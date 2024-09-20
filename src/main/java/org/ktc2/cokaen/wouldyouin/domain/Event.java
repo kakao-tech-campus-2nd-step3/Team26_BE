@@ -10,12 +10,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.ktc2.cokaen.wouldyouin.controller.event.EventRequest;
 
+//TODO: Builder 적용 보류 (멘토링 이후 결정예정)
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Event {
 
@@ -40,11 +44,8 @@ public class Event {
     private Integer leftSeat;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    Category category;
+    private Category category;
     private Boolean expired;
-
-    public Event() {
-    }
 
     public Event(UUID hostId, String title, String content, Area area, String location,
         LocalDateTime start_time, LocalDateTime end_time, Integer price, Integer totalSeat,
