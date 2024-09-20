@@ -7,8 +7,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +19,7 @@ import org.ktc2.cokaen.wouldyouin.controller.curation.CurationRequest;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Curation {
 
@@ -24,13 +27,13 @@ public class Curation {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
+    @NotNull @Column(nullable = false)
     private UUID curatorId;
 
-    @Column(nullable = false)
+    @NotNull
     private String title;
 
-    @Column(nullable = false)
+    @NotNull
     private String content;
 
     @Column(nullable = false)
@@ -44,13 +47,8 @@ public class Curation {
 
     private UUID eventId;
 
-    public Curation(UUID eventId, String hashTag, Area area, UUID curatorId, String title,
-        String content) {
-
-    }
-
-    public Curation(UUID curatorId, String title, String content, Area area, String hashTag,
-        UUID eventId) {
+    @Builder
+    protected Curation(UUID curatorId, String title, String content, Area area, String hashTag, UUID eventId) {
         this.curatorId = curatorId;
         this.title = title;
         this.content = content;
@@ -70,8 +68,13 @@ public class Curation {
     }
 
     public static Curation from(CurationRequest curationRequest) {
-        return new Curation(curationRequest.getCuratorId(), curationRequest.getTitle(),
-            curationRequest.getContent(), curationRequest.getArea(), curationRequest.getHashTag(),
-            curationRequest.getEventId());
+        return Curation.builder()
+            .area(curationRequest.getArea())
+            .title(curationRequest.getTitle())
+            .curatorId(curationRequest.getCuratorId())
+            .eventId(curationRequest.getEventId())
+            .content(curationRequest.getContent())
+            .hashTag(curationRequest.getHashTag())
+            .build();
     }
 }

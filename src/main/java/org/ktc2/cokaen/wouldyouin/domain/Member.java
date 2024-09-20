@@ -4,13 +4,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Member {
 
@@ -30,7 +32,13 @@ public class Member {
     @Column
     private String profileImageUrl;
 
-    protected Member() {
-
+    @Builder()
+    protected Member(String nickname, Area area, String userType, String gender, String phone, String profileImageUrl) {
+        this.nickname = nickname;
+        this.area = area;
+        this.userType = userType;
+        this.gender = gender;
+        this.phone = phone;
+        this.profileImageUrl = profileImageUrl;
     }
 }
