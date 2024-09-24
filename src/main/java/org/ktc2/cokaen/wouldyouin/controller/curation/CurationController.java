@@ -2,8 +2,8 @@ package org.ktc2.cokaen.wouldyouin.controller.curation;
 
 import java.util.List;
 import java.util.UUID;
-import org.ktc2.cokaen.wouldyouin.controller.event.response.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin.domain.Area;
+import org.ktc2.cokaen.wouldyouin.global.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin.service.CurationService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

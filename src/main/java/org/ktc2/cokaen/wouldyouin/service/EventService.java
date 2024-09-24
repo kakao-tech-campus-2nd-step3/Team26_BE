@@ -46,7 +46,7 @@ public class EventService {
     @Transactional
     public EventResponse update(UUID id, EventRequest eventRequest) {
         Event target = eventRepository.findById(id).orElseThrow(RuntimeException::new);
-        target.setDetails(eventRequest);
+        target.setFrom(eventRequest);
         return toEventResponse(target);
     }
 
