@@ -30,7 +30,7 @@ public class EventController {
             .body(new ApiResponseBody<>(true, eventService.getAll()));
     }
 
-    @GetMapping
+    @GetMapping("/{hostId}")
     public ResponseEntity<ApiResponseBody<List<EventResponse>>> getEventsByHostId(
         @RequestParam UUID hostId) {
         return ResponseEntity.status(HttpStatus.OK)
