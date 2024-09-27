@@ -21,5 +21,15 @@ public class CurationRequest {
 
     private final Long eventId;
 
+    public Curation toEntity() {
+        return Curation.builder()
+            .area(this.area)
+            .title(this.title)
+            .curatorId(this.curatorId)
+            .eventId(this.eventId)
+            .content(this.content)
+            .hashTag(this.hashTag)
+            .build();
+    }
 
 }

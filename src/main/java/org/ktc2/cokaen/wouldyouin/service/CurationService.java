@@ -19,26 +19,25 @@ public class CurationService {
 
     public CurationResponse create(CurationRequest curationRequest) {
 
-        return CurationResponse.toCurationResponse(
-            curationRepository.save(Curation.from(curationRequest)));
+        return CurationResponse.from(curationRepository.save(curationRequest.toEntity()));
     }
 
     public CurationResponse getById(Long curationId) {
         Curation target = curationRepository.findById(curationId)
             .orElseThrow(RuntimeException::new);
-        return CurationResponse.toCurationResponse(target);
+        return CurationResponse.from(target);
     }
 
     public List<CurationResponse> getAllByArea(Area area) {
         return curationRepository.findByArea(area).stream()
-            .map(CurationResponse::toCurationResponse).toList();
+            .map(CurationResponse::from).toList();
     }
 
     public CurationResponse update(Long curationId, CurationRequest curationRequest) {
         Curation target = curationRepository.findById(curationId)
             .orElseThrow(RuntimeException::new);
         target.setFrom(curationRequest);
-        return CurationResponse.toCurationResponse(target);
+        return CurationResponse.from(target);
     }
 
     public void delete(Long curationId) {
