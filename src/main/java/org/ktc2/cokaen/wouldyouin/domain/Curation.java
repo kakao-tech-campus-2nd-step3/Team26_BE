@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,11 +23,12 @@ import org.ktc2.cokaen.wouldyouin.controller.curation.CurationRequest;
 public class Curation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @NotNull @Column(nullable = false)
-    private UUID curatorId;
+    @NotNull
+    @Column(nullable = false)
+    private Long curatorId;
 
     @NotNull
     private String title;
@@ -45,10 +45,11 @@ public class Curation {
 
     private String hashTag;
 
-    private UUID eventId;
+    private Long eventId;
 
     @Builder
-    protected Curation(UUID curatorId, String title, String content, Area area, String hashTag, UUID eventId) {
+    protected Curation(Long curatorId, String title, String content, Area area, String hashTag,
+        Long eventId) {
         this.curatorId = curatorId;
         this.title = title;
         this.content = content;
@@ -67,14 +68,4 @@ public class Curation {
         this.eventId = curationRequest.getEventId();
     }
 
-    public static Curation from(CurationRequest curationRequest) {
-        return Curation.builder()
-            .area(curationRequest.getArea())
-            .title(curationRequest.getTitle())
-            .curatorId(curationRequest.getCuratorId())
-            .eventId(curationRequest.getEventId())
-            .content(curationRequest.getContent())
-            .hashTag(curationRequest.getHashTag())
-            .build();
-    }
 }

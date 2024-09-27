@@ -1,22 +1,22 @@
 package org.ktc2.cokaen.wouldyouin.domain;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.UUID;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.ktc2.cokaen.wouldyouin.controller.event.EventRequest;
 
-//TODO: Builder 적용 보류 (멘토링 이후 결정예정)
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,70 +24,76 @@ import org.ktc2.cokaen.wouldyouin.controller.event.EventRequest;
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-    @Column(nullable = false)
-    private UUID hostId;
-    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
+    private Long hostId;
+
+    @NotNull
     private String title;
-    @Column(nullable = false)
+
+    @NotNull
     private String content;
-    @Column(nullable = false)
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Area area;
-    @Column(nullable = false)
-    private String location;
-    private LocalDateTime start_time;
-    private LocalDateTime end_time;
+
+    @Embedded
+    @NotNull
+    private Location location;
+
+    @NotNull
+    private LocalDateTime startTime;
+
+    @NotNull
+    private LocalDateTime endTime;
+
+    @NotNull
+    @Min(0)
     private Integer price;
+
+    @NotNull
+    @Min(0)
     private Integer totalSeat;
+
+    @NotNull
+    @Min(0)
     private Integer leftSeat;
-    @Column(nullable = false)
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Category category;
-    private Boolean expired;
 
-    public Event(UUID hostId, String title, String content, Area area, String location,
-        LocalDateTime start_time, LocalDateTime end_time, Integer price, Integer totalSeat,
+    @Builder
+    protected Event(Long hostId, String title, String content, Area area, Location location,
+        LocalDateTime startTime, LocalDateTime endTime, Integer price, Integer totalSeat,
         Integer leftSeat, Category category) {
         this.hostId = hostId;
         this.title = title;
         this.content = content;
         this.area = area;
         this.location = location;
-        this.start_time = start_time;
-        this.end_time = end_time;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.price = price;
         this.totalSeat = totalSeat;
         this.leftSeat = leftSeat;
         this.category = category;
     }
 
-    @PrePersist
-    public void prePersist() {
-        if (this.expired == null) {
-            this.expired = false;
-        }
-    }
-
-    public void setDetails(EventRequest eventRequest) {
+    public void setFrom(EventRequest eventRequest) {
         this.hostId = eventRequest.getHostId();
         this.title = eventRequest.getTitle();
         this.content = eventRequest.getContent();
         this.area = eventRequest.getArea();
         this.location = eventRequest.getLocation();
-        this.start_time = eventRequest.getStart_time();
-        this.end_time = eventRequest.getEnd_time();
+        this.startTime = eventRequest.getStartTime();
+        this.endTime = eventRequest.getEndTime();
         this.price = eventRequest.getPrice();
         this.totalSeat = eventRequest.getTotalSeat();
         this.leftSeat = eventRequest.getLeftSeat();
         this.category = eventRequest.getCategory();
-    }
-
-    public static Event from(EventRequest eventRequest) {
-        return new Event(eventRequest.getHostId(), eventRequest.getTitle(),
-            eventRequest.getContent(), eventRequest.getArea(), eventRequest.getLocation(),
-            eventRequest.getStart_time(), eventRequest.getEnd_time(), eventRequest.getPrice(),
-            eventRequest.getTotalSeat(), eventRequest.getLeftSeat(), eventRequest.getCategory());
     }
 }
