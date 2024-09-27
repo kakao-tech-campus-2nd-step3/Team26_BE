@@ -1,19 +1,18 @@
 package org.ktc2.cokaen.wouldyouin.controller.member.dto;
 
 import jakarta.annotation.Nullable;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.domain.Area;
 
 @Getter
-@RequiredArgsConstructor
-public class MemberEditRequest {
+@Builder
+public class MemberEditRequest extends MemberEditRequestBase {
 
-    @Nullable private final String nickname;
     @Nullable private final Area area;
-    @Nullable private final String phoneNumber;
-    @Nullable private final String profileUrl;
-    @Nullable private final String intro;
-    @Nullable private final String hashtag;
-    @Nullable private final String curatorProfileUrl;
+
+    public MemberEditRequest(@Nullable String nickname, @Nullable String phoneNumber, @Nullable String profileUrl, @Nullable Area area) {
+        super(nickname, phoneNumber, profileUrl);
+        this.area = area;
+    }
 }
