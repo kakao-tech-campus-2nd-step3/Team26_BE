@@ -1,7 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.controller.event;
 
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.global.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin.service.EventService;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,21 +23,21 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping
-    public ResponseEntity<ApiResponseBody<List<EventResponse>>> getAllEvents() {
+    public ResponseEntity<ApiResponseBody<List<EventResponse>>> getEvents() {
         return ResponseEntity.status(HttpStatus.OK)
             .body(new ApiResponseBody<>(true, eventService.getAll()));
     }
 
-    @GetMapping("/{hostId}")
+    @GetMapping("/hosts/{hostId}")
     public ResponseEntity<ApiResponseBody<List<EventResponse>>> getEventsByHostId(
-        @RequestParam UUID hostId) {
+        @PathVariable Long hostId) {
         return ResponseEntity.status(HttpStatus.OK)
             .body(new ApiResponseBody<>(true, eventService.getAllByHostId(hostId)));
     }
 
     @GetMapping("/{eventId}")
     public ResponseEntity<ApiResponseBody<EventResponse>> getEventByEventId(
-        @PathVariable("eventId") UUID eventId) {
+        @PathVariable("eventId") Long eventId) {
         return ResponseEntity.status(HttpStatus.OK)
             .body(new ApiResponseBody<>(true, eventService.getById(eventId)));
     }
@@ -52,7 +50,7 @@ public class EventController {
     }
 
     @PutMapping("/{eventId}")
-    public ResponseEntity<ApiResponseBody<EventResponse>> updateEvent(@PathVariable UUID eventId,
+    public ResponseEntity<ApiResponseBody<EventResponse>> updateEvent(@PathVariable Long eventId,
         @RequestBody EventRequest eventRequest) {
         return ResponseEntity.status(HttpStatus.OK)
             .body(new ApiResponseBody<>(true, eventService.update(eventId, eventRequest)));
@@ -60,7 +58,8 @@ public class EventController {
 
     @DeleteMapping("/{eventId}")
     public ResponseEntity<ApiResponseBody<Void>> deleteEvent(
-        @PathVariable("eventId") UUID eventId) {
+        @PathVariable("eventId") Long eventId) {
+        eventService.delete(eventId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
             .body(new ApiResponseBody<>(true, null));
     }
