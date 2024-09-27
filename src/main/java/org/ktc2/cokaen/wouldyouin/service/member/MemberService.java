@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.service;
+package org.ktc2.cokaen.wouldyouin.service.member;
 
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.controller.member.MemberCreateRequest;

@@ -3,7 +3,7 @@ package org.ktc2.cokaen.wouldyouin.global.annotation;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.global.util.JwtManager;
-import org.ktc2.cokaen.wouldyouin.service.MemberService;
+import org.ktc2.cokaen.wouldyouin.service.member.MemberService;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;

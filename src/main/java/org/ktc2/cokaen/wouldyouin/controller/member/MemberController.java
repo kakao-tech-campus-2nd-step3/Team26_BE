@@ -3,7 +3,7 @@ package org.ktc2.cokaen.wouldyouin.controller.member;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.global.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin.global.annotation.Authorize;
-import org.ktc2.cokaen.wouldyouin.service.MemberService;
+import org.ktc2.cokaen.wouldyouin.service.member.MemberService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
