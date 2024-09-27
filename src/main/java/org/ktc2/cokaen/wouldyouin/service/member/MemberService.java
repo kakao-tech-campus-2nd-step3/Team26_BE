@@ -28,17 +28,12 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberResponse modifyMember(Long memberId, MemberEditRequest editRequest) {
+    public MemberResponse updateMember(Long memberId, MemberEditRequest editRequest) {
         Member member = findMemberOrThrow(memberId);
         Optional.ofNullable(editRequest.getNickname()).ifPresent(member::setNickname);
         Optional.ofNullable(editRequest.getArea()).ifPresent(member::setArea);
         Optional.ofNullable(editRequest.getPhoneNumber()).ifPresent(member::setPhone);
         Optional.ofNullable(editRequest.getProfileUrl()).ifPresent(member::setProfileImageUrl);
-
-        //TODO: 일반사용자가 아닌 경우 처리 필요
-        Optional.ofNullable(editRequest.getIntro()).ifPresent(m -> {});
-        Optional.ofNullable(editRequest.getHashtag()).ifPresent(m -> {});
-        Optional.ofNullable(editRequest.getCuratorProfileUrl()).ifPresent(m -> {});
 
         return MemberResponse.from(member);
     }

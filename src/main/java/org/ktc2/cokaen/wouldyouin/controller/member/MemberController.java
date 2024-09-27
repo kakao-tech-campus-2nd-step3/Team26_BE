@@ -28,7 +28,7 @@ public class MemberController {
 
     @PutMapping
     public ApiResponseBody<?> modifyMember(@Authorize(MemberType.normal) Long memberId, @RequestBody MemberEditRequest editRequest) {
-        return new ApiResponseBody<>(true, memberService.modifyMember(memberId, editRequest));
+        return new ApiResponseBody<>(true, memberService.updateMember(memberId, editRequest));
     }
 
     @DeleteMapping
