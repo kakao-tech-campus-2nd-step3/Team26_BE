@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.domain;
+package org.ktc2.cokaen.wouldyouin.domain.member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;

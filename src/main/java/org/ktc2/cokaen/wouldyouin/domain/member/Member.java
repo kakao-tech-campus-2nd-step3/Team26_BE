@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.domain;
+package org.ktc2.cokaen.wouldyouin.domain.member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.ktc2.cokaen.wouldyouin.domain.Area;
 
 @Getter
 @Setter

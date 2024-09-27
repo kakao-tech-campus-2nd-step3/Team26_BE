@@ -2,7 +2,7 @@ package org.ktc2.cokaen.wouldyouin.global.util;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.domain.Member;
+import org.ktc2.cokaen.wouldyouin.domain.member.Member;
 import org.springframework.stereotype.Component;
 
 @Component

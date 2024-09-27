@@ -3,7 +3,7 @@ package org.ktc2.cokaen.wouldyouin.controller.member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.domain.Area;
-import org.ktc2.cokaen.wouldyouin.domain.Member;
+import org.ktc2.cokaen.wouldyouin.domain.member.Member;
 
 @Getter
 @RequiredArgsConstructor

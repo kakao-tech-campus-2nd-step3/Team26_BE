@@ -5,7 +5,7 @@ import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin.domain.Area;
-import org.ktc2.cokaen.wouldyouin.domain.Member;
+import org.ktc2.cokaen.wouldyouin.domain.member.Member;
 
 @Getter
 @Builder
