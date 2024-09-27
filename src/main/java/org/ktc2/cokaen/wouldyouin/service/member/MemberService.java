@@ -17,12 +17,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    //TODO: MemberSearchService로 이동 필요
-    @Transactional(readOnly = true)
-    public MemberResponse getById(Long id) {
-        return MemberResponse.from(findMemberOrThrow(id));
-    }
-
     @Transactional
     public MemberResponse createMember(MemberCreateRequest request) {
         return MemberResponse.from(memberRepository.save(request.toEntity()));
@@ -37,11 +31,6 @@ public class MemberService {
         Optional.ofNullable(editRequest.getProfileUrl()).ifPresent(member::setProfileImageUrl);
 
         return MemberResponse.from(member);
-    }
-
-    @Transactional
-    public void deleteMemberById(Long memberId) {
-        memberRepository.delete(findMemberOrThrow(memberId));
     }
 
     @Transactional(readOnly = true)

@@ -7,6 +7,7 @@ import org.ktc2.cokaen.wouldyouin.controller.member.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.domain.MemberType;
 import org.ktc2.cokaen.wouldyouin.global.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin.global.annotation.Authorize;
+import org.ktc2.cokaen.wouldyouin.global.util.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.service.member.HostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,8 @@ public class HostController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponseBody<MemberResponse>> updateHost(@Authorize(MemberType.host) Long hostId, @RequestBody HostEditRequest request) {
-        return ResponseEntity.ok(new ApiResponseBody<>(true, hostService.updateHost(hostId, request)));
+    public ResponseEntity<ApiResponseBody<MemberResponse>> updateHost(@Authorize(MemberType.host) MemberIdentifier identifier, @RequestBody HostEditRequest request) {
+        return ResponseEntity.ok(new ApiResponseBody<>(true, hostService.updateHost(identifier.id(), request)));
     }
 
 }
