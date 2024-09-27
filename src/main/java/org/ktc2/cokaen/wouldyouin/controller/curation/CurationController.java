@@ -1,7 +1,7 @@
 package org.ktc2.cokaen.wouldyouin.controller.curation;
 
 import java.util.List;
-import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.domain.Area;
 import org.ktc2.cokaen.wouldyouin.global.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin.service.CurationService;
@@ -16,14 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/curations")
 public class CurationController {
 
     private final CurationService curationService;
-
-    public CurationController(CurationService curationService) {
-        this.curationService = curationService;
-    }
 
     @GetMapping
     public ApiResponseBody<List<CurationResponse>> getCurationByArea(@RequestParam Area area) {
@@ -32,7 +29,7 @@ public class CurationController {
 
     @GetMapping("/{curationId}")
     public ApiResponseBody<CurationResponse> getCurationByCurationId(
-        @PathVariable("curationId") UUID curationId) {
+        @PathVariable("curationId") Long curationId) {
         return new ApiResponseBody<>(true, curationService.getById(curationId));
     }
 
@@ -43,16 +40,16 @@ public class CurationController {
     }
 
     @PutMapping("/{curationId}")
-    public ApiResponseBody<CurationResponse> updateCuration(@PathVariable UUID curationId,
+    public ApiResponseBody<CurationResponse> updateCuration(@PathVariable Long curationId,
         @RequestBody CurationRequest curationRequest) {
         return new ApiResponseBody<>(true, curationService.update(curationId, curationRequest));
 
     }
 
     @DeleteMapping("/{curationId}")
-    public ApiResponseBody<Void> deleteCuration(@PathVariable UUID curationId) {
+    public ApiResponseBody<Void> deleteCuration(@PathVariable Long curationId) {
+        curationService.delete(curationId);
         return new ApiResponseBody<>(true, null);
     }
-
 
 }
