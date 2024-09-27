@@ -24,7 +24,7 @@ public class CuratorService {
         Member member = memberRepository.findById(normalMemberId).orElseThrow(RuntimeException::new);
 
         // 일반멤버 정보로 큐레이터 생성 후, 기존 일반멤버는 데이터베이스에서 제거
-        Curator curator = curatorRepository.save(Curator.builder()
+        Curator curator = curatorRepository.save(Curator.curatorBuilder()
             .phone(member.getPhone())
             .area(member.getArea())
             .nickname(member.getNickname())

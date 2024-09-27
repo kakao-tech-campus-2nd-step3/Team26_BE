@@ -23,7 +23,7 @@ public class Member extends AbstractMember {
     @Column(nullable = false)
     private String gender;
 
-    @Builder()
+    @Builder
     protected Member(String nickname, Area area, String gender, String phone, String profileImageUrl) {
         super(nickname, phone, profileImageUrl);
         this.area = area;
