@@ -1,6 +1,16 @@
 package org.ktc2.cokaen.wouldyouin.domain;
 
-//Todo : 피드백 반영해 UUID를 사용하지 않는다면 상호배타적 관계 제거
-public class Image {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 
+@Entity
+public class Image {
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @NotNull
+    private String url;
 }
