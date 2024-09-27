@@ -12,20 +12,21 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@DiscriminatorValue("Member")
+@DiscriminatorValue("Curator")
 @Entity
-public class Member extends AbstractMember {
+public class Curator extends Member {
 
     @Column(nullable = false)
-    private Area area;
+    private String intro;
 
     @Column(nullable = false)
-    private String gender;
+    private Integer followers;
 
-    @Builder()
-    protected Member(String nickname, Area area, String gender, String phone, String profileImageUrl) {
-        super(nickname, phone, profileImageUrl);
-        this.area = area;
-        this.gender = gender;
+    @Builder
+    protected Curator(String nickname, Area area, String gender, String phone, String profileImageUrl, String intro,
+        Integer followers) {
+        super(nickname, area, gender, phone, profileImageUrl);
+        this.intro = intro;
+        this.followers = followers;
     }
 }
