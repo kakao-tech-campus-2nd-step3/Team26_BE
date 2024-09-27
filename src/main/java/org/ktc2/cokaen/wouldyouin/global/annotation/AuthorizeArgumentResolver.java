@@ -1,7 +1,9 @@
 package org.ktc2.cokaen.wouldyouin.global.annotation;
 
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin.domain.MemberType;
 import org.ktc2.cokaen.wouldyouin.global.util.JwtManager;
 import org.ktc2.cokaen.wouldyouin.service.member.MemberService;
 import org.springframework.core.MethodParameter;
@@ -33,7 +35,10 @@ public class AuthorizeArgumentResolver implements HandlerMethodArgumentResolver 
             throw new RuntimeException("Authorization header is missing or invalid");
         }
 
+        // Annotation에서 MemberType 추출
+        MemberType memberType = Objects.requireNonNull(parameter.getParameterAnnotation(Authorize.class)).value();
+
         // ID의 실제 검증은 컨트롤러로 넘어간 후 MemberService에서 진행
-        return jwtManager.getMemberFromToken(authorizationHeader.substring(7));
+        return jwtManager.getMemberFromToken(memberType, authorizationHeader.substring(7));
     }
 }

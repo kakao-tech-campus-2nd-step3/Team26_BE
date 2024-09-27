@@ -3,6 +3,7 @@ package org.ktc2.cokaen.wouldyouin.controller.member;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.controller.member.dto.MemberCreateRequest;
 import org.ktc2.cokaen.wouldyouin.controller.member.dto.MemberEditRequest;
+import org.ktc2.cokaen.wouldyouin.domain.MemberType;
 import org.ktc2.cokaen.wouldyouin.global.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin.global.annotation.Authorize;
 import org.ktc2.cokaen.wouldyouin.service.member.MemberService;
@@ -26,12 +27,12 @@ public class MemberController {
     }
 
     @PutMapping
-    public ApiResponseBody<?> modifyMember(@Authorize Long memberId, @RequestBody MemberEditRequest editRequest) {
+    public ApiResponseBody<?> modifyMember(@Authorize(MemberType.normal) Long memberId, @RequestBody MemberEditRequest editRequest) {
         return new ApiResponseBody<>(true, memberService.modifyMember(memberId, editRequest));
     }
 
     @DeleteMapping
-    public void deleteMember(@Authorize Long memberId) {
+    public void deleteMember(@Authorize(MemberType.normal) Long memberId) {
         memberService.deleteMemberById(memberId);
     }
 }
