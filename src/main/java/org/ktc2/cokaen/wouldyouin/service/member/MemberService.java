@@ -17,6 +17,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    //TODO: MemberSearchService로 이동 필요
     @Transactional(readOnly = true)
     public MemberResponse getById(Long id) {
         return MemberResponse.from(findMemberOrThrow(id));
@@ -45,6 +46,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     protected Member findMemberOrThrow(Long id) {
+        //TODO: 커스텀 예외 필요
         return memberRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 }
