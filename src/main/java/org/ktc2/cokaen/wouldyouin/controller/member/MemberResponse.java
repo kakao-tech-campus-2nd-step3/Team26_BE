@@ -1,17 +1,17 @@
 package org.ktc2.cokaen.wouldyouin.controller.member;
 
-import java.util.List;
-import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin.domain.Area;
 import org.ktc2.cokaen.wouldyouin.domain.member.Member;
 
+import java.util.List;
+
 @Getter
 @Builder
 public class MemberResponse {
 
-    private UUID memberId;
+    private Long memberId;
     private String nickname;
     private Area area;
     private String gender;

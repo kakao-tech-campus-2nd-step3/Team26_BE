@@ -1,7 +1,5 @@
 package org.ktc2.cokaen.wouldyouin.service;
 
-import java.util.Optional;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.controller.member.MemberCreateRequest;
 import org.ktc2.cokaen.wouldyouin.controller.member.MemberEditRequest;
@@ -11,6 +9,8 @@ import org.ktc2.cokaen.wouldyouin.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -18,7 +18,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
-    public MemberResponse getById(UUID id) {
+    public MemberResponse getById(Long id) {
         return MemberResponse.from(findMemberOrThrow(id));
     }
 
@@ -28,7 +28,7 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberResponse modifyMember(UUID memberId, MemberEditRequest editRequest) {
+    public MemberResponse modifyMember(Long memberId, MemberEditRequest editRequest) {
         Member member = findMemberOrThrow(memberId);
         Optional.ofNullable(editRequest.getNickname()).ifPresent(member::setNickname);
         Optional.ofNullable(editRequest.getArea()).ifPresent(member::setArea);
@@ -44,12 +44,12 @@ public class MemberService {
     }
 
     @Transactional
-    public void deleteMemberById(UUID memberId) {
+    public void deleteMemberById(Long memberId) {
         memberRepository.delete(findMemberOrThrow(memberId));
     }
 
     @Transactional(readOnly = true)
-    protected Member findMemberOrThrow(UUID id) {
+    protected Member findMemberOrThrow(Long id) {
         return memberRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 }
