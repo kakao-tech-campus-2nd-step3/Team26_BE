@@ -2,7 +2,8 @@ package org.ktc2.cokaen.wouldyouin.global.util;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.domain.Member;
+import org.ktc2.cokaen.wouldyouin.domain.MemberType;
+import org.ktc2.cokaen.wouldyouin.domain.member.Member;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,7 +15,8 @@ public class JwtManager {
         return member.getId().toString();
     }
 
-    public UUID getMemberFromToken(String token) {
-        return UUID.fromString(token);
+    public MemberIdentifier getMemberIdentifierFrom(String token) {
+        //TODO: 구현 필요
+        return new MemberIdentifier(1L, MemberType.normal);
     }
 }
