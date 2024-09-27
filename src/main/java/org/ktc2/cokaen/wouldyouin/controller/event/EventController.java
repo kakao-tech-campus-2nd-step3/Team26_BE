@@ -62,5 +62,6 @@ public class EventController {
         eventService.delete(eventId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
             .body(new ApiResponseBody<>(true, null));
+
     }
 }

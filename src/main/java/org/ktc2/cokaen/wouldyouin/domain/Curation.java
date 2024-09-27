@@ -50,6 +50,7 @@ public class Curation {
     @Builder
     protected Curation(Long curatorId, String title, String content, Area area, String hashTag,
         Long eventId) {
+
         this.curatorId = curatorId;
         this.title = title;
         this.content = content;

@@ -9,6 +9,5 @@ import org.ktc2.cokaen.wouldyouin.domain.MemberType;
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Authorize {
-
     MemberType value();
 }

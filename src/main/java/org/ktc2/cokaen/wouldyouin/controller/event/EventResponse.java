@@ -40,5 +40,6 @@ public class EventResponse {
             .category(event.getCategory())
             .expired(event.getStartTime().isAfter(LocalDateTime.now()))
             .build();
+
     }
 }

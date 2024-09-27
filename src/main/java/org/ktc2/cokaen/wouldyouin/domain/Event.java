@@ -96,4 +96,5 @@ public class Event {
         this.leftSeat = eventRequest.getLeftSeat();
         this.category = eventRequest.getCategory();
     }
+
 }

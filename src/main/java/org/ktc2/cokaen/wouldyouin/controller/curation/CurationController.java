@@ -40,6 +40,7 @@ public class CurationController {
     }
 
     @PutMapping("/{curationId}")
+
     public ApiResponseBody<CurationResponse> updateCuration(@PathVariable Long curationId,
         @RequestBody CurationRequest curationRequest) {
         return new ApiResponseBody<>(true, curationService.update(curationId, curationRequest));
@@ -51,5 +52,4 @@ public class CurationController {
         curationService.delete(curationId);
         return new ApiResponseBody<>(true, null);
     }
-
 }

@@ -1,5 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.global.annotation;
 
+
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.domain.MemberType;
@@ -45,6 +46,5 @@ public class AuthorizeArgumentResolver implements HandlerMethodArgumentResolver 
         }
 
         return identifier;
-
     }
 }

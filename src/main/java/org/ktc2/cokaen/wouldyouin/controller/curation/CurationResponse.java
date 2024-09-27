@@ -24,7 +24,6 @@ public class CurationResponse {
 
     private final Long eventId;
 
-
     public static CurationResponse from(Curation curation) {
         return new CurationResponse(curation.getId(), curation.getCuratorId(), curation.getTitle(),
             curation.getContent(), curation.getArea(), curation.getCreatedTime(),

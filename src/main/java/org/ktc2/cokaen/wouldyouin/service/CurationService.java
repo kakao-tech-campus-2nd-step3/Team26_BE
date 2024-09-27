@@ -18,7 +18,6 @@ public class CurationService {
     }
 
     public CurationResponse create(CurationRequest curationRequest) {
-
         return CurationResponse.from(curationRepository.save(curationRequest.toEntity()));
     }
 
@@ -26,6 +25,7 @@ public class CurationService {
         Curation target = curationRepository.findById(curationId)
             .orElseThrow(RuntimeException::new);
         return CurationResponse.from(target);
+
     }
 
     public List<CurationResponse> getAllByArea(Area area) {
@@ -41,6 +41,7 @@ public class CurationService {
     }
 
     public void delete(Long curationId) {
+
         curationRepository.findById(curationId).orElseThrow(RuntimeException::new);
         curationRepository.deleteById(curationId);
     }
