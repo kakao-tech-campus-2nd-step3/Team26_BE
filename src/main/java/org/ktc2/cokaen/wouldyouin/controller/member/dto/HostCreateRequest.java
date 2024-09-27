@@ -2,11 +2,15 @@ package org.ktc2.cokaen.wouldyouin.controller.member.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.domain.member.Host;
 
 @Getter
+@RequiredArgsConstructor
 @Builder
-public record HostCreateRequest(String nickname) {
+public class HostCreateRequest {
+
+    private final String nickname;
 
     //TODO: 생성할 때 넣어야만 하는 정보 파악하기
     public Host toEntity() {
