@@ -23,14 +23,14 @@ import org.ktc2.cokaen.wouldyouin.controller.reservation.ReservationRequest;
 public class Reservation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotNull
-    private UUID memberId;
+    private Long memberId;
 
     @NotNull
-    private UUID eventId;
+    private Long eventId;
 
     @NotNull
     private Integer price;
@@ -38,30 +38,15 @@ public class Reservation {
     @NotNull
     private Integer quantity;
 
-    @Column(nullable=false)
+    @NotNull
     private LocalDateTime reservationDate;
 
-    @PrePersist
-    private void prePersist() {
-        reservationDate = LocalDateTime.now();
-    }
-
     @Builder
-    protected Reservation(UUID memberId, UUID eventId, Integer price, Integer quantity,
-        LocalDateTime reservationDate) {
+    protected Reservation(Long memberId, Long eventId, Integer price, Integer quantity) {
         this.memberId = memberId;
         this.eventId = eventId;
         this.price = price;
         this.quantity = quantity;
-        this.reservationDate = reservationDate;
-    }
-
-    public static Reservation from(ReservationRequest reservationRequest) {
-        return Reservation.builder()
-            .memberId(reservationRequest.getMemberId())
-            .eventId(reservationRequest.getEventId())
-            .price(reservationRequest.getPrice())
-            .quantity(reservationRequest.getQuantity())
-            .build();
+        this.reservationDate = LocalDateTime.now();
     }
 }
