@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.repository;
+package org.ktc2.cokaen.wouldyouin.repository.member;
 
 import org.ktc2.cokaen.wouldyouin.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

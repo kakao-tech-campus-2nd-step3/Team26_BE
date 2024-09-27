@@ -5,7 +5,7 @@ import org.ktc2.cokaen.wouldyouin.controller.member.MemberCreateRequest;
 import org.ktc2.cokaen.wouldyouin.controller.member.MemberEditRequest;
 import org.ktc2.cokaen.wouldyouin.controller.member.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.domain.member.Member;
-import org.ktc2.cokaen.wouldyouin.repository.MemberRepository;
+import org.ktc2.cokaen.wouldyouin.repository.member.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
