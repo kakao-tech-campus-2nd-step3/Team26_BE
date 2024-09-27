@@ -15,7 +15,8 @@ public class JwtManager {
         return member.getId().toString();
     }
 
-    public UUID getMemberFromToken(MemberType memberType, String token) {
-        return UUID.fromString(token);
+    public MemberIdentifier getMemberIdentifierFrom(String token) {
+        //TODO: 구현 필요
+        return new MemberIdentifier(1L, MemberType.normal);
     }
 }
