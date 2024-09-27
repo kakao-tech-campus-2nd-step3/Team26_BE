@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.controller.member;
+package org.ktc2.cokaen.wouldyouin.controller.member.dto;
 
 import lombok.Builder;
 import lombok.Getter;

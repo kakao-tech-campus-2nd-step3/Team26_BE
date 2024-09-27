@@ -1,9 +1,9 @@
 package org.ktc2.cokaen.wouldyouin.service.member;
 
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.controller.member.MemberCreateRequest;
-import org.ktc2.cokaen.wouldyouin.controller.member.MemberEditRequest;
-import org.ktc2.cokaen.wouldyouin.controller.member.MemberResponse;
+import org.ktc2.cokaen.wouldyouin.controller.member.dto.MemberCreateRequest;
+import org.ktc2.cokaen.wouldyouin.controller.member.dto.MemberEditRequest;
+import org.ktc2.cokaen.wouldyouin.controller.member.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.domain.member.Member;
 import org.ktc2.cokaen.wouldyouin.repository.member.MemberRepository;
 import org.springframework.stereotype.Service;

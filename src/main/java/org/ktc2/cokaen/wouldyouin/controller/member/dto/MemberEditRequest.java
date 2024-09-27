@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.controller.member;
+package org.ktc2.cokaen.wouldyouin.controller.member.dto;
 
 import jakarta.annotation.Nullable;
 import lombok.Getter;
