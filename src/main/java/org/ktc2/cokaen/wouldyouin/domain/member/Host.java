@@ -3,6 +3,8 @@ package org.ktc2.cokaen.wouldyouin.domain.member;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import java.util.Arrays;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,5 +33,10 @@ public class Host extends AbstractMember {
         this.intro = intro;
         this.followers = followers;
         this.hashtag = hashtag;
+    }
+
+    public List<String> getHashTagList() {
+        //TODO: 정상적으로 해시태그 리스트로 분리되는지 검증 필요
+        return Arrays.stream(hashtag.split("#")).toList();
     }
 }
