@@ -1,11 +1,11 @@
 package org.ktc2.cokaen.wouldyouin.global;
 
 import java.time.LocalDateTime;
-import org.ktc2.cokaen.wouldyouin.controller.event.EventRequest;
-import org.ktc2.cokaen.wouldyouin.controller.reservation.ReservationRequest;
-import org.ktc2.cokaen.wouldyouin.domain.Area;
-import org.ktc2.cokaen.wouldyouin.domain.Category;
-import org.ktc2.cokaen.wouldyouin.domain.Location;
+import org.ktc2.cokaen.wouldyouin.event.api.EventRequest;
+import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationRequest;
+import org.ktc2.cokaen.wouldyouin._common.persist.Area;
+import org.ktc2.cokaen.wouldyouin._common.persist.Category;
+import org.ktc2.cokaen.wouldyouin._common.persist.Location;
 
 public class TestData {
 
