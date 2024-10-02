@@ -1,6 +1,7 @@
 package org.ktc2.cokaen.wouldyouin.event.application;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.event.api.EventRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.EventResponse;
@@ -40,7 +41,7 @@ public class EventService {
     @Transactional
     public EventResponse update(Long id, EventRequest eventRequest) {
         Event target = eventRepository.findById(id).orElseThrow(RuntimeException::new);
-        target.setFrom(eventRequest);
+        target.updateFrom(eventRequest);
         return EventResponse.from(target);
     }
 
