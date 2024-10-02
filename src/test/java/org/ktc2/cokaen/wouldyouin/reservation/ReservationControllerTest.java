@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.controller;
+package org.ktc2.cokaen.wouldyouin.reservation;
 
 import static java.lang.Math.abs;
 import static org.mockito.Mockito.verify;
@@ -13,10 +13,10 @@ import java.util.Random;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.ktc2.cokaen.wouldyouin.reservation.api.ReservationController;
 import org.ktc2.cokaen.wouldyouin.global.TestData;
 import org.ktc2.cokaen.wouldyouin._common.util.JwtManager;
-import org.ktc2.cokaen.wouldyouin.service.MemberService;
 import org.ktc2.cokaen.wouldyouin.reservation.application.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
