@@ -25,7 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(ReservationController.class)
-class ReservationControllerTest {
+class ReservationControllerUnitTest {
 
     @MockBean
     private ReservationService reservationService;

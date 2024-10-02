@@ -30,7 +30,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(EventController.class)
-class EventControllerTest {
+class EventControllerUnitTest {
 
     @MockBean
     private EventService eventService;

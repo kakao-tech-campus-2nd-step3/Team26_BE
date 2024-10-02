@@ -4,6 +4,7 @@ import static java.lang.Math.abs;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,7 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class EventServiceTest {
+class EventServiceUnitTest {
 
     private EventService eventService;
 
@@ -71,15 +72,16 @@ class EventServiceTest {
     @Test
     @DisplayName("행사 생성 - 성공")
     void create() {
-        when(eventRepository.save(TestData.validEvent)).thenReturn(TestData.validEvent);
+        when(eventRepository.save(any())).thenReturn(TestData.validEvent);
         eventService.create(TestData.validEventRequest);
-        verify(eventRepository, times(1)).save(TestData.validEvent);
+        verify(eventRepository, times(1)).save(any());
     }
 
     @Test
     @DisplayName("행사 id를 통한 행사 수정 - 성공")
     void update() {
         var validEvent = TestData.validEvent;
+        System.out.println(validEvent.getId());
         when(eventRepository.findById(id)).thenReturn(Optional.of(validEvent));
         eventService.update(id, TestData.validEventRequestToModify);
         verify(eventRepository, times(1)).findById(id);

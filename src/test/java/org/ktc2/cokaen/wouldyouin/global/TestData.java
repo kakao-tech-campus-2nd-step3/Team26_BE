@@ -7,6 +7,7 @@ import org.ktc2.cokaen.wouldyouin._common.persist.Location;
 import org.ktc2.cokaen.wouldyouin.event.api.EventRequest;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationRequest;
+import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
 
 public class TestData {
 
@@ -14,6 +15,7 @@ public class TestData {
     public static EventRequest validEventRequestToModify;
     public static Event validEvent;
     public static ReservationRequest validReservationRequest;
+    public static Reservation validReservation;
 
     static {
         validEventRequest = EventRequest.builder()
@@ -65,6 +67,14 @@ public class TestData {
                 .eventId(1L)
                 .price(10000)
                 .quantity(1)
+                .build();
+
+        validReservation =
+            Reservation.builder()
+                .memberId(1L)
+                .eventId(1L)
+                .price(10000)
+                .quantity(3)
                 .build();
     }
 }
