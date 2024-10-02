@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.controller;
+package org.ktc2.cokaen.wouldyouin.event;
 
 
 import static java.lang.Math.abs;
@@ -20,9 +20,9 @@ import org.junit.jupiter.api.Test;
 import org.ktc2.cokaen.wouldyouin.event.api.EventController;
 import org.ktc2.cokaen.wouldyouin.event.api.EventRequest;
 import org.ktc2.cokaen.wouldyouin.global.TestData;
-import org.ktc2.cokaen.wouldyouin._common.util.JwtManager;
+import org.ktc2.cokaen.wouldyouin.auth.application.JwtService;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
-import org.ktc2.cokaen.wouldyouin.service.MemberService;
+import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -30,7 +30,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(EventController.class)
-class EventControllerTest {
+class EventControllerUnitTest {
 
     @MockBean
     private EventService eventService;
@@ -39,7 +39,7 @@ class EventControllerTest {
     private MemberService memberService;
 
     @MockBean
-    private JwtManager jwtManager;
+    private JwtService jwtService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -49,7 +49,7 @@ class EventControllerTest {
     private static ObjectMapper objectMapper;
 
     @BeforeAll
-    public static void init() {
+    public static void setUp() {
         id = abs(new Random().nextLong());
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
