@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -57,11 +58,9 @@ public class Event {
     @Min(0)
     private Integer price;
 
-    @NotNull
-    @Min(0)
+    @Min(1)
     private Integer totalSeat;
 
-    @NotNull
     @Min(0)
     private Integer leftSeat;
 
@@ -86,17 +85,17 @@ public class Event {
         this.category = category;
     }
 
-    public void setFrom(EventRequest eventRequest) {
-        this.hostId = eventRequest.getHostId();
-        this.title = eventRequest.getTitle();
-        this.content = eventRequest.getContent();
-        this.area = eventRequest.getArea();
-        this.location = eventRequest.getLocation();
-        this.startTime = eventRequest.getStartTime();
-        this.endTime = eventRequest.getEndTime();
-        this.price = eventRequest.getPrice();
-        this.totalSeat = eventRequest.getTotalSeat();
-        this.leftSeat = eventRequest.getLeftSeat();
-        this.category = eventRequest.getCategory();
+    public void updateFrom(EventRequest eventRequest) {
+        Optional.ofNullable(eventRequest.getHostId()).ifPresent(this::setHostId);
+        Optional.ofNullable(eventRequest.getTitle()).ifPresent(this::setTitle);
+        Optional.ofNullable(eventRequest.getContent()).ifPresent(this::setContent);
+        Optional.ofNullable(eventRequest.getArea()).ifPresent(this::setArea);
+        Optional.ofNullable(eventRequest.getLocation()).ifPresent(this::setLocation);
+        Optional.ofNullable(eventRequest.getStartTime()).ifPresent(this::setStartTime);
+        Optional.ofNullable(eventRequest.getEndTime()).ifPresent(this::setEndTime);
+        Optional.ofNullable(eventRequest.getPrice()).ifPresent(this::setPrice);
+        Optional.ofNullable(eventRequest.getTotalSeat()).ifPresent(this::setTotalSeat);
+        Optional.ofNullable(eventRequest.getLeftSeat()).ifPresent(this::setLeftSeat);
+        Optional.ofNullable(eventRequest.getCategory()).ifPresent(this::setCategory);
     }
 }
