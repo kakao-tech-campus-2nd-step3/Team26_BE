@@ -37,13 +37,6 @@ class EventServiceTest {
         id = abs(new Random().nextLong());
     }
 
-//    Optional<Person> person = Optional.of(Person.builder().firstName("doyoung").lastName("kim").build());
-//    when(personRepository.findById(anyLong())).thenReturn(person);
-//    assertEquals(personService.findById(1L).getLastName(), "kim");
-//    verify(personRepository, times(1)).findById(1L);
-//    verify(personRepository, never()).findAll();
-//    verifyNoMoreInteractions(personRepository);
-
     @Test
     @DisplayName("모든 행사 조회 - 성공")
     void getAll() {
