@@ -1,7 +1,7 @@
 package org.ktc2.cokaen.wouldyouin._common.util;
 
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.security.MemberIdentifier;
+import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.springframework.stereotype.Component;
