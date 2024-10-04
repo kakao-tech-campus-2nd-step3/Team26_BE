@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.ktc2.cokaen.wouldyouin.reservation.api.ReservationController;
 import org.ktc2.cokaen.wouldyouin.global.TestData;
-import org.ktc2.cokaen.wouldyouin._common.util.JwtManager;
+import org.ktc2.cokaen.wouldyouin.auth.application.JwtService;
 import org.ktc2.cokaen.wouldyouin.reservation.application.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -34,7 +34,7 @@ class ReservationControllerUnitTest {
     private MemberService memberService;
 
     @MockBean
-    private JwtManager jwtManager;
+    private JwtService jwtService;
 
     @Autowired
     private MockMvc mockMvc;

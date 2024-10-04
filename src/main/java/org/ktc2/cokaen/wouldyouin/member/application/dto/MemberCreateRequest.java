@@ -11,6 +11,8 @@ import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 @Builder
 public class MemberCreateRequest {
 
+    private final String email;
+    private final String password;
     private final String nickname;
     private final Area area;
 
@@ -19,6 +21,9 @@ public class MemberCreateRequest {
         return Member.builder()
             .nickname(this.nickname)
             .area(this.area)
+            .gender("Men")
+            .phone("010-1234-5678")
+            .profileImageUrl("http://example.com/images/6")
             .build();
     }
 }
