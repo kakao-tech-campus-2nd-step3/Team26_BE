@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.security;
+package org.ktc2.cokaen.wouldyouin.auth;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
