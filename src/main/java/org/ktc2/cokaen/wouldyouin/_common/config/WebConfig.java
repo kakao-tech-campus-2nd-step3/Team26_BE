@@ -2,7 +2,7 @@ package org.ktc2.cokaen.wouldyouin._common.config;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.security.AuthorizeArgumentResolver;
+import org.ktc2.cokaen.wouldyouin.auth.AuthorizeArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.ktc2.cokaen.wouldyouin.event.api.EventController;
 import org.ktc2.cokaen.wouldyouin.event.api.EventRequest;
 import org.ktc2.cokaen.wouldyouin.global.TestData;
-import org.ktc2.cokaen.wouldyouin._common.util.JwtManager;
+import org.ktc2.cokaen.wouldyouin.auth.application.JwtService;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ class EventControllerUnitTest {
     private MemberService memberService;
 
     @MockBean
-    private JwtManager jwtManager;
+    private JwtService jwtService;
 
     @Autowired
     private MockMvc mockMvc;
