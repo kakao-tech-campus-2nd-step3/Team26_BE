@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin._common.persist.Area;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
-import org.ktc2.cokaen.wouldyouin.member.persist.AbstractMember;
+import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
@@ -29,12 +29,12 @@ public class MemberResponse {
 
     private List<String> hashtag;
 
-    private static MemberResponseBuilder responseBase(AbstractMember memberBase) {
+    private static MemberResponseBuilder responseBase(BaseMember baseMember) {
         return MemberResponse.builder()
-            .memberId(memberBase.getId())
-            .nickname(memberBase.getNickname())
-            .phoneNumber(memberBase.getPhone())
-            .profileUrl(memberBase.getProfileImageUrl());
+            .memberId(baseMember.getId())
+            .nickname(baseMember.getNickname())
+            .phoneNumber(baseMember.getPhone())
+            .profileUrl(baseMember.getProfileImageUrl());
     }
 
     public static MemberResponse from(final Member member) {

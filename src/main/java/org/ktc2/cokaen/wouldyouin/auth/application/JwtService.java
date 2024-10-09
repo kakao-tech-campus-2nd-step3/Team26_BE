@@ -8,8 +8,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
-import org.ktc2.cokaen.wouldyouin.member.persist.AbstractMember;
-import org.ktc2.cokaen.wouldyouin.member.persist.AbstractMemberRepository;
+import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
+import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,10 +31,10 @@ public class JwtService {
     private static final String MEMBER_TYPE_CLAIM = "MemberType";
     private static final String BEARER = "Bearer ";
 
-    private final AbstractMemberRepository abstractMemberRepository;
+    private final BaseMemberRepository baseMemberRepository;
 
     // AccessToken 생성
-    public String createAccessToken(AbstractMember member) {
+    public String createAccessToken(BaseMember member) {
         return JWT.create()
             .withSubject(ACCESS_TOKEN_SUBJECT)
             .withExpiresAt(new Date(System.currentTimeMillis() + accessExpiration))
@@ -67,7 +67,7 @@ public class JwtService {
             String memberType = decodedJWT.getClaim(MEMBER_TYPE_CLAIM).asString();
 
             // 이메일로 회원 정보를 조회
-            AbstractMember member = abstractMemberRepository.findByEmail(email)
+            BaseMember member = baseMemberRepository.findByEmail(email)
                 //TODO: 커스텀 예외 필요
                 .orElseThrow(() -> new IllegalArgumentException("Invalid token: no matching user"));
 

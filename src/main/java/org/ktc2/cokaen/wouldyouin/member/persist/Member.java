@@ -15,7 +15,7 @@ import org.ktc2.cokaen.wouldyouin._common.persist.Area;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("Member")
 @Entity
-public class Member extends AbstractMember {
+public class Member extends BaseMember {
 
     @Column(nullable = false)
     private Area area;

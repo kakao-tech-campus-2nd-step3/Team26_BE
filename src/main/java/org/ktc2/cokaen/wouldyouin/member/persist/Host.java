@@ -16,7 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("Host")
 @Entity
-public class Host extends AbstractMember {
+public class Host extends BaseMember {
 
     @Column(nullable = false)
     private String intro;

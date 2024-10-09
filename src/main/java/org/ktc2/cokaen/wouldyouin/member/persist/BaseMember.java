@@ -21,7 +21,7 @@ import lombok.Setter;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
 @Entity
-public abstract class AbstractMember {
+public abstract class BaseMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,7 +57,7 @@ public abstract class AbstractMember {
     @Column(length = 1000)
     private String refreshToken;
 
-    protected AbstractMember(String nickname, String phone, String profileImageUrl) {
+    protected BaseMember(String nickname, String phone, String profileImageUrl) {
         this.nickname = nickname;
         this.phone = phone;
         this.profileImageUrl = profileImageUrl;
