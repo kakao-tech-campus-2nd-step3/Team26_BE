@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.member.application.dto;
+package org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit;
 
 
 import jakarta.annotation.Nullable;

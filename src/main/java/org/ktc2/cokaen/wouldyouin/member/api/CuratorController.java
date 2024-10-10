@@ -6,7 +6,7 @@ import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.member.application.CuratorService;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.CuratorEditRequest;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.CuratorEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.http.ResponseEntity;

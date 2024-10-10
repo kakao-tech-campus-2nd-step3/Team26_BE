@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.member.application.dto.create;
+package org.ktc2.cokaen.wouldyouin.member.application.dto.request.create;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 
 @Getter
 @RequiredArgsConstructor
-public class MemberCreateRequest extends BaseMemberCreateRequest {
+public class MemberCreateRequest extends MemberCreateRequestBase {
 
     protected AccountType accountType;
     protected String socialId;

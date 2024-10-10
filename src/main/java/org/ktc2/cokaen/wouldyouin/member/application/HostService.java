@@ -2,8 +2,8 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.create.HostCreateRequest;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.HostEditRequest;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.request.create.HostCreateRequest;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.HostEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 import org.ktc2.cokaen.wouldyouin.member.persist.HostRepository;

@@ -1,8 +1,8 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.create.MemberCreateRequest;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberEditRequest;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.request.create.MemberCreateRequest;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.MemberEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberRepository;

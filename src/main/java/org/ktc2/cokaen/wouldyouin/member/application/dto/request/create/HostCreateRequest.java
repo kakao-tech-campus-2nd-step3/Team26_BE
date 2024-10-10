@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.member.application.dto.create;
+package org.ktc2.cokaen.wouldyouin.member.application.dto.request.create;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -6,7 +6,7 @@ import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 
 @Getter
 @RequiredArgsConstructor
-public class HostCreateRequest extends BaseMemberCreateRequest {
+public class HostCreateRequest extends MemberCreateRequestBase {
 
     protected String password;
 

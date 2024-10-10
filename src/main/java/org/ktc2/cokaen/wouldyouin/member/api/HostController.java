@@ -6,7 +6,7 @@ import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.member.application.HostService;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.HostEditRequest;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.HostEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.http.ResponseEntity;

@@ -2,7 +2,7 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.CuratorEditRequest;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.CuratorEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
