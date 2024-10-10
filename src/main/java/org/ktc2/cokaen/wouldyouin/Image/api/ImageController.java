@@ -5,9 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageServiceFactory;
-import org.ktc2.cokaen.wouldyouin.Image.persist.Image;
-import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
-import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImageRepository;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImageController {
 
     private final ImageServiceFactory imageServiceFactory;
-    private final MemberImageRepository memberImageRepository;
 
     @PostMapping("/images")
     public ResponseEntity<ApiResponseBody<ImageResponse>> uploadImage(
@@ -36,7 +32,8 @@ public class ImageController {
             imageServiceFactory.getImageServiceByImageType(imageDomain).saveAndCreate(image)));
     }
 
-    @GetMapping(value = "{path}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    @GetMapping(value = "{path}", produces = {MediaType.IMAGE_PNG_VALUE,
+        MediaType.IMAGE_JPEG_VALUE})
     public ResponseEntity<byte[]> getImage(@PathVariable String path) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(Files.readAllBytes(Paths.get(path)));
