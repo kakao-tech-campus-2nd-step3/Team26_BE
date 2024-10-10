@@ -25,7 +25,7 @@ public abstract class BaseMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long Id;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -38,12 +38,6 @@ public abstract class BaseMember {
     @Column(nullable = false)
     private String email;
 
-    @Column
-    private String hashedPassword;
-
-    @Column
-    private String socialId; //소셜 타입 식별자 값
-
     @Column(nullable = false)
     private String nickname;
 
@@ -53,11 +47,11 @@ public abstract class BaseMember {
     @Column(nullable = false)
     private String profileImageUrl;
 
-    //for JWT refresh token
-    @Column(length = 1000)
-    private String refreshToken;
-
-    protected BaseMember(String nickname, String phone, String profileImageUrl) {
+    protected BaseMember(AccountType accountType, MemberType memberType, String email, String nickname,
+        String phone, String profileImageUrl) {
+        this.accountType = accountType;
+        this.memberType = memberType;
+        this.email = email;
         this.nickname = nickname;
         this.phone = phone;
         this.profileImageUrl = profileImageUrl;

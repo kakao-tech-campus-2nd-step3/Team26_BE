@@ -2,7 +2,7 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.HostCreateRequest;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.create.HostCreateRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.HostEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class HostService {
+public class HostService implements MemberServiceCommonBehavior {
 
     private final HostRepository hostRepository;
 
@@ -23,7 +23,7 @@ public class HostService {
 
     @Transactional
     public MemberResponse updateHost(Long hostId, HostEditRequest request) {
-        Host host = findHostOrThrow(hostId);
+        Host host = getHostOrThrow(hostId);
         Optional.ofNullable(request.getNickname()).ifPresent(host::setNickname);
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(host::setPhone);
         Optional.ofNullable(request.getProfileUrl()).ifPresent(host::setProfileImageUrl);
@@ -33,10 +33,21 @@ public class HostService {
         return MemberResponse.from(host);
     }
 
-    @Transactional(readOnly = true)
-    protected Host findHostOrThrow(Long hostId) {
-        //TODO: 커스텀 예외 필요
-        return hostRepository.findById(hostId).orElseThrow(RuntimeException::new);
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        hostRepository.delete(getHostOrThrow(id));
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public MemberResponse getMemberResponseById(Long id) {
+        return MemberResponse.from(getHostOrThrow(id));
+    }
+
+    @Transactional(readOnly = true)
+    public Host getHostOrThrow(Long id) {
+        //TODO: 커스텀 예외 필요
+        return hostRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
 }
