@@ -29,11 +29,6 @@ public class ImageController {
     private final ImageServiceFactory imageServiceFactory;
     private final MemberImageRepository memberImageRepository;
 
-    @GetMapping("/images/test")
-    public ResponseEntity<ApiResponseBody<Image>> test() {
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseBody<>(true, memberImageRepository.save(new MemberImage("name", 1L, "jpg"))));
-    }
-
     @PostMapping("/images")
     public ResponseEntity<ApiResponseBody<ImageResponse>> uploadImage(
         @RequestParam MultipartFile image, @RequestParam ImageDomain imageDomain) {
