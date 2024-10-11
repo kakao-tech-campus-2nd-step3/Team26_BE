@@ -18,7 +18,9 @@ import org.ktc2.cokaen.wouldyouin._common.persist.Area;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("Member")
 @Entity
+
 public class Member extends BaseMember {
+
 
     @Column(nullable = false)
     private Area area;
@@ -45,5 +47,6 @@ public class Member extends BaseMember {
     // for public builder
     protected Member(AccountType accountType, String email, String nickname, String phone, String profileImageUrl, Area area, String gender, String socialId) {
         this(accountType, MemberType.normal, email, nickname, phone, profileImageUrl, area, gender, socialId);
+
     }
 }
