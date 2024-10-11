@@ -16,7 +16,10 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("Host")
 @Entity
-public class Host extends AbstractMember {
+public class Host extends BaseMember {
+
+    @Column(nullable = false)
+    private String hashedPassword;
 
     @Column(nullable = false)
     private String intro;
@@ -28,11 +31,12 @@ public class Host extends AbstractMember {
     private String hashtag;
 
     @Builder
-    protected Host(String nickname, String phone, String profileUrl, String intro, Integer followers, String hashtag) {
-        super(nickname, phone, profileUrl);
-        this.intro = intro;
-        this.followers = followers;
-        this.hashtag = hashtag;
+    protected Host(String email, String nickname, String phone, String hashedPassword) {
+        super(AccountType.local, MemberType.host, email, nickname, phone, "");
+        this.hashedPassword = hashedPassword;
+        this.intro = "";
+        this.followers = 0;
+        this.hashtag = "";
     }
 
     public List<String> getHashTagList() {

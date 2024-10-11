@@ -24,9 +24,9 @@ public class Curator extends Member {
     private Integer followers;
 
     @Builder(builderMethodName = "curatorBuilder")
-    protected Curator(String nickname, Area area, String gender, String phone, String profileImageUrl, String intro, Integer followers) {
-        super(nickname, area, gender, phone, profileImageUrl);
-        this.intro = intro;
-        this.followers = followers;
+    public Curator(AccountType accountType, String email, String nickname, String phone, String profileImageUrl, Area area, String gender, String socialId) {
+        super(accountType, MemberType.curator, email, nickname, phone, profileImageUrl, area, gender, socialId);
+        this.intro = "";
+        this.followers = 0;
     }
 }

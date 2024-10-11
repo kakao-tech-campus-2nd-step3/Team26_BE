@@ -1,8 +1,8 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberCreateRequest;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberEditRequest;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.request.create.MemberCreateRequest;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.MemberEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberRepository;
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberService implements MemberServiceCommonBehavior {
 
     private final MemberRepository memberRepository;
 
@@ -24,7 +24,7 @@ public class MemberService {
 
     @Transactional
     public MemberResponse updateMember(Long memberId, MemberEditRequest editRequest) {
-        Member member = findMemberOrThrow(memberId);
+        Member member = getMemberOrThrow(memberId);
         Optional.ofNullable(editRequest.getNickname()).ifPresent(member::setNickname);
         Optional.ofNullable(editRequest.getArea()).ifPresent(member::setArea);
         Optional.ofNullable(editRequest.getPhoneNumber()).ifPresent(member::setPhone);
@@ -33,8 +33,20 @@ public class MemberService {
         return MemberResponse.from(member);
     }
 
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        memberRepository.delete(getMemberOrThrow(id));
+    }
+
+    @Override
     @Transactional(readOnly = true)
-    protected Member findMemberOrThrow(Long id) {
+    public MemberResponse getMemberResponseById(Long id) {
+        return MemberResponse.from(getMemberOrThrow(id));
+    }
+
+    @Transactional(readOnly = true)
+    public Member getMemberOrThrow(Long id) {
         //TODO: 커스텀 예외 필요
         return memberRepository.findById(id).orElseThrow(RuntimeException::new);
     }
