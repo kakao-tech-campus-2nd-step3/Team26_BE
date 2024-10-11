@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService implements MemberServiceCommonBehavior {
+public class MemberService implements MemberServiceCommonBehavior, EntityGettable<Member> {
 
     private final MemberRepository memberRepository;
 
@@ -24,7 +24,7 @@ public class MemberService implements MemberServiceCommonBehavior {
 
     @Transactional
     public MemberResponse updateMember(Long memberId, MemberEditRequest editRequest) {
-        Member member = getMemberOrThrow(memberId);
+        Member member = getByIdOrThrow(memberId);
         Optional.ofNullable(editRequest.getNickname()).ifPresent(member::setNickname);
         Optional.ofNullable(editRequest.getArea()).ifPresent(member::setArea);
         Optional.ofNullable(editRequest.getPhoneNumber()).ifPresent(member::setPhone);
@@ -36,17 +36,18 @@ public class MemberService implements MemberServiceCommonBehavior {
     @Override
     @Transactional
     public void deleteById(Long id) {
-        memberRepository.delete(getMemberOrThrow(id));
+        memberRepository.delete(getByIdOrThrow(id));
     }
 
     @Override
     @Transactional(readOnly = true)
     public MemberResponse getMemberResponseById(Long id) {
-        return MemberResponse.from(getMemberOrThrow(id));
+        return MemberResponse.from(getByIdOrThrow(id));
     }
 
+    @Override
     @Transactional(readOnly = true)
-    public Member getMemberOrThrow(Long id) {
+    public Member getByIdOrThrow(Long id) {
         //TODO: 커스텀 예외 필요
         return memberRepository.findById(id).orElseThrow(RuntimeException::new);
     }
