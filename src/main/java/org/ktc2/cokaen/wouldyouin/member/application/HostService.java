@@ -2,28 +2,31 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.HostCreateRequest;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.HostEditRequest;
+import org.ktc2.cokaen.wouldyouin.auth.application.dto.LocalLoginRequest;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.request.create.HostCreateRequest;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.HostEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 import org.ktc2.cokaen.wouldyouin.member.persist.HostRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class HostService {
+public class HostService implements MemberServiceCommonBehavior {
 
     private final HostRepository hostRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public MemberResponse createHost(HostCreateRequest request) {
-        return MemberResponse.from(hostRepository.save(request.toEntity()));
+        return MemberResponse.from(hostRepository.save(request.toEntity(passwordEncoder)));
     }
 
     @Transactional
     public MemberResponse updateHost(Long hostId, HostEditRequest request) {
-        Host host = findHostOrThrow(hostId);
+        Host host = getHostOrThrow(hostId);
         Optional.ofNullable(request.getNickname()).ifPresent(host::setNickname);
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(host::setPhone);
         Optional.ofNullable(request.getProfileUrl()).ifPresent(host::setProfileImageUrl);
@@ -33,10 +36,30 @@ public class HostService {
         return MemberResponse.from(host);
     }
 
-    @Transactional(readOnly = true)
-    protected Host findHostOrThrow(Long hostId) {
-        //TODO: 커스텀 예외 필요
-        return hostRepository.findById(hostId).orElseThrow(RuntimeException::new);
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        hostRepository.delete(getHostOrThrow(id));
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public MemberResponse getMemberResponseById(Long id) {
+        return MemberResponse.from(getHostOrThrow(id));
+    }
+
+    @Transactional(readOnly = true)
+    public MemberResponse getMemberResponseBy(LocalLoginRequest loginRequest) {
+        return MemberResponse.from(hostRepository
+            .findByEmailAndHashedPassword(
+                loginRequest.email(),
+                passwordEncoder.encode(loginRequest.password()))
+            .orElseThrow(RuntimeException::new));
+    }
+
+    @Transactional(readOnly = true)
+    protected Host getHostOrThrow(Long id) {
+        //TODO: 커스텀 예외 필요
+        return hostRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
 }
