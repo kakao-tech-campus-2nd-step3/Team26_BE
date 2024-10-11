@@ -2,11 +2,13 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin.auth.application.dto.LocalLoginRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.create.HostCreateRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.HostEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 import org.ktc2.cokaen.wouldyouin.member.persist.HostRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class HostService implements MemberServiceCommonBehavior {
 
     private final HostRepository hostRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public MemberResponse createHost(HostCreateRequest request) {
-        return MemberResponse.from(hostRepository.save(request.toEntity()));
+        return MemberResponse.from(hostRepository.save(request.toEntity(passwordEncoder)));
     }
 
     @Transactional
@@ -46,7 +49,16 @@ public class HostService implements MemberServiceCommonBehavior {
     }
 
     @Transactional(readOnly = true)
-    public Host getHostOrThrow(Long id) {
+    public MemberResponse getMemberResponseBy(LocalLoginRequest loginRequest) {
+        return MemberResponse.from(hostRepository
+            .findByEmailAndHashedPassword(
+                loginRequest.email(),
+                passwordEncoder.encode(loginRequest.password()))
+            .orElseThrow(RuntimeException::new));
+    }
+
+    @Transactional(readOnly = true)
+    protected Host getHostOrThrow(Long id) {
         //TODO: 커스텀 예외 필요
         return hostRepository.findById(id).orElseThrow(RuntimeException::new);
     }

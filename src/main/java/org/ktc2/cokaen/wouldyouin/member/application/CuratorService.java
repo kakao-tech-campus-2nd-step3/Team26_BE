@@ -22,7 +22,7 @@ public class CuratorService implements MemberServiceCommonBehavior {
 
     @Transactional
     public MemberResponse createCurator(Long normalMemberId) {
-        //TODO: 커스텀 예외 필요, 오직 normal만 되도록 처리 필요
+        //TODO: 커스텀 예외 필요
         Member member = memberRepository.findById(normalMemberId).orElseThrow(RuntimeException::new);
 
         // 일반 멤버 정보로 큐레이터 생성 후, 기존 일반멤버 및 BaseMember 정보는 데이터베이스에서 제거
@@ -37,10 +37,15 @@ public class CuratorService implements MemberServiceCommonBehavior {
             .socialId(member.getSocialId())
             .build();
 
-        curatorRepository.save(curator);
-        memberRepository.delete(member);
-        baseMemberRepository.delete(member);
+        Long toDeleteId = member.getId();
+        memberRepository.deleteById(toDeleteId);
+        baseMemberRepository.deleteById(toDeleteId);
 
+        //삭제 후 플러시를 사용해 즉시 데이터베이스에 반영
+        memberRepository.flush();
+        baseMemberRepository.flush();
+
+        curatorRepository.save(curator);
         return MemberResponse.from(curator);
     }
 

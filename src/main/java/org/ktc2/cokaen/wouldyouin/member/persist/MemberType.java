@@ -7,7 +7,8 @@ public enum MemberType {
     normal("memberService"),
     curator("curatorService"),
     host("hostService"),
-    any("");
+    any(""),
+    admin("");
 
     private final String serviceName;
 

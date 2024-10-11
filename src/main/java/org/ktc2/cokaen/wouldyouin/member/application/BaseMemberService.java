@@ -19,6 +19,14 @@ public class BaseMemberService {
         return memberServiceMap.get(getServiceNameByIdOrThrow(id)).getMemberResponseById(id);
     }
 
+    @Transactional(readOnly = true)
+    public void checkUniqueEmailOrThrow(String email) {
+        // TODO: 커스텀 예외 추가필요
+        baseMemberRepository.findByEmail(email).ifPresent(p -> {
+            throw new RuntimeException("Email already exists");
+        });
+    }
+
     @Transactional
     public void deleteById(Long id) {
         memberServiceMap.get(getServiceNameByIdOrThrow(id)).deleteById(id);

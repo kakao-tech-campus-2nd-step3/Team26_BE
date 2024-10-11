@@ -35,10 +35,10 @@ public abstract class BaseMember {
     @Enumerated(EnumType.STRING)
     private MemberType memberType;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nickname;
 
     @Column(nullable = false)
