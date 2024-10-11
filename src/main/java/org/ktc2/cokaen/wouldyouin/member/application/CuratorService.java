@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class CuratorService implements MemberServiceCommonBehavior {
+public class CuratorService implements MemberServiceCommonBehavior, EntityGettable<Curator> {
 
     private final CuratorRepository curatorRepository;
     private final MemberRepository memberRepository;
@@ -51,7 +51,7 @@ public class CuratorService implements MemberServiceCommonBehavior {
 
     @Transactional
     public MemberResponse updateCurator(Long curatorId, CuratorEditRequest request) {
-        Curator curator = getCuratorOrThrow(curatorId);
+        Curator curator = getByIdOrThrow(curatorId);
         Optional.ofNullable(curator.getNickname()).ifPresent(curator::setNickname);
         Optional.ofNullable(curator.getPhone()).ifPresent(curator::setPhone);
         Optional.ofNullable(curator.getProfileImageUrl()).ifPresent(curator::setProfileImageUrl);
@@ -64,17 +64,18 @@ public class CuratorService implements MemberServiceCommonBehavior {
     @Override
     @Transactional
     public void deleteById(Long id) {
-        curatorRepository.delete(getCuratorOrThrow(id));
+        curatorRepository.delete(getByIdOrThrow(id));
     }
 
     @Override
     @Transactional(readOnly = true)
     public MemberResponse getMemberResponseById(Long id) {
-        return MemberResponse.from(getCuratorOrThrow(id));
+        return MemberResponse.from(getByIdOrThrow(id));
     }
 
+    @Override
     @Transactional(readOnly = true)
-    protected Curator getCuratorOrThrow(Long id) {
+    public Curator getByIdOrThrow(Long id) {
         //TODO: 커스텀 예외 필요
         return curatorRepository.findById(id).orElseThrow(RuntimeException::new);
     }

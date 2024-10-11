@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class HostService implements MemberServiceCommonBehavior {
+public class HostService implements MemberServiceCommonBehavior, EntityGettable<Host> {
 
     private final HostRepository hostRepository;
     private final PasswordEncoder passwordEncoder;
@@ -26,7 +26,7 @@ public class HostService implements MemberServiceCommonBehavior {
 
     @Transactional
     public MemberResponse updateHost(Long hostId, HostEditRequest request) {
-        Host host = getHostOrThrow(hostId);
+        Host host = getByIdOrThrow(hostId);
         Optional.ofNullable(request.getNickname()).ifPresent(host::setNickname);
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(host::setPhone);
         Optional.ofNullable(request.getProfileUrl()).ifPresent(host::setProfileImageUrl);
@@ -39,13 +39,13 @@ public class HostService implements MemberServiceCommonBehavior {
     @Override
     @Transactional
     public void deleteById(Long id) {
-        hostRepository.delete(getHostOrThrow(id));
+        hostRepository.delete(getByIdOrThrow(id));
     }
 
     @Override
     @Transactional(readOnly = true)
     public MemberResponse getMemberResponseById(Long id) {
-        return MemberResponse.from(getHostOrThrow(id));
+        return MemberResponse.from(getByIdOrThrow(id));
     }
 
     @Transactional(readOnly = true)
@@ -57,8 +57,9 @@ public class HostService implements MemberServiceCommonBehavior {
             .orElseThrow(RuntimeException::new));
     }
 
+    @Override
     @Transactional(readOnly = true)
-    protected Host getHostOrThrow(Long id) {
+    public Host getByIdOrThrow(Long id) {
         //TODO: 커스텀 예외 필요
         return hostRepository.findById(id).orElseThrow(RuntimeException::new);
     }
