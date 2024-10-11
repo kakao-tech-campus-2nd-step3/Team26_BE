@@ -1,5 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.reservation.persist;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,21 +21,27 @@ public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "reservation_id")
     private Long id;
 
     @NotNull
+    @Column(name = "member_id")
     private Long memberId;
 
     @NotNull
+    @Column(name = "event_id")
     private Long eventId;
 
     @NotNull
+    @Column(name = "price")
     private Integer price;
 
     @NotNull
+    @Column(name = "quantity")
     private Integer quantity;
 
     @NotNull
+    @Column(name = "reservation_date")
     private LocalDateTime reservationDate;
 
     @Builder

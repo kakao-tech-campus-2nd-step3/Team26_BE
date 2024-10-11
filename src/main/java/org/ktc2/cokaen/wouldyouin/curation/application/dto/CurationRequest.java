@@ -31,5 +31,4 @@ public class CurationRequest {
             .hashTag(this.hashTag)
             .build();
     }
-
 }
