@@ -10,5 +10,5 @@ import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Authorize {
 
-    MemberType value();
+    MemberType[] value();
 }
