@@ -8,7 +8,6 @@ import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.like.persist.CuratorLike;
 import org.ktc2.cokaen.wouldyouin.like.persist.CuratorLikeRepository;
 import org.ktc2.cokaen.wouldyouin.like.persist.LikeRepository;
-import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 import org.ktc2.cokaen.wouldyouin.member.persist.LikeableMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
@@ -22,10 +21,9 @@ public class CuratorLikeService extends LikeService<CuratorLike> {
 
     public CuratorLikeService(
         Map<String, EntityGettable<? extends LikeableMember>> likeableMemberGetter,
-        EntityGettable<BaseMember> baseMemberGetter,
         EntityGettable<Member> memberGetter,
         CuratorLikeRepository likeRepository) {
-        super(likeableMemberGetter, baseMemberGetter, memberGetter);
+        super(likeableMemberGetter, memberGetter);
         this.likeRepository = likeRepository;
     }
 
@@ -39,7 +37,7 @@ public class CuratorLikeService extends LikeService<CuratorLike> {
         return like -> LikeResponse.builder()
             .nickname(like.getLikeableMember().getNickname())
             .intro(like.getLikeableMember().getIntro())
-            .hashtags(List.of())
+            .hashtags(List.of()) // TODO: 큐레이터에 해시태그 추가시 변경 필요
             .profileImageUrl(like.getLikeableMember().getProfileImageUrl())
             .build();
     }

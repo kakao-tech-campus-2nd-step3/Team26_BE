@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.like.persist.Like;
 import org.ktc2.cokaen.wouldyouin.like.persist.LikeRepository;
-import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.LikeableMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
@@ -19,11 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 public abstract class LikeService<LikeType extends Like<? extends LikeableMember>> {
 
     private final Map<String, EntityGettable<? extends LikeableMember>> likeableMemberGetter;
-    private final EntityGettable<BaseMember> baseMemberGetter;
     private final EntityGettable<Member> memberGetter;
 
     protected abstract LikeRepository<LikeType> getLikeRepository();
-    protected abstract Function<LikeType, LikeResponse> getLikeToResponseMapper();
+    protected abstract Function<LikeType, LikeResponse> getLikeToResponseMapper(); // TODO: 추후 host, curator간 응답 차이 사라지면 제거 후 여기서 구현해야 함
     protected abstract LikeType toEntity(Member member, LikeableMember targetLikableMember);
     public abstract MemberType getTargetLikeableMemberType();
 
