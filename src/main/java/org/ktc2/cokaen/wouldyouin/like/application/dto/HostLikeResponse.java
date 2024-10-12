@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.like.api;
+package org.ktc2.cokaen.wouldyouin.like.application.dto;
 
 import lombok.Builder;
 import org.ktc2.cokaen.wouldyouin.like.persist.HostLike;

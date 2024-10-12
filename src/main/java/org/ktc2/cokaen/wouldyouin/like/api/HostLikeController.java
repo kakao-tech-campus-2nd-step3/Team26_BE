@@ -3,6 +3,8 @@ package org.ktc2.cokaen.wouldyouin.like.api;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin.like.application.HostLikeService;
+import org.ktc2.cokaen.wouldyouin.like.application.dto.HostLikeResponse;
+import org.ktc2.cokaen.wouldyouin.like.application.dto.LikeRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

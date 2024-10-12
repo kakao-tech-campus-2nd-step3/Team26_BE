@@ -3,8 +3,8 @@ package org.ktc2.cokaen.wouldyouin.like.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.like.api.CuratorLikeResponse;
-import org.ktc2.cokaen.wouldyouin.like.api.LikeRequest;
+import org.ktc2.cokaen.wouldyouin.like.application.dto.CuratorLikeResponse;
+import org.ktc2.cokaen.wouldyouin.like.application.dto.LikeRequest;
 import org.ktc2.cokaen.wouldyouin.like.persist.CuratorLikeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
