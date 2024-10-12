@@ -1,8 +1,8 @@
 package org.ktc2.cokaen.wouldyouin.event.application;
 
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.event.api.EventRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.EventResponse;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor()
-public class EventService {
+public class EventService implements EntityGettable<Event> {
 
     private final EventRepository eventRepository;
 
@@ -27,10 +27,15 @@ public class EventService {
             .toList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Event getByIdOrThrow(Long id) throws RuntimeException {
+        return eventRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
+
     @Transactional(readOnly = true)
     public EventResponse getById(Long id) {
-        Event target = eventRepository.findById(id).orElseThrow(RuntimeException::new);
-        return EventResponse.from(target);
+        return EventResponse.from(getByIdOrThrow(id));
     }
 
     @Transactional

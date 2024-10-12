@@ -3,6 +3,7 @@ package org.ktc2.cokaen.wouldyouin.advertisement.application;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.advertisement.api.AdvertisementRequest;
 import org.ktc2.cokaen.wouldyouin.advertisement.api.AdvertisementResponse;
 import org.ktc2.cokaen.wouldyouin.advertisement.persist.Advertisement;
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor()
-public class AdvertisementService {
+public class AdvertisementService implements EntityGettable<Advertisement> {
 
     private final AdvertisementRepository advertisementRepository;
 
@@ -22,11 +23,15 @@ public class AdvertisementService {
             .map(AdvertisementResponse::from).toList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Advertisement getByIdOrThrow(Long id) throws RuntimeException {
+        return advertisementRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
+
     @Transactional(readOnly = true)
     public AdvertisementResponse getAdvertisementByAdId(Long adId) {
-        Advertisement target = advertisementRepository.findById(adId)
-            .orElseThrow(RuntimeException::new);
-        return AdvertisementResponse.from(target);
+        return AdvertisementResponse.from(getByIdOrThrow(adId));
     }
 
     @Transactional
@@ -48,6 +53,5 @@ public class AdvertisementService {
         advertisementRepository.findById(adId).orElseThrow(RuntimeException::new);
         advertisementRepository.deleteById(adId);
     }
-
 
 }
