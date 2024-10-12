@@ -2,34 +2,58 @@ package org.ktc2.cokaen.wouldyouin.like.application;
 
 
 import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.like.application.dto.CuratorLikeResponse;
-import org.ktc2.cokaen.wouldyouin.like.application.dto.LikeRequest;
+import java.util.Map;
+import java.util.function.Function;
+import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
+import org.ktc2.cokaen.wouldyouin.like.persist.CuratorLike;
 import org.ktc2.cokaen.wouldyouin.like.persist.CuratorLikeRepository;
+import org.ktc2.cokaen.wouldyouin.like.persist.LikeRepository;
+import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
+import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
+import org.ktc2.cokaen.wouldyouin.member.persist.LikeableMember;
+import org.ktc2.cokaen.wouldyouin.member.persist.Member;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
-public class CuratorLikeService {
+public class CuratorLikeService extends LikeService<CuratorLike> {
 
-    private final CuratorLikeRepository curatorLikeRepository;
+    private final CuratorLikeRepository likeRepository;
 
-    @Transactional(readOnly = true)
-    public List<CuratorLikeResponse> getAllByMemberId(Long memberId) {
-        return curatorLikeRepository.findByMemberId(memberId).stream()
-            .map(CuratorLikeResponse::from).toList();
+    public CuratorLikeService(
+        Map<String, EntityGettable<? extends LikeableMember>> likeableMemberGetter,
+        EntityGettable<BaseMember> baseMemberGetter,
+        EntityGettable<Member> memberGetter,
+        CuratorLikeRepository likeRepository) {
+        super(likeableMemberGetter, baseMemberGetter, memberGetter);
+        this.likeRepository = likeRepository;
     }
 
-    @Transactional
-    public CuratorLikeResponse create(Long curatorId, LikeRequest likeRequest) {
-        return CuratorLikeResponse.from(
-            curatorLikeRepository.save(likeRequest.toCuratorLikeEntity(curatorId, likeRequest)));
+    @Override
+    protected LikeRepository<CuratorLike> getLikeRepository() {
+        return likeRepository;
     }
 
-    @Transactional
-    public void delete(Long curatorLikeId) {
-        curatorLikeRepository.findById(curatorLikeId).orElseThrow(RuntimeException::new);
-        curatorLikeRepository.deleteById(curatorLikeId);
+    @Override
+    protected Function<CuratorLike, LikeResponse> getLikeToResponseMapper() {
+        return like -> LikeResponse.builder()
+            .nickname(like.getLikeableMember().getNickname())
+            .intro(like.getLikeableMember().getIntro())
+            .hashtags(List.of())
+            .profileImageUrl(like.getLikeableMember().getProfileImageUrl())
+            .build();
+    }
+
+    @Override
+    protected CuratorLike toEntity(Member member, LikeableMember targetLikableMember) {
+        return CuratorLike.builder()
+            .targetMember((Curator)targetLikableMember)
+            .member(member)
+            .build();
+    }
+
+    @Override
+    public MemberType getTargetLikeableMemberType() {
+        return MemberType.curator;
     }
 }
