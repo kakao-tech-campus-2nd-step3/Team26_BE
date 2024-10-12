@@ -34,8 +34,8 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
     }
 
     @Transactional
-    public LikeResponse create(Long memberId, Long targetMemberId, MemberType targetMemberType) {
-        LikeableMember targetLikeableMember = getLikeableMemberByIdOrThrow(targetMemberId, targetMemberType);
+    public LikeResponse create(Long memberId, Long targetMemberId) {
+        LikeableMember targetLikeableMember = getLikeableMemberByIdOrThrow(targetMemberId);
         Member member = memberGetter.getByIdOrThrow(memberId);
         getLikeRepository().findByMemberAndLikeableMember(member, targetLikeableMember).ifPresent(x -> {
             throw new RuntimeException("이미 좋아요한 사용자입니다.");
@@ -44,8 +44,8 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
     }
 
     @Transactional
-    public void delete(Long memberId, Long targetMemberId, MemberType targetMemberType) {
-        LikeableMember targetLikeableMember = getLikeableMemberByIdOrThrow(targetMemberId, targetMemberType);
+    public void delete(Long memberId, Long targetMemberId) {
+        LikeableMember targetLikeableMember = getLikeableMemberByIdOrThrow(targetMemberId);
         Member member = memberGetter.getByIdOrThrow(memberId);
         LikeType like = getLikeRepository().findByMemberAndLikeableMember(member, targetLikeableMember)
             .orElseThrow(() -> new RuntimeException("해당 사용자를 좋아요하지 않았습니다."));
@@ -53,7 +53,7 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
     }
 
     @Transactional(readOnly = true)
-    protected LikeableMember getLikeableMemberByIdOrThrow(Long likeableMemberId, MemberType targetMemberType) {
-        return likeableMemberGetter.get(targetMemberType.getServiceName()).getByIdOrThrow(likeableMemberId);
+    protected LikeableMember getLikeableMemberByIdOrThrow(Long likeableMemberId) {
+        return likeableMemberGetter.get(getTargetLikeableMemberType().getServiceName()).getByIdOrThrow(likeableMemberId);
     }
 }
