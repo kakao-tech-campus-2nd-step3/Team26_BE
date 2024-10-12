@@ -32,7 +32,7 @@ public class Host extends BaseMember {
     @Column(nullable = false)
     private String hashtag;
 
-    @OneToMany
+    @OneToMany(mappedBy = "host")
     private List<Event> events;
 
     @Builder

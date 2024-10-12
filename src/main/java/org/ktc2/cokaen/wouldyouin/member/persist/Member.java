@@ -36,16 +36,16 @@ public class Member extends BaseMember {
     @Column(length = 1000)
     private String refreshToken;
 
-    @OneToMany
+    @OneToMany(mappedBy = "memberId")
     private List<CuratorLike> curatorLikes;
 
-    @OneToMany
+    @OneToMany(mappedBy = "memberId")
     private List<HostLike> hostLikes;
 
-    @OneToMany
+    @OneToMany(mappedBy = "memberId")
     private List<Reservation> reservations;
 
-    @OneToMany
+    @OneToMany(mappedBy = "memberId")
     private List<Review> reviews;
 
     // for Curator

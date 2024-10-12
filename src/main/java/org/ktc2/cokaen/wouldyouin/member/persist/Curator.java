@@ -26,7 +26,7 @@ public class Curator extends Member {
     @Column(nullable = false)
     private Integer followers;
 
-    @OneToMany
+    @OneToMany(mappedBy = "curator")
     private List<Curation> curations;
 
     @Builder(builderMethodName = "curatorBuilder")
