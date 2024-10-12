@@ -1,6 +1,7 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.create.MemberCreateRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.MemberEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
