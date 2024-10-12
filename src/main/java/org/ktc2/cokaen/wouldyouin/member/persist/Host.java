@@ -18,7 +18,7 @@ import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("Host")
 @Entity
-public class Host extends BaseMember {
+public class Host extends BaseMember implements LikeableMember {
 
     @Column(nullable = false)
     private String hashedPassword;

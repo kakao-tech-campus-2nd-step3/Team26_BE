@@ -18,7 +18,7 @@ import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("Curator")
 @Entity
-public class Curator extends Member {
+public class Curator extends Member implements LikeableMember {
 
     @Column(nullable = false)
     private String intro;
