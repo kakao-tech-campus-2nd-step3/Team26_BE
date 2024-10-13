@@ -36,10 +36,10 @@ public class Member extends BaseMember {
     @Column(length = 1000)
     private String refreshToken;
 
-    @OneToMany(mappedBy = "memberId")
+    @OneToMany(mappedBy = "member")
     private List<CuratorLike> curatorLikes;
 
-    @OneToMany(mappedBy = "memberId")
+    @OneToMany(mappedBy = "member")
     private List<HostLike> hostLikes;
 
     @OneToMany(mappedBy = "memberId")
