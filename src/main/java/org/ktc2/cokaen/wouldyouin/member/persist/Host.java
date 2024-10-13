@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import java.util.Arrays;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,7 +17,7 @@ import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("Host")
 @Entity
-public class Host extends BaseMember {
+public class Host extends BaseMember implements LikeableMember {
 
     @Column(nullable = false)
     private String hashedPassword;
@@ -27,7 +26,7 @@ public class Host extends BaseMember {
     private String intro;
 
     @Column(nullable = false)
-    private Integer followers;
+    private Integer likes;
 
     @Column(nullable = false)
     private String hashtag;
@@ -40,12 +39,7 @@ public class Host extends BaseMember {
         super(AccountType.local, MemberType.host, email, nickname, phone, "");
         this.hashedPassword = hashedPassword;
         this.intro = "";
-        this.followers = 0;
+        this.likes = 0;
         this.hashtag = "";
-    }
-
-    public List<String> getHashTagList() {
-        //TODO: 정상적으로 해시태그 리스트로 분리되는지 검증 필요
-        return Arrays.stream(hashtag.split("#")).toList();
     }
 }

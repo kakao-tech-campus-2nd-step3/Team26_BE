@@ -1,33 +1,43 @@
 package org.ktc2.cokaen.wouldyouin.like.application;
 
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.like.api.HostLikeResponse;
-import org.ktc2.cokaen.wouldyouin.like.api.LikeRequest;
+import java.util.Map;
+import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
+import org.ktc2.cokaen.wouldyouin.like.persist.HostLike;
 import org.ktc2.cokaen.wouldyouin.like.persist.HostLikeRepository;
+import org.ktc2.cokaen.wouldyouin.like.persist.LikeRepository;
+import org.ktc2.cokaen.wouldyouin.member.persist.Host;
+import org.ktc2.cokaen.wouldyouin.member.persist.LikeableMember;
+import org.ktc2.cokaen.wouldyouin.member.persist.Member;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
-public class HostLikeService {
+public class HostLikeService extends LikeService<HostLike> {
 
     private final HostLikeRepository hostLikeRepository;
 
-    @Transactional(readOnly = true)
-    public List<HostLikeResponse> findByMemberId(Long memberId){
-        return hostLikeRepository.findByMemberId(memberId).stream().map(HostLikeResponse::from).toList();
+    public HostLikeService(
+        Map<String, EntityGettable<? extends LikeableMember>> likeableMemberGetter, EntityGettable<Member> memberGetter,
+        HostLikeRepository hostLikeRepository) {
+        super(likeableMemberGetter, memberGetter);
+        this.hostLikeRepository = hostLikeRepository;
     }
 
-    @Transactional
-    public HostLikeResponse create(Long hostId, LikeRequest likeRequest) {
-        return HostLikeResponse.from(
-            hostLikeRepository.save(likeRequest.toHostLikeEntity(hostId, likeRequest)));
+    @Override
+    protected LikeRepository<HostLike> getLikeRepository() {
+        return hostLikeRepository;
     }
 
-    @Transactional
-    public void delete(Long hostLikeId) {
-        hostLikeRepository.findById(hostLikeId).orElseThrow(RuntimeException::new);
-        hostLikeRepository.deleteById(hostLikeId);
+    @Override
+    protected HostLike toEntity(Member member, LikeableMember targetLikableMember) {
+        return HostLike.builder()
+            .targetMember((Host)targetLikableMember)
+            .member(member)
+            .build();
+    }
+
+    @Override
+    public MemberType getTargetLikeableMemberType() {
+        return MemberType.host;
     }
 }
