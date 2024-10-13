@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 public class LikeResponse {
 
+    private final Long memberId;
     private final String nickname;
     private final String intro;
     private final List<String> hashtags;

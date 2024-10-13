@@ -33,6 +33,7 @@ public class HostLikeService extends LikeService<HostLike> {
     @Override
     protected Function<HostLike, LikeResponse> getLikeToResponseMapper() {
         return like -> LikeResponse.builder()
+            .memberId(like.getLikeableMember().getId())
             .nickname(like.getLikeableMember().getNickname())
             .intro(like.getLikeableMember().getIntro())
             .hashtags(like.getLikeableMember().getHashTagList())

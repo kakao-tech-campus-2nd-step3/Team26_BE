@@ -35,6 +35,7 @@ public class CuratorLikeService extends LikeService<CuratorLike> {
     @Override
     protected Function<CuratorLike, LikeResponse> getLikeToResponseMapper() {
         return like -> LikeResponse.builder()
+            .memberId(like.getLikeableMember().getId())
             .nickname(like.getLikeableMember().getNickname())
             .intro(like.getLikeableMember().getIntro())
             .hashtags(List.of()) // TODO: 큐레이터에 해시태그 추가시 변경 필요
