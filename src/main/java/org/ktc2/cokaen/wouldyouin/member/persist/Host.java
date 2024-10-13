@@ -26,7 +26,7 @@ public class Host extends BaseMember implements LikeableMember {
     private String intro;
 
     @Column(nullable = false)
-    private Integer followers;
+    private Integer likes;
 
     @Column(nullable = false)
     private String hashtag;
@@ -39,7 +39,7 @@ public class Host extends BaseMember implements LikeableMember {
         super(AccountType.local, MemberType.host, email, nickname, phone, "");
         this.hashedPassword = hashedPassword;
         this.intro = "";
-        this.followers = 0;
+        this.likes = 0;
         this.hashtag = "";
     }
 }

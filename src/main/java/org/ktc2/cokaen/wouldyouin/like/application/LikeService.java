@@ -39,7 +39,7 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
         getLikeRepository().findByMemberAndLikeableMember(member, targetLikeableMember)
             .ifPresent(x -> { throw new RuntimeException("이미 좋아요한 사용자입니다."); });
 
-        targetLikeableMember.incrementFollowers();
+        targetLikeableMember.increaseLikes();
         return LikeResponse.from(getLikeRepository()
             .save(toEntity(member, targetLikeableMember))
             .getLikeableMember());
@@ -52,7 +52,7 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
         LikeType like = getLikeRepository().findByMemberAndLikeableMember(member, targetLikeableMember)
             .orElseThrow(() -> new RuntimeException("해당 사용자를 좋아요하지 않았습니다."));
 
-        targetLikeableMember.decrementFollowers();
+        targetLikeableMember.decreaseLikes();
         getLikeRepository().delete(like);
     }
 

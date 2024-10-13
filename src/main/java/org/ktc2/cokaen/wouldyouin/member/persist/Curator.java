@@ -24,7 +24,7 @@ public class Curator extends Member implements LikeableMember {
     private String intro;
 
     @Column(nullable = false)
-    private Integer followers;
+    private Integer likes;
 
     @Column(nullable = false)
     private String hashtag;
@@ -36,7 +36,7 @@ public class Curator extends Member implements LikeableMember {
     public Curator(AccountType accountType, String email, String nickname, String phone, String profileImageUrl, Area area, String gender, String socialId) {
         super(accountType, MemberType.curator, email, nickname, phone, profileImageUrl, area, gender, socialId);
         this.intro = "";
-        this.followers = 0;
+        this.likes = 0;
         this.hashtag = "";
     }
 }

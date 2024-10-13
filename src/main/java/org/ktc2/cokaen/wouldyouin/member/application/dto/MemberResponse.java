@@ -25,7 +25,7 @@ public class MemberResponse {
     private String gender;
 
     private String intro;
-    private Integer followers;
+    private Integer likes;
 
     private List<String> hashtag;
 
@@ -50,7 +50,7 @@ public class MemberResponse {
         return responseBase(host)
             .memberType(MemberType.host)
             .intro(host.getIntro())
-            .followers(host.getFollowers())
+            .likes(host.getLikes())
             .hashtag(host.getHashTagList())
             .build();
     }
@@ -61,7 +61,7 @@ public class MemberResponse {
             .area(curator.getArea())
             .gender(curator.getGender())
             .intro(curator.getIntro())
-            .followers(curator.getFollowers())
+            .likes(curator.getLikes())
             .build();
     }
 }

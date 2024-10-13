@@ -13,18 +13,18 @@ public interface LikeableMember {
 
     String getIntro();
 
-    Integer getFollowers();
+    Integer getLikes();
 
-    void setFollowers(Integer followers);
+    void setLikes(Integer likes);
 
     String getHashtag();
 
-    default void incrementFollowers() {
-        setFollowers(getFollowers() + 1);
+    default void increaseLikes() {
+        setLikes(getLikes() + 1);
     }
 
-    default void decrementFollowers() {
-        setFollowers(getFollowers() - 1);
+    default void decreaseLikes() {
+        setLikes(getLikes() - 1);
     }
 
     default List<String> getHashTagList() {
