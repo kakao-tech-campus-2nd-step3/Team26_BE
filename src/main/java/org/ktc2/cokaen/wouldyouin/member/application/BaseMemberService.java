@@ -6,6 +6,7 @@ import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,11 @@ public class BaseMemberService implements EntityGettable<BaseMember> {
     public BaseMember getByIdOrThrow(Long id) throws RuntimeException {
         // TODO: 커스텀 예외 작성필요
         return baseMemberRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public MemberType getMemberType(Long id) throws RuntimeException {
+        return getByIdOrThrow(id).getMemberType();
     }
 
     @Transactional(readOnly = true)

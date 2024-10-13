@@ -1,36 +1,19 @@
 package org.ktc2.cokaen.wouldyouin.like.persist;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
+import org.ktc2.cokaen.wouldyouin.member.persist.Member;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 
-@Getter
-@Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class CuratorLike {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotNull
-    private Long curatorId;
-
-    @NotNull
-    private Long memberId;
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class CuratorLike extends Like<Curator>{
 
     @Builder
-
-    public CuratorLike(Long curatorId, Long memberId) {
-        this.curatorId = curatorId;
-        this.memberId = memberId;
+    protected CuratorLike(Curator targetMember, Member member) {
+        super(targetMember, MemberType.curator, member);
     }
 }
