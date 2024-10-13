@@ -1,7 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.like.application;
 
 import java.util.Map;
-import java.util.function.Function;
 import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.like.persist.HostLike;
 import org.ktc2.cokaen.wouldyouin.like.persist.HostLikeRepository;
@@ -15,30 +14,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class HostLikeService extends LikeService<HostLike> {
 
-    private final HostLikeRepository likeRepository;
+    private final HostLikeRepository hostLikeRepository;
 
     public HostLikeService(
-        Map<String, EntityGettable<? extends LikeableMember>> likeableMemberGetter,
-        EntityGettable<Member> memberGetter,
-        HostLikeRepository likeRepository) {
+        Map<String, EntityGettable<? extends LikeableMember>> likeableMemberGetter, EntityGettable<Member> memberGetter,
+        HostLikeRepository hostLikeRepository) {
         super(likeableMemberGetter, memberGetter);
-        this.likeRepository = likeRepository;
+        this.hostLikeRepository = hostLikeRepository;
     }
 
     @Override
     protected LikeRepository<HostLike> getLikeRepository() {
-        return likeRepository;
-    }
-
-    @Override
-    protected Function<HostLike, LikeResponse> getLikeToResponseMapper() {
-        return like -> LikeResponse.builder()
-            .memberId(like.getLikeableMember().getId())
-            .nickname(like.getLikeableMember().getNickname())
-            .intro(like.getLikeableMember().getIntro())
-            .hashtags(like.getLikeableMember().getHashTagList())
-            .profileImageUrl(like.getLikeableMember().getProfileImageUrl())
-            .build();
+        return hostLikeRepository;
     }
 
     @Override

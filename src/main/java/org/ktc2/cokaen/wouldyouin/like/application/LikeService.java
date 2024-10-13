@@ -2,7 +2,6 @@ package org.ktc2.cokaen.wouldyouin.like.application;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.like.persist.Like;
@@ -21,7 +20,6 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
     private final EntityGettable<Member> memberGetter;
 
     protected abstract LikeRepository<LikeType> getLikeRepository();
-    protected abstract Function<LikeType, LikeResponse> getLikeToResponseMapper(); // TODO: 추후 host, curator간 응답 차이 사라지면 제거 후 여기서 구현해야 함
     protected abstract LikeType toEntity(Member member, LikeableMember targetLikableMember);
     public abstract MemberType getTargetLikeableMemberType();
 
@@ -29,7 +27,8 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
     public List<LikeResponse> getLikes(Long memberId) {
         return getLikeRepository().findAllByMember(memberGetter.getByIdOrThrow(memberId))
             .stream()
-            .map(getLikeToResponseMapper())
+            .map(Like::getLikeableMember)
+            .map(LikeResponse::from)
             .toList();
     }
 
@@ -40,7 +39,9 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
         getLikeRepository().findByMemberAndLikeableMember(member, targetLikeableMember).ifPresent(x -> {
             throw new RuntimeException("이미 좋아요한 사용자입니다.");
         });
-        return getLikeToResponseMapper().apply(getLikeRepository().save(toEntity(member, targetLikeableMember)));
+        return LikeResponse.from(getLikeRepository()
+            .save(toEntity(member, targetLikeableMember))
+            .getLikeableMember());
     }
 
     @Transactional

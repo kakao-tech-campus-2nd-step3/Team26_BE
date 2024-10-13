@@ -13,7 +13,7 @@ public interface LikeableMember {
 
     String getIntro();
 
-    Long getFollowers();
+    Integer getFollowers();
 
     String getHashtag();
 
