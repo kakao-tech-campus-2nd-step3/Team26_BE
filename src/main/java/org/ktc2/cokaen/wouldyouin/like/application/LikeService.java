@@ -34,11 +34,12 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
 
     @Transactional
     public LikeResponse create(Long memberId, Long targetMemberId) {
-        LikeableMember targetLikeableMember = getLikeableMemberByIdOrThrow(targetMemberId);
         Member member = memberGetter.getByIdOrThrow(memberId);
-        getLikeRepository().findByMemberAndLikeableMember(member, targetLikeableMember).ifPresent(x -> {
-            throw new RuntimeException("이미 좋아요한 사용자입니다.");
-        });
+        LikeableMember targetLikeableMember = getLikeableMemberByIdOrThrow(targetMemberId);
+        getLikeRepository().findByMemberAndLikeableMember(member, targetLikeableMember)
+            .ifPresent(x -> { throw new RuntimeException("이미 좋아요한 사용자입니다."); });
+
+        targetLikeableMember.incrementFollowers();
         return LikeResponse.from(getLikeRepository()
             .save(toEntity(member, targetLikeableMember))
             .getLikeableMember());
@@ -46,10 +47,12 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
 
     @Transactional
     public void delete(Long memberId, Long targetMemberId) {
-        LikeableMember targetLikeableMember = getLikeableMemberByIdOrThrow(targetMemberId);
         Member member = memberGetter.getByIdOrThrow(memberId);
+        LikeableMember targetLikeableMember = getLikeableMemberByIdOrThrow(targetMemberId);
         LikeType like = getLikeRepository().findByMemberAndLikeableMember(member, targetLikeableMember)
             .orElseThrow(() -> new RuntimeException("해당 사용자를 좋아요하지 않았습니다."));
+
+        targetLikeableMember.decrementFollowers();
         getLikeRepository().delete(like);
     }
 

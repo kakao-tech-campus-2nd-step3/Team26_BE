@@ -15,7 +15,17 @@ public interface LikeableMember {
 
     Integer getFollowers();
 
+    void setFollowers(Integer followers);
+
     String getHashtag();
+
+    default void incrementFollowers() {
+        setFollowers(getFollowers() + 1);
+    }
+
+    default void decrementFollowers() {
+        setFollowers(getFollowers() - 1);
+    }
 
     default List<String> getHashTagList() {
         return Arrays.stream(getHashtag().split("#")).toList();
