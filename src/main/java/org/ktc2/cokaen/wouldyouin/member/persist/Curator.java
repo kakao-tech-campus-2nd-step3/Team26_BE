@@ -26,6 +26,9 @@ public class Curator extends Member implements LikeableMember {
     @Column(nullable = false)
     private Integer followers;
 
+    @Column(nullable = false)
+    private String hashtag;
+
     @OneToMany(mappedBy = "curator")
     private List<Curation> curations;
 
@@ -34,5 +37,6 @@ public class Curator extends Member implements LikeableMember {
         super(accountType, MemberType.curator, email, nickname, phone, profileImageUrl, area, gender, socialId);
         this.intro = "";
         this.followers = 0;
+        this.hashtag = "";
     }
 }
