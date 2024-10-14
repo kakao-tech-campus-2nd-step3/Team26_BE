@@ -1,5 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.event.persist;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,42 +30,54 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "event_id")
     private Long id;
 
     @NotNull
+    @Column(name = "host_id")
     private Long hostId;
 
     @NotNull
+    @Column(name = "title")
     private String title;
 
     @NotNull
+    @Column(name = "content")
     private String content;
 
     @NotNull
+    @Column(name = "area")
     @Enumerated(EnumType.STRING)
     private Area area;
 
     @Embedded
     @NotNull
+    @Column(name = "location")
     private Location location;
 
     @NotNull
+    @Column(name = "start_time")
     private LocalDateTime startTime;
 
     @NotNull
+    @Column(name = "end_time")
     private LocalDateTime endTime;
 
     @NotNull
     @Min(0)
+    @Column(name = "price")
     private Integer price;
 
     @Min(1)
+    @Column(name = "total_seat")
     private Integer totalSeat;
 
     @Min(0)
+    @Column(name = "left_seat")
     private Integer leftSeat;
 
     @NotNull
+    @Column(name = "category")
     @Enumerated(EnumType.STRING)
     private Category category;
 

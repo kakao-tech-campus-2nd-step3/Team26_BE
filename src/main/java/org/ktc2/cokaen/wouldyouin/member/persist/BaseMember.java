@@ -21,11 +21,11 @@ import lombok.Setter;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
 @Entity
-public abstract class AbstractMember {
+public abstract class BaseMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long Id;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -35,16 +35,10 @@ public abstract class AbstractMember {
     @Enumerated(EnumType.STRING)
     private MemberType memberType;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column
-    private String hashedPassword;
-
-    @Column
-    private String socialId; //소셜 타입 식별자 값
-
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nickname;
 
     @Column(nullable = false)
@@ -53,11 +47,11 @@ public abstract class AbstractMember {
     @Column(nullable = false)
     private String profileImageUrl;
 
-    //for JWT refresh token
-    @Column(length = 1000)
-    private String refreshToken;
-
-    protected AbstractMember(String nickname, String phone, String profileImageUrl) {
+    protected BaseMember(AccountType accountType, MemberType memberType, String email, String nickname,
+        String phone, String profileImageUrl) {
+        this.accountType = accountType;
+        this.memberType = memberType;
+        this.email = email;
         this.nickname = nickname;
         this.phone = phone;
         this.profileImageUrl = profileImageUrl;

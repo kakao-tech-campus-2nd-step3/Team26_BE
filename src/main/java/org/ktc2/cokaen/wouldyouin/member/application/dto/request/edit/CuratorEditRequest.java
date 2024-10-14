@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.member.application.dto;
+package org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit;
 
 import io.micrometer.common.lang.Nullable;
 import lombok.Getter;
