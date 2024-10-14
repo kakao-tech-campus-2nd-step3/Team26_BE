@@ -22,4 +22,13 @@ public class MemberImageService extends ImageService<MemberImage> {
     public ImageRepository<MemberImage> getImageRepository() {
         return memberImageRepository;
     }
+
+    @Override
+    protected MemberImage toEntity(String path, Long size, String extension) {
+        return MemberImage.builder()
+            .name(path)
+            .size(size)
+            .extension(extension)
+            .build();
+    }
 }

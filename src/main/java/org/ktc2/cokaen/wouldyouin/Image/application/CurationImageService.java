@@ -22,4 +22,13 @@ public class CurationImageService extends ImageService<CurationImage> {
     public ImageRepository<CurationImage> getImageRepository() {
         return curationImageRepository;
     }
+
+    @Override
+    protected CurationImage toEntity(String path, Long size, String extension) {
+        return CurationImage.builder()
+            .name(path)
+            .size(size)
+            .extension(extension)
+            .build();
+    }
 }

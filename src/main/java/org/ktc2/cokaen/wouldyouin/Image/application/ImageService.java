@@ -2,7 +2,6 @@ package org.ktc2.cokaen.wouldyouin.Image.application;
 
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.api.ImageDomain;
-import org.ktc2.cokaen.wouldyouin.Image.api.ImageRequest;
 import org.ktc2.cokaen.wouldyouin.Image.api.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.Image.persist.Image;
 import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
@@ -22,20 +21,13 @@ public abstract class ImageService<T extends Image> {
 
     protected abstract ImageRepository<T> getImageRepository();
 
+    // 구체 이미지 타입을 반환하는 로직을 하위 서비스가 위임하도록 합니다.
+    protected abstract T toEntity(String path, Long size, String extension);
+
     @Transactional(readOnly = true)
     protected String getNameById(Long id) {
         T target = getImageRepository().findById(id).orElseThrow(RuntimeException::new);
         return target.getUrl();
-    }
-
-    @Transactional
-    protected ImageResponse create(ImageRequest imageRequest) {
-        try {
-            T imageEntity = imageRequest.toEntity(getImageType().getClassType());
-            return ImageResponse.from(getImageRepository().save(imageEntity));
-        } catch (Exception e) {
-            throw new RuntimeException("failed to create image entity");
-        }
     }
 
     @Transactional
@@ -47,7 +39,12 @@ public abstract class ImageService<T extends Image> {
     @Transactional
     public ImageResponse saveAndCreate(MultipartFile image) {
         String path = imageStorage.save(image, getImageType());
-        return create(ImageRequest.of(path, image.getSize(), image.getContentType()));
+        //ImageRequest는 서비스 내에서만 이용하니까 그냥 파라미터로 전달하면 어떨까요?, 즉 imageRequest를 삭제합니다.
+        return ImageResponse.from(
+            getImageRepository().save(toEntity(
+                path, image.getSize(), image.getContentType())
+            )
+        );
     }
 
     @Transactional
