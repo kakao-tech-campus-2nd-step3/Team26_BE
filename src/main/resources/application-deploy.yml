@@ -1,0 +1,15 @@
+#server settings
+server:
+  port: 8080
+
+spring:
+  config:
+    activate:
+      on-profile: deploy
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+
+# log4j log level setting
+logging.level.kr.ac.jnu.capstone.bigpicture.dongsim: info
