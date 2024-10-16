@@ -1,0 +1,53 @@
+# 환경 프로필 변경방법
+# 오른쪽 위 클릭 후 Edit configuration... 클릭 > Active profiles에 dev, create, deploy 중 하나 입력
+
+spring:
+  application.name: WouldYouIn
+  profiles:
+    default: dev
+  thymeleaf:
+    cache: false
+
+  # h2 database settings
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    url: jdbc:h2:mem:test
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    hibernate.ddl-auto: create
+
+# log4j log level setting
+logging.level.org.ktc2.cokaen.wouldyouin: debug
+
+# for image storage path
+image:
+  upload:
+    common-path: src/main/resources/static
+
+# for jwt
+jwt:
+  secret: ${WOULD_YOU_IN_JWT_SECRET}
+  access:
+    expiration: 86400000 # 1day
+
+# for social login
+oauth:
+  kakao:
+    client_id: ${WOULD_YOU_IN_KAKAO_CLIENT_ID}
+    client_secret: ${WOULD_YOU_IN_KAKAO_CLIENT_SECRET}
+    redirect_uri: ${WOULD_YOU_IN_KAKAO_REDIRECT_URI}
+  google:
+    client_id: ${WOULD_YOU_IN_GOOGLE_CLIENT_ID}
+    client_secret: ${WOULD_YOU_IN_GOOGLE_CLIENT_SECRET}
+    redirect_uri: ${WOULD_YOU_IN_GOOGLE_REDIRECT_URI}
+    scope:
+      - email
+      - profile
