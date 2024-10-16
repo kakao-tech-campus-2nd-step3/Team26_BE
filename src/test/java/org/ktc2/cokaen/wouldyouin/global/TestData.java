@@ -4,21 +4,22 @@ import java.time.LocalDateTime;
 import org.ktc2.cokaen.wouldyouin._common.persist.Area;
 import org.ktc2.cokaen.wouldyouin._common.persist.Category;
 import org.ktc2.cokaen.wouldyouin._common.persist.Location;
-import org.ktc2.cokaen.wouldyouin.event.api.EventRequest;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationRequest;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
 
 public class TestData {
 
-    public static EventRequest validEventRequest;
-    public static EventRequest validEventRequestToModify;
+    public static EventCreateRequest validEventCreateRequest;
+    public static EventEditRequest validEventRequestToModify;
     public static Event validEvent;
     public static ReservationRequest validReservationRequest;
     public static Reservation validReservation;
 
     static {
-        validEventRequest = EventRequest.builder()
+        validEventCreateRequest = EventCreateRequest.builder()
             .hostId(1L)
             .title("title")
             .content("content")
@@ -32,8 +33,7 @@ public class TestData {
             .category(Category.밴드)
             .build();
 
-        validEventRequestToModify = EventRequest.builder()
-            .hostId(2L)
+        validEventRequestToModify = EventEditRequest.builder()
             .title("modifiedTitle")
             .content("modifiedContent")
             .area(Area.광주)
@@ -47,7 +47,6 @@ public class TestData {
             .build();
 
         validEvent = Event.builder()
-            .hostId(1L)
             .title("title")
             .content("content")
             .area(Area.전체)

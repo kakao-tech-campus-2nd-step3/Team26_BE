@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public abstract class LikeService<LikeType extends Like<? extends LikeableMember>> {
 
-    private final Map<String, EntityGettable<? extends LikeableMember>> likeableMemberGetter;
-    private final EntityGettable<Member> memberGetter;
+    private final Map<String, EntityGettable<Long, ? extends LikeableMember>> likeableMemberGetter;
+    private final EntityGettable<Long, Member> memberGetter;
 
     protected abstract LikeRepository<LikeType> getLikeRepository();
     protected abstract LikeType toEntity(Member member, LikeableMember targetLikableMember);

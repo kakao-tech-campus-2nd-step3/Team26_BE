@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.Image.api;
+package org.ktc2.cokaen.wouldyouin.Image.api.dto;
 
 import java.time.LocalDateTime;
 import lombok.Builder;
@@ -13,7 +13,6 @@ public class ImageResponse {
     private String url;
     private LocalDateTime createdDate;
     private Long size;
-    private String extension;
 
     public static ImageResponse from(Image image) {
         return ImageResponse.builder()

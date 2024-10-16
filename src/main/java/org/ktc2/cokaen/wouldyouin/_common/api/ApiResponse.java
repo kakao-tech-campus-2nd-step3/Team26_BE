@@ -13,4 +13,7 @@ public class ApiResponse {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponseBody<>(true, data));
     }
 
+    public static <D> ResponseEntity<ApiResponseBody<D>> noContent() {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponseBody<>(true, null));
+    }
 }

@@ -3,8 +3,11 @@ package org.ktc2.cokaen.wouldyouin.Image.api;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageServiceFactory;
+import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,14 +29,12 @@ public class ImageController {
     private final ImageServiceFactory imageServiceFactory;
 
     @PostMapping("/images")
-    public ResponseEntity<ApiResponseBody<ImageResponse>> uploadImage(
-        @RequestParam MultipartFile image, @RequestParam ImageDomain imageDomain) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseBody<>(true,
-            imageServiceFactory.getImageServiceByImageType(imageDomain).saveAndCreate(image)));
+    public ResponseEntity<ApiResponseBody<List<ImageResponse>>> uploadImages(@RequestParam List<MultipartFile> images,
+        @RequestParam ImageDomain imageDomain) {
+        return ApiResponse.ok(imageServiceFactory.getImageServiceByImageType(imageDomain).saveAndCreateImages(images));
     }
 
-    @GetMapping(value = "{path}", produces = {MediaType.IMAGE_PNG_VALUE,
-        MediaType.IMAGE_JPEG_VALUE})
+    @GetMapping(value = "{path}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     public ResponseEntity<byte[]> getImage(@PathVariable String path) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(Files.readAllBytes(Paths.get(path)));
@@ -43,9 +44,8 @@ public class ImageController {
     }
 
     @DeleteMapping("/images/{id}")
-    public ResponseEntity<ApiResponseBody<Void>> deleteImage(@PathVariable Long id,
-        @RequestParam ImageDomain imageDomain) {
+    public ResponseEntity<ApiResponseBody<Void>> deleteImage(@PathVariable Long id, @RequestParam ImageDomain imageDomain) {
         imageServiceFactory.getImageServiceByImageType(imageDomain).deleteAndDelete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponseBody<>(true, null));
+        return ApiResponse.noContent();
     }
 }

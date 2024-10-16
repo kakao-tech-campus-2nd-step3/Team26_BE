@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class BaseMemberService implements EntityGettable<BaseMember> {
+public class BaseMemberService implements EntityGettable<Long, BaseMember> {
 
     private final BaseMemberRepository baseMemberRepository;
     private final Map<String, MemberServiceCommonBehavior> memberServiceMap;

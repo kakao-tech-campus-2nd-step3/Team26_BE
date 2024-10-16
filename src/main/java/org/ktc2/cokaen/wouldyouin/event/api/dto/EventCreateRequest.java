@@ -1,6 +1,7 @@
-package org.ktc2.cokaen.wouldyouin.event.api;
+package org.ktc2.cokaen.wouldyouin.event.api.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin._common.persist.Area;
@@ -9,8 +10,8 @@ import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin._common.persist.Location;
 
 @Getter
-@Builder(toBuilder = true)
-public class EventRequest {
+@Builder
+public class EventCreateRequest {
 
     private Long hostId;
     private String title;
@@ -23,10 +24,10 @@ public class EventRequest {
     private Integer totalSeat;
     private Integer leftSeat;
     private Category category;
+    private List<Long> imageIds;
 
     public Event toEntity() {
         return Event.builder()
-            .hostId(hostId)
             .title(title)
             .content(content)
             .area(area)
