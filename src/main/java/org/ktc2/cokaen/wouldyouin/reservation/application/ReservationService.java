@@ -2,6 +2,9 @@ package org.ktc2.cokaen.wouldyouin.reservation.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
+import org.ktc2.cokaen.wouldyouin.event.persist.Event;
+import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationRequest;
 import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
@@ -14,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final EntityGettable<Long, Member> memberService;
+    private final EntityGettable<Long, Event> eventService;
+
 
     @Transactional(readOnly = true)
     public List<ReservationResponse> getAll() {
@@ -43,8 +49,10 @@ public class ReservationService {
 
     @Transactional
     public ReservationResponse create(ReservationRequest reservationRequest) {
-        return ReservationResponse.from(
-            reservationRepository.save(reservationRequest.toEntity()));
+        Reservation reservation = reservationRequest.toEntity();
+        reservation.setMember(memberService.getByIdOrThrow(reservationRequest.getMemberId()));
+        reservation.setEvent(eventService.getByIdOrThrow(reservationRequest.getEventId()));
+        return ReservationResponse.from(reservationRepository.save(reservation));
     }
 
     @Transactional

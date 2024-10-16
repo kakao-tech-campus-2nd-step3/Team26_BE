@@ -42,7 +42,7 @@ public class Member extends BaseMember {
     @OneToMany(mappedBy = "member")
     private List<HostLike> hostLikes;
 
-    @OneToMany(mappedBy = "memberId")
+    @OneToMany(mappedBy = "member")
     private List<Reservation> reservations;
 
     @OneToMany(mappedBy = "memberId")

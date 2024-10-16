@@ -16,8 +16,8 @@ public class ReservationRequest {
 
     public Reservation toEntity() {
         return Reservation.builder()
-            .memberId(memberId)
-            .eventId(eventId)
+//            .memberId(memberId)
+//            .eventId(eventId)
             .price(price)
             .quantity(quantity)
             .build();
