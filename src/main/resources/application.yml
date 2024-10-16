@@ -31,6 +31,13 @@ logging.level.org.ktc2.cokaen.wouldyouin: debug
 image:
   upload:
     common-path: src/main/resources/static
+    curation:
+      sub-path: images/curation
+    member:
+      sub-path: images/member
+    event:
+      sub-path: images/event
+
 
 # for jwt
 jwt:
