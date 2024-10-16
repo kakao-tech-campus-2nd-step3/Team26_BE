@@ -1,11 +1,14 @@
 package org.ktc2.cokaen.wouldyouin.Image.application;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.api.ImageDomain;
-import org.ktc2.cokaen.wouldyouin.Image.api.ImageRequest;
-import org.ktc2.cokaen.wouldyouin.Image.api.ImageResponse;
+import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
+import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.Image.persist.Image;
 import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
+import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,36 +21,29 @@ public abstract class ImageService<T extends Image> {
     @Autowired
     protected ImageStorage imageStorage;
 
-    protected abstract ImageDomain getImageType();
-
     protected abstract ImageRepository<T> getImageRepository();
 
-    @Transactional(readOnly = true)
-    protected String getNameById(Long id) {
-        T target = getImageRepository().findById(id).orElseThrow(RuntimeException::new);
-        return target.getUrl();
-    }
+    protected abstract ImageDomain getImageDomain();
 
-    @Transactional
+    protected abstract String getSubPath();
+
+    protected abstract T mapToEntityFrom(ImageRequest imageRequest);
+
     protected ImageResponse create(ImageRequest imageRequest) {
-        try {
-            T imageEntity = imageRequest.toEntity(getImageType().getClassType());
-            return ImageResponse.from(getImageRepository().save(imageEntity));
-        } catch (Exception e) {
-            throw new RuntimeException("failed to create image entity");
-        }
+        return ImageResponse.from(getImageRepository().save(mapToEntityFrom(imageRequest)));
     }
 
-    @Transactional
     protected void delete(Long id) {
         getImageRepository().findById(id).orElseThrow(RuntimeException::new);
         getImageRepository().deleteById(id);
     }
 
     @Transactional
-    public ImageResponse saveAndCreate(MultipartFile image) {
-        String path = imageStorage.save(image, getImageType());
-        return create(ImageRequest.of(path, image.getSize(), image.getContentType()));
+    public List<ImageResponse> saveAndCreateImages(List<MultipartFile> images) {
+        List<String> paths = images.stream().map(image -> imageStorage.save(image, getSubPath())).toList();
+        return paths.stream()
+            .map(path -> create(ImageRequest.of(path, images.get(paths.indexOf(path)).getSize())))
+            .collect(Collectors.toList());
     }
 
     @Transactional
