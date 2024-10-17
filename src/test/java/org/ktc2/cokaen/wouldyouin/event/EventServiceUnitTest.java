@@ -16,6 +16,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
+import org.ktc2.cokaen.wouldyouin.Image.application.ImageService;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.event.persist.EventRepository;
 import org.ktc2.cokaen.wouldyouin.global.TestData;
@@ -34,12 +36,15 @@ class EventServiceUnitTest {
     @Mock
     private HostService hostService;
 
+    @Mock
+    private EventImageService eventImageService;
+
 
     private long id;
 
     @BeforeEach
     void setUp() {
-        eventService = new EventService(eventRepository, hostService);
+        eventService = new EventService(eventRepository, hostService, eventImageService);
         id = abs(new Random().nextLong());
     }
 

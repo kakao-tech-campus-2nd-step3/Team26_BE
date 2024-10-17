@@ -70,8 +70,6 @@ public class TestData {
 
         validReservation =
             Reservation.builder()
-                .memberId(1L)
-                .eventId(1L)
                 .price(10000)
                 .quantity(3)
                 .build();

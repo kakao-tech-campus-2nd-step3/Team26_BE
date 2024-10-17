@@ -58,3 +58,10 @@ oauth:
     scope:
       - email
       - profile
+  payment:
+    "approval_url": "http://localhost:8080/api/events"
+    "cancel_url": "http://localhost:8080/api/events"
+    "fail_url": "http://localhost:8080/api/events"
+    "secret_key": ${KAKAOPAY_SECRET_KEY}
+    "kakao_pay_single_payment_url": "/online/v1/payment/ready"
+    "kakao_pay_request_host": "open-api.kakaopay.com"

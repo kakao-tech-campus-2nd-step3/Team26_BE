@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
+import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayRequest;
+import org.ktc2.cokaen.wouldyouin.payment.application.PaymentService;
+import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationRequest;
 import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
@@ -17,9 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final PaymentService paymentService;
     private final EntityGettable<Long, Member> memberService;
     private final EntityGettable<Long, Event> eventService;
-
 
     @Transactional(readOnly = true)
     public List<ReservationResponse> getAll() {
@@ -48,11 +51,13 @@ public class ReservationService {
     }
 
     @Transactional
-    public ReservationResponse create(ReservationRequest reservationRequest) {
+    public KakaoPayResponse create(ReservationRequest reservationRequest) {
+
         Reservation reservation = reservationRequest.toEntity();
         reservation.setMember(memberService.getByIdOrThrow(reservationRequest.getMemberId()));
         reservation.setEvent(eventService.getByIdOrThrow(reservationRequest.getEventId()));
-        return ReservationResponse.from(reservationRepository.save(reservation));
+        reservationRepository.save(reservation);
+        return paymentService.createPayment(KakaoPayRequest.from(reservation));
     }
 
     @Transactional

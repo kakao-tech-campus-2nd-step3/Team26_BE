@@ -3,6 +3,7 @@ package org.ktc2.cokaen.wouldyouin.reservation.api;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
+import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.application.ReservationService;
 import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationRequest;
 import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationResponse;
@@ -51,7 +52,7 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseBody<ReservationResponse>> createReservation(
+    public ResponseEntity<ApiResponseBody<KakaoPayResponse>> createReservation(
         @RequestBody ReservationRequest reservationRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(new ApiResponseBody<>(true, reservationService.create(reservationRequest)));

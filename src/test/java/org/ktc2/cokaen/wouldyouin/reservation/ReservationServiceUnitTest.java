@@ -18,6 +18,7 @@ import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.global.TestData;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
+import org.ktc2.cokaen.wouldyouin.payment.application.PaymentService;
 import org.ktc2.cokaen.wouldyouin.reservation.application.ReservationService;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.ReservationRepository;
 import org.mockito.Mock;
@@ -34,12 +35,14 @@ class ReservationServiceUnitTest {
     private EntityGettable<Long, Member> memberService;
     @Mock
     private EntityGettable<Long, Event> eventService;
+    @Mock
+    private PaymentService paymentService;
 
     private Long id;
 
     @BeforeEach
     void setUp() {
-        reservationService = new ReservationService(reservationRepository, memberService, eventService);
+        reservationService = new ReservationService(reservationRepository, paymentService, memberService, eventService);
         id = abs(new Random().nextLong());
     }
 
