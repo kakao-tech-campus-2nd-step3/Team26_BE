@@ -24,6 +24,15 @@ public class EventImageService extends ImageService<EventImage> {
     }
 
     @Override
+    protected EventImage toEntity(String path, Long size, String extension) {
+        return EventImage.builder()
+            .name(path)
+            .size(size)
+            .extension(extension)
+            .build();
+    }
+
+    @Override
     public void delete(Long id) {
         eventImageRepository.findById(id).orElseThrow(RuntimeException::new);
         eventImageRepository.deleteById(id);
