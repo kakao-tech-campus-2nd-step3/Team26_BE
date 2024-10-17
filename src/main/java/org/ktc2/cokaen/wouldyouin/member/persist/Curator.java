@@ -29,7 +29,7 @@ public class Curator extends Member implements LikeableMember {
     @Column(nullable = false)
     private String hashtag;
 
-    @OneToMany(mappedBy = "curator")
+    @OneToMany(mappedBy = "curatorId")
     private List<Curation> curations;
 
     @Builder(builderMethodName = "curatorBuilder")

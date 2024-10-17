@@ -17,7 +17,7 @@ public class CuratorLikeService extends LikeService<CuratorLike> {
     private final CuratorLikeRepository curatorLikeRepository;
 
     public CuratorLikeService(
-        Map<String, EntityGettable<? extends LikeableMember>> likeableMemberGetter, EntityGettable<Member> memberGetter,
+        Map<String, EntityGettable<Long, ? extends LikeableMember>> likeableMemberGetter, EntityGettable<Long, Member> memberGetter,
         CuratorLikeRepository curatorLikeRepository) {
         super(likeableMemberGetter, memberGetter);
         this.curatorLikeRepository = curatorLikeRepository;

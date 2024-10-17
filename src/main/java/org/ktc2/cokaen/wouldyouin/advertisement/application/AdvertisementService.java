@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor()
-public class AdvertisementService implements EntityGettable<Advertisement> {
+public class AdvertisementService implements EntityGettable<Long, Advertisement> {
 
     private final AdvertisementRepository advertisementRepository;
 
