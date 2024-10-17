@@ -17,9 +17,9 @@ public class ImageStorage {
     @Value("${image.upload.common-path}")
     private String commonPath;
 
-    public String save(MultipartFile image, ImageDomain imageDomain) {
+    public String save(MultipartFile image, String subPath) {
         String fileName = generateUuidName() + "." + getExtension(image);
-        String pathStr = commonPath + imageDomain.getSubPath() + fileName;
+        String pathStr = commonPath + subPath + fileName;
         Path path = Paths.get(pathStr);
         try {
             Files.createDirectories(path.getParent());
@@ -27,7 +27,7 @@ public class ImageStorage {
         } catch (IOException ex) {
             throw new RuntimeException("failed to upload image.");
         }
-        return imageDomain.getSubPath() + fileName;
+        return subPath + fileName;
     }
 
     public void delete(String imagePath) {

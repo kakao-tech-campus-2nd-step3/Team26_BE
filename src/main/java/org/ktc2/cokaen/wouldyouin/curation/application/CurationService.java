@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class CurationService implements EntityGettable<Curation> {
+public class CurationService implements EntityGettable<Long, Curation> {
 
     private final CurationRepository curationRepository;
 

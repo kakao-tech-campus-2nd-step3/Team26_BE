@@ -17,7 +17,7 @@ public class HostLikeService extends LikeService<HostLike> {
     private final HostLikeRepository hostLikeRepository;
 
     public HostLikeService(
-        Map<String, EntityGettable<? extends LikeableMember>> likeableMemberGetter, EntityGettable<Member> memberGetter,
+        Map<String, EntityGettable<Long, ? extends LikeableMember>> likeableMemberGetter, EntityGettable<Long, Member> memberGetter,
         HostLikeRepository hostLikeRepository) {
         super(likeableMemberGetter, memberGetter);
         this.hostLikeRepository = hostLikeRepository;

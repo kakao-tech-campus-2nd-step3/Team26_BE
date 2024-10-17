@@ -5,8 +5,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 // Long 기반 id로 Entity를 얻을 수 있는 인터페이스 제공
 @Component
-public interface EntityGettable<T> {
+public interface EntityGettable<K, E> {
 
     @Transactional(readOnly = true)
-    T getByIdOrThrow(Long id) throws RuntimeException; // TODO: 커스텀 예외 필요;
+    E getByIdOrThrow(K id) throws RuntimeException; // TODO: 커스텀 예외 필요;
 }
