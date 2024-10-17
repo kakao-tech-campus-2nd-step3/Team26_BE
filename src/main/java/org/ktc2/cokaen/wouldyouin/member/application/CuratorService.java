@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class CuratorService implements MemberServiceCommonBehavior, EntityGettable<Curator> {
+public class CuratorService implements MemberServiceCommonBehavior, EntityGettable<Long, Curator> {
 
     private final CuratorRepository curatorRepository;
     private final MemberRepository memberRepository;

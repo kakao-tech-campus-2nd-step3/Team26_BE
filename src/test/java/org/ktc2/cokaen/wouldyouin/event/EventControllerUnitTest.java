@@ -18,7 +18,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.ktc2.cokaen.wouldyouin.event.api.EventController;
-import org.ktc2.cokaen.wouldyouin.event.api.EventRequest;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.global.TestData;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtService;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
@@ -81,18 +82,18 @@ class EventControllerUnitTest {
     @DisplayName("행사 생성 - 성공")
     void createEvent() throws Exception {
         mockMvc.perform(post("/api/events").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(TestData.validEventRequest)))
+                .content(objectMapper.writeValueAsString(TestData.validEventCreateRequest)))
             .andExpect(status().isCreated());
-        verify(eventService).create(any(EventRequest.class));
+        verify(eventService).create(any(EventCreateRequest.class));
     }
 
     @Test
     @DisplayName("행사 수정 - 성공")
     void updateEvent() throws Exception {
         mockMvc.perform(put("/api/events/" + id).contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(TestData.validEventRequest)))
+                .content(objectMapper.writeValueAsString(TestData.validEventCreateRequest)))
             .andExpect(status().isOk());
-        verify(eventService).update(eq(id), any(EventRequest.class));
+        verify(eventService).update(eq(id), any(EventEditRequest.class));
     }
 
     @Test

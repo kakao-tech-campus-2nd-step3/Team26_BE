@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService implements MemberServiceCommonBehavior, EntityGettable<Member> {
+public class MemberService implements MemberServiceCommonBehavior, EntityGettable<Long, Member> {
 
     private final MemberRepository memberRepository;
 

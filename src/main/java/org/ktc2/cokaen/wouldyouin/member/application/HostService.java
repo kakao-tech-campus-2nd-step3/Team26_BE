@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class HostService implements MemberServiceCommonBehavior, EntityGettable<Host> {
+public class HostService implements MemberServiceCommonBehavior, EntityGettable<Long, Host> {
 
     private final HostRepository hostRepository;
     private final PasswordEncoder passwordEncoder;

@@ -1,10 +1,14 @@
 package org.ktc2.cokaen.wouldyouin.reservation.persist;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -12,6 +16,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.ktc2.cokaen.wouldyouin.event.persist.Event;
+import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 
 @Getter
 @Setter
@@ -24,13 +30,13 @@ public class Reservation {
     @Column(name = "reservation_id")
     private Long id;
 
-    @NotNull
-    @Column(name = "member_id")
-    private Long memberId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-    @NotNull
-    @Column(name = "event_id")
-    private Long eventId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "event_id")
+    private Event event;
 
     @NotNull
     @Column(name = "price")
@@ -45,9 +51,7 @@ public class Reservation {
     private LocalDateTime reservationDate;
 
     @Builder
-    protected Reservation(Long memberId, Long eventId, Integer price, Integer quantity) {
-        this.memberId = memberId;
-        this.eventId = eventId;
+    protected Reservation(Integer price, Integer quantity) {
         this.price = price;
         this.quantity = quantity;
         this.reservationDate = LocalDateTime.now();
