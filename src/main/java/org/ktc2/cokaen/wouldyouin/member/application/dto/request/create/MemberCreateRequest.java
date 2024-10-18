@@ -13,17 +13,13 @@ public class MemberCreateRequest extends MemberCreateRequestBase {
 
     protected AccountType accountType;
     protected String socialId;
-    protected Area area;
-    protected String gender;
     protected String profileImageUrl;
 
     @Builder
-    protected MemberCreateRequest(String nickname, String email, String phone, AccountType accountType, String socialId, Area area, String gender, String profileImageUrl) {
-        super(nickname, email, phone);
+    protected MemberCreateRequest(String nickname, String email, AccountType accountType, String socialId, String profileImageUrl) {
+        super(nickname, email);
         this.accountType = accountType;
         this.socialId = socialId;
-        this.area = area;
-        this.gender = gender;
         this.profileImageUrl = profileImageUrl;
     }
 
@@ -31,11 +27,11 @@ public class MemberCreateRequest extends MemberCreateRequestBase {
         return Member.builder()
             .nickname(this.nickname)
             .email(this.email)
-            .phone(this.phone)
+            .phone("")
             .accountType(this.accountType)
             .socialId(this.socialId)
-            .area(this.area)
-            .gender(this.gender)
+            .area(Area.서울)
+            .gender("")
             .profileImageUrl(this.profileImageUrl)
             .build();
     }
