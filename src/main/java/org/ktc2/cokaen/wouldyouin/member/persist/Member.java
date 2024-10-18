@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._common.persist.Area;
 import org.ktc2.cokaen.wouldyouin.like.persist.CuratorLike;
 import org.ktc2.cokaen.wouldyouin.like.persist.HostLike;
@@ -50,8 +51,8 @@ public class Member extends BaseMember {
     private List<Review> reviews;
 
     // for Curator
-    protected Member(AccountType accountType, MemberType memberType, String email, String nickname, String phone, String profileImageUrl, Area area, String gender, String socialId) {
-        super(accountType, memberType, email, nickname, phone, profileImageUrl);
+    protected Member(AccountType accountType, MemberType memberType, String email, String nickname, String phone, List<MemberImage> profileImage, Area area, String gender, String socialId) {
+        super(accountType, memberType, email, nickname, phone, profileImage);
         this.area = area;
         this.gender = gender;
         this.socialId = socialId;
@@ -59,8 +60,8 @@ public class Member extends BaseMember {
 
     @Builder
     // for public builder
-    protected Member(AccountType accountType, String email, String nickname, String phone, String profileImageUrl, Area area, String gender, String socialId) {
-        this(accountType, MemberType.welcome, email, nickname, phone, profileImageUrl, area, gender, socialId);
+    protected Member(AccountType accountType, String email, String nickname, String phone, List<MemberImage> profileImage, Area area, String gender, String socialId) {
+        this(accountType, MemberType.welcome, email, nickname, phone, profileImage, area, gender, socialId);
     }
 
     public void updateFrom(MemberAdditionalInfoRequest request) {

@@ -1,6 +1,5 @@
 package org.ktc2.cokaen.wouldyouin.Image.application;
 
-import jakarta.annotation.PostConstruct;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.api.ImageDomain;
@@ -14,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MemberImageService extends ImageService<MemberImage> implements EntityGettable<List<Long>, List<MemberImage>> {
+public class MemberImageService extends ImageService<MemberImage>
+    implements EntityGettable<List<Long>, List<MemberImage>>,
+    ImageUrlToMemberImageListConverter {
 
     private final MemberImageRepository memberImageRepository;
 
@@ -47,5 +48,11 @@ public class MemberImageService extends ImageService<MemberImage> implements Ent
     @Override
     public List<MemberImage> getByIdOrThrow(List<Long> ids) throws RuntimeException {
         return ids.stream().map(id -> memberImageRepository.findById(id).orElseThrow(RuntimeException::new)).toList();
+    }
+
+    @Override
+    // TODO: imageUrl을 MemberImage로 변환하는 로직 추가 필요
+    public List<MemberImage> convert(String imageUrl) {
+        return null;
     }
 }

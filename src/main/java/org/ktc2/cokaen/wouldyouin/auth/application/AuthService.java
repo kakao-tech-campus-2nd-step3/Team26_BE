@@ -2,12 +2,13 @@ package org.ktc2.cokaen.wouldyouin.auth.application;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin.Image.application.ImageUrlToMemberImageListConverter;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.auth.application.dto.LocalLoginRequest;
 import org.ktc2.cokaen.wouldyouin.auth.application.dto.LocalSignupRequest;
 import org.ktc2.cokaen.wouldyouin.auth.application.dto.SocialTokenResponse;
-import org.ktc2.cokaen.wouldyouin.auth.application.oauth.OauthRequestServiceFactory;
 import org.ktc2.cokaen.wouldyouin.auth.application.dto.TokenResponse;
+import org.ktc2.cokaen.wouldyouin.auth.application.oauth.OauthRequestServiceFactory;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthResourcesResponse;
 import org.ktc2.cokaen.wouldyouin.member.application.BaseMemberService;
 import org.ktc2.cokaen.wouldyouin.member.application.HostService;
@@ -29,6 +30,7 @@ public class AuthService {
     private final MemberService memberService;
     private final HostService hostService;
     private final OauthRequestServiceFactory oauthRequestServiceFactory;
+    private final ImageUrlToMemberImageListConverter memberImageListConverter;
 
     @Transactional
     public TokenResponse localSignup(LocalSignupRequest request) {
@@ -55,7 +57,7 @@ public class AuthService {
                 .email(resources.getEmail())
                 .socialId(resources.getSocialId())
                 .accountType(accountType)
-                .profileImageUrl(resources.getProfileImageUrl())
+                .profileImage(memberImageListConverter.convert(resources.getProfileImageUrl()))
                 .build());
 
             return SocialTokenResponse.builder()
