@@ -9,11 +9,9 @@ public abstract class MemberCreateRequestBase {
 
     protected String nickname;
     protected String email;
-    protected String phone;
 
-    protected MemberCreateRequestBase(String nickname, String email, String phone) {
+    protected MemberCreateRequestBase(String nickname, String email) {
         this.nickname = nickname;
         this.email = email;
-        this.phone = phone;
     }
 }

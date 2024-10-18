@@ -1,7 +1,9 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.auth.application.dto.LocalLoginRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.create.HostCreateRequest;
@@ -19,6 +21,7 @@ public class HostService implements MemberServiceCommonBehavior, EntityGettable<
 
     private final HostRepository hostRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EntityGettable<List<Long>, List<MemberImage>> imageIdToMemberImageConverter;
 
     @Transactional
     public MemberResponse createHost(HostCreateRequest request) {
@@ -30,7 +33,8 @@ public class HostService implements MemberServiceCommonBehavior, EntityGettable<
         Host host = getByIdOrThrow(hostId);
         Optional.ofNullable(request.getNickname()).ifPresent(host::setNickname);
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(host::setPhone);
-        Optional.ofNullable(request.getProfileUrl()).ifPresent(host::setProfileImageUrl);
+        Optional.ofNullable(request.getProfileImage())
+            .map(imageIdToMemberImageConverter::getByIdOrThrow).ifPresent(host::setProfileImage);
         Optional.ofNullable(request.getIntro()).ifPresent(host::setIntro);
         Optional.ofNullable(request.getHashtag()).ifPresent(host::setHashtag);
 
