@@ -9,10 +9,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class HostCreateRequest extends MemberCreateRequestBase {
 
+    protected String phone;
     protected String password;
 
     public HostCreateRequest(String nickname, String email, String phone, String password) {
-        super(nickname, email, phone);
+        super(nickname, email);
+        this.phone = phone;
         this.password = password;
     }
 

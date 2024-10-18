@@ -38,23 +38,38 @@ image:
     event:
       sub-path: images/event
 
-
 # for jwt
 jwt:
-  secret: ${WOULD_YOU_IN_JWT_SECRET}
+  secret: ${JWT_SECRET}
   access:
     expiration: 86400000 # 1day
 
 # for social login
 oauth:
   kakao:
-    client_id: ${WOULD_YOU_IN_KAKAO_CLIENT_ID}
-    client_secret: ${WOULD_YOU_IN_KAKAO_CLIENT_SECRET}
-    redirect_uri: ${WOULD_YOU_IN_KAKAO_REDIRECT_URI}
+    uri:
+      login:
+        host: kauth.kakao.com
+        path: /oauth/token
+      access:
+        host: kapi.kakao.com
+        path: /v2/user/me
+    client:
+      id: ${KAKAO_CLIENT_ID}
+      secret: ${KAKAO_CLIENT_SECRET}
+    redirect_uri: ${KAKAO_REDIRECT_URI}
   google:
-    client_id: ${WOULD_YOU_IN_GOOGLE_CLIENT_ID}
-    client_secret: ${WOULD_YOU_IN_GOOGLE_CLIENT_SECRET}
-    redirect_uri: ${WOULD_YOU_IN_GOOGLE_REDIRECT_URI}
+    uri:
+      login:
+        host: oauth2.googleapis.com
+        path: /token
+      access:
+        host: www.googleapis.com
+        path: /userinfo/v2/me
+    client:
+      id: ${GOOGLE_CLIENT_ID}
+      secret: ${GOOGLE_CLIENT_SECRET}
+    redirect_uri: ${GOOGLE_REDIRECT_URI}
     scope:
       - email
       - profile

@@ -32,7 +32,7 @@ public class CuratorService implements MemberServiceCommonBehavior, EntityGettab
             .email(member.getEmail())
             .nickname(member.getNickname())
             .phone(member.getPhone())
-            .profileImageUrl(member.getProfileImageUrl())
+            .profileImage(member.getProfileImage())
             .area(member.getArea())
             .gender(member.getGender())
             .socialId(member.getSocialId())
@@ -55,7 +55,7 @@ public class CuratorService implements MemberServiceCommonBehavior, EntityGettab
         Curator curator = getByIdOrThrow(curatorId);
         Optional.ofNullable(curator.getNickname()).ifPresent(curator::setNickname);
         Optional.ofNullable(curator.getPhone()).ifPresent(curator::setPhone);
-        Optional.ofNullable(curator.getProfileImageUrl()).ifPresent(curator::setProfileImageUrl);
+        Optional.ofNullable(curator.getProfileImage()).ifPresent(curator::setProfileImage);
         Optional.ofNullable(curator.getArea()).ifPresent(curator::setArea);
         Optional.ofNullable(curator.getIntro()).ifPresent(curator::setIntro);
 

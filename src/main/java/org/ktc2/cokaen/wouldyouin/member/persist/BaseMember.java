@@ -10,10 +10,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 
 @Getter
 @Setter
@@ -45,15 +48,19 @@ public abstract class BaseMember {
     private String phone;
 
     @Column(nullable = false)
-    private String profileImageUrl;
+    @OneToMany(mappedBy = "baseMember")
+    private List<MemberImage> profileImage;
 
-    protected BaseMember(AccountType accountType, MemberType memberType, String email, String nickname,
-        String phone, String profileImageUrl) {
+    protected BaseMember(AccountType accountType, MemberType memberType, String email, String nickname, String phone, List<MemberImage> profileImage) {
         this.accountType = accountType;
         this.memberType = memberType;
         this.email = email;
         this.nickname = nickname;
         this.phone = phone;
-        this.profileImageUrl = profileImageUrl;
+        this.profileImage = profileImage;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImage.getFirst().getUrl();
     }
 }
