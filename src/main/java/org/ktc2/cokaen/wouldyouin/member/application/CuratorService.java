@@ -10,12 +10,13 @@ import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 import org.ktc2.cokaen.wouldyouin.member.persist.CuratorRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberRepository;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class CuratorService implements MemberServiceCommonBehavior, EntityGettable<Long, Curator> {
+public class CuratorService implements MemberServiceCommonBehavior, EntityGettable<Long, Curator>, LikeableMemberService<Curator> {
 
     private final CuratorRepository curatorRepository;
     private final MemberRepository memberRepository;
@@ -81,4 +82,13 @@ public class CuratorService implements MemberServiceCommonBehavior, EntityGettab
         return curatorRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
+    @Override
+    public MemberType getTargetMemberType() {
+        return MemberType.curator;
+    }
+
+    @Override
+    public EntityGettable<Long, Curator> getLikeableMemberGetter() {
+        return this;
+    }
 }
