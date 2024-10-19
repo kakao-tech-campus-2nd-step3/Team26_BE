@@ -1,21 +1,31 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
+import java.util.List;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 public class BaseMemberService implements EntityGettable<Long, BaseMember> {
 
     private final BaseMemberRepository baseMemberRepository;
-    private final Map<String, MemberServiceCommonBehavior> memberServiceMap;
+    private final Map<MemberType, MemberServiceCommonBehavior> memberServiceMap;
+
+    public BaseMemberService(@Autowired BaseMemberRepository baseMemberRepository,
+        @Autowired List<MemberServiceCommonBehavior> memberServices) {
+        this.baseMemberRepository = baseMemberRepository;
+        this.memberServiceMap = memberServices.stream().collect(Collectors.toConcurrentMap(
+            MemberServiceCommonBehavior::getTargetMemberType,
+            Function.identity()));
+    }
 
     @Override
     public BaseMember getByIdOrThrow(Long id) throws RuntimeException {
@@ -30,7 +40,7 @@ public class BaseMemberService implements EntityGettable<Long, BaseMember> {
 
     @Transactional(readOnly = true)
     public MemberResponse findById(Long id) {
-        return memberServiceMap.get(getServiceNameByIdOrThrow(id)).getMemberResponseById(id);
+        return memberServiceMap.get(getMemberTypeByIdOrThrow(id)).getMemberResponseById(id);
     }
 
     @Transactional(readOnly = true)
@@ -43,14 +53,17 @@ public class BaseMemberService implements EntityGettable<Long, BaseMember> {
 
     @Transactional
     public void deleteById(Long id) {
-        memberServiceMap.get(getServiceNameByIdOrThrow(id)).deleteById(id);
+        memberServiceMap.get(getMemberTypeByIdOrThrow(id)).deleteById(id);
         baseMemberRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
-    protected String getServiceNameByIdOrThrow(Long id) {
-        return getByIdOrThrow(id)
-            .getMemberType()
-            .getServiceName();
+    protected MemberType getMemberTypeByIdOrThrow(Long id) {
+        MemberType type = getByIdOrThrow(id).getMemberType();
+
+        if (type == MemberType.welcome) {
+            return MemberType.normal;
+        }
+        return type;
     }
 }

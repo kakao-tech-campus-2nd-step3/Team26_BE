@@ -5,8 +5,15 @@ spring:
   application.name: WouldYouIn
   profiles:
     default: dev
+
+  # 소셜로그인 테스트시 캐시 비활성화
   thymeleaf:
     cache: false
+
+  # devtools 자동 빌드 해제
+  devtools:
+    restart:
+      enabled: false
 
   # h2 database settings
   h2:
