@@ -53,6 +53,10 @@ public class MemberImageService extends ImageService<MemberImage>
     @Override
     // TODO: imageUrl을 MemberImage로 변환하는 로직 추가 필요
     public List<MemberImage> convert(String imageUrl) {
-        return null;
+        return List.of(MemberImage.builder()
+            .name("http://example.com/images/MockMemberImageUrl")
+            .size(10L)
+            .extension(".jpeg")
+            .build());
     }
 }

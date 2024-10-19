@@ -1,7 +1,9 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.CuratorEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
@@ -21,6 +23,7 @@ public class CuratorService implements MemberServiceCommonBehavior, EntityGettab
     private final CuratorRepository curatorRepository;
     private final MemberRepository memberRepository;
     private final BaseMemberRepository baseMemberRepository;
+    private final EntityGettable<List<Long>, List<MemberImage>> imageIdToMemberImageConverter;
 
     @Transactional
     public MemberResponse createCurator(Long normalMemberId) {
@@ -54,11 +57,15 @@ public class CuratorService implements MemberServiceCommonBehavior, EntityGettab
     @Transactional
     public MemberResponse updateCurator(Long curatorId, CuratorEditRequest request) {
         Curator curator = getByIdOrThrow(curatorId);
-        Optional.ofNullable(curator.getNickname()).ifPresent(curator::setNickname);
-        Optional.ofNullable(curator.getPhone()).ifPresent(curator::setPhone);
-        Optional.ofNullable(curator.getProfileImage()).ifPresent(curator::setProfileImage);
-        Optional.ofNullable(curator.getArea()).ifPresent(curator::setArea);
-        Optional.ofNullable(curator.getIntro()).ifPresent(curator::setIntro);
+
+        Optional.ofNullable(request.getPhoneNumber()).ifPresent(curator::setPhone);
+        Optional.ofNullable(request.getNickname()).ifPresent(curator::setNickname);
+        Optional.ofNullable(request.getArea()).ifPresent(curator::setArea);
+        Optional.ofNullable(request.getIntro()).ifPresent(curator::setIntro);
+        Optional.ofNullable(request.getProfileImageId())
+            .map(List::of)
+            .map(imageIdToMemberImageConverter::getByIdOrThrow)
+            .ifPresent(curator::setProfileImage);
 
         return MemberResponse.from(curator);
     }
