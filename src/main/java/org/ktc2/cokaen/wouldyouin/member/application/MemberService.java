@@ -35,8 +35,10 @@ public class MemberService implements MemberServiceCommonBehavior, EntityGettabl
         Optional.ofNullable(editRequest.getNickname()).ifPresent(member::setNickname);
         Optional.ofNullable(editRequest.getArea()).ifPresent(member::setArea);
         Optional.ofNullable(editRequest.getPhoneNumber()).ifPresent(member::setPhone);
-        Optional.ofNullable(editRequest.getProfileImage())
-            .map(imageIdToMemberImageConverter::getByIdOrThrow).ifPresent(member::setProfileImage);
+        Optional.ofNullable(editRequest.getProfileImageId())
+            .map(List::of)
+            .map(imageIdToMemberImageConverter::getByIdOrThrow)
+            .ifPresent(member::setProfileImage);
 
         return MemberResponse.from(member);
     }
@@ -74,5 +76,10 @@ public class MemberService implements MemberServiceCommonBehavior, EntityGettabl
     @Transactional(readOnly = true)
     public Optional<MemberIdentifier> getMemberIdentifierBySocialId(String socialId) {
         return memberRepository.findBySocialId(socialId).map(m -> new MemberIdentifier(m.getId(), m.getMemberType()));
+    }
+
+    @Override
+    public MemberType getTargetMemberType() {
+        return MemberType.normal;
     }
 }

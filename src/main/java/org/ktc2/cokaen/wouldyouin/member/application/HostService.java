@@ -11,13 +11,14 @@ import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.HostEditRe
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 import org.ktc2.cokaen.wouldyouin.member.persist.HostRepository;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class HostService implements MemberServiceCommonBehavior, EntityGettable<Long, Host> {
+public class HostService implements MemberServiceCommonBehavior, EntityGettable<Long, Host>, LikeableMemberService<Host> {
 
     private final HostRepository hostRepository;
     private final PasswordEncoder passwordEncoder;
@@ -25,7 +26,7 @@ public class HostService implements MemberServiceCommonBehavior, EntityGettable<
 
     @Transactional
     public MemberResponse createHost(HostCreateRequest request) {
-        return MemberResponse.from(hostRepository.save(request.toEntity(passwordEncoder)));
+        return MemberResponse.from(hostRepository.save(request.toEntity(passwordEncoder, imageIdToMemberImageConverter)));
     }
 
     @Transactional
@@ -33,8 +34,10 @@ public class HostService implements MemberServiceCommonBehavior, EntityGettable<
         Host host = getByIdOrThrow(hostId);
         Optional.ofNullable(request.getNickname()).ifPresent(host::setNickname);
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(host::setPhone);
-        Optional.ofNullable(request.getProfileImage())
-            .map(imageIdToMemberImageConverter::getByIdOrThrow).ifPresent(host::setProfileImage);
+        Optional.ofNullable(request.getProfileImageId())
+            .map(List::of)
+            .map(imageIdToMemberImageConverter::getByIdOrThrow)
+            .ifPresent(host::setProfileImage);
         Optional.ofNullable(request.getIntro()).ifPresent(host::setIntro);
         Optional.ofNullable(request.getHashtag()).ifPresent(host::setHashtag);
 
@@ -67,5 +70,15 @@ public class HostService implements MemberServiceCommonBehavior, EntityGettable<
     public Host getByIdOrThrow(Long id) {
         //TODO: 커스텀 예외 필요
         return hostRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public MemberType getTargetMemberType() {
+        return MemberType.host;
+    }
+
+    @Override
+    public EntityGettable<Long, Host> getLikeableMemberGetter() {
+        return this;
     }
 }

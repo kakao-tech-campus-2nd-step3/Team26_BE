@@ -1,6 +1,7 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface MemberServiceCommonBehavior {
@@ -10,4 +11,6 @@ public interface MemberServiceCommonBehavior {
 
     @Transactional(readOnly = true)
     MemberResponse getMemberResponseById(Long id);
+
+    MemberType getTargetMemberType();
 }

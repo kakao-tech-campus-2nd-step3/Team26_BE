@@ -1,10 +1,10 @@
 package org.ktc2.cokaen.wouldyouin.like.application;
 
-import java.util.Map;
 import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.like.persist.HostLike;
 import org.ktc2.cokaen.wouldyouin.like.persist.HostLikeRepository;
 import org.ktc2.cokaen.wouldyouin.like.persist.LikeRepository;
+import org.ktc2.cokaen.wouldyouin.member.application.LikeableMemberGetterFactory;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 import org.ktc2.cokaen.wouldyouin.member.persist.LikeableMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
@@ -17,9 +17,9 @@ public class HostLikeService extends LikeService<HostLike> {
     private final HostLikeRepository hostLikeRepository;
 
     public HostLikeService(
-        Map<String, EntityGettable<Long, ? extends LikeableMember>> likeableMemberGetter, EntityGettable<Long, Member> memberGetter,
-        HostLikeRepository hostLikeRepository) {
-        super(likeableMemberGetter, memberGetter);
+        LikeableMemberGetterFactory likeableMemberGetterFactory,
+        EntityGettable<Long, Member> memberGetter, HostLikeRepository hostLikeRepository) {
+        super(likeableMemberGetterFactory, memberGetter);
         this.hostLikeRepository = hostLikeRepository;
     }
 

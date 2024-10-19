@@ -1,11 +1,11 @@
 package org.ktc2.cokaen.wouldyouin.like.application;
 
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.like.persist.Like;
 import org.ktc2.cokaen.wouldyouin.like.persist.LikeRepository;
+import org.ktc2.cokaen.wouldyouin.member.application.LikeableMemberGetterFactory;
 import org.ktc2.cokaen.wouldyouin.member.persist.LikeableMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public abstract class LikeService<LikeType extends Like<? extends LikeableMember>> {
 
-    private final Map<String, EntityGettable<Long, ? extends LikeableMember>> likeableMemberGetter;
+    private final LikeableMemberGetterFactory likeableMemberGetterFactory;
     private final EntityGettable<Long, Member> memberGetter;
 
     protected abstract LikeRepository<LikeType> getLikeRepository();
@@ -58,6 +58,6 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
 
     @Transactional(readOnly = true)
     protected LikeableMember getLikeableMemberByIdOrThrow(Long likeableMemberId) {
-        return likeableMemberGetter.get(getTargetLikeableMemberType().getServiceName()).getByIdOrThrow(likeableMemberId);
+        return likeableMemberGetterFactory.get(getTargetLikeableMemberType()).getByIdOrThrow(likeableMemberId);
     }
 }
