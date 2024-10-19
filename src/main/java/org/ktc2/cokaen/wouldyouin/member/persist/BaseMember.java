@@ -16,8 +16,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 
+@Slf4j
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -60,7 +62,22 @@ public abstract class BaseMember {
         this.profileImage = profileImage;
     }
 
+    @Override
+    public String toString() {
+        return "BaseMember{" +
+            "Id=" + Id +
+            ", accountType=" + accountType +
+            ", memberType=" + memberType +
+            ", email='" + email + '\'' +
+            ", nickname='" + nickname + '\'' +
+            ", phone='" + phone + '\'' +
+            ", profileImage=" + profileImage +
+            '}';
+    }
+
     public String getProfileImageUrl() {
+        // TODO: 멤버 조회시 profileImage에 null 들어가는 원인 파악 필요
+        log.warn("#### in baseMember.getProfileImageUrl() for baseMember: {}", this);
         return profileImage.getFirst().getUrl();
     }
 }

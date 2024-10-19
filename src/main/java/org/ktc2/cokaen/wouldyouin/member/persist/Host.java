@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 
 @Getter
@@ -35,8 +36,8 @@ public class Host extends BaseMember implements LikeableMember {
     private List<Event> events;
 
     @Builder
-    protected Host(String email, String nickname, String phone, String hashedPassword) {
-        super(AccountType.local, MemberType.host, email, nickname, phone, List.of());
+    protected Host(String email, String nickname, String phone, String hashedPassword, List<MemberImage> profileImage) {
+        super(AccountType.local, MemberType.host, email, nickname, phone, profileImage);
         this.hashedPassword = hashedPassword;
         this.intro = "";
         this.likes = 0;
