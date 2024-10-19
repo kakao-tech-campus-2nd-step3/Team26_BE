@@ -12,4 +12,4 @@ spring:
       ddl-auto: none
 
 # log4j log level setting
-logging.level.kr.ac.jnu.capstone.bigpicture.dongsim: info
+logging.level.org.ktc2.cokaen.wouldyouin: info
