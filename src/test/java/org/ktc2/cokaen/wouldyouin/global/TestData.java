@@ -1,20 +1,34 @@
 package org.ktc2.cokaen.wouldyouin.global;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._common.persist.Area;
 import org.ktc2.cokaen.wouldyouin._common.persist.Category;
 import org.ktc2.cokaen.wouldyouin._common.persist.Location;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
+import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
+import org.ktc2.cokaen.wouldyouin.member.persist.Host;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationRequest;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
 
 public class TestData {
 
     public static EventCreateRequest validEventCreateRequest;
-    public static EventEditRequest validEventRequestToModify;
+    public static EventEditRequest validEventEditRequest;
     public static Event validEvent;
+    public static Host validHost;
     public static ReservationRequest validReservationRequest;
     public static Reservation validReservation;
 
@@ -31,9 +45,10 @@ public class TestData {
             .totalSeat(100)
             .leftSeat(50)
             .category(Category.밴드)
+            .imageIds(List.of())
             .build();
 
-        validEventRequestToModify = EventEditRequest.builder()
+        validEventEditRequest = EventEditRequest.builder()
             .title("modifiedTitle")
             .content("modifiedContent")
             .area(Area.광주)
@@ -44,6 +59,7 @@ public class TestData {
             .totalSeat(200)
             .leftSeat(100)
             .category(Category.뮤지컬)
+            .imageIds(List.of())
             .build();
 
         validEvent = Event.builder()
@@ -58,6 +74,13 @@ public class TestData {
             .leftSeat(50)
             .category(Category.밴드)
             .build();
+
+        validHost = Host.builder()
+            .nickname("nickname")
+            .phone("010-1234-5678")
+            .hashedPassword(UUID.randomUUID().toString())
+            .build();
+        validEvent.setHost(validHost);
 
         validReservationRequest =
             ReservationRequest.builder()
