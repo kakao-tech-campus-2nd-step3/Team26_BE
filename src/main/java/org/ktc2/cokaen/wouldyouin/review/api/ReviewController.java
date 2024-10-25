@@ -4,7 +4,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin.review.application.ReviewService;
-import org.ktc2.cokaen.wouldyouin.review.application.dto.ReviewRequest;
+import org.ktc2.cokaen.wouldyouin.review.application.dto.ReviewCreateRequest;
+import org.ktc2.cokaen.wouldyouin.review.application.dto.ReviewEditRequest;
 import org.ktc2.cokaen.wouldyouin.review.application.dto.ReviewResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,12 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    //TODO: getReviewsByMemberId() 작성
+    @GetMapping("/{memberId}")
+    public ResponseEntity<ApiResponseBody<List<ReviewResponse>>> getReviewsByMemberId(
+        @PathVariable("memberId") Long memberId) {
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(new ApiResponseBody<>(true, reviewService.getAllByMemberId(memberId)));
+    }
 
     @GetMapping("/{eventId}")
     public ResponseEntity<ApiResponseBody<List<ReviewResponse>>> getReviewsByEventId(
@@ -43,17 +49,17 @@ public class ReviewController {
     @PostMapping("/{eventId}")
     public ResponseEntity<ApiResponseBody<ReviewResponse>> createReview(
         @PathVariable("eventId") Long eventId,
-        @RequestBody ReviewRequest reviewRequest) {
+        @RequestBody ReviewCreateRequest reviewCreateRequest) {
         return ResponseEntity.status(HttpStatus.OK)
-            .body(new ApiResponseBody<>(true, reviewService.create(eventId, reviewRequest)));
+            .body(new ApiResponseBody<>(true, reviewService.create(eventId, reviewCreateRequest)));
     }
 
     @PutMapping("/{reviewId}")
     public ResponseEntity<ApiResponseBody<ReviewResponse>> updateReview(
         @PathVariable("reviewId") Long reviewId,
-        @RequestBody ReviewRequest reviewRequest) {
+        @RequestBody ReviewEditRequest reviewEditRequest) {
         return ResponseEntity.status(HttpStatus.OK)
-            .body(new ApiResponseBody<>(true, reviewService.update(reviewId, reviewRequest)));
+            .body(new ApiResponseBody<>(true, reviewService.update(reviewId, reviewEditRequest)));
     }
 
     @DeleteMapping("/{reviewId}")
