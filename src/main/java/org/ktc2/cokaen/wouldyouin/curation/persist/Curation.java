@@ -1,5 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.curation.persist;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -7,15 +8,24 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin._common.persist.Area;
-import org.ktc2.cokaen.wouldyouin.curation.application.dto.CurationRequest;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationEditRequest;
+import org.ktc2.cokaen.wouldyouin.event.persist.Event;
+import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 
 @Getter
 @Setter
@@ -25,48 +35,63 @@ public class Curation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "curation_id")
     private Long id;
 
-    @NotNull
-    @Column(nullable = false)
-    private Long curatorId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "curator_id")
+    private Curator curator;
 
     @NotNull
+    @Column(name = "title")
     private String title;
 
     @NotNull
+    @Column(name = "content")
     private String content;
 
-    @Column(nullable = false)
+    @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(name = "area")
     private Area area;
 
-    @Column(nullable = false)
+    @NotNull
+    @Column(name = "created_time")
     private LocalDateTime createdTime;
 
+    @NotNull
+    @Column(name = "hash_tag")
     private String hashTag;
 
-    private Long eventId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "event_id")
+    private Event event;
+
+    @OneToMany(mappedBy = "curation")
+    private List<CurationImage> images;
 
     @Builder
-    protected Curation(Long curatorId, String title, String content, Area area, String hashTag,
-        Long eventId) {
-        this.curatorId = curatorId;
+    public Curation(Curator curator, String title, String content, Area area,
+        LocalDateTime createdTime,
+        String hashTag, Event event, List<CurationImage> images) {
+        this.curator = curator;
         this.title = title;
         this.content = content;
         this.area = area;
-        this.createdTime = LocalDateTime.now();
+        this.createdTime = createdTime;
         this.hashTag = hashTag;
-        this.eventId = eventId;
+        this.event = event;
+        this.images = images;
     }
 
-    public void setFrom(CurationRequest curationRequest) {
-        this.curatorId = curationRequest.getCuratorId();
-        this.title = curationRequest.getTitle();
-        this.content = curationRequest.getContent();
-        this.area = curationRequest.getArea();
-        this.hashTag = curationRequest.getHashTag();
-        this.eventId = curationRequest.getEventId();
+    public void updateFrom(CurationEditRequest curationEditRequest) {
+        Optional.ofNullable(curationEditRequest.getTitle()).ifPresent(this::setTitle);
+        Optional.ofNullable(curationEditRequest.getContent()).ifPresent(this::setContent);
+        Optional.ofNullable(curationEditRequest.getArea()).ifPresent(this::setArea);
+        Optional.ofNullable(curationEditRequest.getCreatedTime()).ifPresent(this::setCreatedTime);
+        Optional.ofNullable(curationEditRequest.getHashTag()).ifPresent(this::setHashTag);
+//        Optional.ofNullable(curationEditRequest.getImageUrls()).ifPresent(this::setImages);
+
     }
 
 }
