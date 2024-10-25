@@ -2,10 +2,11 @@ package org.ktc2.cokaen.wouldyouin.curation.api;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.curation.application.dto.CurationRequest;
-import org.ktc2.cokaen.wouldyouin.curation.application.dto.CurationResponse;
-import org.ktc2.cokaen.wouldyouin._common.persist.Area;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
+import org.ktc2.cokaen.wouldyouin._common.persist.Area;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationEditRequest;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationResponse;
 import org.ktc2.cokaen.wouldyouin.curation.application.CurationService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,14 +38,14 @@ public class CurationController {
 
     @PostMapping
     public ApiResponseBody<CurationResponse> createCuration(
-        @RequestBody CurationRequest curationRequest) {
-        return new ApiResponseBody<>(true, curationService.create(curationRequest));
+        @RequestBody CurationCreateRequest curationCreateRequest) {
+        return new ApiResponseBody<>(true, curationService.create(curationCreateRequest));
     }
 
     @PutMapping("/{curationId}")
     public ApiResponseBody<CurationResponse> updateCuration(@PathVariable Long curationId,
-        @RequestBody CurationRequest curationRequest) {
-        return new ApiResponseBody<>(true, curationService.update(curationId, curationRequest));
+        @RequestBody CurationEditRequest curationEditRequest) {
+        return new ApiResponseBody<>(true, curationService.update(curationId, curationEditRequest));
 
     }
 
