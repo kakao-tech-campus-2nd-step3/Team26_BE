@@ -78,6 +78,9 @@ public abstract class BaseMember {
     public String getProfileImageUrl() {
         // TODO: 멤버 조회시 profileImage에 null 들어가는 원인 파악 필요
         log.warn("#### in baseMember.getProfileImageUrl() for baseMember: {}", this);
+        if (profileImage == null || profileImage.isEmpty()) {
+            return null;
+        }
         return profileImage.getFirst().getUrl();
     }
 }
