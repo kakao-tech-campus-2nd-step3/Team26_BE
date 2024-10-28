@@ -9,8 +9,8 @@ public class CuratorEditRequest extends MemberEditRequest {
 
     @Nullable private final String intro;
 
-    public CuratorEditRequest(@Nullable String nickname, @Nullable String phoneNumber, @Nullable String profileUrl, @Nullable Area area, @Nullable String intro) {
-        super(nickname, phoneNumber, profileUrl, area);
+    public CuratorEditRequest(@Nullable String nickname, @Nullable String phoneNumber, @Nullable Long profileImageId, @Nullable Area area, @Nullable String intro) {
+        super(nickname, phoneNumber, profileImageId, area);
         this.intro = intro;
     }
 }

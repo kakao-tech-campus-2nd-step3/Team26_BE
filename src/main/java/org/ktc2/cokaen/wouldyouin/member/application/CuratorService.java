@@ -1,7 +1,10 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
+import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.CuratorEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
@@ -9,16 +12,18 @@ import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 import org.ktc2.cokaen.wouldyouin.member.persist.CuratorRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberRepository;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class CuratorService implements MemberServiceCommonBehavior, EntityGettable<Curator> {
+public class CuratorService implements MemberServiceCommonBehavior, EntityGettable<Long, Curator>, LikeableMemberService<Curator> {
 
     private final CuratorRepository curatorRepository;
     private final MemberRepository memberRepository;
     private final BaseMemberRepository baseMemberRepository;
+    private final EntityGettable<List<Long>, List<MemberImage>> imageIdToMemberImageConverter;
 
     @Transactional
     public MemberResponse createCurator(Long normalMemberId) {
@@ -31,7 +36,7 @@ public class CuratorService implements MemberServiceCommonBehavior, EntityGettab
             .email(member.getEmail())
             .nickname(member.getNickname())
             .phone(member.getPhone())
-            .profileImageUrl(member.getProfileImageUrl())
+            .profileImage(member.getProfileImage())
             .area(member.getArea())
             .gender(member.getGender())
             .socialId(member.getSocialId())
@@ -52,11 +57,15 @@ public class CuratorService implements MemberServiceCommonBehavior, EntityGettab
     @Transactional
     public MemberResponse updateCurator(Long curatorId, CuratorEditRequest request) {
         Curator curator = getByIdOrThrow(curatorId);
-        Optional.ofNullable(curator.getNickname()).ifPresent(curator::setNickname);
-        Optional.ofNullable(curator.getPhone()).ifPresent(curator::setPhone);
-        Optional.ofNullable(curator.getProfileImageUrl()).ifPresent(curator::setProfileImageUrl);
-        Optional.ofNullable(curator.getArea()).ifPresent(curator::setArea);
-        Optional.ofNullable(curator.getIntro()).ifPresent(curator::setIntro);
+
+        Optional.ofNullable(request.getPhoneNumber()).ifPresent(curator::setPhone);
+        Optional.ofNullable(request.getNickname()).ifPresent(curator::setNickname);
+        Optional.ofNullable(request.getArea()).ifPresent(curator::setArea);
+        Optional.ofNullable(request.getIntro()).ifPresent(curator::setIntro);
+        Optional.ofNullable(request.getProfileImageId())
+            .map(List::of)
+            .map(imageIdToMemberImageConverter::getByIdOrThrow)
+            .ifPresent(curator::setProfileImage);
 
         return MemberResponse.from(curator);
     }
@@ -80,4 +89,13 @@ public class CuratorService implements MemberServiceCommonBehavior, EntityGettab
         return curatorRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
+    @Override
+    public MemberType getTargetMemberType() {
+        return MemberType.curator;
+    }
+
+    @Override
+    public EntityGettable<Long, Curator> getLikeableMemberGetter() {
+        return this;
+    }
 }

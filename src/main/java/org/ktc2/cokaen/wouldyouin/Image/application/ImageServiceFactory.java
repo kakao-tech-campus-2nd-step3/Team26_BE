@@ -4,22 +4,22 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.ktc2.cokaen.wouldyouin.Image.api.ImageDomain;
+import org.ktc2.cokaen.wouldyouin.Image.persist.Image;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ImageServiceFactory {
 
-    private final ConcurrentHashMap<ImageDomain, ImageService> imageTypeToImageServiceMap;
+    private final ConcurrentHashMap<ImageDomain, ImageService<? extends Image>> imageTypeToImageServiceMap;
 
-    public ImageServiceFactory(List<ImageService> imageServices) {
-        imageTypeToImageServiceMap = (ConcurrentHashMap<ImageDomain, ImageService>) imageServices.stream()
-            .collect(Collectors.toConcurrentMap(
-                ImageService::getImageType,
-                imageService -> imageService
-            ));
+    public ImageServiceFactory(List<ImageService<? extends Image>> imageServices) {
+        imageTypeToImageServiceMap = new ConcurrentHashMap<>(imageServices.stream()
+            .collect(Collectors.toConcurrentMap(ImageService::getImageDomain, imageService -> imageService)));
     }
 
-    public ImageService getImageServiceByImageType(ImageDomain imageDomain) {
+    public ImageService<? extends Image> getImageServiceByImageType(ImageDomain imageDomain) {
         return imageTypeToImageServiceMap.get(imageDomain);
     }
+
+
 }

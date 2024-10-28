@@ -1,0 +1,89 @@
+# 환경 프로필 변경방법
+# 오른쪽 위 클릭 후 Edit configuration... 클릭 > Active profiles에 dev, create, deploy 중 하나 입력
+
+spring:
+  application.name: WouldYouIn
+  profiles:
+    default: dev
+
+  # 소셜로그인 테스트시 캐시 비활성화
+  thymeleaf:
+    cache: false
+
+  # devtools 자동 빌드 해제
+  devtools:
+    restart:
+      enabled: false
+
+  # h2 database settings
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    url: jdbc:h2:mem:test
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    hibernate.ddl-auto: create
+
+# log4j log level setting
+logging.level.org.ktc2.cokaen.wouldyouin: debug
+
+# for image storage path
+image:
+  upload:
+    common-path: src/main/resources/static
+    curation:
+      sub-path: images/curation
+    member:
+      sub-path: images/member
+    event:
+      sub-path: images/event
+
+# for jwt
+jwt:
+  secret: ${JWT_SECRET}
+  access:
+    expiration: 86400000 # 1day
+
+# for social login
+oauth:
+  kakao:
+    uri:
+      login:
+        host: kauth.kakao.com
+        path: /oauth/token
+      access:
+        host: kapi.kakao.com
+        path: /v2/user/me
+    client:
+      id: ${KAKAO_CLIENT_ID}
+      secret: ${KAKAO_CLIENT_SECRET}
+    redirect_uri: ${KAKAO_REDIRECT_URI}
+  google:
+    uri:
+      login:
+        host: oauth2.googleapis.com
+        path: /token
+      access:
+        host: www.googleapis.com
+        path: /userinfo/v2/me
+    client:
+      id: ${GOOGLE_CLIENT_ID}
+      secret: ${GOOGLE_CLIENT_SECRET}
+    redirect_uri: ${GOOGLE_REDIRECT_URI}
+    scope:
+      - email
+      - profile
+  payment:
+    "approval_url": "http://localhost:8080/api/events"
+    "cancel_url": "http://localhost:8080/api/events"
+    "fail_url": "http://localhost:8080/api/events"
+    "secret_key": ${KAKAOPAY_SECRET_KEY}
+    "kakao_pay_single_payment_url": "/online/v1/payment/ready"
+    "kakao_pay_request_host": "open-api.kakaopay.com"

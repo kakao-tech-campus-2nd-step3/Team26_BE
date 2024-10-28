@@ -10,5 +10,5 @@ public abstract class MemberEditRequestBase {
 
     @Nullable private final String nickname;
     @Nullable private final String phoneNumber;
-    @Nullable private final String profileUrl;
+    @Nullable private final Long profileImageId;
 }

@@ -25,7 +25,7 @@ public class MemberResponse {
     private String gender;
 
     private String intro;
-    private Integer followers;
+    private Integer likes;
 
     private List<String> hashtag;
 
@@ -40,7 +40,7 @@ public class MemberResponse {
     // TODO: normal member임에도 불구, curator 형식이 호출되는 현상 수정필요
     public static MemberResponse from(final Member member) {
         return responseBase(member)
-            .memberType(MemberType.normal)
+            .memberType(member.getMemberType())
             .area(member.getArea())
             .gender(member.getGender())
             .build();
@@ -48,20 +48,20 @@ public class MemberResponse {
 
     public static MemberResponse from(final Host host) {
         return responseBase(host)
-            .memberType(MemberType.host)
+            .memberType(host.getMemberType())
             .intro(host.getIntro())
-            .followers(host.getFollowers())
+            .likes(host.getLikes())
             .hashtag(host.getHashTagList())
             .build();
     }
 
     public static MemberResponse from(final Curator curator) {
         return responseBase(curator)
-            .memberType(MemberType.curator)
+            .memberType(curator.getMemberType())
             .area(curator.getArea())
             .gender(curator.getGender())
             .intro(curator.getIntro())
-            .followers(curator.getFollowers())
+            .likes(curator.getLikes())
             .build();
     }
 }

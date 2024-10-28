@@ -16,9 +16,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.event.persist.EventRepository;
 import org.ktc2.cokaen.wouldyouin.global.TestData;
+import org.ktc2.cokaen.wouldyouin.member.application.HostService;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -30,11 +32,18 @@ class EventServiceUnitTest {
     @Mock
     private EventRepository eventRepository;
 
+    @Mock
+    private HostService hostService;
+
+    @Mock
+    private EventImageService eventImageService;
+
+
     private long id;
 
     @BeforeEach
     void setUp() {
-        eventService = new EventService(eventRepository);
+        eventService = new EventService(eventRepository, hostService, eventImageService);
         id = abs(new Random().nextLong());
     }
 
@@ -73,7 +82,7 @@ class EventServiceUnitTest {
     @DisplayName("행사 생성 - 성공")
     void create() {
         when(eventRepository.save(any())).thenReturn(TestData.validEvent);
-        eventService.create(TestData.validEventRequest);
+        eventService.create(TestData.validEventCreateRequest);
         verify(eventRepository, times(1)).save(any());
     }
 
@@ -83,20 +92,19 @@ class EventServiceUnitTest {
         var validEvent = TestData.validEvent;
         System.out.println(validEvent.getId());
         when(eventRepository.findById(id)).thenReturn(Optional.of(validEvent));
-        eventService.update(id, TestData.validEventRequestToModify);
+        eventService.update(id, TestData.validEventEditRequest);
         verify(eventRepository, times(1)).findById(id);
         assertAll(
-            () -> assertEquals(validEvent.getHostId(), TestData.validEventRequestToModify.getHostId()),
-            () -> assertEquals(validEvent.getTitle(), TestData.validEventRequestToModify.getTitle()),
-            () -> assertEquals(validEvent.getContent(), TestData.validEventRequestToModify.getContent()),
-            () -> assertEquals(validEvent.getArea(), TestData.validEventRequestToModify.getArea()),
-            () -> assertEquals(validEvent.getLocation(), TestData.validEventRequestToModify.getLocation()),
-            () -> assertEquals(validEvent.getStartTime(), TestData.validEventRequestToModify.getStartTime()),
-            () -> assertEquals(validEvent.getEndTime(), TestData.validEventRequestToModify.getEndTime()),
-            () -> assertEquals(validEvent.getPrice(), TestData.validEventRequestToModify.getPrice()),
-            () -> assertEquals(validEvent.getTotalSeat(), TestData.validEventRequestToModify.getTotalSeat()),
-            () -> assertEquals(validEvent.getLeftSeat(), TestData.validEventRequestToModify.getLeftSeat()),
-            () -> assertEquals(validEvent.getCategory(), TestData.validEventRequestToModify.getCategory())
+            () -> assertEquals(validEvent.getTitle(), TestData.validEventEditRequest.getTitle()),
+            () -> assertEquals(validEvent.getContent(), TestData.validEventEditRequest.getContent()),
+            () -> assertEquals(validEvent.getArea(), TestData.validEventEditRequest.getArea()),
+            () -> assertEquals(validEvent.getLocation(), TestData.validEventEditRequest.getLocation()),
+            () -> assertEquals(validEvent.getStartTime(), TestData.validEventEditRequest.getStartTime()),
+            () -> assertEquals(validEvent.getEndTime(), TestData.validEventEditRequest.getEndTime()),
+            () -> assertEquals(validEvent.getPrice(), TestData.validEventEditRequest.getPrice()),
+            () -> assertEquals(validEvent.getTotalSeat(), TestData.validEventEditRequest.getTotalSeat()),
+            () -> assertEquals(validEvent.getLeftSeat(), TestData.validEventEditRequest.getLeftSeat()),
+            () -> assertEquals(validEvent.getCategory(), TestData.validEventEditRequest.getCategory())
         );
     }
 
@@ -104,7 +112,7 @@ class EventServiceUnitTest {
     @DisplayName("유효하지 않은 행사 id를 통한 행사 수정 - 실패")
     void updateByInvalidId() {
         when(eventRepository.findById(id)).thenThrow(RuntimeException.class);
-        assertThrows(RuntimeException.class, () -> eventService.update(id, TestData.validEventRequest));
+        assertThrows(RuntimeException.class, () -> eventService.update(id, TestData.validEventEditRequest));
     }
 
     @Test

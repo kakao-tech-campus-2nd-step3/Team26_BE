@@ -12,9 +12,9 @@ public class HostEditRequest extends MemberEditRequestBase {
     @Nullable  private final String hashtag;
 
     @Builder
-    public HostEditRequest(@Nullable String nickname, @Nullable String phoneNumber, @Nullable String profileUrl,
+    public HostEditRequest(@Nullable String nickname, @Nullable String phoneNumber, @Nullable Long profileImageId,
         @Nullable String intro, @Nullable String hashtag) {
-        super(nickname, phoneNumber, profileUrl);
+        super(nickname, phoneNumber, profileImageId);
         this.intro = intro;
         this.hashtag = hashtag;
     }

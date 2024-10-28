@@ -11,8 +11,8 @@ public class MemberEditRequest extends MemberEditRequestBase {
     @Nullable private final Area area;
 
     @Builder
-    public MemberEditRequest(@Nullable String nickname, @Nullable String phoneNumber, @Nullable String profileUrl, @Nullable Area area) {
-        super(nickname, phoneNumber, profileUrl);
+    public MemberEditRequest(@Nullable String nickname, @Nullable String phoneNumber, @Nullable Long profileImageId, @Nullable Area area) {
+        super(nickname, phoneNumber, profileImageId);
         this.area = area;
     }
 }

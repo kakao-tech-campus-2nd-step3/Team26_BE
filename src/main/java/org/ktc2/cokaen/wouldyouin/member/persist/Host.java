@@ -3,20 +3,22 @@ package org.ktc2.cokaen.wouldyouin.member.persist;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import java.util.Arrays;
+import jakarta.persistence.OneToMany;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
+import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("Host")
 @Entity
-public class Host extends BaseMember {
+public class Host extends BaseMember implements LikeableMember {
 
     @Column(nullable = false)
     private String hashedPassword;
@@ -25,22 +27,20 @@ public class Host extends BaseMember {
     private String intro;
 
     @Column(nullable = false)
-    private Integer followers;
+    private Integer likes;
 
     @Column(nullable = false)
     private String hashtag;
 
+    @OneToMany(mappedBy = "host")
+    private List<Event> events;
+
     @Builder
-    protected Host(String email, String nickname, String phone, String hashedPassword) {
-        super(AccountType.local, MemberType.host, email, nickname, phone, "");
+    protected Host(String email, String nickname, String phone, String hashedPassword, List<MemberImage> profileImage) {
+        super(AccountType.local, MemberType.host, email, nickname, phone, profileImage);
         this.hashedPassword = hashedPassword;
         this.intro = "";
-        this.followers = 0;
+        this.likes = 0;
         this.hashtag = "";
-    }
-
-    public List<String> getHashTagList() {
-        //TODO: 정상적으로 해시태그 리스트로 분리되는지 검증 필요
-        return Arrays.stream(hashtag.split("#")).toList();
     }
 }
