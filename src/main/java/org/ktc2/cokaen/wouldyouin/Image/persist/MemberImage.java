@@ -5,7 +5,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
+import lombok.Setter;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 
 @Entity
@@ -14,6 +14,7 @@ public class MemberImage extends Image {
 
     @ManyToOne
     @JoinColumn(name = "base_member_id")
+    @Setter
     private BaseMember baseMember;
 
     @Builder

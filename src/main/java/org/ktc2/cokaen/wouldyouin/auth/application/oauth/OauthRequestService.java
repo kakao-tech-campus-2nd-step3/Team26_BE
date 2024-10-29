@@ -1,13 +1,11 @@
 package org.ktc2.cokaen.wouldyouin.auth.application.oauth;
 
 import jakarta.annotation.PostConstruct;
-import lombok.extern.slf4j.Slf4j;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthRequest;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthResourcesResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 public abstract class OauthRequestService {
 
