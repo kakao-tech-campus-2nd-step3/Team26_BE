@@ -26,7 +26,11 @@ public class HostService implements MemberServiceCommonBehavior, EntityGettable<
 
     @Transactional
     public MemberResponse createHost(HostCreateRequest request) {
-        return MemberResponse.from(hostRepository.save(request.toEntity(passwordEncoder, imageIdToMemberImageConverter)));
+        String hashedPassword = passwordEncoder.encode(request.getPassword());
+        List<MemberImage> profileImage = imageIdToMemberImageConverter.getByIdOrThrow(List.of(request.getProfileImageId()));
+        Host createdHost = hostRepository.save(request.toEntity(hashedPassword, profileImage));
+        profileImage.getFirst().setBaseMember(createdHost);
+        return MemberResponse.from(createdHost);
     }
 
     @Transactional
