@@ -35,7 +35,7 @@ public class SecurityConfig {
         "/**", //임시 설정, 나중에 제거필요
         "/h2-console/**",
         "/swagger-ui/**",
-        "/swagger-ui-custom.html",
+        "/swagger-ui/index.html",
         "/swagger-ui.html"
     };
 
