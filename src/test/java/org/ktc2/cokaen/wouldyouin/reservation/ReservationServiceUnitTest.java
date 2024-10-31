@@ -88,7 +88,7 @@ class ReservationServiceUnitTest {
     @DisplayName("예약 생성 - 성공")
     void create() {
         when(reservationRepository.save(any())).thenReturn(TestData.validReservation);
-        reservationService.create(TestData.validReservationRequest);
+        reservationService.create(1L, TestData.validReservationRequest);
         verify(reservationRepository, times(1)).save(any());
     }
 
