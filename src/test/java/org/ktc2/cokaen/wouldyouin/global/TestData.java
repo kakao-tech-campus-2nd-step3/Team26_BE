@@ -43,7 +43,6 @@ public class TestData {
             .endTime(LocalDateTime.of(2024, 10, 1, 10, 0))
             .price(10000)
             .totalSeat(100)
-            .leftSeat(50)
             .category(Category.밴드)
             .imageIds(List.of())
             .build();
@@ -57,7 +56,6 @@ public class TestData {
             .endTime(LocalDateTime.of(2024, 10, 2, 18, 0))
             .price(20000)
             .totalSeat(200)
-            .leftSeat(100)
             .category(Category.뮤지컬)
             .imageIds(List.of())
             .build();
@@ -71,7 +69,6 @@ public class TestData {
             .endTime(LocalDateTime.now())
             .price(10000)
             .totalSeat(100)
-            .leftSeat(50)
             .category(Category.밴드)
             .build();
 
@@ -84,8 +81,6 @@ public class TestData {
 
         validReservationRequest =
             ReservationRequest.builder()
-                .id(1L)
-                .memberId(1L)
                 .eventId(1L)
                 .price(10000)
                 .quantity(1)
@@ -93,6 +88,8 @@ public class TestData {
 
         validReservation =
             Reservation.builder()
+                .member(null)
+                .event(null)
                 .price(10000)
                 .quantity(3)
                 .build();
