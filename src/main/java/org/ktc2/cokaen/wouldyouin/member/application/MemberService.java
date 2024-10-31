@@ -1,20 +1,18 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
-import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.MemberAdditionalInfoRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.create.MemberCreateRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.MemberEditRequest;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,11 +32,7 @@ public class MemberService implements MemberServiceCommonBehavior {
         Optional.ofNullable(editRequest.getNickname()).ifPresent(member::setNickname);
         Optional.ofNullable(editRequest.getArea()).ifPresent(member::setArea);
         Optional.ofNullable(editRequest.getPhoneNumber()).ifPresent(member::setPhone);
-        Optional.ofNullable(editRequest.getProfileImageId())
-            .map(List::of)
-            .map(memberImageService::getByIdOrThrow)
-            .ifPresent(member::setProfileImage);
-
+        Optional.ofNullable(editRequest.getProfileImageId()).map(memberImageService::getByIdOrThrow).ifPresent(member::setProfileImage);
         return MemberResponse.from(member);
     }
 

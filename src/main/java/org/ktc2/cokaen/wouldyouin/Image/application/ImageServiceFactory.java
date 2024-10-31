@@ -20,6 +20,4 @@ public class ImageServiceFactory {
     public ImageService<? extends Image> getImageServiceByImageType(ImageDomain imageDomain) {
         return imageTypeToImageServiceMap.get(imageDomain);
     }
-
-
 }

@@ -13,5 +13,7 @@ public class CurationEventResponse {
     private String title;
     private Location location;
     private LocalDateTime startTime;
-    private String mainImage;
+    private String thumbnailImageUrl;
+    private String hostProfileImageUrl;
+    private String hostNickname;
 }

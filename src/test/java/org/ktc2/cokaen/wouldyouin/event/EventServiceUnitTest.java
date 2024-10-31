@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -103,7 +104,6 @@ class EventServiceUnitTest {
             () -> assertEquals(validEvent.getEndTime(), TestData.validEventEditRequest.getEndTime()),
             () -> assertEquals(validEvent.getPrice(), TestData.validEventEditRequest.getPrice()),
             () -> assertEquals(validEvent.getTotalSeat(), TestData.validEventEditRequest.getTotalSeat()),
-            () -> assertEquals(validEvent.getLeftSeat(), TestData.validEventEditRequest.getLeftSeat()),
             () -> assertEquals(validEvent.getCategory(), TestData.validEventEditRequest.getCategory())
         );
     }

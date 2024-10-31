@@ -1,5 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.event.api;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
@@ -44,13 +45,13 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity<ApiResponseBody<EventResponse>> createEvent(
-        @RequestBody EventCreateRequest eventCreateRequest) {
+        @Valid @RequestBody EventCreateRequest eventCreateRequest) {
         return ApiResponse.created(eventService.create(eventCreateRequest));
     }
 
     @PutMapping("/{eventId}")
     public ResponseEntity<ApiResponseBody<EventResponse>> updateEvent(@PathVariable Long eventId,
-        @RequestBody EventEditRequest eventEditRequest) {
+        @Valid @RequestBody EventEditRequest eventEditRequest) {
         return ApiResponse.ok(eventService.update(eventId, eventEditRequest));
     }
 

@@ -33,6 +33,9 @@ public abstract class Image {
     @Column(name = "size")
     private Long size;
 
+    @Column(name = "extension")
+    private String extension;
+
     @CreatedDate
     @Column(name = "created_date")
     private LocalDateTime createdDate;
@@ -40,5 +43,6 @@ public abstract class Image {
     protected Image(String url, Long size, String extension) {
         this.url = url;
         this.size = size;
+        this.extension = extension;
     }
 }
