@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.advertisement.api;
+package org.ktc2.cokaen.wouldyouin.advertisement.api.dto;
 
 import java.time.LocalDateTime;
 import lombok.Builder;
@@ -9,7 +9,7 @@ public class AdvertisementResponse {
 
     private Long id;
     private String title;
-    private Long imageId;
+    private String imageUrl;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
@@ -17,7 +17,7 @@ public class AdvertisementResponse {
         return AdvertisementResponse.builder()
             .id(advertisement.getId())
             .title(advertisement.getTitle())
-            .imageId(advertisement.getImageId())
+            .imageUrl(advertisement.getAdvertisementImage().getUrl())
             .startTime(advertisement.getStartTime())
             .endTime(advertisement.getEndTime())
             .build();

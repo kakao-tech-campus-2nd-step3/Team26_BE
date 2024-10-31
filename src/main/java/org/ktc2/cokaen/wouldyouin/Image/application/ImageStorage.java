@@ -19,15 +19,14 @@ public class ImageStorage {
 
     public String save(MultipartFile image, String subPath) {
         String fileName = generateUuidName() + "." + getExtension(image);
-        String pathStr = commonPath + subPath + fileName;
-        Path path = Paths.get(pathStr);
+        Path path = Paths.get(commonPath, subPath, fileName);
         try {
             Files.createDirectories(path.getParent());
             Files.write(path, image.getBytes());
         } catch (IOException ex) {
             throw new RuntimeException("failed to upload image.");
         }
-        return subPath + fileName;
+        return subPath + "/" + fileName;
     }
 
     public void delete(String imagePath) {
@@ -38,7 +37,7 @@ public class ImageStorage {
         }
     }
 
-    private static String getExtension(MultipartFile image) {
+    protected static String getExtension(MultipartFile image) {
         return Objects.requireNonNull(image.getContentType()).split("/")[1];
     }
 

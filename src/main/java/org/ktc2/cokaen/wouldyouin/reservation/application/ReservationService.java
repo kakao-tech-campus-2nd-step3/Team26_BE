@@ -2,10 +2,12 @@ package org.ktc2.cokaen.wouldyouin.reservation.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayRequest;
 import org.ktc2.cokaen.wouldyouin.payment.application.PaymentService;
+import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayRequest;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationRequest;
 import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationResponse;
@@ -45,23 +47,22 @@ public class ReservationService {
 
     @Transactional(readOnly = true)
     public ReservationResponse getById(Long id) {
-        Reservation target = reservationRepository.findById(id).orElseThrow(RuntimeException::new);
+        Reservation target = reservationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("reservation "));
         return ReservationResponse.from(target);
     }
 
     @Transactional
-    public KakaoPayResponse create(ReservationRequest reservationRequest) {
-
-        Reservation reservation = reservationRequest.toEntity();
-        reservation.setMember(memberService.getByIdOrThrow(reservationRequest.getMemberId()));
-        reservation.setEvent(eventService.getByIdOrThrow(reservationRequest.getEventId()));
-        reservationRepository.save(reservation);
+    public KakaoPayResponse create(Long memberId, ReservationRequest reservationRequest) {
+        Reservation reservation = reservationRepository.save(reservationRequest.toEntity(
+            memberService.getByIdOrThrow(memberId),
+            eventService.getByIdOrThrow(reservationRequest.getEventId())));
+        eventService.decreaseLeftSeat(reservation.getEvent().getId(), reservationRequest.getQuantity());
         return paymentService.createPayment(KakaoPayRequest.from(reservation));
     }
 
     @Transactional
     public void delete(Long id) {
-        reservationRepository.findById(id).orElseThrow(RuntimeException::new);
+        reservationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("reservation "));
         reservationRepository.deleteById(id);
     }
 }

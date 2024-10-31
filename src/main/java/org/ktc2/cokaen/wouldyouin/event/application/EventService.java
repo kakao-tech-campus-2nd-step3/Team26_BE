@@ -1,9 +1,9 @@
 package org.ktc2.cokaen.wouldyouin.event.application;
 
 import java.util.List;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
+import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventResponse;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor(access = AccessLevel.PUBLIC)
+@RequiredArgsConstructor
 public class EventService {
 
     private final EventRepository eventRepository;
@@ -36,29 +36,36 @@ public class EventService {
         return EventResponse.from(getByIdOrThrow(id));
     }
 
-    public Event getByIdOrThrow(Long id) throws RuntimeException {
-        return eventRepository.findById(id).orElseThrow(RuntimeException::new);
+    public Event getByIdOrThrow(Long id) throws EntityNotFoundException {
+        return eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event"));
     }
 
     @Transactional
     public EventResponse create(EventCreateRequest eventCreateRequest) {
-        Event event = eventRepository.save(eventCreateRequest.toEntity());
-        event.setHost(hostService.getByIdOrThrow(eventCreateRequest.getHostId()));
-        event.setImages(eventImageService.getByIdOrThrow(eventCreateRequest.getImageIds()));
-        return EventResponse.from(event);
+        return EventResponse.from(eventRepository.save(eventCreateRequest.toEntity(
+            hostService.getByIdOrThrow(eventCreateRequest.getHostId()),
+            eventCreateRequest.getImageIds().stream()
+                .map(eventImageService::getByIdOrThrow)
+                .toList())));
     }
 
     @Transactional
     public EventResponse update(Long id, EventEditRequest eventEditRequest) {
-        Event target = eventRepository.findById(id).orElseThrow(RuntimeException::new);
-        target.updateFrom(eventEditRequest);
-        target.setImages(eventImageService.getByIdOrThrow(eventEditRequest.getImageIds()));
+        Event target = getByIdOrThrow(id);
+        target.updateFrom(eventEditRequest, eventEditRequest.getImageIds().stream()
+            .map(eventImageService::getByIdOrThrow)
+            .toList());
         return EventResponse.from(target);
     }
 
     @Transactional
+    public void decreaseLeftSeat(Long id, Integer count) {
+        getByIdOrThrow(id).decreaseLeftSeat(count);
+    }
+
+    @Transactional
     public void delete(Long id) {
-        eventRepository.findById(id).orElseThrow(RuntimeException::new);
+        getByIdOrThrow(id);
         eventRepository.deleteById(id);
     }
 }
