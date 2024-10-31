@@ -7,15 +7,12 @@ import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImageRepository;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MemberImageService extends ImageService<MemberImage>
-    implements EntityGettable<List<Long>, List<MemberImage>>,
-    ImageUrlToMemberImageListConverter {
+public class MemberImageService extends ImageService<MemberImage> implements ImageUrlToMemberImageListConverter {
 
     private final MemberImageRepository memberImageRepository;
 
@@ -45,13 +42,12 @@ public class MemberImageService extends ImageService<MemberImage>
             .build();
     }
 
-    @Override
     public List<MemberImage> getByIdOrThrow(List<Long> ids) throws RuntimeException {
         return ids.stream().map(id -> memberImageRepository.findById(id).orElseThrow(RuntimeException::new)).toList();
     }
 
-    @Override
     // TODO: imageUrl을 MemberImage로 변환하는 로직 추가 필요
+    @Override
     public List<MemberImage> convert(String imageUrl) {
         return List.of(MemberImage.builder()
             .name("http://example.com/images/MockMemberImageUrl")
