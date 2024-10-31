@@ -2,9 +2,8 @@ package org.ktc2.cokaen.wouldyouin.reservation.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
-import org.ktc2.cokaen.wouldyouin.event.persist.Event;
-import org.ktc2.cokaen.wouldyouin.member.persist.Member;
+import org.ktc2.cokaen.wouldyouin.event.application.EventService;
+import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayRequest;
 import org.ktc2.cokaen.wouldyouin.payment.application.PaymentService;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayResponse;
@@ -21,8 +20,8 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final PaymentService paymentService;
-    private final EntityGettable<Long, Member> memberService;
-    private final EntityGettable<Long, Event> eventService;
+    private final MemberService memberService;
+    private final EventService eventService;
 
     @Transactional(readOnly = true)
     public List<ReservationResponse> getAll() {

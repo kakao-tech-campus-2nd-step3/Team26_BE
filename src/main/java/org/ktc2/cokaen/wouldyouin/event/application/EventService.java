@@ -3,24 +3,23 @@ package org.ktc2.cokaen.wouldyouin.event.application;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
+import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventResponse;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.event.persist.EventRepository;
-import org.ktc2.cokaen.wouldyouin.member.persist.Host;
+import org.ktc2.cokaen.wouldyouin.member.application.HostService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
-public class EventService implements EntityGettable<Long, Event> {
+public class EventService {
 
     private final EventRepository eventRepository;
-    private final EntityGettable<Long, Host> hostService;
-    private final EntityGettable<List<Long>, List<EventImage>> eventImageService;
+    private final HostService hostService;
+    private final EventImageService eventImageService;
 
     @Transactional(readOnly = true)
     public List<EventResponse> getAll() {
@@ -37,7 +36,6 @@ public class EventService implements EntityGettable<Long, Event> {
         return EventResponse.from(getByIdOrThrow(id));
     }
 
-    @Override
     public Event getByIdOrThrow(Long id) throws RuntimeException {
         return eventRepository.findById(id).orElseThrow(RuntimeException::new);
     }

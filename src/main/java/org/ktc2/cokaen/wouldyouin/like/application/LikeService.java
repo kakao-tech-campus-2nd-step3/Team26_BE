@@ -2,10 +2,10 @@ package org.ktc2.cokaen.wouldyouin.like.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.like.persist.Like;
 import org.ktc2.cokaen.wouldyouin.like.persist.LikeRepository;
 import org.ktc2.cokaen.wouldyouin.member.application.LikeableMemberGetterFactory;
+import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.ktc2.cokaen.wouldyouin.member.persist.LikeableMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public abstract class LikeService<LikeType extends Like<? extends LikeableMember>> {
 
     private final LikeableMemberGetterFactory likeableMemberGetterFactory;
-    private final EntityGettable<Long, Member> memberGetter;
+    private final MemberService memberService;
 
     protected abstract LikeRepository<LikeType> getLikeRepository();
     protected abstract LikeType toEntity(Member member, LikeableMember targetLikableMember);
@@ -25,7 +25,7 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
 
     @Transactional(readOnly = true)
     public List<LikeResponse> getLikes(Long memberId) {
-        return getLikeRepository().findAllByMember(memberGetter.getByIdOrThrow(memberId))
+        return getLikeRepository().findAllByMember(memberService.getByIdOrThrow(memberId))
             .stream()
             .map(Like::getLikeableMember)
             .map(LikeResponse::from)
@@ -34,7 +34,7 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
 
     @Transactional
     public LikeResponse create(Long memberId, Long targetMemberId) {
-        Member member = memberGetter.getByIdOrThrow(memberId);
+        Member member = memberService.getByIdOrThrow(memberId);
         LikeableMember targetLikeableMember = getLikeableMemberByIdOrThrow(targetMemberId);
         getLikeRepository().findByMemberAndLikeableMember(member, targetLikeableMember)
             .ifPresent(x -> { throw new RuntimeException("이미 좋아요한 사용자입니다."); });
@@ -47,7 +47,7 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
 
     @Transactional
     public void delete(Long memberId, Long targetMemberId) {
-        Member member = memberGetter.getByIdOrThrow(memberId);
+        Member member = memberService.getByIdOrThrow(memberId);
         LikeableMember targetLikeableMember = getLikeableMemberByIdOrThrow(targetMemberId);
         LikeType like = getLikeRepository().findByMemberAndLikeableMember(member, targetLikeableMember)
             .orElseThrow(() -> new RuntimeException("해당 사용자를 좋아요하지 않았습니다."));
