@@ -1,14 +1,22 @@
 package org.ktc2.cokaen.wouldyouin.Image.application;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.api.ImageDomain;
 import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
+import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImageRepository;
 import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
+import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
+import org.ktc2.cokaen.wouldyouin._common.exception.EntityParamIsNullException;
+import org.ktc2.cokaen.wouldyouin.advertisement.persist.Advertisement;
+import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
+import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -25,27 +33,24 @@ public class EventImageService extends ImageService<EventImage> {
     }
 
     @Override
-    protected String getSubPath() {
-        return subPath;
-    }
-
-    @Override
     protected ImageDomain getImageDomain() {
         return ImageDomain.EVENT;
     }
 
     @Override
-    protected EventImage mapToEntityFrom(ImageRequest imageRequest) {
-        return EventImage.builder().name(imageRequest.getUrl()).size(imageRequest.getSize()).build();
+    protected String getSubPath() {
+        return subPath;
     }
 
     @Override
-    public void delete(Long id) {
-        eventImageRepository.findById(id).orElseThrow(RuntimeException::new);
-        eventImageRepository.deleteById(id);
+    protected EventImage toEntity(ImageRequest imageRequest) {
+        return EventImage.builder().name(imageRequest.getUrl()).size(imageRequest.getSize()).build();
     }
 
-    public List<EventImage> getByIdOrThrow(List<Long> ids) throws RuntimeException {
-        return ids.stream().map(id -> eventImageRepository.findById(id).orElseThrow(RuntimeException::new)).toList();
+    @Transactional
+    public void setEvent(EventImage image, Event event) {
+        Optional.ofNullable(image).orElseThrow(() -> new EntityParamIsNullException(getImageDomain().name() + " image"));
+        Optional.ofNullable(event).orElseThrow(() -> new EntityParamIsNullException("event"));
+        image.setEvent(event);
     }
 }

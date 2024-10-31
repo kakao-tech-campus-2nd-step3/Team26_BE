@@ -7,7 +7,7 @@ import org.ktc2.cokaen.wouldyouin._common.persist.Area;
 import org.ktc2.cokaen.wouldyouin._common.persist.Category;
 import org.ktc2.cokaen.wouldyouin._common.persist.Location;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.relationResponse.EventHostResponse;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.relation.EventHostResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 
 @Builder
@@ -38,7 +38,7 @@ public class EventResponse {
                 .nickname(host.getNickname())
                 .email(host.getEmail())
                 .phone(host.getPhone())
-                .profileImageUrl(host.getProfileImageUrl())
+                .profileImageUrl(host.getProfileImage().getUrl())
                 .intro(host.getIntro())
                 .likes(host.getLikes())
                 .hashtags(host.getHashTagList())

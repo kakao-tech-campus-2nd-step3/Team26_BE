@@ -1,13 +1,13 @@
 package org.ktc2.cokaen.wouldyouin.Image.application;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.api.ImageDomain;
 import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.Image.persist.Image;
 import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
+import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,28 +26,37 @@ public abstract class ImageService<T extends Image> {
 
     protected abstract String getSubPath();
 
-    protected abstract T mapToEntityFrom(ImageRequest imageRequest);
+    protected abstract T toEntity(ImageRequest imageRequest);
+
+    public T getByIdOrThrow(Long id) {
+        return getImageRepository().findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(getImageDomain().name() + " Image"));
+    }
 
     protected ImageResponse create(ImageRequest imageRequest) {
-        return ImageResponse.from(getImageRepository().save(mapToEntityFrom(imageRequest)));
+        return ImageResponse.from(getImageRepository().save(toEntity(imageRequest)));
     }
 
     protected void delete(Long id) {
-        getImageRepository().findById(id).orElseThrow(RuntimeException::new);
+        getImageRepository().findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(getImageDomain().name() + " Image"));
         getImageRepository().deleteById(id);
     }
 
     @Transactional
     public List<ImageResponse> saveAndCreateImages(List<MultipartFile> images) {
-        List<String> paths = images.stream().map(image -> imageStorage.save(image, getSubPath())).toList();
-        return paths.stream()
-            .map(path -> create(ImageRequest.of(path, images.get(paths.indexOf(path)).getSize())))
-            .collect(Collectors.toList());
+        return images.stream()
+            .map(image -> {
+                String path = imageStorage.save(image, getSubPath());
+                return create(ImageRequest.of(path, image.getSize(), ImageStorage.getExtension(image)));
+            })
+            .toList();
     }
 
     @Transactional
     public void deleteAndDelete(Long id) {
-        String url = getImageRepository().findById(id).orElseThrow(RuntimeException::new).getUrl();
+        String url = getImageRepository().findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(getImageDomain().name() + " Image")).getUrl();
         delete(id);
         imageStorage.delete(url);
     }

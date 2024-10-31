@@ -5,10 +5,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
+import lombok.Setter;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 
 @Entity
+@Setter
 @NoArgsConstructor
 public class EventImage extends Image {
 

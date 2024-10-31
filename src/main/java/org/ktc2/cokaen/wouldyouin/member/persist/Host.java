@@ -36,7 +36,7 @@ public class Host extends BaseMember implements LikeableMember {
     private List<Event> events;
 
     @Builder
-    protected Host(String email, String nickname, String phone, String hashedPassword, List<MemberImage> profileImage) {
+    protected Host(String email, String nickname, String phone, String hashedPassword, MemberImage profileImage) {
         super(AccountType.local, MemberType.host, email, nickname, phone, profileImage);
         this.hashedPassword = hashedPassword;
         this.intro = "";

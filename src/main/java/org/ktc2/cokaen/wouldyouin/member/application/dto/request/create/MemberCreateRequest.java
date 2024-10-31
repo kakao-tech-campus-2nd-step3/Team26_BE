@@ -15,10 +15,10 @@ public class MemberCreateRequest extends MemberCreateRequestBase {
 
     protected AccountType accountType;
     protected String socialId;
-    protected List<MemberImage> profileImage;
+    protected MemberImage profileImage;
 
     @Builder
-    protected MemberCreateRequest(String nickname, String email, AccountType accountType, String socialId, List<MemberImage> profileImage) {
+    protected MemberCreateRequest(String nickname, String email, AccountType accountType, String socialId, MemberImage profileImage) {
         super(nickname, email);
         this.accountType = accountType;
         this.socialId = socialId;
