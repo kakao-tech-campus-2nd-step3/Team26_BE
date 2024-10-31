@@ -34,7 +34,7 @@ public class Curator extends Member implements LikeableMember {
     private List<Curation> curations;
 
     @Builder(builderMethodName = "curatorBuilder")
-    public Curator(AccountType accountType, String email, String nickname, String phone, List<MemberImage> profileImage, Area area, String gender, String socialId) {
+    public Curator(AccountType accountType, String email, String nickname, String phone, MemberImage profileImage, Area area, String gender, String socialId) {
         super(accountType, MemberType.curator, email, nickname, phone, profileImage, area, gender, socialId);
         this.intro = "";
         this.likes = 0;

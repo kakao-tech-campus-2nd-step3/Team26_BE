@@ -5,5 +5,5 @@ import java.util.List;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 
 public interface ImageUrlToMemberImageListConverter {
-    List<MemberImage> convert(String imageUrl);
+    MemberImage convert(String imageUrl);
 }

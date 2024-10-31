@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
+import org.springframework.data.annotation.CreatedDate;
 
 @Getter
 @Setter
@@ -46,14 +47,15 @@ public class Reservation {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @NotNull
+    @CreatedDate
     @Column(name = "reservation_date")
     private LocalDateTime reservationDate;
 
     @Builder
-    protected Reservation(Integer price, Integer quantity) {
+    protected Reservation(Member member, Event event, Integer price, Integer quantity) {
+        this.member = member;
+        this.event = event;
         this.price = price;
         this.quantity = quantity;
-        this.reservationDate = LocalDateTime.now();
     }
 }

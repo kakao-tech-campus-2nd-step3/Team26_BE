@@ -44,6 +44,8 @@ image:
       sub-path: images/member
     event:
       sub-path: images/event
+    ad:
+      sub-path: images/ad
 
 # for jwt
 jwt:
