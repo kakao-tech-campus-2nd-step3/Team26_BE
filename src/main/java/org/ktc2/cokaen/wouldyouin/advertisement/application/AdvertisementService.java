@@ -3,7 +3,6 @@ package org.ktc2.cokaen.wouldyouin.advertisement.application;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.advertisement.api.AdvertisementRequest;
 import org.ktc2.cokaen.wouldyouin.advertisement.api.AdvertisementResponse;
 import org.ktc2.cokaen.wouldyouin.advertisement.persist.Advertisement;
@@ -13,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor()
-public class AdvertisementService implements EntityGettable<Long, Advertisement> {
+public class AdvertisementService {
 
     private final AdvertisementRepository advertisementRepository;
 
@@ -23,7 +22,6 @@ public class AdvertisementService implements EntityGettable<Long, Advertisement>
             .map(AdvertisementResponse::from).toList();
     }
 
-    @Override
     @Transactional(readOnly = true)
     public Advertisement getByIdOrThrow(Long id) throws RuntimeException {
         return advertisementRepository.findById(id).orElseThrow(RuntimeException::new);

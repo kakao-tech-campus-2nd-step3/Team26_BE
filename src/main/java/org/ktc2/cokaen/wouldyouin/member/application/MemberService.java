@@ -2,8 +2,7 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
+import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.MemberAdditionalInfoRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.create.MemberCreateRequest;
@@ -19,10 +18,10 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService implements MemberServiceCommonBehavior, EntityGettable<Long, Member> {
+public class MemberService implements MemberServiceCommonBehavior {
 
     private final MemberRepository memberRepository;
-    private final EntityGettable<List<Long>, List<MemberImage>> imageIdToMemberImageConverter;
+    private final MemberImageService memberImageService;
 
     @Transactional
     public MemberResponse createMember(MemberCreateRequest request) {
@@ -37,7 +36,7 @@ public class MemberService implements MemberServiceCommonBehavior, EntityGettabl
         Optional.ofNullable(editRequest.getPhoneNumber()).ifPresent(member::setPhone);
         Optional.ofNullable(editRequest.getProfileImageId())
             .map(List::of)
-            .map(imageIdToMemberImageConverter::getByIdOrThrow)
+            .map(memberImageService::getByIdOrThrow)
             .ifPresent(member::setProfileImage);
 
         return MemberResponse.from(member);
@@ -66,7 +65,6 @@ public class MemberService implements MemberServiceCommonBehavior, EntityGettabl
         return MemberResponse.from(getByIdOrThrow(id));
     }
 
-    @Override
     @Transactional(readOnly = true)
     public Member getByIdOrThrow(Long id) {
         //TODO: 커스텀 예외 필요

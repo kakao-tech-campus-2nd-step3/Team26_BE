@@ -3,8 +3,8 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.auth.application.dto.LocalLoginRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.create.HostCreateRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.HostEditRequest;
@@ -18,16 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class HostService implements MemberServiceCommonBehavior, EntityGettable<Long, Host>, LikeableMemberService<Host> {
+public class HostService implements MemberServiceCommonBehavior, LikeableMemberService<Host> {
 
     private final HostRepository hostRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EntityGettable<List<Long>, List<MemberImage>> imageIdToMemberImageConverter;
+    private final MemberImageService memberImageService;
 
     @Transactional
     public MemberResponse createHost(HostCreateRequest request) {
         String hashedPassword = passwordEncoder.encode(request.getPassword());
-        List<MemberImage> profileImage = imageIdToMemberImageConverter.getByIdOrThrow(List.of(request.getProfileImageId()));
+        List<MemberImage> profileImage = memberImageService.getByIdOrThrow(List.of(request.getProfileImageId()));
         Host createdHost = hostRepository.save(request.toEntity(hashedPassword, profileImage));
         profileImage.getFirst().setBaseMember(createdHost);
         return MemberResponse.from(createdHost);
@@ -40,7 +40,7 @@ public class HostService implements MemberServiceCommonBehavior, EntityGettable<
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(host::setPhone);
         Optional.ofNullable(request.getProfileImageId())
             .map(List::of)
-            .map(imageIdToMemberImageConverter::getByIdOrThrow)
+            .map(memberImageService::getByIdOrThrow)
             .ifPresent(host::setProfileImage);
         Optional.ofNullable(request.getIntro()).ifPresent(host::setIntro);
         Optional.ofNullable(request.getHashtag()).ifPresent(host::setHashtag);
@@ -69,7 +69,6 @@ public class HostService implements MemberServiceCommonBehavior, EntityGettable<
             .orElseThrow(RuntimeException::new));
     }
 
-    @Override
     @Transactional(readOnly = true)
     public Host getByIdOrThrow(Long id) {
         //TODO: 커스텀 예외 필요
@@ -82,7 +81,7 @@ public class HostService implements MemberServiceCommonBehavior, EntityGettable<
     }
 
     @Override
-    public EntityGettable<Long, Host> getLikeableMemberGetter() {
+    public LikeableMemberService<Host> getLikeableMemberService() {
         return this;
     }
 }

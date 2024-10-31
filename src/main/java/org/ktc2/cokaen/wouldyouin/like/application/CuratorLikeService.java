@@ -1,10 +1,10 @@
 package org.ktc2.cokaen.wouldyouin.like.application;
 
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.like.persist.CuratorLike;
 import org.ktc2.cokaen.wouldyouin.like.persist.CuratorLikeRepository;
 import org.ktc2.cokaen.wouldyouin.like.persist.LikeRepository;
 import org.ktc2.cokaen.wouldyouin.member.application.LikeableMemberGetterFactory;
+import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 import org.ktc2.cokaen.wouldyouin.member.persist.LikeableMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
@@ -18,8 +18,8 @@ public class CuratorLikeService extends LikeService<CuratorLike> {
 
     public CuratorLikeService(
         LikeableMemberGetterFactory likeableMemberGetterFactory,
-        EntityGettable<Long, Member> memberGetter, CuratorLikeRepository curatorLikeRepository) {
-        super(likeableMemberGetterFactory, memberGetter);
+        MemberService memberService, CuratorLikeRepository curatorLikeRepository) {
+        super(likeableMemberGetterFactory, memberService);
         this.curatorLikeRepository = curatorLikeRepository;
     }
 

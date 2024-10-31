@@ -7,13 +7,12 @@ import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImageRepository;
 import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class EventImageService extends ImageService<EventImage> implements EntityGettable<List<Long>, List<EventImage>> {
+public class EventImageService extends ImageService<EventImage> {
 
     private final EventImageRepository eventImageRepository;
 
@@ -46,7 +45,6 @@ public class EventImageService extends ImageService<EventImage> implements Entit
         eventImageRepository.deleteById(id);
     }
 
-    @Override
     public List<EventImage> getByIdOrThrow(List<Long> ids) throws RuntimeException {
         return ids.stream().map(id -> eventImageRepository.findById(id).orElseThrow(RuntimeException::new)).toList();
     }

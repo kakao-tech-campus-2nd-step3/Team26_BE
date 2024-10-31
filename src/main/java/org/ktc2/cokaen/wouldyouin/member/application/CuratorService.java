@@ -3,8 +3,7 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
+import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.CuratorEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
@@ -18,12 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class CuratorService implements MemberServiceCommonBehavior, EntityGettable<Long, Curator>, LikeableMemberService<Curator> {
+public class CuratorService implements MemberServiceCommonBehavior, LikeableMemberService<Curator> {
 
     private final CuratorRepository curatorRepository;
     private final MemberRepository memberRepository;
     private final BaseMemberRepository baseMemberRepository;
-    private final EntityGettable<List<Long>, List<MemberImage>> imageIdToMemberImageConverter;
+    private final MemberImageService memberImageService;
 
     @Transactional
     public MemberResponse createCurator(Long normalMemberId) {
@@ -64,7 +63,7 @@ public class CuratorService implements MemberServiceCommonBehavior, EntityGettab
         Optional.ofNullable(request.getIntro()).ifPresent(curator::setIntro);
         Optional.ofNullable(request.getProfileImageId())
             .map(List::of)
-            .map(imageIdToMemberImageConverter::getByIdOrThrow)
+            .map(memberImageService::getByIdOrThrow)
             .ifPresent(curator::setProfileImage);
 
         return MemberResponse.from(curator);
@@ -82,7 +81,6 @@ public class CuratorService implements MemberServiceCommonBehavior, EntityGettab
         return MemberResponse.from(getByIdOrThrow(id));
     }
 
-    @Override
     @Transactional(readOnly = true)
     public Curator getByIdOrThrow(Long id) {
         //TODO: 커스텀 예외 필요
@@ -95,7 +93,7 @@ public class CuratorService implements MemberServiceCommonBehavior, EntityGettab
     }
 
     @Override
-    public EntityGettable<Long, Curator> getLikeableMemberGetter() {
+    public LikeableMemberService<Curator> getLikeableMemberService() {
         return this;
     }
 }
