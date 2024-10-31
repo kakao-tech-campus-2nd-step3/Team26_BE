@@ -1,7 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
@@ -11,12 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class BaseMemberService implements EntityGettable<Long, BaseMember> {
+public class BaseMemberService {
 
     private final BaseMemberRepository baseMemberRepository;
     private final DerivedMemberServiceFactory derivedMemberServiceFactory;
 
-    @Override
     public BaseMember getByIdOrThrow(Long id) throws RuntimeException {
         // TODO: 커스텀 예외 작성필요
         return baseMemberRepository.findById(id).orElseThrow(RuntimeException::new);

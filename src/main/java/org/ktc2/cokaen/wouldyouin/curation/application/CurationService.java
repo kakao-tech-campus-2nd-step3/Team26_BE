@@ -3,29 +3,27 @@ package org.ktc2.cokaen.wouldyouin.curation.application;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
+import org.ktc2.cokaen.wouldyouin.Image.application.CurationImageService;
 import org.ktc2.cokaen.wouldyouin._common.persist.Area;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationEditRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationResponse;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationRepository;
-import org.ktc2.cokaen.wouldyouin.event.persist.Event;
-import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
+import org.ktc2.cokaen.wouldyouin.event.application.EventService;
+import org.ktc2.cokaen.wouldyouin.member.application.CuratorService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
-public class CurationService implements EntityGettable<Long, Curation> {
+public class CurationService {
 
     private final CurationRepository curationRepository;
-    private final EntityGettable<Long, Curator> curatorService;
-    private final EntityGettable<Long, Event> eventService;
-    private final EntityGettable<List<Long>, List<CurationImage>> curationImageService;
+    private final CuratorService curatorService;
+    private final EventService eventService;
+    private final CurationImageService curationImageService;
 
-    @Override
     @Transactional(readOnly = true)
     public Curation getByIdOrThrow(Long id) throws RuntimeException {
         return curationRepository.findById(id).orElseThrow(RuntimeException::new);

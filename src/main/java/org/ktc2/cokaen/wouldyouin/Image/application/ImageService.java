@@ -8,7 +8,6 @@ import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.Image.persist.Image;
 import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -3,9 +3,8 @@ package org.ktc2.cokaen.wouldyouin.review.application;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
-import org.ktc2.cokaen.wouldyouin.event.persist.Event;
-import org.ktc2.cokaen.wouldyouin.member.persist.Member;
+import org.ktc2.cokaen.wouldyouin.event.application.EventService;
+import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.ktc2.cokaen.wouldyouin.review.application.dto.ReviewCreateRequest;
 import org.ktc2.cokaen.wouldyouin.review.application.dto.ReviewEditRequest;
 import org.ktc2.cokaen.wouldyouin.review.application.dto.ReviewResponse;
@@ -19,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final EntityGettable<Long, Event> eventService;
-    private final EntityGettable<Long, Member> memberService;
+    private final EventService eventService;
+    private final MemberService memberService;
 
     @Transactional(readOnly = true)
     public ReviewResponse getById(Long reviewId) {
