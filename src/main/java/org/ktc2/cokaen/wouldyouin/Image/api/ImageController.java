@@ -9,6 +9,7 @@ import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageServiceFactory;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
+import org.ktc2.cokaen.wouldyouin._common.exception.FailToReadImageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class ImageController {
 
     @PostMapping("/images")
     public ResponseEntity<ApiResponseBody<List<ImageResponse>>> uploadImages(@RequestParam List<MultipartFile> images,
-        @RequestParam ImageDomain imageDomain) {
+        @RequestParam(value = "type") ImageDomain imageDomain) {
         return ApiResponse.ok(imageServiceFactory.getImageServiceByImageType(imageDomain).saveAndCreateImages(images));
     }
 
@@ -39,7 +40,7 @@ public class ImageController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(Files.readAllBytes(Paths.get(path)));
         } catch (IOException e) {
-            throw new RuntimeException("failed to get image.");
+            throw new FailToReadImageException();
         }
     }
 

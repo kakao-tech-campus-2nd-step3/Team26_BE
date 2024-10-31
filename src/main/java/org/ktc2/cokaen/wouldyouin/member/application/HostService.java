@@ -1,14 +1,13 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.auth.application.dto.LocalLoginRequest;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.create.HostCreateRequest;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.HostEditRequest;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 import org.ktc2.cokaen.wouldyouin.member.persist.HostRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
@@ -27,9 +26,9 @@ public class HostService implements MemberServiceCommonBehavior, LikeableMemberS
     @Transactional
     public MemberResponse createHost(HostCreateRequest request) {
         String hashedPassword = passwordEncoder.encode(request.getPassword());
-        List<MemberImage> profileImage = memberImageService.getByIdOrThrow(List.of(request.getProfileImageId()));
+        MemberImage profileImage = memberImageService.getByIdOrThrow(request.getProfileImageId());
         Host createdHost = hostRepository.save(request.toEntity(hashedPassword, profileImage));
-        profileImage.getFirst().setBaseMember(createdHost);
+        profileImage.setBaseMember(createdHost);
         return MemberResponse.from(createdHost);
     }
 
@@ -38,10 +37,7 @@ public class HostService implements MemberServiceCommonBehavior, LikeableMemberS
         Host host = getByIdOrThrow(hostId);
         Optional.ofNullable(request.getNickname()).ifPresent(host::setNickname);
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(host::setPhone);
-        Optional.ofNullable(request.getProfileImageId())
-            .map(List::of)
-            .map(memberImageService::getByIdOrThrow)
-            .ifPresent(host::setProfileImage);
+        Optional.ofNullable(request.getProfileImageId()).map(memberImageService::getByIdOrThrow).ifPresent(host::setProfileImage);
         Optional.ofNullable(request.getIntro()).ifPresent(host::setIntro);
         Optional.ofNullable(request.getHashtag()).ifPresent(host::setHashtag);
 

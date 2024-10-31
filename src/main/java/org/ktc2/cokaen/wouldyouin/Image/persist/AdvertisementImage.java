@@ -1,0 +1,25 @@
+package org.ktc2.cokaen.wouldyouin.Image.persist;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.ktc2.cokaen.wouldyouin.advertisement.persist.Advertisement;
+
+@Entity
+@Setter
+@NoArgsConstructor
+public class AdvertisementImage extends Image {
+
+    @OneToOne
+    @JoinColumn(name = "advertisement_id")
+    private Advertisement advertisement;
+
+    @Builder
+    public AdvertisementImage(String name, Long size, String extension, Advertisement advertisement) {
+        super(name, size, extension);
+        this.advertisement = advertisement;
+    }
+}

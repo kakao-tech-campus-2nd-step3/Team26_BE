@@ -21,7 +21,7 @@ public class HostCreateRequest extends MemberCreateRequestBase {
         this.profileImageId = profileImageId;
     }
 
-    public Host toEntity(String hashedPassword, List<MemberImage> profileImage) {
+    public Host toEntity(String hashedPassword, MemberImage profileImage) {
 
         return Host.builder()
             .nickname(this.nickname)

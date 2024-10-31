@@ -3,6 +3,8 @@ package org.ktc2.cokaen.wouldyouin.auth.application;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageUrlToMemberImageListConverter;
+import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
+import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.auth.application.dto.LocalLoginRequest;
 import org.ktc2.cokaen.wouldyouin.auth.application.dto.LocalSignupRequest;
@@ -30,7 +32,7 @@ public class AuthService {
     private final MemberService memberService;
     private final HostService hostService;
     private final OauthRequestServiceFactory oauthRequestServiceFactory;
-    private final ImageUrlToMemberImageListConverter memberImageListConverter;
+    private final MemberImageService memberImageService;
 
     @Transactional
     public TokenResponse localSignup(LocalSignupRequest request) {
@@ -57,7 +59,7 @@ public class AuthService {
                 .email(resources.getEmail())
                 .socialId(resources.getSocialId())
                 .accountType(accountType)
-                .profileImage(memberImageListConverter.convert(resources.getProfileImageUrl()))
+                .profileImage(memberImageService.convert(resources.getProfileImageUrl()))
                 .build());
 
             return SocialTokenResponse.builder()
