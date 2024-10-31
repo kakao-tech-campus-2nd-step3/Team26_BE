@@ -7,13 +7,12 @@ import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImageRepository;
 import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CurationImageService extends ImageService<CurationImage> implements EntityGettable<List<Long>, List<CurationImage>> {
+public class CurationImageService extends ImageService<CurationImage> {
 
     private final CurationImageRepository curationImageRepository;
 
@@ -43,7 +42,6 @@ public class CurationImageService extends ImageService<CurationImage> implements
             .build();
     }
 
-    @Override
     public List<CurationImage> getByIdOrThrow(List<Long> ids) throws RuntimeException {
         return ids.stream().map(id -> curationImageRepository.findById(id).orElseThrow(RuntimeException::new)).toList();
     }

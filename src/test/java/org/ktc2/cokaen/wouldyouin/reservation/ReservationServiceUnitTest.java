@@ -14,10 +14,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
-import org.ktc2.cokaen.wouldyouin.event.persist.Event;
+import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.global.TestData;
-import org.ktc2.cokaen.wouldyouin.member.persist.Member;
+import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.ktc2.cokaen.wouldyouin.payment.application.PaymentService;
 import org.ktc2.cokaen.wouldyouin.reservation.application.ReservationService;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.ReservationRepository;
@@ -32,9 +31,9 @@ class ReservationServiceUnitTest {
     @Mock
     private ReservationRepository reservationRepository;
     @Mock
-    private EntityGettable<Long, Member> memberService;
+    private MemberService memberService;
     @Mock
-    private EntityGettable<Long, Event> eventService;
+    private EventService eventService;
     @Mock
     private PaymentService paymentService;
 
