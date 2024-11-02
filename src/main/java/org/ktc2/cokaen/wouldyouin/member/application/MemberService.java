@@ -3,6 +3,7 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
+import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.MemberAdditionalInfoRequest;
@@ -23,7 +24,8 @@ public class MemberService implements MemberServiceCommonBehavior {
 
     @Transactional
     public MemberResponse createMember(MemberCreateRequest request) {
-        return MemberResponse.from(memberRepository.save(request.toEntity()));
+        MemberImage profileImage = memberImageService.convert(request.getProfileImageUrl());
+        return MemberResponse.from(memberRepository.save(request.toEntity(profileImage)));
     }
 
     @Transactional
@@ -32,7 +34,9 @@ public class MemberService implements MemberServiceCommonBehavior {
         Optional.ofNullable(editRequest.getNickname()).ifPresent(member::setNickname);
         Optional.ofNullable(editRequest.getArea()).ifPresent(member::setArea);
         Optional.ofNullable(editRequest.getPhoneNumber()).ifPresent(member::setPhone);
-        Optional.ofNullable(editRequest.getProfileImageId()).map(memberImageService::getByIdOrThrow).ifPresent(member::setProfileImage);
+        Optional.ofNullable(editRequest.getProfileImageId())
+            .map(memberImageService::getByIdOrThrow)
+            .ifPresent(member::setProfileImage);
         return MemberResponse.from(member);
     }
 
