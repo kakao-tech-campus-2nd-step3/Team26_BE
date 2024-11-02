@@ -2,9 +2,6 @@ package org.ktc2.cokaen.wouldyouin.auth.application;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.Image.application.ImageUrlToMemberImageListConverter;
-import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
-import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.auth.application.dto.LocalLoginRequest;
 import org.ktc2.cokaen.wouldyouin.auth.application.dto.LocalSignupRequest;
@@ -32,7 +29,6 @@ public class AuthService {
     private final MemberService memberService;
     private final HostService hostService;
     private final OauthRequestServiceFactory oauthRequestServiceFactory;
-    private final MemberImageService memberImageService;
 
     @Transactional
     public TokenResponse localSignup(LocalSignupRequest request) {
@@ -52,35 +48,37 @@ public class AuthService {
 
         baseMemberService.checkUniqueEmailOrThrow(resources.getEmail());
 
-        if (identifier.isEmpty()) {
-            // 소셜 계정의 회원가입 처리
-            MemberResponse welcomeMemberResponse = memberService.createMember(MemberCreateRequest.builder()
-                .nickname(resources.getNickname())
-                .email(resources.getEmail())
-                .socialId(resources.getSocialId())
-                .accountType(accountType)
-                .profileImage(memberImageService.convert(resources.getProfileImageUrl()))
-                .build());
-
-            return SocialTokenResponse.builder()
-                .isWelcomeMember(true)
-                .token(createToken(welcomeMemberResponse))
-                .build();
-
-        } else if (identifier.get().type() == MemberType.welcome) {
-            // 소셜 계정이지만 아직 추가 정보 기입이 되지 않은 경우 처리
-            return SocialTokenResponse.builder()
-                .isWelcomeMember(true)
-                .token(createToken(identifier.get()))
-                .build();
-
-        } else {
-            // 소셜 계정이고 추가 정보도 기입된 경우 처리
-            return SocialTokenResponse.builder()
-                .isWelcomeMember(false)
-                .token(createToken(identifier.get()))
-                .build();
+        if (identifier.isPresent()) {
+            MemberIdentifier id = identifier.get();
+            // 소셜 계정이고 추가 정보도 기입된 경우
+            if (id.type() != MemberType.welcome) {
+                return SocialTokenResponse.builder()
+                    .isWelcomeMember(false)
+                    .token(createToken(id))
+                    .build();
+            }
+            // 소셜 계정이지만 아직 추가 정보 기입이 되지 않은 경우
+            else {
+                return SocialTokenResponse.builder()
+                    .isWelcomeMember(true)
+                    .token(createToken(id))
+                    .build();
+            }
         }
+
+        // 소셜 계정의 회원가입 처리
+        MemberResponse welcomeMemberResponse = memberService.createMember(MemberCreateRequest.builder()
+            .nickname(resources.getNickname())
+            .email(resources.getEmail())
+            .socialId(resources.getSocialId())
+            .accountType(accountType)
+            .profileImageUrl(resources.getProfileImageUrl())
+            .build());
+
+        return SocialTokenResponse.builder()
+            .isWelcomeMember(true)
+            .token(createToken(welcomeMemberResponse))
+            .build();
     }
 
     @Transactional

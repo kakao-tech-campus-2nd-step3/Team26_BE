@@ -28,7 +28,7 @@ public class HostService implements MemberServiceCommonBehavior, LikeableMemberS
         String hashedPassword = passwordEncoder.encode(request.getPassword());
         MemberImage profileImage = memberImageService.getByIdOrThrow(request.getProfileImageId());
         Host createdHost = hostRepository.save(request.toEntity(hashedPassword, profileImage));
-        profileImage.setBaseMember(createdHost);
+        memberImageService.setBaseMember(profileImage, createdHost);
         return MemberResponse.from(createdHost);
     }
 
