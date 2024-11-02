@@ -1,12 +1,5 @@
 package org.ktc2.cokaen.wouldyouin.global;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -18,10 +11,13 @@ import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
+import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
+import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationRequest;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class TestData {
 
@@ -93,5 +89,88 @@ public class TestData {
                 .price(10000)
                 .quantity(3)
                 .build();
+    }
+
+    public static class MemberDomain {
+
+        public static MemberImage createValidMemberImage(Long id) {
+            MemberImage ret = MemberImage.builder()
+                .name("memberImage")
+                .size(10L)
+                .extension(".jpg")
+                .build();
+            ReflectionTestUtils.setField(ret, "id", id);
+            return ret;
+        }
+
+        public static Member createValidMember() {
+            MemberImage memberImage = createValidMemberImage(1L);
+            Member ret = Member.builder()
+                .accountType(AccountType.kakao)
+                .email("member1@example.com")
+                .nickname("nick_normal_123")
+                .phone("010-1112-2233")
+                .profileImage(memberImage)
+                .area(Area.광주)
+                .gender("Men")
+                .socialId("100100100100100")
+                .build();
+            ReflectionTestUtils.setField(ret, "Id", 1L);
+            ReflectionTestUtils.setField(ret, "memberType", MemberType.normal);
+            ReflectionTestUtils.setField(memberImage, "baseMember", ret);
+            return ret;
+        }
+
+        public static Member createValidWelcomeMember() {
+            MemberImage memberImage = createValidMemberImage(4L);
+            Member ret = Member.builder()
+                .accountType(AccountType.kakao)
+                .email("member2@example.com")
+                .nickname("nick_normal_333")
+                .phone("010-4414-1144")
+                .profileImage(memberImage)
+                .area(Area.서울)
+                .gender("Men")
+                .socialId("456456456456")
+                .build();
+            ReflectionTestUtils.setField(ret, "Id", 4L);
+            ReflectionTestUtils.setField(memberImage, "baseMember", ret);
+            return ret;
+        }
+
+        public static Host createValidHost() {
+            MemberImage memberImage = createValidMemberImage(3L);
+            Host ret = Host.builder()
+                .email("curator1@example.com")
+                .nickname("nick_curator_12")
+                .phone("010-4545-6767")
+                .hashedPassword("hashed_password")
+                .profileImage(memberImage)
+                .build();
+            ReflectionTestUtils.setField(ret, "Id", 3L);
+            ReflectionTestUtils.setField(ret, "intro", "주최자 자기소개입니다.");
+            ReflectionTestUtils.setField(ret, "hashtag", "#주최자#해시태그#입니다");
+            ReflectionTestUtils.setField(memberImage, "baseMember", ret);
+            return ret;
+        }
+
+        public static Curator createValidCurator() {
+            MemberImage memberImage = createValidMemberImage(2L);
+            Curator ret = Curator.curatorBuilder()
+                .accountType(AccountType.google)
+                .email("curator1@example.com")
+                .nickname("nick_curator_12")
+                .phone("010-4545-6767")
+                .profileImage(memberImage)
+                .area(Area.광주)
+                .gender("Women")
+                .socialId("200200200200200")
+                .build();
+            ReflectionTestUtils.setField(ret, "Id", 2L);
+            ReflectionTestUtils.setField(ret, "intro", "큐레이터 자기소개입니다.");
+            ReflectionTestUtils.setField(ret, "hashtag", "#큐레이터#해시태그#입니다");
+            ReflectionTestUtils.setField(memberImage, "baseMember", ret);
+            return ret;
+        }
     }
 }
