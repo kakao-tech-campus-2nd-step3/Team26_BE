@@ -12,13 +12,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    @Query("SELECT E FROM Event E JOIN FETCH E.host JOIN FETCH E.images "
+    @Query("SELECT E FROM Event E JOIN FETCH E.host "
         + "WHERE E.host.Id = :hostId "
         + "AND E.host.Id > :lastId "
         + "ORDER BY E.createdDate DESC")
     Slice<Event> findAllByHostIdOrderByCreatedDateDesc(Long hostId, Long lastId, Pageable pageable);
 
-    @Query("SELECT E FROM Event E JOIN FETCH E.host JOIN FETCH E.images "
+    @Query("SELECT E FROM Event E JOIN FETCH E.host "
         + "WHERE ((:lat1 IS NULL OR :long1 IS NULL OR :lat2 IS NULL OR :long2 IS NULL) "
         + "OR ((E.location.latitude between :lat1 AND :lat2) AND (E.location.longitude between :long1 AND :long2))) "
         + "AND (:category IS NULL OR E.category = '전체' OR E.category = :category) "
