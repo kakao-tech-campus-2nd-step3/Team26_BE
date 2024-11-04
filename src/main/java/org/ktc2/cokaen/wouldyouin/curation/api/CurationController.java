@@ -1,13 +1,17 @@
 package org.ktc2.cokaen.wouldyouin.curation.api;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin._common.persist.Area;
+import org.ktc2.cokaen.wouldyouin.auth.Authorize;
+import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationEditRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationResponse;
 import org.ktc2.cokaen.wouldyouin.curation.application.CurationService;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,15 +42,15 @@ public class CurationController {
 
     @PostMapping
     public ApiResponseBody<CurationResponse> createCuration(
-        @RequestBody CurationCreateRequest curationCreateRequest) {
-        return new ApiResponseBody<>(true, curationService.create(curationCreateRequest));
+        @Valid @RequestBody CurationCreateRequest curationCreateRequest,
+        @Authorize(MemberType.curator) MemberIdentifier curator) {
+        return new ApiResponseBody<>(true, curationService.create(curator.id(), curationCreateRequest));
     }
 
     @PutMapping("/{curationId}")
     public ApiResponseBody<CurationResponse> updateCuration(@PathVariable Long curationId,
-        @RequestBody CurationEditRequest curationEditRequest) {
+        @Valid @RequestBody CurationEditRequest curationEditRequest) {
         return new ApiResponseBody<>(true, curationService.update(curationId, curationEditRequest));
-
     }
 
     @DeleteMapping("/{curationId}")
@@ -54,5 +58,4 @@ public class CurationController {
         curationService.delete(curationId);
         return new ApiResponseBody<>(true, null);
     }
-
 }

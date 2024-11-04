@@ -4,7 +4,7 @@
 spring:
   application.name: WouldYouIn
   profiles:
-    default: dev
+    default: ${ACTIVE_PROFILE}
 
   # 소셜로그인 테스트시 캐시 비활성화
   thymeleaf:
@@ -44,6 +44,8 @@ image:
       sub-path: images/member
     event:
       sub-path: images/event
+    ad:
+      sub-path: images/ad
 
 # for jwt
 jwt:

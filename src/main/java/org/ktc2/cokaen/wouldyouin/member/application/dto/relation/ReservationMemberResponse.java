@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.member.application.dto.relationResponse;
+package org.ktc2.cokaen.wouldyouin.member.application.dto.relation;
 
 import lombok.Builder;
 import lombok.Getter;

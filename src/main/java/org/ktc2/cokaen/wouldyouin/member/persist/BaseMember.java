@@ -10,16 +10,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 
-@Slf4j
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -49,11 +48,12 @@ public abstract class BaseMember {
     @Column(nullable = false)
     private String phone;
 
-    @Column(nullable = false)
-    @OneToMany(mappedBy = "baseMember")
-    private List<MemberImage> profileImage;
+    @PrimaryKeyJoinColumn
+    @OneToOne(mappedBy = "baseMember")
+    private MemberImage profileImage;
 
-    protected BaseMember(AccountType accountType, MemberType memberType, String email, String nickname, String phone, List<MemberImage> profileImage) {
+    protected BaseMember(AccountType accountType, MemberType memberType, String email, String nickname, String phone,
+        MemberImage profileImage) {
         this.accountType = accountType;
         this.memberType = memberType;
         this.email = email;
@@ -62,25 +62,7 @@ public abstract class BaseMember {
         this.profileImage = profileImage;
     }
 
-    @Override
-    public String toString() {
-        return "BaseMember{" +
-            "Id=" + Id +
-            ", accountType=" + accountType +
-            ", memberType=" + memberType +
-            ", email='" + email + '\'' +
-            ", nickname='" + nickname + '\'' +
-            ", phone='" + phone + '\'' +
-            ", profileImage=" + profileImage +
-            '}';
-    }
-
     public String getProfileImageUrl() {
-        // TODO: 멤버 조회시 profileImage에 null 들어가는 원인 파악 필요
-        log.warn("#### in baseMember.getProfileImageUrl() for baseMember: {}", this);
-        if (profileImage == null || profileImage.isEmpty()) {
-            return null;
-        }
-        return profileImage.getFirst().getUrl();
+        return profileImage.getUrl();
     }
 }

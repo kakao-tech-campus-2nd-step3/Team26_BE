@@ -47,11 +47,11 @@ public class Member extends BaseMember {
     @OneToMany(mappedBy = "member")
     private List<Reservation> reservations;
 
-    @OneToMany(mappedBy = "memberId")
+    @OneToMany(mappedBy = "member")
     private List<Review> reviews;
 
     // for Curator
-    protected Member(AccountType accountType, MemberType memberType, String email, String nickname, String phone, List<MemberImage> profileImage, Area area, String gender, String socialId) {
+    protected Member(AccountType accountType, MemberType memberType, String email, String nickname, String phone, MemberImage profileImage, Area area, String gender, String socialId) {
         super(accountType, memberType, email, nickname, phone, profileImage);
         this.area = area;
         this.gender = gender;
@@ -60,7 +60,7 @@ public class Member extends BaseMember {
 
     @Builder
     // for public builder
-    protected Member(AccountType accountType, String email, String nickname, String phone, List<MemberImage> profileImage, Area area, String gender, String socialId) {
+    protected Member(AccountType accountType, String email, String nickname, String phone, MemberImage profileImage, Area area, String gender, String socialId) {
         this(accountType, MemberType.welcome, email, nickname, phone, profileImage, area, gender, socialId);
     }
 

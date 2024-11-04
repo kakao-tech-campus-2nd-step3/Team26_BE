@@ -4,9 +4,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
-import org.ktc2.cokaen.wouldyouin._common.api.EntityGettable;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @RequiredArgsConstructor
@@ -23,13 +21,14 @@ public class HostCreateRequest extends MemberCreateRequestBase {
         this.profileImageId = profileImageId;
     }
 
-    public Host toEntity(PasswordEncoder passwordEncoder, EntityGettable<List<Long>, List<MemberImage>> imageIdToMemberImageConverter) {
+    public Host toEntity(String hashedPassword, MemberImage profileImage) {
+
         return Host.builder()
             .nickname(this.nickname)
-            .profileImage(imageIdToMemberImageConverter.getByIdOrThrow(List.of(this.profileImageId)))
+            .profileImage(profileImage)
             .email(this.email)
             .phone(this.phone)
-            .hashedPassword(passwordEncoder.encode(this.password))
+            .hashedPassword(hashedPassword)
             .build();
     }
 }
