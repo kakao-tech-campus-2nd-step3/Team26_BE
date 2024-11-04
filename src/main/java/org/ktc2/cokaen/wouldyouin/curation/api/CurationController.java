@@ -1,17 +1,18 @@
 package org.ktc2.cokaen.wouldyouin.curation.api;
 
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin._common.persist.Area;
-import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationEditRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationResponse;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationSliceResponse;
 import org.ktc2.cokaen.wouldyouin.curation.application.CurationService;
-import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,32 +31,50 @@ public class CurationController {
     private final CurationService curationService;
 
     @GetMapping
-    public ApiResponseBody<List<CurationResponse>> getCurationByArea(@RequestParam Area area) {
-        return new ApiResponseBody<>(true, curationService.getAllByArea(area));
+    public ResponseEntity<ApiResponseBody<CurationSliceResponse>> getCurationsByAreaOrderByCreatedDateDesc(
+        @RequestParam Area area,
+        @RequestParam(defaultValue = "${spring.controller.pageable.default-page}") Integer page,
+        @RequestParam(defaultValue = "${spring.controller.pageable.default-page-size}") Integer size,
+        @RequestParam(defaultValue = "${spring.controller.pageable.default-last-id}") Long lastId
+    ) {
+        return ApiResponse.ok(curationService.getAllByAreaOrderByCreatedDateDesc(
+            area, PageRequest.of(page, size), lastId));
+    }
+
+    @GetMapping("/curators/{curatorId}")
+    public ResponseEntity<ApiResponseBody<CurationSliceResponse>> getCurationsByCuratorIdOrderByCreatedDateDesc(
+        @PathVariable("curatorId") Long curatorId,
+        @RequestParam(defaultValue = "${spring.controller.pageable.default-page}") Integer page,
+        @RequestParam(defaultValue = "${spring.controller.pageable.default-page-size}") Integer size,
+        @RequestParam(defaultValue = "${spring.controller.pageable.default-last-id}") Long lastId
+    ) {
+        return ApiResponse.ok(curationService.getAllByCuratorIdOrderByCreatedDateDesc(
+            curatorId, PageRequest.of(page, size), lastId));
     }
 
     @GetMapping("/{curationId}")
-    public ApiResponseBody<CurationResponse> getCurationByCurationId(
+    public ResponseEntity<ApiResponseBody<CurationResponse>> getCurationByCurationId(
         @PathVariable("curationId") Long curationId) {
-        return new ApiResponseBody<>(true, curationService.getById(curationId));
+        return ApiResponse.ok(curationService.getById(curationId));
     }
 
     @PostMapping
-    public ApiResponseBody<CurationResponse> createCuration(
+    public ResponseEntity<ApiResponseBody<CurationResponse>> createCuration(
         @Valid @RequestBody CurationCreateRequest curationCreateRequest,
-        @Authorize(MemberType.curator) MemberIdentifier curator) {
-        return new ApiResponseBody<>(true, curationService.create(curator.id(), curationCreateRequest));
+        MemberIdentifier curator) {
+        return ApiResponse.created(curationService.create(curator.id(), curationCreateRequest));
     }
 
     @PutMapping("/{curationId}")
-    public ApiResponseBody<CurationResponse> updateCuration(@PathVariable Long curationId,
-        @Valid @RequestBody CurationEditRequest curationEditRequest) {
-        return new ApiResponseBody<>(true, curationService.update(curationId, curationEditRequest));
+    public ResponseEntity<ApiResponseBody<CurationResponse>> updateCuration(@PathVariable Long curationId,
+        @Valid @RequestBody CurationEditRequest curationEditRequest,
+        MemberIdentifier curator) {
+        return ApiResponse.ok(curationService.update(curator.id(), curationEditRequest));
     }
 
     @DeleteMapping("/{curationId}")
-    public ApiResponseBody<Void> deleteCuration(@PathVariable Long curationId) {
+    public ResponseEntity<ApiResponseBody<Void>> deleteCuration(@PathVariable Long curationId) {
         curationService.delete(curationId);
-        return new ApiResponseBody<>(true, null);
+        return ApiResponse.noContent();
     }
 }

@@ -5,8 +5,8 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.CurationImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
-import org.ktc2.cokaen.wouldyouin._common.exception.EntityParamIsNullException;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
+import org.ktc2.cokaen.wouldyouin._common.exception.EntityParamIsNullException;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardResponse;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
@@ -46,7 +46,7 @@ public class CurationCardService {
     @Transactional
     public CurationCard create(CurationCardRequest request) {
         List<CurationImage> images = request.getImageIds().stream()
-            .map(curationImageService::getByIdOrThrow)
+            .map(curationImageService::getById)
             .toList();
         CurationCard curationCard = curationCardRepository.save(request.toEntity(images));
         images.forEach(image -> curationImageService.setCuration(image, curationCard));
