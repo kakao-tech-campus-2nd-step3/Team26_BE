@@ -70,22 +70,15 @@ class ReservationControllerUnitTest {
     }
 
     @Test
-    @DisplayName("모든 예약 조회 - 성공")
-    void getReservations() throws Exception {
-        mockMvc.perform(get("/api/reservations")).andExpect(status().isOk());
-        verify(reservationService).getAll();
-    }
-
-    @Test
     @DisplayName("예약 조회 - 성공")
-    void getReservation() throws Exception {
+    void getReservationById() throws Exception {
         mockMvc.perform(get("/api/reservations/" + id)).andExpect(status().isOk());
         verify(reservationService).getById(id);
     }
 
     @Test
     @DisplayName("사용자 id를 통한 예약 조회 - 성공")
-    void getReservationsByMemberId() throws Exception {
+    void getReservationsByMemberIdById() throws Exception {
         mockMvc.perform(get("/api/reservations/members/" + id)).andExpect(status().isOk());
         verify(reservationService).getAllByMemberId(id);
 
@@ -93,7 +86,7 @@ class ReservationControllerUnitTest {
 
     @Test
     @DisplayName("행사 id를 통한 예약 조회 - 성공")
-    void getReservationsByEventId() throws Exception {
+    void getReservationsByEventIdById() throws Exception {
         mockMvc.perform(get("/api/reservations/events/" + id)).andExpect(status().isOk());
         verify(reservationService).getAllByEventId(id);
     }

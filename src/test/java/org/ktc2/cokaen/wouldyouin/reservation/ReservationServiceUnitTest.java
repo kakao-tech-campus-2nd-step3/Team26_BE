@@ -46,31 +46,23 @@ class ReservationServiceUnitTest {
     }
 
     @Test
-    @DisplayName("모든 예약 조회 - 성공")
-    void getAll() {
-        when(reservationRepository.findAll()).thenReturn(List.of());
-        reservationService.getAll();
-        verify(reservationRepository, times(1)).findAll();
-    }
-
-    @Test
     @DisplayName("사용자 id를 통한 모든 예약 조회 - 성공")
     void getAllByMemberId() {
-        when(reservationRepository.findByMemberId(id)).thenReturn(List.of());
+        when(reservationRepository.findByMemberIdOrderByReservationDateDesc(id)).thenReturn(List.of());
         reservationService.getAllByMemberId(id);
-        verify(reservationRepository, times(1)).findByMemberId(id);
+        verify(reservationRepository, times(1)).findByMemberIdOrderByReservationDateDesc(id);
     }
 
     @Test
     @DisplayName("행사 id를 통한 모든 예약 조회 - 성공")
     void getAllByEventId() {
-        when(reservationRepository.findByEventId(id)).thenReturn(List.of());
+        when(reservationRepository.findByEventIdOrderByReservationDateDesc(id)).thenReturn(List.of());
         reservationService.getAllByEventId(id);
-        verify(reservationRepository, times(1)).findByEventId(id);
+        verify(reservationRepository, times(1)).findByEventIdOrderByReservationDateDesc(id);
     }
 
     @Test
-    @DisplayName("예약 id를 통한 모든 예약 조회 - 성공")
+    @DisplayName("예약 id를 통한 예약 조회 - 성공")
     void getById() {
         when(reservationRepository.findById(id)).thenReturn(Optional.of(TestData.validReservation));
         reservationService.getById(id);
