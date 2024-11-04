@@ -1,6 +1,7 @@
 package org.ktc2.cokaen.wouldyouin._common.persist;
 
 public enum Category {
+    전체,
     밴드,
     연극,
     뮤지컬,
