@@ -26,7 +26,7 @@ public class HostService implements MemberServiceCommonBehavior, LikeableMemberS
     @Transactional
     public MemberResponse createHost(HostCreateRequest request) {
         String hashedPassword = passwordEncoder.encode(request.getPassword());
-        MemberImage profileImage = memberImageService.getByIdOrThrow(request.getProfileImageId());
+        MemberImage profileImage = memberImageService.getById(request.getProfileImageId());
         Host createdHost = hostRepository.save(request.toEntity(hashedPassword, profileImage));
         memberImageService.setBaseMember(profileImage, createdHost);
         return MemberResponse.from(createdHost);
@@ -37,7 +37,7 @@ public class HostService implements MemberServiceCommonBehavior, LikeableMemberS
         Host host = getByIdOrThrow(hostId);
         Optional.ofNullable(request.getNickname()).ifPresent(host::setNickname);
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(host::setPhone);
-        Optional.ofNullable(request.getProfileImageId()).map(memberImageService::getByIdOrThrow).ifPresent(host::setProfileImage);
+        Optional.ofNullable(request.getProfileImageId()).map(memberImageService::getById).ifPresent(host::setProfileImage);
         Optional.ofNullable(request.getIntro()).ifPresent(host::setIntro);
         Optional.ofNullable(request.getHashtag()).ifPresent(host::setHashtag);
 

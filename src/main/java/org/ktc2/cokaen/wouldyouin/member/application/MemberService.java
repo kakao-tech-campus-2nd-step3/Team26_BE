@@ -35,7 +35,7 @@ public class MemberService implements MemberServiceCommonBehavior {
         Optional.ofNullable(editRequest.getArea()).ifPresent(member::setArea);
         Optional.ofNullable(editRequest.getPhoneNumber()).ifPresent(member::setPhone);
         Optional.ofNullable(editRequest.getProfileImageId())
-            .map(memberImageService::getByIdOrThrow)
+            .map(memberImageService::getById)
             .ifPresent(member::setProfileImage);
         return MemberResponse.from(member);
     }

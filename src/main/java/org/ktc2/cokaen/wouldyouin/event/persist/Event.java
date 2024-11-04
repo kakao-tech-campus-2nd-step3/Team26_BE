@@ -1,12 +1,12 @@
 package org.ktc2.cokaen.wouldyouin.event.persist;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,6 +17,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -54,7 +55,7 @@ public class Event {
     private String content;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "host_id")
     private Host host;
 
@@ -92,11 +93,12 @@ public class Event {
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    // Todo: 이미지를 사용하는 모든 엔티티 thumnail 설정
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 
-    @OneToMany(mappedBy = "event")
-    private List<EventImage> images;
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+    private List<EventImage> images = new ArrayList<>();
 
     @CreatedDate
     @Column(name = "created_date")

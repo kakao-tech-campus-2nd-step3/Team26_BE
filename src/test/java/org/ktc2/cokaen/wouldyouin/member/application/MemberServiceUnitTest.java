@@ -79,7 +79,7 @@ class MemberServiceUnitTest {
         MemberImage validMemberImage = createValidMemberImage(5L);
         Long givenMemberId = validMember.getId();
         given(memberRepository.findById(givenMemberId)).willReturn(Optional.of(validMember));
-        given(memberImageService.getByIdOrThrow(validMember.getProfileImage().getId())).willReturn(validMemberImage);
+        given(memberImageService.getById(validMember.getProfileImage().getId())).willReturn(validMemberImage);
 
         // editRequest의 각 필드는 값을 가지거나 null임
         given(memberEditRequest.getNickname()).willReturn(TestUtil.getOrNull(validMember.getNickname()));
