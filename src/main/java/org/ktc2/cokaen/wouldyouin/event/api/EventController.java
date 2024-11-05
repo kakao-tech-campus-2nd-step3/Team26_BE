@@ -1,14 +1,19 @@
 package org.ktc2.cokaen.wouldyouin.event.api;
 
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
+import org.ktc2.cokaen.wouldyouin._common.persist.Area;
+import org.ktc2.cokaen.wouldyouin._common.persist.Category;
+import org.ktc2.cokaen.wouldyouin._common.persist.Location;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.LocationFilter;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventResponse;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.EventSliceResponse;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,14 +33,26 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping
-    public ResponseEntity<ApiResponseBody<List<EventResponse>>> getEvents() {
-        return ApiResponse.ok(eventService.getAll());
+    public ResponseEntity<ApiResponseBody<EventSliceResponse>> getEventsByFilterOrderByDistanceAsc(
+        @RequestParam(required = false) LocationFilter locationFilter,
+        @RequestParam Location currentLocation,
+        @RequestParam(defaultValue = "전체") Category category,
+        @RequestParam(defaultValue = "전체") Area area,
+        @RequestParam(defaultValue = "${spring.controller.pageable.default-page}") Integer page,
+        @RequestParam(defaultValue = "${spring.controller.pageable.default-page-size}") Integer size,
+        @RequestParam(defaultValue = "${spring.controller.pageable.default-last-id}") Long lastId
+    ) {
+        return ApiResponse.ok(eventService.getAllByFilterOrderByDistanceAsc(locationFilter, currentLocation, category, area, PageRequest.of(page, size), lastId));
     }
 
     @GetMapping("/hosts/{hostId}")
-    public ResponseEntity<ApiResponseBody<List<EventResponse>>> getEventsByHostId(
-        @PathVariable Long hostId) {
-        return ApiResponse.ok(eventService.getAllByHostId(hostId));
+    public ResponseEntity<ApiResponseBody<EventSliceResponse>> getEventsByHostId(
+        @PathVariable Long hostId,
+        @RequestParam(defaultValue = "${spring.controller.pageable.default-page}") Integer page,
+        @RequestParam(defaultValue = "${spring.controller.pageable.default-page-size}") Integer size,
+        @RequestParam(defaultValue = "${spring.controller.pageable.default-last-id}") Long lastId
+    ) {
+        return ApiResponse.ok(eventService.getAllByHostIdOrderByCreatedDateDesc(hostId, PageRequest.of(page, size), lastId));
     }
 
     @GetMapping("/{eventId}")

@@ -1,6 +1,7 @@
 package org.ktc2.cokaen.wouldyouin.Image.persist;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 @NoArgsConstructor
 public class EventImage extends Image {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Event event;
 

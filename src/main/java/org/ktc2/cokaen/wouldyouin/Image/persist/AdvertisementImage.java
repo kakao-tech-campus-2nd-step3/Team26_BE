@@ -1,6 +1,7 @@
 package org.ktc2.cokaen.wouldyouin.Image.persist;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import org.ktc2.cokaen.wouldyouin.advertisement.persist.Advertisement;
 @NoArgsConstructor
 public class AdvertisementImage extends Image {
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "advertisement_id")
     private Advertisement advertisement;
 

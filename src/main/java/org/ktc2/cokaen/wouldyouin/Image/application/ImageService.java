@@ -28,7 +28,7 @@ public abstract class ImageService<T extends Image> {
 
     protected abstract T toEntity(ImageRequest imageRequest);
 
-    public T getByIdOrThrow(Long id) {
+    public T getById(Long id) {
         return getImageRepository().findById(id)
             .orElseThrow(() -> new EntityNotFoundException(getImageDomain().name() + " Image"));
     }

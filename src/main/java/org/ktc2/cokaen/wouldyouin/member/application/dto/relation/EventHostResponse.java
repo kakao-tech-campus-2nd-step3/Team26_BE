@@ -3,6 +3,7 @@ package org.ktc2.cokaen.wouldyouin.member.application.dto.relation;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 
 @Builder
 @Getter
@@ -15,4 +16,16 @@ public class EventHostResponse {
     private String intro;
     private Integer likes;
     private List<String> hashtags;
+
+    public static EventHostResponse from(Host host) {
+        return EventHostResponse.builder()
+            .nickname(host.getNickname())
+            .email(host.getEmail())
+            .phone(host.getPhone())
+            .profileImageUrl(host.getProfileImage().getUrl())
+            .intro(host.getIntro())
+            .likes(host.getLikes())
+            .hashtags(host.getHashTagList())
+            .build();
+    }
 }

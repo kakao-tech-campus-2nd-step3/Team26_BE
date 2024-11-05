@@ -3,6 +3,7 @@ package org.ktc2.cokaen.wouldyouin.member.persist;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import java.util.List;
 import lombok.AccessLevel;
@@ -32,7 +33,7 @@ public class Host extends BaseMember implements LikeableMember {
     @Column(nullable = false)
     private String hashtag;
 
-    @OneToMany(mappedBy = "host")
+    @OneToMany(mappedBy = "host", fetch = FetchType.LAZY)
     private List<Event> events;
 
     @Builder

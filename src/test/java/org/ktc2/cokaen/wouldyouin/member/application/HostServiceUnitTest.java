@@ -64,7 +64,7 @@ class HostServiceUnitTest {
         given(hostCreateRequest.getPassword()).willReturn(password);
         given(hostCreateRequest.getProfileImageId()).willReturn(profileImageId);
         given(passwordEncoder.encode(password)).willReturn(hashedPassword);
-        given(memberImageService.getByIdOrThrow(profileImageId)).willReturn(profileImage);
+        given(memberImageService.getById(profileImageId)).willReturn(profileImage);
         given(hostCreateRequest.toEntity(hashedPassword, profileImage)).willReturn(validHost);
         given(hostRepository.save(validHost)).willReturn(validHost);
 
@@ -75,7 +75,7 @@ class HostServiceUnitTest {
         var ignore1 = then(hostCreateRequest).should(times(1)).getPassword();
         var ignore2 = then(hostCreateRequest).should(times(1)).getProfileImageId();
         then(passwordEncoder).should(times(1)).encode(password);
-        then(memberImageService).should(times(1)).getByIdOrThrow(profileImageId);
+        then(memberImageService).should(times(1)).getById(profileImageId);
         then(hostCreateRequest).should(times(1))
             .toEntity(hashedPassword, profileImage);
         then(hostRepository).should(times(1)).save(validHost);
@@ -98,7 +98,7 @@ class HostServiceUnitTest {
             .build();
 
         given(hostRepository.findById(validHost.getId())).willReturn(Optional.of(validHost));
-        given(memberImageService.getByIdOrThrow(newProfileImageId)).willReturn(newProfileImage);
+        given(memberImageService.getById(newProfileImageId)).willReturn(newProfileImage);
 
         // when
         hostService.updateHost(validHost.getId(), editRequest);
@@ -109,7 +109,7 @@ class HostServiceUnitTest {
         if (editRequest.getProfileImageId() == null) {
             times = 0;
         }
-        then(memberImageService).should(times(times)).getByIdOrThrow(newProfileImageId);
+        then(memberImageService).should(times(times)).getById(newProfileImageId);
     }
 
     @Test

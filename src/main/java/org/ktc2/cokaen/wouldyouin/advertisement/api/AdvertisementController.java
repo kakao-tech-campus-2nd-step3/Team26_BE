@@ -28,7 +28,7 @@ public class AdvertisementController {
     private final AdvertisementService advertisementService;
 
     @GetMapping
-    public ResponseEntity<ApiResponseBody<List<AdvertisementResponse>>> getActiveAdvertisement() {
+    public ResponseEntity<ApiResponseBody<List<AdvertisementResponse>>> getActiveAdvertisements() {
         return ApiResponse.ok(advertisementService.getAllActiveAdvertisements());
     }
 
