@@ -5,12 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin._common.persist.Area;
+import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationEditRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationResponse;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationSliceResponse;
 import org.ktc2.cokaen.wouldyouin.curation.application.CurationService;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,9 +35,9 @@ public class CurationController {
     @GetMapping
     public ResponseEntity<ApiResponseBody<CurationSliceResponse>> getCurationsByAreaOrderByCreatedDateDesc(
         @RequestParam Area area,
-        @RequestParam(defaultValue = "${spring.controller.pageable.default-page}") Integer page,
-        @RequestParam(defaultValue = "${spring.controller.pageable.default-page-size}") Integer size,
-        @RequestParam(defaultValue = "${spring.controller.pageable.default-last-id}") Long lastId
+        @RequestParam(defaultValue = "0") Integer page,
+        @RequestParam(defaultValue = "10") Integer size,
+        @RequestParam(defaultValue = Long.MAX_VALUE + "") Long lastId
     ) {
         return ApiResponse.ok(curationService.getAllByAreaOrderByCreatedDateDesc(
             area, PageRequest.of(page, size), lastId));
@@ -44,9 +46,9 @@ public class CurationController {
     @GetMapping("/curators/{curatorId}")
     public ResponseEntity<ApiResponseBody<CurationSliceResponse>> getCurationsByCuratorIdOrderByCreatedDateDesc(
         @PathVariable("curatorId") Long curatorId,
-        @RequestParam(defaultValue = "${spring.controller.pageable.default-page}") Integer page,
-        @RequestParam(defaultValue = "${spring.controller.pageable.default-page-size}") Integer size,
-        @RequestParam(defaultValue = "${spring.controller.pageable.default-last-id}") Long lastId
+        @RequestParam(defaultValue = "0") Integer page,
+        @RequestParam(defaultValue = "10") Integer size,
+        @RequestParam(defaultValue = Long.MAX_VALUE + "") Long lastId
     ) {
         return ApiResponse.ok(curationService.getAllByCuratorIdOrderByCreatedDateDesc(
             curatorId, PageRequest.of(page, size), lastId));
@@ -61,20 +63,23 @@ public class CurationController {
     @PostMapping
     public ResponseEntity<ApiResponseBody<CurationResponse>> createCuration(
         @Valid @RequestBody CurationCreateRequest curationCreateRequest,
-        MemberIdentifier curator) {
+        @Authorize({MemberType.curator, MemberType.admin}) MemberIdentifier curator) {
         return ApiResponse.created(curationService.create(curator.id(), curationCreateRequest));
     }
 
     @PutMapping("/{curationId}")
-    public ResponseEntity<ApiResponseBody<CurationResponse>> updateCuration(@PathVariable Long curationId,
+    public ResponseEntity<ApiResponseBody<CurationResponse>> updateCuration(
+        @PathVariable Long curationId,
         @Valid @RequestBody CurationEditRequest curationEditRequest,
-        MemberIdentifier curator) {
-        return ApiResponse.ok(curationService.update(curator.id(), curationEditRequest));
+        @Authorize({MemberType.curator, MemberType.admin}) MemberIdentifier curator) {
+        return ApiResponse.ok(curationService.update(curator.id(), curationId, curationEditRequest));
     }
 
     @DeleteMapping("/{curationId}")
-    public ResponseEntity<ApiResponseBody<Void>> deleteCuration(@PathVariable Long curationId) {
-        curationService.delete(curationId);
+    public ResponseEntity<ApiResponseBody<Void>> deleteCuration(
+        @PathVariable Long curationId,
+        @Authorize({MemberType.curator, MemberType.admin}) MemberIdentifier curator) {
+        curationService.delete(curator.id(), curationId);
         return ApiResponse.noContent();
     }
 }
