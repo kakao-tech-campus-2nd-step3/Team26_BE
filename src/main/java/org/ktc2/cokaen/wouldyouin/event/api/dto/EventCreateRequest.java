@@ -20,9 +20,6 @@ import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 @Builder
 public class EventCreateRequest {
 
-    @NotNull(message = "hostId는 필수입니다.")
-    private Long hostId;
-
     @NotBlank(message = "제목은 필수입니다.")
     private String title;
 

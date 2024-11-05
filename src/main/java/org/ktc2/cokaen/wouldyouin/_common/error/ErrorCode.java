@@ -16,6 +16,8 @@ public enum ErrorCode {
 
     FAIL_TO_READ_IMAGE(HttpStatus.CONFLICT.value(), "-20400", "Fail to read image"),
 
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED.value(), "-20400", "Unauthorized, %s id is not matched."),
+
     ENTITY_PARAM_IS_NULL(HttpStatus.BAD_REQUEST.value(), "-20400", "%s is null");
 
     private final Integer status;
