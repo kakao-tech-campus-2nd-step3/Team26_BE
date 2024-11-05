@@ -5,14 +5,16 @@ import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
-import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayRequest;
 import org.ktc2.cokaen.wouldyouin.payment.application.PaymentService;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayRequest;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationRequest;
 import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationResponse;
+import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationSliceResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.ReservationRepository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,23 +28,24 @@ public class ReservationService {
     private final EventService eventService;
 
     @Transactional(readOnly = true)
-    public List<ReservationResponse> getAll() {
-        return reservationRepository.findAll().stream()
-            .map(ReservationResponse::from).toList();
+    public ReservationSliceResponse getAllByMemberId(Long memberId, Pageable pageable, Long lastId) {
+        return getReservationSliceResponse(
+            reservationRepository.findByMemberIdOrderByReservationIdDesc(memberId, lastId, pageable), lastId);
     }
 
     @Transactional(readOnly = true)
-    public List<ReservationResponse> getAllByMemberId(Long memberId) {
-        return reservationRepository.findByMemberId(memberId).stream()
-            .map(ReservationResponse::from)
-            .toList();
+    public ReservationSliceResponse getAllByEventId(Long eventId, Pageable pageable, Long lastId) {
+        return getReservationSliceResponse(
+            reservationRepository.findByEventIdOrderByReservationIdDesc(eventId, lastId, pageable), lastId);
     }
 
-    @Transactional(readOnly = true)
-    public List<ReservationResponse> getAllByEventId(Long eventId) {
-        return reservationRepository.findByEventId(eventId).stream()
-            .map(ReservationResponse::from)
-            .toList();
+    private ReservationSliceResponse getReservationSliceResponse(Slice<Reservation> reservationSlice, Long lastId) {
+        List<ReservationResponse> reservations = reservationSlice.stream().map(ReservationResponse::from).toList();
+        if (!reservationSlice.hasContent()) {
+            Long id = reservationSlice.getContent().getLast().getId();
+            return ReservationSliceResponse.of(reservations, reservationSlice.getSize(), id);
+        }
+        return ReservationSliceResponse.of(reservations, reservationSlice.getSize(), lastId);
     }
 
     @Transactional(readOnly = true)

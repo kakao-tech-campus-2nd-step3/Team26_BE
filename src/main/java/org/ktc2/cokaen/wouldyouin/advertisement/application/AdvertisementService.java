@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-@RequiredArgsConstructor()
+@RequiredArgsConstructor
 public class AdvertisementService {
 
     private final AdvertisementRepository adRepository;
@@ -24,13 +24,8 @@ public class AdvertisementService {
 
     @Transactional(readOnly = true)
     public List<AdvertisementResponse> getAllActiveAdvertisements() {
-        return adRepository.findByCurrentTime(LocalDateTime.now()).stream()
+        return adRepository.findAllActiveAdvertisements(LocalDateTime.now()).stream()
             .map(AdvertisementResponse::from).toList();
-    }
-
-    @Transactional(readOnly = true)
-    public Advertisement getByIdOrThrow(Long id) throws RuntimeException {
-        return adRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
     @Transactional(readOnly = true)
@@ -69,7 +64,8 @@ public class AdvertisementService {
 
     @Transactional
     public void delete(Long adId) {
-        adRepository.findById(adId).orElseThrow(() -> new EntityNotFoundException("Advertisement"));
+        Advertisement ad = adRepository.findById(adId).orElseThrow(() -> new EntityNotFoundException("Advertisement"));
+        adImageService.deleteAndDelete(ad.getAdvertisementImage().getId());
         adRepository.deleteById(adId);
     }
 }

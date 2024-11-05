@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Long> {
 
-    @Query("SELECT a FROM Advertisement a WHERE a.endTime > :currentTime")
-    List<Advertisement> findByCurrentTime(LocalDateTime currentTime);
+    @Query("SELECT a FROM Advertisement a JOIN FETCH a.advertisementImage WHERE a.endTime > :currentTime")
+    List<Advertisement> findAllActiveAdvertisements(LocalDateTime currentTime);
 }

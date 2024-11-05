@@ -13,4 +13,3 @@ public interface LikeRepository <LikeType extends Like<? extends LikeableMember>
     Optional<LikeType> findByMemberAndLikeableMember(Member member, LikeableMember likeableMember);
     List<LikeType> findAllByMember(Member member);
 }
-

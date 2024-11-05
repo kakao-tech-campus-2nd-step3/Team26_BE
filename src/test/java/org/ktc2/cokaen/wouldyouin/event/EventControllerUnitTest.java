@@ -80,16 +80,16 @@ class EventControllerUnitTest {
 
     @Test
     @DisplayName("모든 행사 조회 - 성공")
-    void getEvents() throws Exception {
+    void getEventsByFilterOrderByDistanceAsc() throws Exception {
         mockMvc.perform(get("/api/events")).andExpect(status().isOk());
-        verify(eventService).getAll();
+        verify(eventService).getAllByFilterOrderByDistanceAsc();
     }
 
     @Test
     @DisplayName("주최자 id를 통한 모든 행사 조회 - 성공")
-    void getEventsByHostId() throws Exception {
+    void getEventsByLocationByHostId() throws Exception {
         mockMvc.perform(get("/api/events/hosts/" + id)).andExpect(status().isOk());
-        verify(eventService).getAllByHostId(id);
+        verify(eventService).getAllByHostIdOrderByCreatedDateDesc(id);
     }
 
     @Test

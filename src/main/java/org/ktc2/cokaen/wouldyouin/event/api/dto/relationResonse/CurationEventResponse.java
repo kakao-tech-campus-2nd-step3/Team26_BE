@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin._common.persist.Location;
+import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 
 @Getter
 @Builder
@@ -16,4 +17,16 @@ public class CurationEventResponse {
     private String thumbnailImageUrl;
     private String hostProfileImageUrl;
     private String hostNickname;
+
+    public static CurationEventResponse from(Event event) {
+        return CurationEventResponse.builder()
+            .id(event.getId())
+            .title(event.getTitle())
+            .location(event.getLocation())
+            .startTime(event.getStartTime())
+            .thumbnailImageUrl(event.getThumbnailUrl())
+            .hostProfileImageUrl(event.getHost().getProfileImageUrl())
+            .hostNickname(event.getHost().getNickname())
+            .build();
+    }
 }
