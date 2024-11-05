@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
+import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin._common.persist.Area;
 import org.ktc2.cokaen.wouldyouin._common.persist.Category;
 import org.ktc2.cokaen.wouldyouin._common.persist.Location;
@@ -63,31 +64,40 @@ public class EventService {
     }
 
     @Transactional
-    public EventResponse create(EventCreateRequest eventCreateRequest) {
-        return EventResponse.from(eventRepository.save(eventCreateRequest.toEntity(
-            hostService.getByIdOrThrow(eventCreateRequest.getHostId()),
+    public EventResponse create(Long hostId, EventCreateRequest eventCreateRequest) {
+        return EventResponse.from(
+            eventRepository.save(eventCreateRequest.toEntity(
+            hostService.getByIdOrThrow(hostId),
             eventCreateRequest.getImageIds().stream()
                 .map(eventImageService::getById)
                 .toList())));
     }
 
+    // Todo: 호스트 id 검증 로직 분리
     @Transactional
-    public EventResponse update(Long id, EventEditRequest eventEditRequest) {
-        Event target = getByIdOrThrow(id);
-        target.updateFrom(eventEditRequest, eventEditRequest.getImageIds().stream()
+    public EventResponse update(Long hostId, Long eventId, EventEditRequest eventEditRequest) {
+        Event event = getByIdOrThrow(eventId);
+        if (hostId != event.getId()) {
+            throw new UnauthorizedException("Host");
+        }
+        event.updateFrom(eventEditRequest, eventEditRequest.getImageIds().stream()
             .map(eventImageService::getById)
             .toList());
-        return EventResponse.from(target);
+        return EventResponse.from(event);
+    }
+
+    // Todo: 호스트 id 검증 로직 분리
+    @Transactional
+    public void delete(Long hostId, Long eventId) {
+        Event event = getByIdOrThrow(eventId);
+        if (hostId != event.getId()) {
+            throw new UnauthorizedException("Host");
+        }
+        eventRepository.deleteById(eventId);
     }
 
     @Transactional
     public void decreaseLeftSeat(Long id, Integer count) {
         getByIdOrThrow(id).decreaseLeftSeat(count);
-    }
-
-    @Transactional
-    public void delete(Long id) {
-        getByIdOrThrow(id);
-        eventRepository.deleteById(id);
     }
 }

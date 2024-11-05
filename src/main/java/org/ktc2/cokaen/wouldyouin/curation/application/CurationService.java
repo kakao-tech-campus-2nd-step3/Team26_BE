@@ -3,6 +3,7 @@ package org.ktc2.cokaen.wouldyouin.curation.application;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
+import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin._common.persist.Area;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationEditRequest;
@@ -75,24 +76,32 @@ public class CurationService {
         return CurationResponse.from(curation);
     }
 
+    // Todo: 큐레이터 id 검증 로직 분리
     @Transactional
-    public CurationResponse update(Long curationId, CurationEditRequest curationEditRequest) {
-        Curation target = getByIdOrThrow(curationId);
+    public CurationResponse update(Long curatorId, Long curationId, CurationEditRequest curationEditRequest) {
+        Curation curation = getByIdOrThrow(curationId);
+        if (curatorId != curation.getCurator().getId()) {
+            throw new UnauthorizedException("Curator");
+        }
         List<CurationCard> curationCards = curationEditRequest.getCurationCards().stream()
             .map(curationCardService::create)
             .toList();
         List<Event> events = curationEditRequest.getEventIds().stream()
             .map(eventService::getByIdOrThrow)
             .toList();
-        target.getCurationCards().forEach(card -> curationCardService.delete(card.getId()));
-        target.updateFrom(curationEditRequest, curationCards, events);
-        curationCards.forEach(curationCard -> curationCardService.setCuration(curationCard, target));
-        return CurationResponse.from(target);
+        curation.getCurationCards().forEach(card -> curationCardService.delete(card.getId()));
+        curation.updateFrom(curationEditRequest, curationCards, events);
+        curationCards.forEach(curationCard -> curationCardService.setCuration(curationCard, curation));
+        return CurationResponse.from(curation);
     }
 
+    // Todo: 큐레이터 id 검증 로직 분리
     @Transactional
-    public void delete(Long curationId) {
+    public void delete(Long curatorId, Long curationId) {
         Curation curation = getByIdOrThrow(curationId);
+        if (curatorId != curation.getCurator().getId()) {
+            throw new UnauthorizedException("Curator");
+        }
         curation.getCurationCards()
             .forEach(curationCard -> curationCardService.delete(curationCard.getId()));
         curationRepository.deleteById(curationId);
