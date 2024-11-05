@@ -58,9 +58,9 @@ class EventServiceUnitTest {
     @Test
     @DisplayName("주최자 id를 통한 모든 행사 조회 - 성공")
     void getAllByFilterByHostIdOrderByDistanceAsc() {
-        when(eventRepository.findAllByHostIdOrderByCreatedDateDesc(id)).thenReturn(List.of());
+        when(eventRepository.findAllByHostIdOrderByEventIdDesc(id)).thenReturn(List.of());
         eventService.getAllByHostIdOrderByCreatedDateDesc(id);
-        verify(eventRepository, times(1)).findAllByHostIdOrderByCreatedDateDesc(id);
+        verify(eventRepository, times(1)).findAllByHostIdOrderByEventIdDesc(id);
     }
 
     @Test

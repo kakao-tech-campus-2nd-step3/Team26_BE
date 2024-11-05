@@ -30,13 +30,13 @@ public class ReservationService {
     @Transactional(readOnly = true)
     public ReservationSliceResponse getAllByMemberId(Long memberId, Pageable pageable, Long lastId) {
         return getReservationSliceResponse(
-            reservationRepository.findByMemberIdOrderByReservationDateDesc(memberId, lastId, pageable), lastId);
+            reservationRepository.findByMemberIdOrderByReservationIdDesc(memberId, lastId, pageable), lastId);
     }
 
     @Transactional(readOnly = true)
     public ReservationSliceResponse getAllByEventId(Long eventId, Pageable pageable, Long lastId) {
         return getReservationSliceResponse(
-            reservationRepository.findByEventIdOrderByReservationDateDesc(eventId, lastId, pageable), lastId);
+            reservationRepository.findByEventIdOrderByReservationIdDesc(eventId, lastId, pageable), lastId);
     }
 
     private ReservationSliceResponse getReservationSliceResponse(Slice<Reservation> reservationSlice, Long lastId) {

@@ -48,17 +48,17 @@ class ReservationServiceUnitTest {
     @Test
     @DisplayName("사용자 id를 통한 모든 예약 조회 - 성공")
     void getAllByMemberId() {
-        when(reservationRepository.findByMemberIdOrderByReservationDateDesc(id)).thenReturn(List.of());
+        when(reservationRepository.findByMemberIdOrderByReservationIdDesc(id)).thenReturn(List.of());
         reservationService.getAllByMemberId(id);
-        verify(reservationRepository, times(1)).findByMemberIdOrderByReservationDateDesc(id);
+        verify(reservationRepository, times(1)).findByMemberIdOrderByReservationIdDesc(id);
     }
 
     @Test
     @DisplayName("행사 id를 통한 모든 예약 조회 - 성공")
     void getAllByEventId() {
-        when(reservationRepository.findByEventIdOrderByReservationDateDesc(id)).thenReturn(List.of());
+        when(reservationRepository.findByEventIdOrderByReservationIdDesc(id)).thenReturn(List.of());
         reservationService.getAllByEventId(id);
-        verify(reservationRepository, times(1)).findByEventIdOrderByReservationDateDesc(id);
+        verify(reservationRepository, times(1)).findByEventIdOrderByReservationIdDesc(id);
     }
 
     @Test

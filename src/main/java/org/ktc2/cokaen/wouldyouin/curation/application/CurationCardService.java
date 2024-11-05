@@ -32,7 +32,7 @@ public class CurationCardService {
     @Transactional(readOnly = true)
     public List<CurationCardResponse> getByCurationId(Curation curation) {
         Optional.ofNullable(curation).orElseThrow(() -> new EntityParamIsNullException("Curation"));
-        return curationCardRepository.findAllByCuration(curation).stream()
+        return curationCardRepository.findAllByCurationOrderByIdAsc(curation).stream()
             .map(CurationCardResponse::from).toList();
     }
 

@@ -41,7 +41,7 @@ public class EventService {
     @Transactional(readOnly = true)
     public EventSliceResponse getAllByHostIdOrderByCreatedDateDesc(Long hostId, Pageable pageable, Long lastId) {
         return getEventSliceResponse(
-            eventRepository.findAllByHostIdOrderByCreatedDateDesc(hostId, lastId, pageable), lastId);
+            eventRepository.findAllByHostIdOrderByEventIdDesc(hostId, lastId, pageable), lastId);
     }
 
     private EventSliceResponse getEventSliceResponse(Slice<Event> eventSlice, Long lastId) {
