@@ -1,5 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.advertisement.persist;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Comment;
 import org.ktc2.cokaen.wouldyouin.Image.persist.AdvertisementImage;
 import org.ktc2.cokaen.wouldyouin.advertisement.api.dto.AdvertisementRequest;
 
@@ -24,9 +26,11 @@ public class Advertisement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "advertisement_id")
     private Long id;
 
     @NotNull
+    @Column(name = "title")
     private String title;
 
     @NotNull
@@ -35,9 +39,11 @@ public class Advertisement {
     private AdvertisementImage advertisementImage;
 
     @NotNull
+    @Column(name = "start_time")
     private LocalDateTime startTime;
 
     @NotNull
+    @Column(name = "end_time")
     private LocalDateTime endTime;
 
     @Builder

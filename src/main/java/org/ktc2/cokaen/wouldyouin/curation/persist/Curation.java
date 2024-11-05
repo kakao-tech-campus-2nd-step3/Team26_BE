@@ -1,12 +1,12 @@
 package org.ktc2.cokaen.wouldyouin.curation.persist;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,6 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -45,8 +46,9 @@ public class Curation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @JoinColumn(name = "curator_id")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Curator curator;
 
     @NotNull
@@ -57,8 +59,8 @@ public class Curation {
     @Column(name = "content")
     private String content;
 
-    @OneToMany(mappedBy = "curation")
-    private List<CurationCard> curationCards;
+    @OneToMany(mappedBy = "curation", fetch = FetchType.LAZY)
+    private List<CurationCard> curationCards = new ArrayList<>();
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -67,15 +69,15 @@ public class Curation {
 
     @Column(name = "hashtag")
     @Convert(converter = HashtagConverter.class)
-    private List<String> hashTag;
+    private List<String> hashTag = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "curation_event_relation",
         joinColumns = @JoinColumn(name = "curation_id"),
         inverseJoinColumns = @JoinColumn(name = "event_id")
     )
-    private List<Event> events;
+    private List<Event> events = new ArrayList<>();
 
     @CreatedDate
     @Column(name = "created_date")
@@ -86,7 +88,8 @@ public class Curation {
     private LocalDateTime modifiedDate;
 
     @Builder
-    public Curation(Curator curator, String title, String content, List<CurationCard> curationCards, Area area, List<String> hashTag, List<Event> events) {
+    public Curation(Curator curator, String title, String content, List<CurationCard> curationCards, Area area, List<String> hashTag,
+        List<Event> events) {
         this.curator = curator;
         this.title = title;
         this.content = content;
