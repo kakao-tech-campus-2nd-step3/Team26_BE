@@ -1,14 +1,13 @@
 package org.ktc2.cokaen.wouldyouin.curation.application;
 
 import java.util.List;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.Image.application.CurationImageService;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin._common.persist.Area;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationEditRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationResponse;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationSliceResponse;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationRepository;
@@ -16,11 +15,13 @@ import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.application.CuratorService;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor(access = AccessLevel.PUBLIC)
+@RequiredArgsConstructor
 public class CurationService {
 
     private final CurationRepository curationRepository;
@@ -39,9 +40,25 @@ public class CurationService {
     }
 
     @Transactional(readOnly = true)
-    public List<CurationResponse> getAllByArea(Area area) {
-        return curationRepository.findByArea(area).stream()
-            .map(CurationResponse::from).toList();
+    public CurationSliceResponse getAllByAreaOrderByCreatedDateDesc(Area area, Pageable pageable, Long lastId) {
+        return getCurationSliceResponse(
+            curationRepository.findAllByAreaOrderByCreatedDateDesc(area, lastId, pageable), lastId);
+    }
+
+    @Transactional(readOnly = true)
+    public CurationSliceResponse getAllByCuratorIdOrderByCreatedDateDesc(Long curatorId, Pageable pageable, Long lastId) {
+        return getCurationSliceResponse(
+            curationRepository.findAllByCuratorOrderByCreatedDateDesc(
+                curatorService.getByIdOrThrow(curatorId), lastId, pageable), lastId);
+    }
+
+    private CurationSliceResponse getCurationSliceResponse(Slice<Curation> curationSlice, Long lastId) {
+        List<CurationResponse> curations = curationSlice.stream().map(CurationResponse::from).toList();
+        if (!curationSlice.hasContent()) {
+            Long id = curationSlice.getContent().getLast().getId();
+            return CurationSliceResponse.of(curations, curationSlice.getSize(), id);
+        }
+        return CurationSliceResponse.of(curations, curationSlice.getSize(), lastId);
     }
 
     @Transactional
@@ -75,7 +92,9 @@ public class CurationService {
 
     @Transactional
     public void delete(Long curationId) {
-        getByIdOrThrow(curationId);
+        Curation curation = getByIdOrThrow(curationId);
+        curation.getCurationCards()
+            .forEach(curationCard -> curationCardService.delete(curationCard.getId()));
         curationRepository.deleteById(curationId);
     }
 }

@@ -25,6 +25,8 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    // ToDo: ApiResponse 정적메서드 활용
+
     @GetMapping("/{memberId}")
     public ResponseEntity<ApiResponseBody<List<ReviewResponse>>> getReviewsByMemberId(
         @PathVariable("memberId") Long memberId) {

@@ -87,7 +87,7 @@ class CuratorServiceUnitTest {
             .build();
 
         given(curatorRepository.findById(validCurator.getId())).willReturn(Optional.of(validCurator));
-        given(memberImageService.getByIdOrThrow(newProfileImageId)).willReturn(newProfileImage);
+        given(memberImageService.getById(newProfileImageId)).willReturn(newProfileImage);
 
         // when
         curatorService.updateCurator(validCurator.getId(), editRequest);
@@ -98,7 +98,7 @@ class CuratorServiceUnitTest {
         if (editRequest.getProfileImageId() == null) {
             times = 0;
         }
-        then(memberImageService).should(times(times)).getByIdOrThrow(newProfileImageId);
+        then(memberImageService).should(times(times)).getById(newProfileImageId);
     }
 
     @Test

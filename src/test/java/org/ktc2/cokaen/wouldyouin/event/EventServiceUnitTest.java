@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,18 +49,18 @@ class EventServiceUnitTest {
 
     @Test
     @DisplayName("모든 행사 조회 - 성공")
-    void getAll() {
+    void getAllByFilterOrderByDistanceAsc() {
         when(eventRepository.findAll()).thenReturn(List.of());
-        eventService.getAll();
+        eventService.getAllByFilterOrderByDistanceAsc();
         verify(eventRepository, times(1)).findAll();
     }
 
     @Test
     @DisplayName("주최자 id를 통한 모든 행사 조회 - 성공")
-    void getAllByHostId() {
-        when(eventRepository.findByHostId(id)).thenReturn(List.of());
-        eventService.getAllByHostId(id);
-        verify(eventRepository, times(1)).findByHostId(id);
+    void getAllByFilterByHostIdOrderByDistanceAsc() {
+        when(eventRepository.findAllByHostIdOrderByEventIdDesc(id)).thenReturn(List.of());
+        eventService.getAllByHostIdOrderByCreatedDateDesc(id);
+        verify(eventRepository, times(1)).findAllByHostIdOrderByEventIdDesc(id);
     }
 
     @Test
