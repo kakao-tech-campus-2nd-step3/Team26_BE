@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
-import org.ktc2.cokaen.wouldyouin._common.persist.Area;
+import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 
 @Getter

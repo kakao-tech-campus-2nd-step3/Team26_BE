@@ -44,6 +44,7 @@ public class ImageController {
         }
     }
 
+    // Authorize 로직
     @DeleteMapping("/images/{id}")
     public ResponseEntity<ApiResponseBody<Void>> deleteImage(@PathVariable Long id, @RequestParam ImageDomain imageDomain) {
         imageServiceFactory.getImageServiceByImageType(imageDomain).deleteAndDelete(id);

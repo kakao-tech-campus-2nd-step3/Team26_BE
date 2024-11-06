@@ -10,9 +10,9 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
-import org.ktc2.cokaen.wouldyouin._common.persist.Area;
-import org.ktc2.cokaen.wouldyouin._common.persist.Category;
-import org.ktc2.cokaen.wouldyouin._common.persist.Location;
+import org.ktc2.cokaen.wouldyouin._common.vo.Area;
+import org.ktc2.cokaen.wouldyouin._common.vo.Category;
+import org.ktc2.cokaen.wouldyouin._common.vo.Location;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 

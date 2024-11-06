@@ -10,13 +10,6 @@ spring:
   thymeleaf:
     cache: false
 
-  # controller
-  controller:
-    pageable:
-      default-page: 0
-      default-page-size: 10
-      default-last-id: 9223372036854775807
-
   # devtools 자동 빌드 해제
   devtools:
     restart:
