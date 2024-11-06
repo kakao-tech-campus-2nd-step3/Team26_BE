@@ -4,9 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
-import org.ktc2.cokaen.wouldyouin._common.persist.Area;
-import org.ktc2.cokaen.wouldyouin._common.persist.Category;
-import org.ktc2.cokaen.wouldyouin._common.persist.Location;
+import org.ktc2.cokaen.wouldyouin._common.config.ParamDefaults;
+import org.ktc2.cokaen.wouldyouin._common.vo.Area;
+import org.ktc2.cokaen.wouldyouin._common.vo.Category;
+import org.ktc2.cokaen.wouldyouin._common.vo.Location;
 import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.LocationFilter;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,13 +39,13 @@ public class EventController {
 
     @GetMapping
     public ResponseEntity<ApiResponseBody<EventSliceResponse>> getEventsByFilterOrderByDistanceAsc(
-        @RequestParam(required = false) LocationFilter locationFilter,
-        @RequestParam Location currentLocation,
-        @RequestParam(defaultValue = "전체") Category category,
-        @RequestParam(defaultValue = "전체") Area area,
-        @RequestParam(defaultValue = "0") Integer page,
-        @RequestParam(defaultValue = "10") Integer size,
-        @RequestParam(defaultValue = Long.MAX_VALUE + "") Long lastId
+        @ModelAttribute LocationFilter locationFilter,
+        @ModelAttribute Location currentLocation,
+        @RequestParam(defaultValue = ParamDefaults.CATEGORY) Category category,
+        @RequestParam(defaultValue = ParamDefaults.AREA) Area area,
+        @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
+        @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
+        @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId
     ) {
         return ApiResponse.ok(eventService.getAllByFilterOrderByDistanceAsc(
             locationFilter, currentLocation, category, area, PageRequest.of(page, size), lastId));
@@ -52,9 +54,9 @@ public class EventController {
     @GetMapping("/hosts/{hostId}")
     public ResponseEntity<ApiResponseBody<EventSliceResponse>> getEventsByHostId(
         @PathVariable Long hostId,
-        @RequestParam(defaultValue = "0") Integer page,
-        @RequestParam(defaultValue = "10") Integer size,
-        @RequestParam(defaultValue = Long.MAX_VALUE + "") Long lastId
+        @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
+        @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
+        @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId
     ) {
         return ApiResponse.ok(eventService.getAllByHostIdOrderByCreatedDateDesc(
             hostId, PageRequest.of(page, size), lastId));

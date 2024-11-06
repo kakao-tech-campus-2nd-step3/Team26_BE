@@ -20,7 +20,9 @@ public class AdvertisementImageService extends ImageService<AdvertisementImage> 
 
     @Value("${image.upload.ad.sub-path}")
     private String subPath;
+
     private final ImageStorage imageStorage;
+    
     private final AdvertisementImageRepository adImageRepository;
 
     @Override

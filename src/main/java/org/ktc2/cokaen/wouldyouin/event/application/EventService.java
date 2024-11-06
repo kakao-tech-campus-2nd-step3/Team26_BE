@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
-import org.ktc2.cokaen.wouldyouin._common.persist.Area;
-import org.ktc2.cokaen.wouldyouin._common.persist.Category;
-import org.ktc2.cokaen.wouldyouin._common.persist.Location;
+import org.ktc2.cokaen.wouldyouin._common.vo.Area;
+import org.ktc2.cokaen.wouldyouin._common.vo.Category;
+import org.ktc2.cokaen.wouldyouin._common.vo.Location;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.LocationFilter;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
@@ -34,9 +34,8 @@ public class EventService {
         Category category, Area area, Pageable pageable, Long lastId) {
         return getEventSliceResponse(
             eventRepository.findAllByFilterOrderByDistance(location.getStartLatitude(), location.getStartLongitude(),
-                location.getEndLatitude(), location.getEndLongitude(),
-                currentLocation.getLatitude(), currentLocation.getLongitude(), category, area, pageable), lastId
-        );
+                location.getEndLatitude(), location.getEndLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(),
+                category, area, pageable), lastId);
     }
 
     @Transactional(readOnly = true)
@@ -73,31 +72,31 @@ public class EventService {
                 .toList())));
     }
 
-    // Todo: 호스트 id 검증 로직 분리
+    private void validateHostId(Long hostId, Event event) {
+        if (!hostId.equals(event.getId())) {
+            throw new UnauthorizedException("Host");
+        }
+    }
+
     @Transactional
     public EventResponse update(Long hostId, Long eventId, EventEditRequest eventEditRequest) {
         Event event = getByIdOrThrow(eventId);
-        if (hostId != event.getId()) {
-            throw new UnauthorizedException("Host");
-        }
+        validateHostId(hostId, event);
         event.updateFrom(eventEditRequest, eventEditRequest.getImageIds().stream()
             .map(eventImageService::getById)
             .toList());
         return EventResponse.from(event);
     }
 
-    // Todo: 호스트 id 검증 로직 분리
     @Transactional
     public void delete(Long hostId, Long eventId) {
         Event event = getByIdOrThrow(eventId);
-        if (hostId != event.getId()) {
-            throw new UnauthorizedException("Host");
-        }
+        validateHostId(hostId, event);
         eventRepository.deleteById(eventId);
     }
 
     @Transactional
-    public void decreaseLeftSeat(Long id, Integer count) {
-        getByIdOrThrow(id).decreaseLeftSeat(count);
+    public void decreaseLeftSeat(Long eventId, Integer count) {
+        getByIdOrThrow(eventId).decreaseLeftSeat(count);
     }
 }

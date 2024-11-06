@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
-import org.ktc2.cokaen.wouldyouin._common.persist.Area;
+import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationEditRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationResponse;
@@ -76,13 +76,16 @@ public class CurationService {
         return CurationResponse.from(curation);
     }
 
-    // Todo: 큐레이터 id 검증 로직 분리
+    public void validateCuratorId(Long curatorId, Curation curation) {
+        if (!curatorId.equals(curation.getCurator().getId())) {
+            throw new UnauthorizedException("Curator");
+        }
+    }
+
     @Transactional
     public CurationResponse update(Long curatorId, Long curationId, CurationEditRequest curationEditRequest) {
         Curation curation = getByIdOrThrow(curationId);
-        if (curatorId != curation.getCurator().getId()) {
-            throw new UnauthorizedException("Curator");
-        }
+        validateCuratorId(curatorId, curation);
         List<CurationCard> curationCards = curationEditRequest.getCurationCards().stream()
             .map(curationCardService::create)
             .toList();
@@ -95,13 +98,10 @@ public class CurationService {
         return CurationResponse.from(curation);
     }
 
-    // Todo: 큐레이터 id 검증 로직 분리
     @Transactional
     public void delete(Long curatorId, Long curationId) {
         Curation curation = getByIdOrThrow(curationId);
-        if (curatorId != curation.getCurator().getId()) {
-            throw new UnauthorizedException("Curator");
-        }
+        validateCuratorId(curatorId, curation);
         curation.getCurationCards()
             .forEach(curationCard -> curationCardService.delete(curationCard.getId()));
         curationRepository.deleteById(curationId);

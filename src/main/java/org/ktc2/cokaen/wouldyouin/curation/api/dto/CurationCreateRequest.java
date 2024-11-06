@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-import org.ktc2.cokaen.wouldyouin._common.persist.Area;
+import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;

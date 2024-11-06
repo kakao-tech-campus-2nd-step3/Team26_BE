@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin._common.persist;
+package org.ktc2.cokaen.wouldyouin._common.vo;
 
 public enum Area {
     전체,
