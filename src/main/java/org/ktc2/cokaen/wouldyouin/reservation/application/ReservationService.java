@@ -3,14 +3,15 @@ package org.ktc2.cokaen.wouldyouin.reservation.application;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
+import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.ktc2.cokaen.wouldyouin.payment.application.PaymentService;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayRequest;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayResponse;
-import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationRequest;
-import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationResponse;
-import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationSliceResponse;
+import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationRequest;
+import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationResponse;
+import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationSliceResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.ReservationRepository;
 import org.springframework.data.domain.Pageable;
@@ -64,8 +65,16 @@ public class ReservationService {
     }
 
     @Transactional
-    public void delete(Long id) {
-        reservationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("reservation "));
-        reservationRepository.deleteById(id);
+    public void delete(Long memberId, Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+            .orElseThrow(() -> new EntityNotFoundException("reservation "));
+        validateMemberId(memberId, reservation);
+        reservationRepository.deleteById(reservationId);
+    }
+
+    public void validateMemberId(Long memberId, Reservation reservation) {
+        if (!memberId.equals(reservation.getMember().getId())) {
+            throw new UnauthorizedException("member ");
+        }
     }
 }

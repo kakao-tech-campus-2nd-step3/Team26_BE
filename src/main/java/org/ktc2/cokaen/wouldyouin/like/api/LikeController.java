@@ -24,6 +24,8 @@ public class LikeController {
 
     private final LikeServiceFactory likeServiceFactory;
 
+    // Todo: 와일드카드 수정
+
     @GetMapping
     public ResponseEntity<?> getLikes(@Authorize(MemberType.normal) MemberIdentifier identifier, @RequestParam("type") MemberType memberType) {
         return ApiResponse.ok(likeServiceFactory.getLikeServiceFrom(memberType).getLikes(identifier.id()));
