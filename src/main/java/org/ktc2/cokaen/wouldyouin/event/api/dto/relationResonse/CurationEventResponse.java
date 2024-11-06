@@ -3,7 +3,7 @@ package org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-import org.ktc2.cokaen.wouldyouin._common.persist.Location;
+import org.ktc2.cokaen.wouldyouin._common.vo.Location;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 
 @Getter

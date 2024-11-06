@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin._common.persist;
+package org.ktc2.cokaen.wouldyouin._common.vo;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

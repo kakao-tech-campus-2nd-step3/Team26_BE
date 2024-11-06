@@ -2,7 +2,7 @@ package org.ktc2.cokaen.wouldyouin.member.application.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.ktc2.cokaen.wouldyouin._common.persist.Area;
+import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;

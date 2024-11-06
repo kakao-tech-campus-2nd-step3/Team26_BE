@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.reservation.application.dto;
+package org.ktc2.cokaen.wouldyouin.reservation.api.dto;
 
 import java.util.List;
 import lombok.Builder;
