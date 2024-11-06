@@ -1,0 +1,68 @@
+name: CI/CD Github Action
+
+on:
+  push:
+    branches: [ "Master", "Weekly/*" ]
+  pull_request:
+    branches: [ "Master", "Weekly/*" ]
+
+permissions:
+  contents: read
+
+jobs:
+  CI-CD:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+
+      - name: Gradle Caching (for faster build)
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # 테스트까지 포함해 빌드하려면 -x test를 제거하기
+      - name: Build With Gradle (exclude test)
+        run: |
+          chmod +x gradlew
+          ./gradlew clean build -x test
+
+      - name: Docker Hub Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Docker Build & Push
+        run: |
+          docker build -f Dockerfile --build-arg DEPENDENCY=build/dependency --platform linux/amd64 -t ${{ secrets.DOCKER_REPO_FULLNAME }} .
+          docker push ${{ secrets.DOCKER_REPO_FULLNAME }}
+
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }} # EC2 퍼블릭 IPv4 DNS
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          envs: GITHUB_SHA
+          script: |
+            echo "[script] docker pull"
+            sudo docker pull ${{ secrets.DOCKER_REPO_FULLNAME }}
+            echo "[script] docker stop"
+            sudo docker stop would-you-in
+            echo "[script] docker run"
+            sudo docker run --rm -d -p 80:8080 --env-file ~/.env --name would-you-in ${{ secrets.DOCKER_REPO_FULLNAME }}
+            echo "[script] docker image clean-up"
+            sudo docker image prune -f
