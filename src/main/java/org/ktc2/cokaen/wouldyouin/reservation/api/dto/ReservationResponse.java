@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.reservation.application.dto;
+package org.ktc2.cokaen.wouldyouin.reservation.api.dto;
 
 import java.time.LocalDateTime;
 import lombok.Builder;
