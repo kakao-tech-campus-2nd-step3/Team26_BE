@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
-import org.ktc2.cokaen.wouldyouin._common.persist.Area;
+import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
@@ -63,7 +63,7 @@ public class CurationController {
     @PostMapping
     public ResponseEntity<ApiResponseBody<CurationResponse>> createCuration(
         @Valid @RequestBody CurationCreateRequest curationCreateRequest,
-        @Authorize({MemberType.curator, MemberType.admin}) MemberIdentifier curator) {
+        @Authorize(MemberType.curator) MemberIdentifier curator) {
         return ApiResponse.created(curationService.create(curator.id(), curationCreateRequest));
     }
 
@@ -71,14 +71,14 @@ public class CurationController {
     public ResponseEntity<ApiResponseBody<CurationResponse>> updateCuration(
         @PathVariable Long curationId,
         @Valid @RequestBody CurationEditRequest curationEditRequest,
-        @Authorize({MemberType.curator, MemberType.admin}) MemberIdentifier curator) {
+        @Authorize(MemberType.curator) MemberIdentifier curator) {
         return ApiResponse.ok(curationService.update(curator.id(), curationId, curationEditRequest));
     }
 
     @DeleteMapping("/{curationId}")
     public ResponseEntity<ApiResponseBody<Void>> deleteCuration(
         @PathVariable Long curationId,
-        @Authorize({MemberType.curator, MemberType.admin}) MemberIdentifier curator) {
+        @Authorize(MemberType.curator) MemberIdentifier curator) {
         curationService.delete(curator.id(), curationId);
         return ApiResponse.noContent();
     }

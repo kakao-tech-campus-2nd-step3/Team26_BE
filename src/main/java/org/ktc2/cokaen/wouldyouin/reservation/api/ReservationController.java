@@ -4,12 +4,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
+import org.ktc2.cokaen.wouldyouin._common.config.ParamDefaults;
+import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.application.ReservationService;
-import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationRequest;
-import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationResponse;
-import org.ktc2.cokaen.wouldyouin.reservation.application.dto.ReservationSliceResponse;
+import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationRequest;
+import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationResponse;
+import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationSliceResponse;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,19 +33,19 @@ public class ReservationController {
 
     @GetMapping
     public ResponseEntity<ApiResponseBody<ReservationSliceResponse>> getReservationsByMemberId(
-        Long memberId, //Todo : 테스트이후 Authorize 추가
-        @RequestParam(defaultValue = "${spring.controller.pageable.default-page}") Integer page,
-        @RequestParam(defaultValue = "${spring.controller.pageable.default-page-size}") Integer size,
-        @RequestParam(defaultValue = "${spring.controller.pageable.default-last-id}") Long lastId) {
+        @Authorize({MemberType.normal, MemberType.curator}) Long memberId,
+        @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
+        @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
+        @RequestParam(defaultValue =  ParamDefaults.LAST_ID) Long lastId) {
         return ApiResponse.ok(reservationService.getAllByMemberId(memberId, PageRequest.of(page, size), lastId));
     }
 
     @GetMapping("/events/{eventId}")
     public ResponseEntity<ApiResponseBody<ReservationSliceResponse>> getReservationsByEventId(
         @PathVariable Long eventId,
-        @RequestParam(defaultValue = "${spring.controller.pageable.default-page}") Integer page,
-        @RequestParam(defaultValue = "${spring.controller.pageable.default-page-size}") Integer size,
-        @RequestParam(defaultValue = "${spring.controller.pageable.default-last-id}") Long lastId) {
+        @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
+        @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
+        @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId) {
         return ApiResponse.ok(reservationService.getAllByEventId(eventId, PageRequest.of(page, size), lastId));
     }
 
@@ -55,14 +58,15 @@ public class ReservationController {
     @PostMapping
     public ResponseEntity<ApiResponseBody<KakaoPayResponse>> createReservation(
         @Valid @RequestBody ReservationRequest reservationRequest,
-        MemberIdentifier memberIdentifier) {
-        return ApiResponse.created(reservationService.create(memberIdentifier.id(), reservationRequest));
+        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier member) {
+        return ApiResponse.created(reservationService.create(member.id(), reservationRequest));
     }
 
     @DeleteMapping("/{reservationId}")
     public ResponseEntity<ApiResponseBody<Void>> deleteReservation(
-        @PathVariable Long reservationId) {
-        reservationService.delete(reservationId);
+        @PathVariable Long reservationId,
+        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier member) {
+        reservationService.delete(member.id(), reservationId);
         return ApiResponse.noContent();
     }
 }
