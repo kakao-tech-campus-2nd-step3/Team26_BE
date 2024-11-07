@@ -40,7 +40,7 @@ public class PaymentService {
         try {
             return client.post()
                 .uri(URI.create("https://" + kakaoPayRequestHost + kakaoPaySinglePaymentUrl))
-                .headers(httpHeaders -> httpHeaders.addAll(createKakaoPayReqeustHeaders()))
+                .headers(httpHeaders -> httpHeaders.addAll(createKakaoPayRequestHeaders()))
                 .body(createKakaoPayRequestBody(kakaoPayRequest))
                 .retrieve()
                 .body(KakaoPayResponse.class);
@@ -49,7 +49,7 @@ public class PaymentService {
         }
     }
 
-    private HttpHeaders createKakaoPayReqeustHeaders() {
+    private HttpHeaders createKakaoPayRequestHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Host", kakaoPayRequestHost);
         headers.add("Authorization", "SECRET_KEY " + secretKey);
