@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   ## 1단계: 프로젝트 빌드
-  Build-Project:
+  Build:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -37,31 +37,6 @@ jobs:
           chmod +x gradlew
           ./gradlew clean build -x test
 
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-output
-          path: build/libs/*.jar
-
-  ## 2단계: 도커 이미지 생성 및 푸시
-  Build-Docker-Image-and-Push-to-DockerHub:
-    runs-on: ubuntu-22.04
-    needs: Build-Project
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: build-output
-
-
-      # 다운로드된 .jar 파일을 빌드 컨텍스트로 복사
-      - name: Move Build Artifacts to Docker Build Context
-        run: |
-          mkdir -p build/libs
-          mv $GITHUB_WORKSPACE/build-output/*.jar build/libs/
-
       - name: Docker Hub Login
         uses: docker/login-action@v3
         with:
@@ -74,10 +49,10 @@ jobs:
       - name: Docker Push
         run: docker push ${{ secrets.DOCKER_REPO_FULLNAME }}
 
-  ## 3단계: 서버에 배포
-  Deploy-Docker-Image-to-Server-and-Run:
+  ## 2단계: 서버에 배포
+  Deploy:
     runs-on: ubuntu-22.04
-    needs: Build-Docker-Image-and-Push-to-DockerHub
+    needs: Build
     steps:
       - name: Pull New Docker Image
         uses: appleboy/ssh-action@master
