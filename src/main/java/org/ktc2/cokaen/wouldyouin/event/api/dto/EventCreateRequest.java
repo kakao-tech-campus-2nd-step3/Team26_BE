@@ -2,6 +2,8 @@ package org.ktc2.cokaen.wouldyouin.event.api.dto;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -40,10 +42,12 @@ public class EventCreateRequest {
     private LocalDateTime endTime;
 
     @NotNull(message = "가격은 필수입니다.")
-    @Size(min = 0, max = 1000000, message = "가격은 0원 이상 1,000,000원 이하입니다.")
+    @Min(value = 0, message = "가격은 0원 이상입니다.")
+    @Max(value = 1000000, message = "가격은 1,000,000원 이하입니다.")
     private Integer price;
 
-    @Size(min = 0, max = 1000, message = "총 좌석은 0석 이상 1,000석 이하입니다.")
+    @Min(value = 0, message = "총 좌석은 0석 이상입니다.")
+    @Max(value = 1000, message = "총 좌석은 1,000석 이하입니다.")
     private Integer totalSeat;
 
     @NotNull(message = "카테고리는 필수입니다.")
