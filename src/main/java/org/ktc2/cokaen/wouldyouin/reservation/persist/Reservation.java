@@ -3,6 +3,7 @@ package org.ktc2.cokaen.wouldyouin.reservation.persist;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,10 +21,12 @@ import lombok.Setter;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Reservation {
 
