@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
+import org.ktc2.cokaen.wouldyouin._common.config.ParamDefaults;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
@@ -34,10 +35,10 @@ public class CurationController {
 
     @GetMapping
     public ResponseEntity<ApiResponseBody<CurationSliceResponse>> getCurationsByAreaOrderByCreatedDateDesc(
-        @RequestParam Area area,
-        @RequestParam(defaultValue = "0") Integer page,
-        @RequestParam(defaultValue = "10") Integer size,
-        @RequestParam(defaultValue = Long.MAX_VALUE + "") Long lastId
+        @RequestParam(defaultValue = ParamDefaults.AREA) Area area,
+        @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
+        @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
+        @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId
     ) {
         return ApiResponse.ok(curationService.getAllByAreaOrderByCreatedDateDesc(
             area, PageRequest.of(page, size), lastId));
@@ -46,9 +47,9 @@ public class CurationController {
     @GetMapping("/curators/{curatorId}")
     public ResponseEntity<ApiResponseBody<CurationSliceResponse>> getCurationsByCuratorIdOrderByCreatedDateDesc(
         @PathVariable("curatorId") Long curatorId,
-        @RequestParam(defaultValue = "0") Integer page,
-        @RequestParam(defaultValue = "10") Integer size,
-        @RequestParam(defaultValue = Long.MAX_VALUE + "") Long lastId
+        @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
+        @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
+        @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId
     ) {
         return ApiResponse.ok(curationService.getAllByCuratorIdOrderByCreatedDateDesc(
             curatorId, PageRequest.of(page, size), lastId));
