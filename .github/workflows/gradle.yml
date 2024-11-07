@@ -63,6 +63,6 @@ jobs:
             echo "[script] docker stop"
             sudo docker stop would-you-in
             echo "[script] docker run"
-            sudo docker run --rm -d -p 80:8080 --env-file ~/.env --name would-you-in ${{ secrets.DOCKER_REFO_FULLNAME }}
+            sudo docker run --rm -d -p 80:8080 --env-file ~/.env --name would-you-in ${{ secrets.DOCKER_REPO_FULLNAME }}
             echo "[script] docker image clean-up"
             sudo docker image prune -f
