@@ -3,7 +3,7 @@ name: CI/CD Github Action
 on:
   push:
     branches: [ "Master", "Weekly/*" ]
-  pull_request:
+  pull_request_target:
     branches: [ "Master", "Weekly/*" ]
 
 permissions:
