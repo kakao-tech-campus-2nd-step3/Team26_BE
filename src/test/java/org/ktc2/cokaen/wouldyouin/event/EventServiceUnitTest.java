@@ -1,13 +1,13 @@
 package org.ktc2.cokaen.wouldyouin.event;
 
-import static java.lang.Math.abs;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
 
 import java.util.List;
 import java.util.Optional;
@@ -67,12 +67,15 @@ class EventServiceUnitTest {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Long lastId = 1L;
-        given(eventRepository.findAllByFilterOrderByDistance(location.getStartLatitude(), location.getStartLongitude(),
-            location.getEndLatitude(), location.getEndLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(),
+        given(eventRepository.findAllByFilterOrderByDistance(location.getStartLatitude(),
+            location.getStartLongitude(),
+            location.getEndLatitude(), location.getEndLongitude(), currentLocation.getLatitude(),
+            currentLocation.getLongitude(),
             category, area, pageable)).willReturn(new SliceImpl<>(List.of()));
 
         // when
-        eventService.getAllByFilterOrderByDistanceAsc(location, currentLocation, category, area, pageable, lastId);
+        eventService.getAllByFilterOrderByDistanceAsc(location, currentLocation, category, area,
+            pageable, lastId);
 
         // then
         then(eventRepository).should(times(1))
@@ -84,73 +87,76 @@ class EventServiceUnitTest {
     @Test
     @DisplayName("주최자 id를 통한 모든 행사 조회 - 성공")
     void getAllByHostIdOrderByCreatedDateDesc() {
-        //given
+        // given
         Long hostId = validEvent.getHost().getId();
         int pageNumber = 1;
         int pageSize = 10;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Long lastId = 1L;
-        given(eventRepository.findAllByHostIdOrderByEventIdDesc(hostId,lastId, pageable))
+        given(eventRepository.findAllByHostIdOrderByEventIdDesc(hostId, lastId, pageable))
             .willReturn(new SliceImpl<>(List.of()));
 
-        //when
+        // when
         eventService.getAllByHostIdOrderByCreatedDateDesc(hostId, pageable, lastId);
 
-        //then
+        // then
         then(eventRepository).should(times(1)).
-        findAllByHostIdOrderByEventIdDesc(any(Long.class), any(Long.class), any(Pageable.class));
+            findAllByHostIdOrderByEventIdDesc(any(Long.class), any(Long.class),
+                any(Pageable.class));
     }
 
     @Test
     @DisplayName("행사 id를 통한 행사 조회 - 성공")
     void getById() {
-        //given
+        // given
         given(eventRepository.findById(validEvent.getId())).willReturn(Optional.of(validEvent));
 
-        //when
+        // when
         eventService.getById(validEvent.getId());
 
-        //then
+        // then
         then(eventRepository).should(times(1)).findById(validEvent.getId());
     }
 
     @Test
     @DisplayName("유효하지 않은 행사 id를 통한 행사 조회 - 실패")
     void getByInvalidId() {
-        //given
-        Long eventId = validEvent.getId();;
-        //when
+        // given
+        Long eventId = validEvent.getId();
         given(eventRepository.findById(eventId)).willThrow(RuntimeException.class);
+
+        // when & then
         assertThrows(RuntimeException.class, () -> eventService.getById(eventId));
     }
 
     @Test
     @DisplayName("행사 생성 - 성공")
     void create() {
-        //given
-        Long hostId = 3L;
+        // given
+        Long hostId = validEvent.getHost().getId();
         EventCreateRequest validEventCreateRequest = EventDomain.createValidEventCreateRequest();
-
-        //when
         given(eventRepository.save(any())).willReturn(validEvent);
+
+        // when
         eventService.create(hostId, validEventCreateRequest);
-        //then
+
+        // then
         then(eventRepository).should(times(1)).save(any(Event.class));
     }
 
     @Test
     @DisplayName("행사 id를 통한 행사 수정 - 성공")
     void update() {
-        //given
+        // given
         Long eventId = validEvent.getId();
         Long hostId = validEvent.getHost().getId();
         EventEditRequest validEventEditRequest = EventDomain.createValidEventEditRequest();
-
-        //when
         given(eventRepository.findById(eventId)).willReturn(Optional.of(validEvent));
 
-        //then
+        // when
         eventService.update(hostId, eventId, validEventEditRequest);
+
+        // then
         then(eventRepository).should(times(1)).findById(eventId);
         assertAll(
             () -> assertEquals(validEvent.getTitle(), validEventEditRequest.getTitle()),
@@ -168,34 +174,43 @@ class EventServiceUnitTest {
     @Test
     @DisplayName("유효하지 않은 행사 id를 통한 행사 수정 - 실패")
     void updateByInvalidId() {
-        //given
+        // given
         EventEditRequest request = EventDomain.createValidEventEditRequest();
         Long invalidHostId = 999L;
-
-        //whn
         given(eventRepository.findById(invalidHostId)).willThrow(RuntimeException.class);
 
-        //then
-        assertThrows(RuntimeException.class, () -> eventService.update(invalidHostId, validEvent.getId(),
-            EventDomain.createValidEventEditRequest()));
+        // when & then
+        assertThrows(RuntimeException.class,
+            () -> eventService.update(invalidHostId, validEvent.getId(),
+                EventDomain.createValidEventEditRequest()));
     }
 
-//    @Test
-//    @DisplayName("행사 삭제 - 성공")
-//    void delete() {
-//        //given
-//        Long eventId = validEvent.getId();
-//        Long hostId = validEvent.getHost().getId();
-//        //when
-//        given(eventRepository.findById(eventId)).willReturn(Optional.of(validEvent));
-//        eventService.delete(hostId, eventId);
-//        then(eventRepository).should(times(1)).findById(hostId);
-//    }
-//
-//    @Test
-//    @DisplayName("유효하지 않은 행사 id를 통한 행사 삭제 - 실패")
-//    void deleteByInvalidId() {
-//        when(eventRepository.findById(id)).thenThrow(RuntimeException.class);
-//        assertThrows(RuntimeException.class, () -> eventService.delete(id));
-//    }
+    @Test
+    @DisplayName("행사 삭제 - 성공")
+    void delete() {
+        // given
+        Long eventId = validEvent.getId();
+        Long hostId = validEvent.getHost().getId();
+
+        // when
+        given(eventRepository.findById(eventId)).willReturn(Optional.of(validEvent));
+        willDoNothing().given(eventRepository).deleteById(eventId);
+        eventService.delete(hostId, eventId);
+
+        // then
+        then(eventRepository).should(times(1)).findById(eventId);
+        then(eventRepository).should(times(1)).deleteById(eventId);
+    }
+
+    @Test
+    @DisplayName("유효하지 않은 행사 id를 통한 행사 삭제 - 실패")
+    void deleteByInvalidId() {
+        // given
+        Long eventId = validEvent.getId();
+        Long hostId = validEvent.getHost().getId();
+        given(eventRepository.findById(eventId)).willThrow(RuntimeException.class);
+
+        // when & then
+        assertThrows(RuntimeException.class, () -> eventService.delete(hostId, eventId));
+    }
 }
