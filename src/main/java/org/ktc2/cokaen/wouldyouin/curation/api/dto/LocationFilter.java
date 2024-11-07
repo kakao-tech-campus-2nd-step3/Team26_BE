@@ -1,5 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.curation.api.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class LocationFilter {
 
     private Double startLatitude = -90.0;
