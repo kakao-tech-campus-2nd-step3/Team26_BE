@@ -53,6 +53,7 @@ jobs:
   Deploy:
     runs-on: ubuntu-22.04
     needs: Build
+    if: github.event_name == 'push'
     steps:
       - name: Pull New Docker Image
         uses: appleboy/ssh-action@master
