@@ -2,8 +2,8 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.ktc2.cokaen.wouldyouin.global.TestData.ImageDomain.createValidMemberImage;
 import static org.ktc2.cokaen.wouldyouin.global.TestData.MemberDomain.createValidMember;
-import static org.ktc2.cokaen.wouldyouin.global.TestData.MemberDomain.createValidMemberImage;
 import static org.ktc2.cokaen.wouldyouin.global.TestData.MemberDomain.createValidWelcomeMember;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
