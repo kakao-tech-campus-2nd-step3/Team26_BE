@@ -25,6 +25,7 @@ public class LikeController {
     private final LikeServiceFactory likeServiceFactory;
 
     // Todo: 와일드카드 수정
+    // Todo: api 요청시 create, delete를 분리하지말고 토글방식으로 하면 어떨지
 
     @GetMapping
     public ResponseEntity<?> getLikes(@Authorize(MemberType.normal) MemberIdentifier identifier, @RequestParam("type") MemberType memberType) {
