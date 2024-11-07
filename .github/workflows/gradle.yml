@@ -10,9 +10,9 @@ permissions:
   contents: read
 
 jobs:
-  CI-CD:
+  ## 1단계: 프로젝트 빌드
+  Build:
     runs-on: ubuntu-22.04
-
     steps:
       - uses: actions/checkout@v4
 
@@ -32,7 +32,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # 테스트까지 포함해 빌드하려면 -x test를 제거하기
       - name: Build With Gradle (exclude test)
         run: |
           chmod +x gradlew
@@ -44,25 +43,53 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Docker Build & Push
-        run: |
-          docker build -f Dockerfile --build-arg DEPENDENCY=build/dependency --platform linux/amd64 -t ${{ secrets.DOCKER_REPO_FULLNAME }} .
-          docker push ${{ secrets.DOCKER_REPO_FULLNAME }}
+      - name: Docker Build
+        run: docker build -f Dockerfile --build-arg DEPENDENCY=build/dependency -t ${{ secrets.DOCKER_REPO_FULLNAME }} .
 
-      - name: Deploy to Server
+      - name: Docker Push
+        run: docker push ${{ secrets.DOCKER_REPO_FULLNAME }}
+
+  ## 2단계: 서버에 배포
+  Deploy:
+    runs-on: ubuntu-22.04
+    needs: Build
+    steps:
+      - name: Pull New Docker Image
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }} # EC2 퍼블릭 IPv4 DNS
+          host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           envs: GITHUB_SHA
-          script: |
-            echo "[script] docker pull"
-            sudo docker pull ${{ secrets.DOCKER_REPO_FULLNAME }}
-            echo "[script] docker stop"
-            sudo docker stop would-you-in
-            echo "[script] docker run"
-            sudo docker run --rm -d -p 80:8080 --env-file ~/.env --name would-you-in ${{ secrets.DOCKER_REPO_FULLNAME }}
-            echo "[script] docker image clean-up"
-            sudo docker image prune -f
+          script: sudo docker pull ${{ secrets.DOCKER_REPO_FULLNAME }}
+
+      - name: Stop Old Docker Image
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          envs: GITHUB_SHA
+          script: sudo docker stop would-you-in
+
+      - name: Run New Docker Image
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          envs: GITHUB_SHA
+          script: sudo docker run --rm -d -p 80:8080 --env-file ~/.env --name would-you-in ${{ secrets.DOCKER_REPO_FULLNAME }}
+
+      - name: Clean-Up Docker Image
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          envs: GITHUB_SHA
+          script: sudo docker image prune -f
