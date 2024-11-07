@@ -46,7 +46,7 @@ public class EventService {
 
     private EventSliceResponse getEventSliceResponse(Slice<Event> eventSlice, Long lastId) {
         List<EventResponse> events = eventSlice.stream().map(EventResponse::from).toList();
-        if (!eventSlice.hasContent()) {
+        if (eventSlice.hasContent()) {
             Long id = eventSlice.getContent().getLast().getId();
             return EventSliceResponse.of(events, eventSlice.getSize(), id);
         }
@@ -73,11 +73,10 @@ public class EventService {
     }
 
     private void validateHostId(Long hostId, Event event) {
-        if (!hostId.equals(event.getId())) {
+        if (!hostId.equals(event.getHost().getId())) {
             throw new UnauthorizedException("Host");
         }
     }
-
     @Transactional
     public EventResponse update(Long hostId, Long eventId, EventEditRequest eventEditRequest) {
         Event event = getByIdOrThrow(eventId);
