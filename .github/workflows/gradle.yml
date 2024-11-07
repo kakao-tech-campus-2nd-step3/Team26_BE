@@ -62,7 +62,7 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Docker Build
-        run: docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO_FULLNAME }} .
+        run: docker build -f Dockerfile --build-arg DEPENDENCY=build/dependency -t ${{ secrets.DOCKER_REPO_FULLNAME }} .
 
       - name: Docker Push
         run: docker push ${{ secrets.DOCKER_REPO_FULLNAME }}
