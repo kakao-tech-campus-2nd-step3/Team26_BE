@@ -77,6 +77,7 @@ public class EventService {
             throw new UnauthorizedException("Host");
         }
     }
+
     @Transactional
     public EventResponse update(Long hostId, Long eventId, EventEditRequest eventEditRequest) {
         Event event = getByIdOrThrow(eventId);
