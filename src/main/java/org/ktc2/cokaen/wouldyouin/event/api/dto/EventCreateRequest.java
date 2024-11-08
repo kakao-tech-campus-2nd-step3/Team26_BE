@@ -65,7 +65,7 @@ public class EventCreateRequest {
 
     @AssertTrue(message = "이미지는 최대 5개까지 등록할 수 있습니다.")
     public boolean isImageSizeValid() {
-        return imageIds.size() <= 5;
+        return imageIds == null || imageIds.size() <= 5;
     }
 
     public Event toEntity(Host host, List<EventImage> images) {

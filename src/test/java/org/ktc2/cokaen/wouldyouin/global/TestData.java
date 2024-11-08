@@ -2,13 +2,24 @@ package org.ktc2.cokaen.wouldyouin.global;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
+import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;
-import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardRequest;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardResponse;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationEditRequest;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationResponse;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationSliceResponse;
+import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.CurationEventResponse;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.relationResponse.CurationCuratorResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
@@ -31,9 +42,34 @@ public class TestData {
             ReflectionTestUtils.setField(ret, "id", id);
             return ret;
         }
+
+        public static EventImage createValidEventImage(Long id) {
+            EventImage ret = EventImage.builder()
+                .url("eventImageUrl")
+                .size(10L)
+                .extension(".jpg")
+                .build();
+            ReflectionTestUtils.setField(ret, "id", id);
+            return ret;
+        }
+
+        public static CurationImage createValidCurationImage(Long id) {
+            CurationImage ret = CurationImage.builder()
+                .url("curationImageUrl")
+                .size(10L)
+                .extension(".jpg")
+                .build();
+            ReflectionTestUtils.setField(ret, "id", id);
+            return ret;
+        }
     }
 
     public static class MemberDomain {
+
+        public static final Long memberId = 1L;
+        public static final Long curatorId = 5L;
+        public static final Long hostId = 3L;
+        public static final Long welcomeMemberId = 4L;
 
         public static Member createValidMember() {
             MemberImage memberImage = ImageDomain.createValidMemberImage(1L);
@@ -104,10 +140,23 @@ public class TestData {
             ReflectionTestUtils.setField(memberImage, "baseMember", ret);
             return ret;
         }
+
+        public static CurationCuratorResponse createCurationCuratorResponse() {
+            return CurationCuratorResponse.builder()
+                .nickname("nick_curator_12")
+                .email("curator1@example.com")
+                .phone("010-4545-6767")
+                .profileImageUrl("image2.com")
+                .intro("큐레이터 자기소개입니다.")
+                .likes(0)
+                .hashtags(List.of("#큐레이터", "#해시태그", "#입니다"))
+                .build();
+        }
     }
+
     public static class EventDomain {
 
-        public static Event createValidEvent () {
+        public static Event createValidEvent() {
             Event validEvent = Event.builder()
                 .title("title")
                 .content("content")
@@ -126,7 +175,7 @@ public class TestData {
         public static EventCreateRequest createValidEventCreateRequest() {
             return EventCreateRequest.builder()
                 .title("title")
-                .content("content 조홍식씨 최소글자 20자라고 해놓고 안 지켰어요. ")
+                .content("content 조홍식씨 최소글자 20자라고 해놓고 안 지켰어요.")
                 .area(Area.전체)
                 .location(new Location(132.0, 43.0))
                 .startTime(LocalDateTime.of(2025, 10, 1, 9, 0))
@@ -138,7 +187,7 @@ public class TestData {
                 .build();
         }
 
-        public static EventEditRequest createValidEventEditRequest () {
+        public static EventEditRequest createValidEventEditRequest() {
             return EventEditRequest.builder()
                 .title("modifiedTitle")
                 .content("modifiedContent 조홍식씨 최소글자 20자라고 해놓고 안 지켰어요. ")
@@ -152,11 +201,22 @@ public class TestData {
                 .imageIds(List.of())
                 .build();
         }
+
+        public static CurationEventResponse createValidCurationEventResponse() {
+            return CurationEventResponse.builder()
+                .id(1L)
+                .title("title")
+                .location(new Location(132.0, 43.0))
+                .thumbnailImageUrl("thumbnailImageUrl")
+                .hostProfileImageUrl("hostProfileImageUrl")
+                .hostNickname("nick_curator_12")
+                .build();
+        }
     }
 
     public static class ReservationDomain {
 
-        public static ReservationRequest createValidReservationRequest () {
+        public static ReservationRequest createValidReservationRequest() {
             return ReservationRequest.builder()
                 .eventId(1L)
                 .price(10000)
@@ -164,8 +224,8 @@ public class TestData {
                 .build();
         }
 
-        public static Reservation createValidReservation () {
-            return  Reservation.builder()
+        public static Reservation createValidReservation() {
+            return Reservation.builder()
                 .member(MemberDomain.createValidMember())
                 .event(EventDomain.createValidEvent())
                 .price(10000)
@@ -174,4 +234,91 @@ public class TestData {
         }
     }
 
+    public static class CurationDomain {
+
+        public static Curation createValidCuration() {
+            return Curation.builder()
+                .curator(MemberDomain.createValidCurator())
+                .title("title")
+                .content("content")
+                .curationCards(List.of())
+                .area(Area.전체)
+                .hashTag(List.of("#해시태그1", "#해시태그2"))
+                .events(List.of(EventDomain.createValidEvent()))
+                .build();
+        }
+
+        public static CurationCardRequest createValidCurationCardRequest1() {
+            return CurationCardRequest.builder()
+                .subtitle("부제목1")
+                .content("큐레이션 카드 내용1 입니다. 큐레이션 카드의 내용은 최소 20자 최대 1000자 입니다.")
+                .imageIds(List.of(1L, 2L))
+                .build();
+        }
+
+        public static CurationCardRequest createValidCurationCardRequest2() {
+            return CurationCardRequest.builder()
+                .subtitle("부제목2")
+                .content("큐레이션 카드 내용2 입니다. 큐레이션 카드의 내용은 최소 20자 최대 1000자 입니다.")
+                .imageIds(List.of(3L, 4L))
+                .build();
+        }
+
+        public static CurationCardResponse createCurationCardResponse1() {
+            return CurationCardResponse.builder()
+                .subtitle("부제목1")
+                .content("큐레이션 카드 내용1 입니다. 큐레이션 카드의 내용은 최소 20자 최대 1000자 입니다.")
+                .imageUrls(List.of("image1.com", "image2.com"))
+                .build();
+        }
+
+        public static CurationCardResponse createCurationCardResponse2() {
+            return CurationCardResponse.builder()
+                .subtitle("부제목2")
+                .content("큐레이션 카드 내용2 입니다. 큐레이션 카드의 내용은 최소 20자 최대 1000자 입니다.")
+                .imageUrls(List.of("image3.com", "image4.com"))
+                .build();
+        }
+
+        public static CurationCreateRequest createValidCurationCreateRequest() {
+            return CurationCreateRequest.builder()
+                .title("큐레이션 제목1")
+                .content("큐레이션 카드 내용1 입니다. 큐레이션 카드의 내용은 최소 20자 최대 1000자 입니다.")
+                .curationCards(List.of(createValidCurationCardRequest1()))
+                .area(Area.광주)
+                .hashTag(List.of("#광주밴드", "#전남대"))
+                .eventIds(List.of(1L, 2L))
+                .build();
+        }
+
+        public static CurationEditRequest createValidCurationEditRequest() {
+            return CurationEditRequest.builder()
+                .title("큐레이션 제목2")
+                .content("큐레이션 내용2 입니다.")
+                .curationCards(List.of(createValidCurationCardRequest2()))
+                .area(Area.서울)
+                .hashTag(List.of("#서울밴드", "#서울대"))
+                .eventIds(List.of(3L, 4L))
+                .build();
+        }
+
+        public static CurationResponse createValidCurationResponse() {
+            return CurationResponse.builder()
+                .curator(MemberDomain.createCurationCuratorResponse())
+                .title("title")
+                .content("content")
+                .curationCards(List.of(createCurationCardResponse1()))
+                .area(Area.전체)
+                .hashTag(List.of("#해시태그1", "#해시태그2"))
+                .eventsInfo(List.of(EventDomain.createValidCurationEventResponse()))
+                .build();
+        }
+
+        public static CurationSliceResponse createValidCurationSliceResponse() {
+            return CurationSliceResponse.builder()
+                .curations(List.of(createValidCurationResponse()))
+                .slice(null)
+                .build();
+        }
+    }
 }

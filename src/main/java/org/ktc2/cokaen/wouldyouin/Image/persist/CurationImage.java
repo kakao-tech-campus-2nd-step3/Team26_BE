@@ -19,7 +19,7 @@ public class CurationImage extends Image {
     private CurationCard curationCard;
 
     @Builder
-    public CurationImage(String name, Long size, String extension) {
-        super(name, size, extension);
+    public CurationImage(String url, Long size, String extension) {
+        super(url, size, extension);
     }
 }
