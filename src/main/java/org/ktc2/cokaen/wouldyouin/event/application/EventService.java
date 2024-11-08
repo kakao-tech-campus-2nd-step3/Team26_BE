@@ -74,7 +74,7 @@ public class EventService {
 
     private void validateHostId(Long hostId, Event event) {
         if (!hostId.equals(event.getHost().getId())) {
-            throw new UnauthorizedException("Host");
+            throw new UnauthorizedException("호스트 ID가 행사의 호스트 ID와 일치하지 않습니다.");
         }
     }
 

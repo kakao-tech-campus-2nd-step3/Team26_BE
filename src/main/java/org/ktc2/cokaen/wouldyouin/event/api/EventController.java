@@ -62,6 +62,8 @@ public class EventController {
             hostId, PageRequest.of(page, size), lastId));
     }
 
+    // Todo: 이름으로 검색
+
     @GetMapping("/{eventId}")
     public ResponseEntity<ApiResponseBody<EventResponse>> getEventByEventId(
         @PathVariable("eventId") Long eventId) {
