@@ -7,8 +7,10 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -22,15 +24,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
-import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
-import org.ktc2.cokaen.wouldyouin.curation.api.CurationController;
-import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
-import org.ktc2.cokaen.wouldyouin.curation.application.CurationService;
 import org.ktc2.cokaen.wouldyouin._global.TestData.CurationDomain;
 import org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember;
+import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
+import org.ktc2.cokaen.wouldyouin.curation.api.CurationController;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardRequest;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationEditRequest;
+import org.ktc2.cokaen.wouldyouin.curation.application.CurationService;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -48,10 +52,13 @@ class CurationControllerUnitTest {
 
     @MockBean
     private CurationService curationService;
+
     @MockBean
     private JwtAuthFilter jwtAuthFilter;
+
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     private WebApplicationContext context;
     private static final long randomId = abs(new Random().nextLong());
@@ -143,7 +150,7 @@ class CurationControllerUnitTest {
     }
 
     @Test
-    @DisplayName("리퀘스트 바디로 전달받은 정보를 통해 큐레이션을 생성한다.")
+    @DisplayName("RequestBody로 전달받은 정보를 통해 큐레이션을 생성한다.")
     @WithMockCurator
     void createCuration1() throws Exception {
         // given
@@ -354,7 +361,7 @@ class CurationControllerUnitTest {
     void createCuration11() throws Exception {
         // given
         CurationCreateRequest request = CurationDomain.createValidCurationCreateRequest().toBuilder().
-        curationCards(List.of()).build();
+            curationCards(List.of()).build();
 
         // when
         mockMvc.perform(post("/api/curations")
@@ -370,6 +377,252 @@ class CurationControllerUnitTest {
     }
 
     @Test
-    void deleteCuration() {
+    @DisplayName("RequestBody로 전달받은 정보를 통해 큐레이션을 수정한다.")
+    @WithMockCurator
+    void updateCuration1() throws Exception {
+        // given
+        ArgumentCaptor<CurationEditRequest> captor = ArgumentCaptor.forClass(CurationEditRequest.class);
+        CurationEditRequest request = CurationDomain.createValidCurationEditRequest();
+
+        // when
+        mockMvc.perform(put("/api/curations/" + randomId)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andDo(print())
+            .andExpect(status().isOk());
+
+        // then
+        then(curationService).should(times(1)).update(eq(MemberDomain.validCuratorId), eq(randomId), captor.capture());
+        assertThat(captor.getValue()).isEqualTo(request);
+    }
+
+    @Test
+    @DisplayName("Host의 권한으로는 큐레이션을 수정할 수 없다.")
+    @WithMockHost
+    void updateCuration2() throws Exception {
+        // given, when
+        mockMvc.perform(put("/api/curations/" + randomId)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(CurationDomain.createValidCurationEditRequest())))
+            .andDo(print())
+            .andExpect(status().isUnauthorized());
+
+        // then
+        then(curationService).shouldHaveNoInteractions();
+    }
+
+    @Test
+    @DisplayName("Member의 권한으로는 큐레이션을 수정할 수 없다.")
+    @WithMockMember
+    void updateCuration3() throws Exception {
+        // given, when
+        mockMvc.perform(put("/api/curations/" + randomId)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(CurationDomain.createValidCurationEditRequest())))
+            .andDo(print())
+            .andExpect(status().isUnauthorized());
+
+        // then
+        then(curationService).shouldHaveNoInteractions();
+    }
+
+    @Test
+    @DisplayName("큐레이션 수정 시, 제목에는 빈 값이 들어갈 수 없다.")
+    @WithMockCurator
+    void updateCuration4() throws Exception {
+        // given
+        CurationEditRequest request = CurationDomain.createValidCurationEditRequest().toBuilder()
+            .title(null).build();
+
+        // when
+        mockMvc.perform(put("/api/curations/" + randomId)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("제목은 필수입니다."));
+
+        // then
+        then(curationService).shouldHaveNoInteractions();
+    }
+
+    @Test
+    @DisplayName("큐레이션 수정 시, 큐레이션 카드의 부제목에는 빈 값이 들어갈 수 없다.")
+    @WithMockCurator
+    void updateCuration5() throws Exception {
+        // given
+        CurationEditRequest request = CurationDomain.createValidCurationEditRequest().toBuilder()
+            .curationCards(List.of(CurationDomain.createValidCurationCardRequest1().toBuilder()
+                .subtitle("").build()))
+            .build();
+
+        // when
+        mockMvc.perform(put("/api/curations/" + randomId)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("부제목은 필수입니다."));
+
+        // then
+        then(curationService).shouldHaveNoInteractions();
+    }
+
+    @Test
+    @DisplayName("큐레이션 수정 시, 큐레이션 카드의 내용에는 빈 값이 들어갈 수 없다.")
+    @WithMockCurator
+    void updateCuration6() throws Exception {
+        // given
+        CurationEditRequest request = CurationDomain.createValidCurationEditRequest().toBuilder()
+            .curationCards(List.of(CurationDomain.createValidCurationCardRequest1().toBuilder()
+                .content(null).build()))
+            .build();
+
+        // when
+        mockMvc.perform(put("/api/curations/" + randomId)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("내용은 필수입니다."));
+
+        // then
+        then(curationService).shouldHaveNoInteractions();
+    }
+
+    @Test
+    @DisplayName("큐레이션 수정 시, 큐레이션 카드의 내용의 길이는 20자 이상 1000자 이하이어야 한다.")
+    @WithMockCurator
+    void updateCuration7() throws Exception {
+        // given
+        CurationEditRequest request = CurationDomain.createValidCurationEditRequest().toBuilder()
+            .curationCards(List.of(CurationDomain.createValidCurationCardRequest1().toBuilder()
+                .content("짧은 내용").build()))
+            .build();
+
+        // when
+        mockMvc.perform(put("/api/curations/" + randomId)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("내용은 20자 이상 1000자 이하입니다."));
+
+        // then
+        then(curationService).shouldHaveNoInteractions();
+    }
+
+    @Test
+    @DisplayName("큐레이션 수정 시, 각 큐레이션 카드에는 이미지를 최대 5개 등록할 수 있다.")
+    @WithMockCurator
+    void updateCuration8() throws Exception {
+        // given
+        CurationEditRequest request = CurationDomain.createValidCurationEditRequest().toBuilder()
+            .curationCards(List.of(CurationDomain.createValidCurationCardRequest1().toBuilder()
+                .imageIds(List.of(1L, 2L, 3L, 4L, 5L, 6L)).build()))
+            .build();
+
+        // when
+        mockMvc.perform(put("/api/curations/" + randomId)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("이미지는 최대 5개까지 등록할 수 있습니다."));
+
+        // then
+        then(curationService).shouldHaveNoInteractions();
+    }
+
+    @Test
+    @DisplayName("큐레이션 수정 시, 지역에는 빈 값이 들어갈 수 없다.")
+    @WithMockCurator
+    void updateCuration9() throws Exception {
+        // given
+        CurationEditRequest request = CurationDomain.createValidCurationEditRequest().toBuilder()
+            .area(null).build();
+
+        // when
+        mockMvc.perform(put("/api/curations/" + randomId)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("지역은 필수입니다."));
+
+        // then
+        then(curationService).shouldHaveNoInteractions();
+    }
+
+    @Test
+    @DisplayName("큐레이션 수정 시, 큐레이션 카드는 1개 이상 10개 이하이어야 한다.")
+    @WithMockCurator
+    void updateCuration10() throws Exception {
+        // given
+        CurationEditRequest request = CurationDomain.createValidCurationEditRequest().toBuilder()
+            .curationCards(List.of()).build();
+
+        // when
+        mockMvc.perform(put("/api/curations/" + randomId)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("큐레이션 카드의 개수는 1개 이상 10개 이하이어야 합니다."));
+
+        // then
+        then(curationService).shouldHaveNoInteractions();
+    }
+
+    @Test
+    @DisplayName("PathVariable로 전달받은 큐레이션 ID에 해당하는 큐레이션을 삭제한다.")
+    @WithMockCurator
+    void deleteCuration1() throws Exception {
+        // given, when
+        mockMvc.perform(delete("/api/curations/" + randomId)
+                .with(csrf()))
+            .andDo(print())
+            .andExpect(status().isNoContent());
+
+        // then
+        then(curationService).should(times(1)).delete(eq(MemberDomain.validCuratorId), eq(randomId));
+    }
+
+    @Test
+    @DisplayName("Host의 권한으로는 큐레이션을 삭제할 수 없다.")
+    @WithMockHost
+    void deleteCuration2() throws Exception {
+        // given, when
+        mockMvc.perform(delete("/api/curations/" + randomId)
+                .with(csrf()))
+            .andDo(print())
+            .andExpect(status().isUnauthorized());
+
+        // then
+        then(curationService).shouldHaveNoInteractions();
+    }
+
+    @Test
+    @DisplayName("Member의 권한으로는 큐레이션을 삭제할 수 없다.")
+    @WithMockMember
+    void deleteCuration3() throws Exception {
+        // given, when
+        mockMvc.perform(delete("/api/curations/" + randomId)
+                .with(csrf()))
+            .andDo(print())
+            .andExpect(status().isUnauthorized());
+
+        // then
+        then(curationService).shouldHaveNoInteractions();
     }
 }
