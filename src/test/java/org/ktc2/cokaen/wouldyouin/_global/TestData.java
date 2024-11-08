@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.global;
+package org.ktc2.cokaen.wouldyouin._global;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -66,13 +66,13 @@ public class TestData {
 
     public static class MemberDomain {
 
-        public static final Long memberId = 1L;
-        public static final Long curatorId = 5L;
-        public static final Long hostId = 3L;
-        public static final Long welcomeMemberId = 4L;
+        public static final long validMemberId = 1L;
+        public static final long validCuratorId = 2L;
+        public static final long validHostId = 3L;
+        public static final long validWelcomeMemberId = 4L;
 
         public static Member createValidMember() {
-            MemberImage memberImage = ImageDomain.createValidMemberImage(1L);
+            MemberImage memberImage = ImageDomain.createValidMemberImage(validMemberId);
             Member ret = Member.builder()
                 .accountType(AccountType.kakao)
                 .email("member1@example.com")
@@ -83,47 +83,14 @@ public class TestData {
                 .gender("Men")
                 .socialId("100100100100100")
                 .build();
-            ReflectionTestUtils.setField(ret, "Id", 1L);
+            ReflectionTestUtils.setField(ret, "Id", validMemberId);
             ReflectionTestUtils.setField(ret, "memberType", MemberType.normal);
             ReflectionTestUtils.setField(memberImage, "baseMember", ret);
             return ret;
         }
 
-        public static Member createValidWelcomeMember() {
-            MemberImage memberImage = ImageDomain.createValidMemberImage(4L);
-            Member ret = Member.builder()
-                .accountType(AccountType.kakao)
-                .email("member2@example.com")
-                .nickname("nick_normal_333")
-                .phone("010-4414-1144")
-                .profileImage(memberImage)
-                .area(Area.서울)
-                .gender("Men")
-                .socialId("456456456456")
-                .build();
-            ReflectionTestUtils.setField(ret, "Id", 4L);
-            ReflectionTestUtils.setField(memberImage, "baseMember", ret);
-            return ret;
-        }
-
-        public static Host createValidHost() {
-            MemberImage memberImage = ImageDomain.createValidMemberImage(3L);
-            Host ret = Host.builder()
-                .email("curator1@example.com")
-                .nickname("nick_curator_12")
-                .phone("010-4545-6767")
-                .hashedPassword("hashed_password")
-                .profileImage(memberImage)
-                .build();
-            ReflectionTestUtils.setField(ret, "Id", 3L);
-            ReflectionTestUtils.setField(ret, "intro", "주최자 자기소개입니다.");
-            ReflectionTestUtils.setField(ret, "hashtag", "#주최자#해시태그#입니다");
-            ReflectionTestUtils.setField(memberImage, "baseMember", ret);
-            return ret;
-        }
-
         public static Curator createValidCurator() {
-            MemberImage memberImage = ImageDomain.createValidMemberImage(2L);
+            MemberImage memberImage = ImageDomain.createValidMemberImage(validCuratorId);
             Curator ret = Curator.curatorBuilder()
                 .accountType(AccountType.google)
                 .email("curator1@example.com")
@@ -134,23 +101,44 @@ public class TestData {
                 .gender("Women")
                 .socialId("200200200200200")
                 .build();
-            ReflectionTestUtils.setField(ret, "Id", 2L);
+            ReflectionTestUtils.setField(ret, "Id", validCuratorId);
             ReflectionTestUtils.setField(ret, "intro", "큐레이터 자기소개입니다.");
             ReflectionTestUtils.setField(ret, "hashtag", "#큐레이터#해시태그#입니다");
             ReflectionTestUtils.setField(memberImage, "baseMember", ret);
             return ret;
         }
 
-        public static CurationCuratorResponse createCurationCuratorResponse() {
-            return CurationCuratorResponse.builder()
-                .nickname("nick_curator_12")
+        public static Host createValidHost() {
+            MemberImage memberImage = ImageDomain.createValidMemberImage(validHostId);
+            Host ret = Host.builder()
                 .email("curator1@example.com")
+                .nickname("nick_curator_12")
                 .phone("010-4545-6767")
-                .profileImageUrl("image2.com")
-                .intro("큐레이터 자기소개입니다.")
-                .likes(0)
-                .hashtags(List.of("#큐레이터", "#해시태그", "#입니다"))
+                .hashedPassword("hashed_password")
+                .profileImage(memberImage)
                 .build();
+            ReflectionTestUtils.setField(ret, "Id", validHostId);
+            ReflectionTestUtils.setField(ret, "intro", "주최자 자기소개입니다.");
+            ReflectionTestUtils.setField(ret, "hashtag", "#주최자#해시태그#입니다");
+            ReflectionTestUtils.setField(memberImage, "baseMember", ret);
+            return ret;
+        }
+
+        public static Member createValidWelcomeMember() {
+            MemberImage memberImage = ImageDomain.createValidMemberImage(validWelcomeMemberId);
+            Member ret = Member.builder()
+                .accountType(AccountType.kakao)
+                .email("member2@example.com")
+                .nickname("nick_normal_333")
+                .phone("010-4414-1144")
+                .profileImage(memberImage)
+                .area(Area.서울)
+                .gender("Men")
+                .socialId("456456456456")
+                .build();
+            ReflectionTestUtils.setField(ret, "Id", validWelcomeMemberId);
+            ReflectionTestUtils.setField(memberImage, "baseMember", ret);
+            return ret;
         }
     }
 
@@ -302,9 +290,22 @@ public class TestData {
                 .build();
         }
 
+        public static CurationCuratorResponse createCurationCuratorResponse() {
+            Curator curator = MemberDomain.createValidCurator();
+            return CurationCuratorResponse.builder()
+                .nickname(curator.getNickname())
+                .email(curator.getEmail())
+                .phone(curator.getPhone())
+                .profileImageUrl(curator.getProfileImageUrl())
+                .intro(curator.getIntro())
+                .likes(curator.getLikes())
+                .hashtags(curator.getHashTagList())
+                .build();
+        }
+
         public static CurationResponse createValidCurationResponse() {
             return CurationResponse.builder()
-                .curator(MemberDomain.createCurationCuratorResponse())
+                .curator(createCurationCuratorResponse())
                 .title("title")
                 .content("content")
                 .curationCards(List.of(createCurationCardResponse1()))

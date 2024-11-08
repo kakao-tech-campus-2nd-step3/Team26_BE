@@ -32,10 +32,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Build With Gradle (exclude test)
+      - name: Build Application only using gradlew
         run: |
           chmod +x gradlew
           ./gradlew clean build -x test
+
+      - name: Test Application using gradlew
+        run: |
+          chmod +x gradlew
+          ./gradlew test
 
       - name: Docker Hub Login
         if: github.event_name == 'push'
