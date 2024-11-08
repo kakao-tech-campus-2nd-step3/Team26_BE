@@ -82,6 +82,23 @@ jobs:
     needs: Build
     if: github.event_name == 'push'
     steps:
+      - name: Update .env
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            echo "GOOGLE_CLIENT_ID=${{ secrets.ENV_GOOGLE_CLIENT_ID }}" > ~/.env
+            echo "GOOGLE_CLIENT_SECRET=${{ secrets.ENV_GOOGLE_CLIENT_SECRET }}" >> ~/.env
+            echo "GOOGLE_REDIRECT_URI=${{ secrets.ENV_GOOGLE_REDIRECT_URI }}" >> ~/.env
+            echo "JWT_SECRET=${{ secrets.ENV_JWT_SECRET }}" >> ~/.env
+            echo "KAKAO_CLIENT_ID=${{ secrets.ENV_KAKAO_CLIENT_ID }}" >> ~/.env
+            echo "KAKAO_CLIENT_SECRET=${{ secrets.ENV_KAKAO_CLIENT_SECRET }}" >> ~/.env
+            echo "KAKAO_REDIRECT_URI=${{ secrets.ENV_KAKAO_REDIRECT_URI }}" >> ~/.env
+            echo "KAKAOPAY_SECRET_KEY=${{ secrets.ENV_KAKAOPAY_SECRET_KEY }}" >> ~/.env
+
       - name: Pull New Docker Image
         uses: appleboy/ssh-action@master
         with:
