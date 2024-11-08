@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.like.application;
+package org.ktc2.cokaen.wouldyouin.like.application.dto;
 
 import java.util.List;
 import lombok.AccessLevel;
