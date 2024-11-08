@@ -62,7 +62,6 @@ class EventControllerUnitTest {
     private JwtService jwtService;
     @MockBean
     private JwtAuthFilter jwtAuthFilter;
-    @MockBean
     private EventSliceResponse eventSliceResponse;
     @Autowired
     private MockMvc mockMvc;

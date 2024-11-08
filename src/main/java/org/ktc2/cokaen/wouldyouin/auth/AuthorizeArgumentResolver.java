@@ -3,6 +3,7 @@ package org.ktc2.cokaen.wouldyouin.auth;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin.auth.persist.CustomUserDetails;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.core.MethodParameter;
@@ -54,6 +55,6 @@ public class AuthorizeArgumentResolver implements HandlerMethodArgumentResolver 
         if (actual == MemberType.admin || required.contains(actual)) {
             return;
         }
-        throw new RuntimeException("요구된 멤버 형식과 실제 형식이 다릅니다.");
+        throw new UnauthorizedException("요구된 멤버 형식과 실제 형식이 다릅니다.");
     }
 }

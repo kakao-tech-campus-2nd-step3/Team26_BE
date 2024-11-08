@@ -6,7 +6,7 @@ import org.ktc2.cokaen.wouldyouin.global.TestData;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 
 @Retention(RetentionPolicy.RUNTIME)
-@WithMockCustomUser(memberId = 3L, memberType = MemberType.host)
-public @interface WithMockHost {
+@WithMockCustomUser(memberId = 5L, memberType = MemberType.curator)
+public @interface WithMockCurator {
 
 }
