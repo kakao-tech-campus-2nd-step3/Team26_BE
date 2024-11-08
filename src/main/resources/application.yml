@@ -4,6 +4,11 @@
 spring:
   application.name: WouldYouIn
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
   # 임시 프로젝트 url
   wouldyouin-domain-name: http://52.78.71.136/
   profiles:

@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin._common.exception.FailedToDeleteImageException;
 import org.ktc2.cokaen.wouldyouin._common.exception.FailedToUploadImageException;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,19 +36,19 @@ public class ImageStorage {
     }
 
     // Todo: payment랑 이부분 restclient 유틸로 빼기
-    public String save(String imageUrl, String subPath) {
+    public ImageRequest save(String imageUrl, String subPath) {
         RestClient client = RestClient.builder().build();
         String fileName = "";
+        Long size = 0L;
         try {
             ResponseEntity<byte[]> response = client.get()
                 .uri(imageUrl)
                 .retrieve()
                 .toEntity(byte[].class);
 
-            if (Optional.ofNullable(response).isPresent() && response.getStatusCode().is2xxSuccessful()) {
-                byte[] imageBytes = response.getBody();
-
+            if (Optional.ofNullable(response.getBody()).isPresent() && response.getStatusCode().is2xxSuccessful()) {
                 fileName = generateUuidName() + "." + getExtension(imageUrl);
+                size = (long) response.getBody().length;
                 Path path = Paths.get(commonPath, subPath, fileName);
                 Files.createDirectories(path.getParent());
                 Files.write(path, response.getBody());
@@ -56,7 +56,8 @@ public class ImageStorage {
         } catch (IOException ex) {
             throw new FailedToUploadImageException();
         }
-        return subPath + "/" + fileName;
+        String url = subPath + "/" + fileName;
+        return ImageRequest.of(url, size, getExtension(imageUrl));
     }
 
     public void delete(String imagePath) {
