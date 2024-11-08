@@ -41,6 +41,7 @@ public class EventController {
     public ResponseEntity<ApiResponseBody<EventSliceResponse>> getEventsByFilterOrderByDistanceAsc(
         @ModelAttribute LocationFilter locationFilter,
         @ModelAttribute Location currentLocation,
+        @RequestParam(defaultValue = ParamDefaults.TITLE) String title,
         @RequestParam(defaultValue = ParamDefaults.CATEGORY) Category category,
         @RequestParam(defaultValue = ParamDefaults.AREA) Area area,
         @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
@@ -48,7 +49,7 @@ public class EventController {
         @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId
     ) {
         return ApiResponse.ok(eventService.getAllByFilterOrderByDistanceAsc(
-            locationFilter, currentLocation, category, area, PageRequest.of(page, size), lastId));
+            locationFilter, currentLocation, title, category, area, PageRequest.of(page, size), lastId));
     }
 
     @GetMapping("/hosts/{hostId}")
@@ -61,8 +62,6 @@ public class EventController {
         return ApiResponse.ok(eventService.getAllByHostIdOrderByCreatedDateDesc(
             hostId, PageRequest.of(page, size), lastId));
     }
-
-    // Todo: 이름으로 검색
 
     @GetMapping("/{eventId}")
     public ResponseEntity<ApiResponseBody<EventResponse>> getEventByEventId(

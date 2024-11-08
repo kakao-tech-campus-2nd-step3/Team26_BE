@@ -9,6 +9,7 @@ import org.ktc2.cokaen.wouldyouin.Image.persist.Image;
 import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,9 @@ public abstract class ImageService<T extends Image> {
 
     @Autowired
     protected ImageStorage imageStorage;
+
+    @Value("${spring.wouldyouin-domain-name}")
+    private String domainName;
 
     protected abstract ImageRepository<T> getImageRepository();
 
@@ -34,7 +38,7 @@ public abstract class ImageService<T extends Image> {
     }
 
     protected ImageResponse create(ImageRequest imageRequest) {
-        return ImageResponse.from(getImageRepository().save(toEntity(imageRequest)));
+        return ImageResponse.from(getImageRepository().save(toEntity(imageRequest)), domainName);
     }
 
     protected void delete(Long id) {
