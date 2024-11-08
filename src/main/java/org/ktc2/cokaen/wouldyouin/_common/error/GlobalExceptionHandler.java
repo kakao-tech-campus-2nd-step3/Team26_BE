@@ -23,6 +23,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponseBody<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         return ApiResponse.error(ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult().getFieldErrors().stream()
             .map(DefaultMessageSourceResolvable::getDefaultMessage)
-            .collect(Collectors.joining(",")));
+            .collect(Collectors.joining(", ")));
     }
 }
