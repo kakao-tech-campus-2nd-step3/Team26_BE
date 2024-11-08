@@ -60,10 +60,7 @@ public class MemberImageService extends ImageService<MemberImage> {
         image.setBaseMember(member);
     }
 
-    // TODO: imageUrl을 MemberImage로 변환하는 로직 추가 필요
-    // Todo: extension과 size 불러오기
     public MemberImage convert(String imageUrl) {
-        var request = ImageRequest.of(imageStorage.save(imageUrl, subPath), 123123L, "jpg");
-        return memberImageRepository.save(toEntity(request));
+        return memberImageRepository.save(toEntity(imageStorage.save(imageUrl, subPath)));
     }
 }
