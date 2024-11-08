@@ -55,6 +55,12 @@ jobs:
           path: |
             **/build/reports/
 
+      - name: Store build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: build/libs/*.jar
+
   ## 2단계: 테스트 실행
   Test:
     runs-on: ubuntu-22.04
@@ -68,7 +74,17 @@ jobs:
           java-version: '21'
           distribution: 'corretto'
 
-      - name: Test Application using gradlew
+      - name: Gradle Caching (for faster build)
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Test Application
         run: |
           chmod +x gradlew
           ./gradlew test     
@@ -82,12 +98,18 @@ jobs:
             **/build/test-results/
 
   ## 3단계: Docker 빌드 및 푸시
-  Docker:
+  Docker-Build:
     runs-on: ubuntu-22.04
     needs: Test  # Test 단계가 성공적으로 완료되어야 실행됨
     if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+          path: build/libs
 
       - name: Docker Hub Login
         uses: docker/login-action@v3
@@ -101,10 +123,10 @@ jobs:
       - name: Docker Push
         run: docker push ${{ secrets.DOCKER_REPO_FULLNAME }}
 
-  ## 2단계: 서버에 배포
+  ## 4단계: 서버에 배포
   Deploy:
     runs-on: ubuntu-22.04
-    needs: Docker
+    needs: Docker-Build
     if: github.event_name == 'push'
     steps:
       - name: Update .env
