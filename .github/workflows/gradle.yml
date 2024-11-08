@@ -9,6 +9,16 @@ on:
 permissions:
   contents: read
 
+env:
+  GOOGLE_CLIENT_ID    : ${{ secrets.ENV_GOOGLE_CLIENT_ID }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.ENV_GOOGLE_CLIENT_SECRET }}
+  GOOGLE_REDIRECT_URI : ${{ secrets.ENV_GOOGLE_REDIRECT_URI }}
+  JWT_SECRET          : ${{ secrets.ENV_JWT_SECRET }}
+  KAKAO_CLIENT_ID     : ${{ secrets.ENV_KAKAO_CLIENT_ID }}
+  KAKAO_CLIENT_SECRET : ${{ secrets.ENV_KAKAO_CLIENT_SECRET }}
+  KAKAO_REDIRECT_URI  : ${{ secrets.ENV_KAKAO_REDIRECT_URI }}
+  KAKAOPAY_SECRET_KEY : ${{ secrets.ENV_KAKAOPAY_SECRET_KEY }}
+
 jobs:
   ## 1단계: 프로젝트 빌드
   Build:
