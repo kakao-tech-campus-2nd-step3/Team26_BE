@@ -62,6 +62,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+
       - name: Test Application using gradlew
         run: |
           chmod +x gradlew
@@ -98,7 +104,7 @@ jobs:
   ## 2단계: 서버에 배포
   Deploy:
     runs-on: ubuntu-22.04
-    needs: Build
+    needs: Docker
     if: github.event_name == 'push'
     steps:
       - name: Update .env
