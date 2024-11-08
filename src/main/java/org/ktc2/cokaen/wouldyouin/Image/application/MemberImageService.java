@@ -61,35 +61,9 @@ public class MemberImageService extends ImageService<MemberImage> {
     }
 
     // TODO: imageUrl을 MemberImage로 변환하는 로직 추가 필요
+    // Todo: extension과 size 불러오기
     public MemberImage convert(String imageUrl) {
-
-        RestClient client = RestClient.builder().build();
-
-        try {
-            ResponseEntity<byte[]> response = client.get()
-                .uri(imageUrl)
-                .retrieve()
-                .toEntity(byte[].class);
-
-            // 요청 성공 시 이미지 저장
-            if (response != null && response.getStatusCode() == HttpStatus.OK) {
-                byte[] imageBytes = response.getBody();
-
-                if (imageBytes != null) {
-                    // 파일 이름과 경로 설정
-                    Path path = Paths.get("src/main/resources/static", subPath, "testFilename");
-                    Files.createDirectories(path.getParent());
-                    Files.write(path, response.getBody());
-                }
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException("failed to get image.");
-        }
-
-        return MemberImage.builder()
-            .url("http://example.com/images/MockMemberImageUrl")
-            .size(10L)
-            .extension(".jpeg")
-            .build();
+        var request = ImageRequest.of(imageStorage.save(imageUrl, subPath), 123123L, "jpg");
+        return memberImageRepository.save(toEntity(request));
     }
 }

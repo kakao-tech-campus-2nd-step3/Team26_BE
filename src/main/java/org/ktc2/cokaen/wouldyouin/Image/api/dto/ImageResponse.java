@@ -14,10 +14,11 @@ public class ImageResponse {
     private LocalDateTime createdDate;
     private Long size;
 
-    public static ImageResponse from(Image image) {
+    public static ImageResponse from(Image image, String domainName) {
+        System.out.println("도메인" + domainName);
         return ImageResponse.builder()
             .id(image.getId())
-            .url(image.getUrl())
+            .url(domainName + image.getUrl())
             .size(image.getSize())
             .createdDate(image.getCreatedDate())
             .build();
