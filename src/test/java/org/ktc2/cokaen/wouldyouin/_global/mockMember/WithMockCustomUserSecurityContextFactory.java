@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.global.mockMember;
+package org.ktc2.cokaen.wouldyouin._global.mockMember;
 
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.auth.persist.CustomUserDetails;

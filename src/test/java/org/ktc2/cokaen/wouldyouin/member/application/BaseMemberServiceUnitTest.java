@@ -2,10 +2,14 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.ktc2.cokaen.wouldyouin.global.TestData.MemberDomain.createValidCurator;
-import static org.ktc2.cokaen.wouldyouin.global.TestData.MemberDomain.createValidHost;
-import static org.ktc2.cokaen.wouldyouin.global.TestData.MemberDomain.createValidMember;
-import static org.ktc2.cokaen.wouldyouin.global.TestData.MemberDomain.createValidWelcomeMember;
+import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.createValidCurator;
+import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.createValidHost;
+import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.createValidMember;
+import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.createValidWelcomeMember;
+import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.validCuratorId;
+import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.validHostId;
+import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.validMemberId;
+import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.validWelcomeMemberId;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -88,7 +92,7 @@ class BaseMemberServiceUnitTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {1L, 2L, 3L, 4L})
+    @ValueSource(longs = {validMemberId, validCuratorId, validHostId, validWelcomeMemberId})
     @DisplayName("임의의 사용자를 찾는 메서드 테스트")
     void getByIdOrThrow(long id) {
         // when
@@ -101,7 +105,7 @@ class BaseMemberServiceUnitTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {1L, 2L, 3L, 4L})
+    @ValueSource(longs = {validMemberId, validCuratorId, validHostId, validWelcomeMemberId})
     @DisplayName("임의의 사용자의 타입을 반환하는 메서드 테스트")
     void getMemberType(long id) {
         // when
@@ -114,7 +118,7 @@ class BaseMemberServiceUnitTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {1L, 2L, 3L, 4L})
+    @ValueSource(longs = {validMemberId, validCuratorId, validHostId, validWelcomeMemberId})
     @DisplayName("각 유형의 사용자를 찾고 응답 반환하는 메서드 테스트")
     void findById(long id) {
         // given
@@ -136,7 +140,7 @@ class BaseMemberServiceUnitTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {1L, 2L, 3L, 4L})
+    @ValueSource(longs = {validMemberId, validCuratorId, validHostId, validWelcomeMemberId})
     @DisplayName("중복 있는 이메일 있는 경우 테스트")
     void checkUniqueEmailOrThrow(long id) {
         // given
@@ -165,7 +169,7 @@ class BaseMemberServiceUnitTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {1L, 2L, 3L, 4L})
+    @ValueSource(longs = {validMemberId, validCuratorId, validHostId, validWelcomeMemberId})
     @DisplayName("각 유형의 사용자를 제거하는 메서드 테스트")
     void deleteById(long id) {
         // given
