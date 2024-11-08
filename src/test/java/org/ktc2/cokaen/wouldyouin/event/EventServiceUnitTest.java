@@ -89,7 +89,7 @@ class EventServiceUnitTest {
         then(eventRepository).should(times(1))
             .findAllByFilterOrderByDistance(any(Double.class), any(Double.class), any(Double.class),
                 any(Double.class), any(Double.class), any(Double.class),
-                any(String.class), any(Category.class), any(Area.class), any(Pageable.class));
+                any(Category.class), any(Area.class), any(Pageable.class));
     }
 
     @Test
