@@ -19,7 +19,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.List;
 import java.util.Random;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,6 @@ import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.ktc2.cokaen.wouldyouin.curation.api.CurationController;
-import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationEditRequest;
 import org.ktc2.cokaen.wouldyouin.curation.application.CurationService;
@@ -48,7 +46,8 @@ import org.springframework.web.context.WebApplicationContext;
 @WebMvcTest(CurationController.class)
 class CurationControllerUnitTest {
 
-    private static ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockBean
     private CurationService curationService;
@@ -63,15 +62,9 @@ class CurationControllerUnitTest {
     private WebApplicationContext context;
     private static final long randomId = abs(new Random().nextLong());
 
-
-    @BeforeAll
-    public static void init() {
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-    }
-
     @BeforeEach
     public void setup() throws Exception {
+        objectMapper.registerModule(new JavaTimeModule());
         mockMvc = MockMvcBuilders
             .webAppContextSetup(context)
             .apply(springSecurity())

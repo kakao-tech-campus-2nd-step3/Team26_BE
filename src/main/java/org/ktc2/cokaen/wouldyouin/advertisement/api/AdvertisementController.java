@@ -45,7 +45,7 @@ public class AdvertisementController {
     public ResponseEntity<ApiResponseBody<AdvertisementResponse>> createAdvertisement(
         @Valid @RequestPart AdvertisementRequest advertisementRequest,
         @RequestPart(required = false) MultipartFile image,
-        @Authorize(MemberType.admin) MemberIdentifier memberIdentifier) {
+        @Authorize(MemberType.admin) MemberIdentifier admin) {
         return ApiResponse.created(advertisementService.create(advertisementRequest, image));
     }
 
@@ -54,14 +54,14 @@ public class AdvertisementController {
         @PathVariable Long adId,
         @Valid @RequestPart AdvertisementRequest advertisementRequest,
         @RequestPart(required = false) MultipartFile image,
-        @Authorize(MemberType.admin) MemberIdentifier memberIdentifier) {
+        @Authorize(MemberType.admin) MemberIdentifier admin) {
         return ApiResponse.ok(advertisementService.update(adId, advertisementRequest, image));
     }
 
     @DeleteMapping("/{adId}")
     public ResponseEntity<ApiResponseBody<Void>> deleteAdvertisement(
         @PathVariable Long adId,
-        @Authorize(MemberType.admin) MemberIdentifier memberIdentifier) {
+        @Authorize(MemberType.admin) MemberIdentifier admin) {
         advertisementService.delete(adId);
         return ApiResponse.noContent();
     }
