@@ -42,16 +42,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Build Application only using gradlew
+      - name: Build Application
         run: |
           chmod +x gradlew
           ./gradlew clean build -x test     
 
-      - name: Store build failure reports
+      - name: Store build failure reports (execute when build fail)
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: build-reports
+          name: build-failure-reports
           path: |
             **/build/reports/
 
@@ -89,11 +89,11 @@ jobs:
           chmod +x gradlew
           ./gradlew test     
 
-      - name: Store test failure reports
+      - name: Store test failure reports (execute when test fail)
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: test-reports
+          name: test-failure-reports
           path: |
             **/build/test-results/
 
