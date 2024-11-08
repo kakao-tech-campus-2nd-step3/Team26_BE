@@ -1,17 +1,18 @@
 package org.ktc2.cokaen.wouldyouin.like.api;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
+import org.ktc2.cokaen.wouldyouin._common.config.ParamDefaults;
 import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
-import org.ktc2.cokaen.wouldyouin.like.application.LikeResponse;
 import org.ktc2.cokaen.wouldyouin.like.application.LikeServiceFactory;
+import org.ktc2.cokaen.wouldyouin.like.application.dto.LikeResponse;
+import org.ktc2.cokaen.wouldyouin.like.application.dto.LikeToggleResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,22 +27,24 @@ public class LikeController {
 
     private final LikeServiceFactory likeServiceFactory;
 
-    // Todo: 와일드카드 수정
-    // Todo: api 요청시 create, delete를 분리하지말고 토글방식으로 하면 어떨지
-
     @GetMapping
-    public ResponseEntity<ApiResponseBody<List<LikeResponse>>> getLikes(@Authorize(MemberType.normal) MemberIdentifier identifier, @RequestParam("type") MemberType memberType) {
-        return ApiResponse.ok(likeServiceFactory.getLikeServiceFrom(memberType).getLikes(identifier.id()));
+    public ResponseEntity<ApiResponseBody<Slice<LikeResponse>>> getLikes(
+        @Authorize(MemberType.normal) MemberIdentifier identifier,
+        @RequestParam("type") MemberType memberType,
+        @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
+        @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
+        @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId
+    ) {
+        return ApiResponse.ok(
+            likeServiceFactory.getLikeServiceFrom(memberType)
+                .getLikes(identifier.id(), PageRequest.of(page, size), lastId));
     }
 
     @PostMapping("/{targetMemberId}")
-    public ResponseEntity<ApiResponseBody<LikeResponse>> createLike(@Authorize(MemberType.normal) MemberIdentifier identifier, @PathVariable("targetMemberId") Long targetId) {
-        return ApiResponse.created(likeServiceFactory.getLikeServiceFrom(targetId).create(identifier.id(), targetId));
-    }
-
-    @DeleteMapping("/{targetMemberId}")
-    public ResponseEntity<ApiResponseBody<Void>> deleteLike(@Authorize(MemberType.normal) MemberIdentifier identifier, @PathVariable("targetMemberId") Long targetId) {
-        likeServiceFactory.getLikeServiceFrom(targetId).delete(identifier.id(), targetId);
-        return ApiResponse.noContent();
+    public ResponseEntity<ApiResponseBody<LikeToggleResponse>> createOrDeleteLike(
+        @Authorize(MemberType.normal) MemberIdentifier identifier,
+        @PathVariable("targetMemberId") Long targetId) {
+        return ApiResponse.created(
+            likeServiceFactory.getLikeServiceFrom(targetId).toggleLike(identifier.id(), targetId));
     }
 }
