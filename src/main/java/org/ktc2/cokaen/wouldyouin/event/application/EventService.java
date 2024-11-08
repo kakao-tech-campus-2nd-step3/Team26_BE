@@ -3,6 +3,7 @@ package org.ktc2.cokaen.wouldyouin.event.application;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
+import org.ktc2.cokaen.wouldyouin._common.exception.CurrentLocationEmptyException;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
@@ -30,12 +31,19 @@ public class EventService {
     private final EventImageService eventImageService;
 
     @Transactional(readOnly = true)
-    public EventSliceResponse getAllByFilterOrderByDistanceAsc(LocationFilter location, Location currentLocation,
+    public EventSliceResponse getAllByFilterOrderByDistanceAsc(LocationFilter location, Location currentLocation, String title,
         Category category, Area area, Pageable pageable, Long lastId) {
+        validateCurrentLocation(currentLocation);
         return getEventSliceResponse(
             eventRepository.findAllByFilterOrderByDistance(location.getStartLatitude(), location.getStartLongitude(),
                 location.getEndLatitude(), location.getEndLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(),
-                category, area, pageable), lastId);
+                title, category, area, pageable), lastId);
+    }
+
+    private void validateCurrentLocation(Location currentLocation) {
+        if (currentLocation.getLatitude() == null || currentLocation.getLongitude() == null) {
+            throw new CurrentLocationEmptyException();
+        }
     }
 
     @Transactional(readOnly = true)
