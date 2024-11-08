@@ -91,16 +91,18 @@ class EventControllerUnitTest {
         // given
         LocationFilter locationFilter = new LocationFilter(0.0, 0.0, 10.0, 10.0);
         Location currentLocation = new Location(3.0, 2.0);
+        String title = "testTitle";
         Category category = Category.공예;
         Area area = Area.광주;
-        int pageNumber = 1; // 교수님 
-        int pageSize = 10; // 
+        int pageNumber = 1;
+        int pageSize = 10;
         Long lastId = 1L;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
         given(eventService.getAllByFilterOrderByDistanceAsc(
             locationFilter,
             currentLocation,
+            title,
             category,
             area,
             pageable,
@@ -115,8 +117,9 @@ class EventControllerUnitTest {
                 .param("endLongitude", locationFilter.getEndLongitude().toString())
                 .param("latitude", currentLocation.getLatitude().toString())
                 .param("longitude", currentLocation.getLongitude().toString())
-                .param("category", category.toString())  // enum을 문자열로 변환하여 설정
-                .param("area", area.toString())  // enum을 문자열로 변환하여 설정
+                .param("title", title)
+                .param("category", category.toString())
+                .param("area", area.toString())
                 .param("page", String.valueOf(pageNumber))
                 .param("size", String.valueOf(pageSize))
                 .param("lastId", String.valueOf(lastId))
@@ -127,6 +130,7 @@ class EventControllerUnitTest {
         then(eventService).should(times(1)).getAllByFilterOrderByDistanceAsc(
             any(LocationFilter.class),
             any(Location.class),
+            eq(title),
             eq(category),
             eq(area),
             eq(pageable),
