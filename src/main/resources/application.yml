@@ -3,6 +3,9 @@
 
 spring:
   application.name: WouldYouIn
+
+  # 임시 프로젝트 url
+  wouldyouin-domain-name: http://52.78.71.136/
   profiles:
     default: dev
 
