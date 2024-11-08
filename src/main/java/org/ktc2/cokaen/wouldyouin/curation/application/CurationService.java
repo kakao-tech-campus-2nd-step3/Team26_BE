@@ -78,7 +78,7 @@ public class CurationService {
 
     public void validateCuratorId(Long curatorId, Curation curation) {
         if (!curatorId.equals(curation.getCurator().getId())) {
-            throw new UnauthorizedException("Curator");
+            throw new UnauthorizedException("큐레이터 ID가 큐레이션의 큐레이터 ID와 일치하지 않습니다.");
         }
     }
 
