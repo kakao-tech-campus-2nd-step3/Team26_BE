@@ -1,12 +1,12 @@
-package org.ktc2.cokaen.wouldyouin.global.mockMember;
+package org.ktc2.cokaen.wouldyouin._global.mockMember;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import org.ktc2.cokaen.wouldyouin.global.TestData;
+import org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 
 @Retention(RetentionPolicy.RUNTIME)
-@WithMockCustomUser(memberId = 5L, memberType = MemberType.curator)
+@WithMockCustomUser(memberId = MemberDomain.validCuratorId, memberType = MemberType.curator)
 public @interface WithMockCurator {
 
 }

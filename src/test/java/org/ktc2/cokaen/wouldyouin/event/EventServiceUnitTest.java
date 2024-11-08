@@ -25,7 +25,7 @@ import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.event.persist.EventRepository;
-import org.ktc2.cokaen.wouldyouin.global.TestData.EventDomain;
+import org.ktc2.cokaen.wouldyouin._global.TestData.EventDomain;
 import org.ktc2.cokaen.wouldyouin.member.application.HostService;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;

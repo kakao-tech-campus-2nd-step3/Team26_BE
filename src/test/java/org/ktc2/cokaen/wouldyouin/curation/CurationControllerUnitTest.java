@@ -26,11 +26,11 @@ import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.ktc2.cokaen.wouldyouin.curation.api.CurationController;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
 import org.ktc2.cokaen.wouldyouin.curation.application.CurationService;
-import org.ktc2.cokaen.wouldyouin.global.TestData.CurationDomain;
-import org.ktc2.cokaen.wouldyouin.global.TestData.MemberDomain;
-import org.ktc2.cokaen.wouldyouin.global.mockMember.WithMockCurator;
-import org.ktc2.cokaen.wouldyouin.global.mockMember.WithMockHost;
-import org.ktc2.cokaen.wouldyouin.global.mockMember.WithMockMember;
+import org.ktc2.cokaen.wouldyouin._global.TestData.CurationDomain;
+import org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain;
+import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator;
+import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
+import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -159,7 +159,7 @@ class CurationControllerUnitTest {
             .andExpect(status().isCreated());
 
         // then
-        then(curationService).should(times(1)).create(eq(MemberDomain.curatorId), captor.capture());
+        then(curationService).should(times(1)).create(eq(MemberDomain.validCuratorId), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
