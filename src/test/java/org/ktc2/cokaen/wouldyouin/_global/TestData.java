@@ -5,6 +5,7 @@ import java.util.List;
 import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
+import org.ktc2.cokaen.wouldyouin._common.api.SliceInfo;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;
@@ -18,7 +19,9 @@ import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.CurationEventResponse;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.ReservationEventResponse;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
+import org.ktc2.cokaen.wouldyouin.member.application.dto.relation.ReservationMemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.relationResponse.CurationCuratorResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
@@ -26,10 +29,19 @@ import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationRequest;
+import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationResponse;
+import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationSliceResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class TestData {
+
+    public static SliceInfo createSliceInfo() {
+        return SliceInfo.builder()
+            .sliceSize(10)
+            .lastId(100L)
+            .build();
+    }
 
     public static class ImageDomain {
 
@@ -140,6 +152,16 @@ public class TestData {
             ReflectionTestUtils.setField(memberImage, "baseMember", ret);
             return ret;
         }
+
+        public static ReservationMemberResponse createValidReservationMemberResponse() {
+            return ReservationMemberResponse.builder()
+                .id(validMemberId)
+                .email("member1@example.com")
+                .nickname("nick_normal_123")
+                .phone("010-1112-2233")
+                .gender("Men")
+                .build();
+        }
     }
 
     public static class EventDomain {
@@ -200,6 +222,14 @@ public class TestData {
                 .hostNickname("nick_curator_12")
                 .build();
         }
+
+        public static ReservationEventResponse createValidReservationEventResponse() {
+            return ReservationEventResponse.builder()
+                .id(1L)
+                .title("title")
+                .price(15000)
+                .build();
+        }
     }
 
     public static class ReservationDomain {
@@ -207,17 +237,37 @@ public class TestData {
         public static ReservationRequest createValidReservationRequest() {
             return ReservationRequest.builder()
                 .eventId(1L)
-                .price(10000)
-                .quantity(1)
+                .price(15000)
+                .quantity(2)
                 .build();
         }
 
         public static Reservation createValidReservation() {
-            return Reservation.builder()
+            Reservation reservation = Reservation.builder()
                 .member(MemberDomain.createValidMember())
                 .event(EventDomain.createValidEvent())
-                .price(10000)
-                .quantity(3)
+                .price(15000)
+                .quantity(2)
+                .build();
+            ReflectionTestUtils.setField(reservation, "id", 1L);
+            return reservation;
+        }
+
+        public static ReservationResponse createValidReservationResponse() {
+            return ReservationResponse.builder()
+                .id(1L)
+                .member(MemberDomain.createValidReservationMemberResponse())
+                .event(EventDomain.createValidReservationEventResponse())
+                .price(15000)
+                .quantity(2)
+                .reservationDate(LocalDateTime.of(2024, 3, 23, 0, 0))
+                .build();
+        }
+
+        public static ReservationSliceResponse createValidReservationSliceResponse() {
+            return ReservationSliceResponse.builder()
+                .reservations(List.of(createValidReservationResponse()))
+                .sliceInfo(TestData.createSliceInfo())
                 .build();
         }
     }
@@ -318,7 +368,7 @@ public class TestData {
         public static CurationSliceResponse createValidCurationSliceResponse() {
             return CurationSliceResponse.builder()
                 .curations(List.of(createValidCurationResponse()))
-                .slice(null)
+                .slice(TestData.createSliceInfo())
                 .build();
         }
     }
