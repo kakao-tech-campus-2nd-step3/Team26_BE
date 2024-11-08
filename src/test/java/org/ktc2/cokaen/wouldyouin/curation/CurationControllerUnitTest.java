@@ -48,6 +48,7 @@ import org.springframework.web.context.WebApplicationContext;
 @WebMvcTest(CurationController.class)
 class CurationControllerUnitTest {
 
+
     private static ObjectMapper objectMapper;
 
     @MockBean
@@ -66,7 +67,6 @@ class CurationControllerUnitTest {
 
     @BeforeAll
     public static void init() {
-        objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
     }
 
