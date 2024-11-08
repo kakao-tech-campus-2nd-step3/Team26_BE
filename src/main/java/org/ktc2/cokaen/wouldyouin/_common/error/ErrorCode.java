@@ -18,7 +18,7 @@ public enum ErrorCode {
 
     FAIL_TO_PAY(HttpStatus.CONFLICT.value(), "-20400", "Fail to %s"),
 
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED.value(), "-20400", "Unauthorized, %s id is not matched."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED.value(), "-20400", "Unauthorized, %s."),
 
     ENTITY_PARAM_IS_NULL(HttpStatus.BAD_REQUEST.value(), "-20400", "%s is null");
 

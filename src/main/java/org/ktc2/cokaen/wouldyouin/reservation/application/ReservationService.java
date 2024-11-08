@@ -74,7 +74,7 @@ public class ReservationService {
 
     public void validateMemberId(Long memberId, Reservation reservation) {
         if (!memberId.equals(reservation.getMember().getId())) {
-            throw new UnauthorizedException("member ");
+            throw new UnauthorizedException("member ID가 예약의 member ID와 일치하지 않습니다.");
         }
     }
 }

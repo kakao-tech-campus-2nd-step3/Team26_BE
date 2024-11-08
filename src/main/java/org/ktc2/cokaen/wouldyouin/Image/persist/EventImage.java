@@ -19,7 +19,7 @@ public class EventImage extends Image {
     private Event event;
 
     @Builder
-    public EventImage(String name, Long size, String extension) {
-        super(name, size, extension);
+    public EventImage(String url, Long size, String extension) {
+        super(url, size, extension);
     }
 }
