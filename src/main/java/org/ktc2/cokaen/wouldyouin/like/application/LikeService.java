@@ -59,8 +59,7 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
 
     @Transactional(readOnly = true)
     protected LikeableMember getLikeableMemberByIdOrThrow(Long likeableMemberId) {
-        return likeableMemberGetterFactory.get(getTargetLikeableMemberType())
-            .getByIdOrThrow(likeableMemberId);
+        return likeableMemberGetterFactory.get(getTargetLikeableMemberType()).getByIdOrThrow(likeableMemberId);
     }
 
     private Long getLastId(Slice<LikeType> likes, Long oldLastId) {
