@@ -1,9 +1,9 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.ktc2.cokaen.wouldyouin.global.TestData.ImageDomain.createValidMemberImage;
-import static org.ktc2.cokaen.wouldyouin.global.TestData.MemberDomain.createValidCurator;
-import static org.ktc2.cokaen.wouldyouin.global.TestData.MemberDomain.createValidMember;
+import static org.ktc2.cokaen.wouldyouin._global.TestData.ImageDomain.createValidMemberImage;
+import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.createValidCurator;
+import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.createValidMember;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
-import org.ktc2.cokaen.wouldyouin.global.TestUtil;
+import org.ktc2.cokaen.wouldyouin._global.TestUtil;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.CuratorEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
@@ -81,7 +81,7 @@ class CuratorServiceUnitTest {
         CuratorEditRequest editRequest = CuratorEditRequest.curatorEditRequestBuilder()
             .nickname(TestUtil.getOrNull("newNickname"))
             .phoneNumber(TestUtil.getOrNull("010-1010-8888"))
-            .profileImageId(TestUtil.getOrNull(5L))
+            .profileImageId(TestUtil.getOrNull(newProfileImageId))
             .area(Area.광주)
             .intro(TestUtil.getOrNull("new intro"))
             .build();

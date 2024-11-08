@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.global;
+package org.ktc2.cokaen.wouldyouin._global;
 
 public class TestUtil {
 
