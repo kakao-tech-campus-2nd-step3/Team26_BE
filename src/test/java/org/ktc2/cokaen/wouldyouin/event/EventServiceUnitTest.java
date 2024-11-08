@@ -27,6 +27,7 @@ import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.event.persist.EventRepository;
 import org.ktc2.cokaen.wouldyouin._global.TestData.EventDomain;
 import org.ktc2.cokaen.wouldyouin.member.application.HostService;
+import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
