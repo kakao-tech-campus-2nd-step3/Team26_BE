@@ -45,35 +45,54 @@ jobs:
       - name: Build Application only using gradlew
         run: |
           chmod +x gradlew
-          ./gradlew clean build -x test
+          ./gradlew clean build -x test     
+
+      - name: Store build failure reports
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-reports
+          path: |
+            **/build/reports/
+
+  ## 2단계: 테스트 실행
+  Test:
+    runs-on: ubuntu-22.04
+    needs: Build  # Build 단계가 완료되어야 실행됨
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Test Application using gradlew
         run: |
           chmod +x gradlew
           ./gradlew test     
 
-      - name: Store reports
+      - name: Store test failure reports
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: reports
+          name: test-reports
           path: |
-            **/build/reports/
             **/build/test-results/
 
+  ## 3단계: Docker 빌드 및 푸시
+  Docker:
+    runs-on: ubuntu-22.04
+    needs: Test  # Test 단계가 성공적으로 완료되어야 실행됨
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
       - name: Docker Hub Login
-        if: github.event_name == 'push'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Docker Build
-        if: github.event_name == 'push'
         run: docker build -f Dockerfile --build-arg DEPENDENCY=build/dependency -t ${{ secrets.DOCKER_REPO_FULLNAME }} .
 
       - name: Docker Push
-        if: github.event_name == 'push'
         run: docker push ${{ secrets.DOCKER_REPO_FULLNAME }}
 
   ## 2단계: 서버에 배포
