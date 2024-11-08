@@ -19,15 +19,14 @@ import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;
+import org.ktc2.cokaen.wouldyouin._global.TestData.EventDomain;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.LocationFilter;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.event.persist.EventRepository;
-import org.ktc2.cokaen.wouldyouin._global.TestData.EventDomain;
 import org.ktc2.cokaen.wouldyouin.member.application.HostService;
-import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
@@ -62,6 +61,7 @@ class EventServiceUnitTest {
         // given
         LocationFilter location = new LocationFilter();
         Location currentLocation = new Location(3.0, 2.0);
+        String title = "testTitle";
         Category category = Category.공예;
         Area area = Area.광주;
         int pageNumber = 1;
@@ -71,18 +71,18 @@ class EventServiceUnitTest {
         given(eventRepository.findAllByFilterOrderByDistance(location.getStartLatitude(),
             location.getStartLongitude(),
             location.getEndLatitude(), location.getEndLongitude(), currentLocation.getLatitude(),
-            currentLocation.getLongitude(),
-            category, area, pageable)).willReturn(new SliceImpl<>(List.of()));
+            currentLocation.getLongitude(), title, category, area, pageable)).willReturn(
+            new SliceImpl<>(List.of()));
 
         // when
-        eventService.getAllByFilterOrderByDistanceAsc(location, currentLocation, category, area,
-            pageable, lastId);
+        eventService.getAllByFilterOrderByDistanceAsc(location, currentLocation, title, category,
+            area, pageable, lastId);
 
         // then
         then(eventRepository).should(times(1))
             .findAllByFilterOrderByDistance(any(Double.class), any(Double.class), any(Double.class),
                 any(Double.class), any(Double.class), any(Double.class),
-                any(Category.class), any(Area.class), any(Pageable.class));
+                any(String.class), any(Category.class), any(Area.class), any(Pageable.class));
     }
 
     @Test
