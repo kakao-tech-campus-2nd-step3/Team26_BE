@@ -28,6 +28,7 @@ import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 public abstract class BaseMember {
 
     @Id
+    @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
