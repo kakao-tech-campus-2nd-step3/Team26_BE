@@ -27,6 +27,7 @@ public class Advertisement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "advertisement_id")
+    @Setter(AccessLevel.NONE)
     private Long id;
 
     @NotNull

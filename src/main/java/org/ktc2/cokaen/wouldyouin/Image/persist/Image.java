@@ -23,6 +23,7 @@ public abstract class Image {
 
     @Id
     @GeneratedValue
+    @Setter(AccessLevel.NONE)
     @Column(name = "image_id")
     protected Long id;
 

@@ -23,6 +23,7 @@ import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 public abstract class Like<T extends LikeableMember> {
 
     @Id
+    @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
