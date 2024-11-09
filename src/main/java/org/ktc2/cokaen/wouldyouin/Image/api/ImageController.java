@@ -7,13 +7,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageServiceFactory;
-import org.ktc2.cokaen.wouldyouin.Image.application.ImageStorage;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin._common.exception.FailToReadImageException;
-import org.ktc2.cokaen.wouldyouin.auth.Authorize;
-import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
-import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +41,7 @@ public class ImageController {
     @GetMapping(value = "{path}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     public ResponseEntity<byte[]> getImage(@PathVariable String path) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(Files.readAllBytes(Paths.get("src/main/resources/static", path)));
+            return ResponseEntity.status(HttpStatus.OK).body(Files.readAllBytes(Paths.get(path)));
         } catch (IOException e) {
             throw new FailToReadImageException();
         }
