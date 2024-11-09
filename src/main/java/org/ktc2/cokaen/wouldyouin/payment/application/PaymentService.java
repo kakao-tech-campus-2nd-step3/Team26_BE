@@ -15,7 +15,8 @@ import org.springframework.web.client.RestClient;
 @Service
 public class PaymentService {
 
-    // Todo: util로 이동하여 재사용
+    // Todo: pay 취소 기능 추가
+    // Todo: RestClient 관련 로직 유틸로 분리
     private final RestClient client = RestClient.builder().build();
 
     @Value("${oauth.payment.kakao_pay_request_host}")
@@ -45,7 +46,7 @@ public class PaymentService {
                 .retrieve()
                 .body(KakaoPayResponse.class);
         } catch (Exception ex) {
-            throw new FailedToPayException("Kakao Pay");
+            throw new FailedToPayException("결제에 실패했습니다.");
         }
     }
 

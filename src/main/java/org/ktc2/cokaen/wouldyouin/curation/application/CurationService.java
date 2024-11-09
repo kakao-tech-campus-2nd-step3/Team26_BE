@@ -32,7 +32,7 @@ public class CurationService {
 
     @Transactional(readOnly = true)
     public Curation getByIdOrThrow(Long id) throws EntityNotFoundException {
-        return curationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Curation"));
+        return curationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당하는 큐레이션을 찾을 수 없습니다."));
     }
 
     @Transactional(readOnly = true)
@@ -41,25 +41,18 @@ public class CurationService {
     }
 
     @Transactional(readOnly = true)
-    public CurationSliceResponse getAllByAreaOrderByCreatedDateDesc(Area area, Pageable pageable, Long lastId) {
-        return getCurationSliceResponse(
-            curationRepository.findAllByAreaOrderByCreatedDateDesc(area, lastId, pageable), lastId);
+    public CurationSliceResponse getAllByAreaOrderByCreatedDateDesc(Area area, Pageable pageable, Long oldLastId) {
+        Slice<Curation> curations = curationRepository.findAllByAreaOrderByCreatedDateDesc(area, oldLastId, pageable);
+        Long newLastId = getLastId(curations, oldLastId);
+        return CurationSliceResponse.from(curations, curations.getSize(), newLastId);
     }
 
     @Transactional(readOnly = true)
     public CurationSliceResponse getAllByCuratorIdOrderByCreatedDateDesc(Long curatorId, Pageable pageable, Long lastId) {
-        return getCurationSliceResponse(
-            curationRepository.findAllByCuratorOrderByCreatedDateDesc(
-                curatorService.getByIdOrThrow(curatorId), lastId, pageable), lastId);
-    }
-
-    private CurationSliceResponse getCurationSliceResponse(Slice<Curation> curationSlice, Long lastId) {
-        List<CurationResponse> curations = curationSlice.stream().map(CurationResponse::from).toList();
-        if (!curationSlice.hasContent()) {
-            Long id = curationSlice.getContent().getLast().getId();
-            return CurationSliceResponse.of(curations, curationSlice.getSize(), id);
-        }
-        return CurationSliceResponse.of(curations, curationSlice.getSize(), lastId);
+        Slice<Curation> curations = curationRepository.findAllByCuratorOrderByCreatedDateDesc(
+            curatorService.getByIdOrThrow(curatorId), lastId, pageable);
+        Long newLastId = getLastId(curations, lastId);
+        return CurationSliceResponse.from(curations, curations.getSize(), newLastId);
     }
 
     @Transactional
@@ -74,12 +67,6 @@ public class CurationService {
         Curation curation = curationRepository.save(curationCreateRequest.toEntity(curator, curationCards, events));
         curationCards.forEach(curationCard -> curationCardService.setCuration(curationCard, curation));
         return CurationResponse.from(curation);
-    }
-
-    public void validateCuratorId(Long curatorId, Curation curation) {
-        if (!curatorId.equals(curation.getCurator().getId())) {
-            throw new UnauthorizedException("큐레이터 ID가 큐레이션의 큐레이터 ID와 일치하지 않습니다.");
-        }
     }
 
     @Transactional
@@ -105,5 +92,18 @@ public class CurationService {
         curation.getCurationCards()
             .forEach(curationCard -> curationCardService.delete(curationCard.getId()));
         curationRepository.deleteById(curationId);
+    }
+
+    private Long getLastId(Slice<Curation> curations, Long oldLastId) {
+        if (curations.hasContent()) {
+            return curations.getContent().getLast().getId();
+        }
+        return oldLastId;
+    }
+
+    public void validateCuratorId(Long curatorId, Curation curation) {
+        if (!curatorId.equals(curation.getCurator().getId())) {
+            throw new UnauthorizedException("큐레이터 ID가 큐레이션의 큐레이터 ID와 일치하지 않습니다.");
+        }
     }
 }

@@ -237,7 +237,6 @@ public class TestData {
         public static ReservationRequest createValidReservationRequest() {
             return ReservationRequest.builder()
                 .eventId(1L)
-                .price(15000)
                 .quantity(2)
                 .build();
         }
@@ -368,7 +367,7 @@ public class TestData {
         public static CurationSliceResponse createValidCurationSliceResponse() {
             return CurationSliceResponse.builder()
                 .curations(List.of(createValidCurationResponse()))
-                .slice(TestData.createSliceInfo())
+                .sliceInfo(TestData.createSliceInfo())
                 .build();
         }
     }

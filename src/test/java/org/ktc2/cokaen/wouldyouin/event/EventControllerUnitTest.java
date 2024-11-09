@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;
+import org.ktc2.cokaen.wouldyouin._common.vo.UserLocation;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtService;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.LocationFilter;
@@ -90,7 +91,7 @@ class EventControllerUnitTest {
     void getEventsByFilterOrderByDistanceAsc() throws Exception {
         // given
         LocationFilter locationFilter = new LocationFilter(0.0, 0.0, 10.0, 10.0);
-        Location currentLocation = new Location(3.0, 2.0);
+        UserLocation currentLocation = new UserLocation(3.0, 2.0);
         String title = "testTitle";
         Category category = Category.공예;
         Area area = Area.광주;
@@ -129,7 +130,7 @@ class EventControllerUnitTest {
         // then
         then(eventService).should(times(1)).getAllByFilterOrderByDistanceAsc(
             any(LocationFilter.class),
-            any(Location.class),
+            any(UserLocation.class),
             eq(title),
             eq(category),
             eq(area),
