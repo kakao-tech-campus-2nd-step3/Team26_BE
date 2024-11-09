@@ -27,6 +27,7 @@ public class CurationCard {
     @Id
     @Column(name = "curation_card_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private Long id;
 
     @Column(name = "subtitle")

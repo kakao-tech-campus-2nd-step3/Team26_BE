@@ -44,6 +44,7 @@ public class Curation {
     @Id
     @Column(name = "curation_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private Long id;
 
     @JoinColumn(name = "curator_id")
