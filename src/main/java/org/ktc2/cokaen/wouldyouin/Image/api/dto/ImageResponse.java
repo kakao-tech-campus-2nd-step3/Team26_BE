@@ -15,7 +15,6 @@ public class ImageResponse {
     private Long size;
 
     public static ImageResponse from(Image image, String domainName) {
-        System.out.println("도메인" + domainName);
         return ImageResponse.builder()
             .id(image.getId())
             .url(domainName + image.getUrl())
