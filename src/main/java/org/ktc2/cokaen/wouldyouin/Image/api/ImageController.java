@@ -41,10 +41,11 @@ public class ImageController {
         return ApiResponse.ok(imageServiceFactory.getImageServiceByImageType(imageDomain).saveAndCreateImages(images));
     }
 
+    // Todo: path 수정
     @GetMapping(value = "{path}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     public ResponseEntity<byte[]> getImage(@PathVariable String path) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(Files.readAllBytes(Paths.get(path)));
+            return ResponseEntity.status(HttpStatus.OK).body(Files.readAllBytes(Paths.get("src/main/resources/static", path)));
         } catch (IOException e) {
             throw new FailToReadImageException();
         }
