@@ -4,7 +4,7 @@ import org.ktc2.cokaen.wouldyouin._common.error.ErrorCode;
 
 public class NoLeftSeatException extends BusinessException {
 
-    public NoLeftSeatException() {
-        super(ErrorCode.NO_LEFT_SEAT);
+    public NoLeftSeatException(String message) {
+        super(message, ErrorCode.NO_LEFT_SEAT);
     }
 }

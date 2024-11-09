@@ -8,6 +8,7 @@ import org.ktc2.cokaen.wouldyouin._common.config.ParamDefaults;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;
+import org.ktc2.cokaen.wouldyouin._common.vo.UserLocation;
 import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.LocationFilter;
@@ -40,7 +41,7 @@ public class EventController {
     @GetMapping
     public ResponseEntity<ApiResponseBody<EventSliceResponse>> getEventsByFilterOrderByDistanceAsc(
         @ModelAttribute LocationFilter locationFilter,
-        @ModelAttribute Location currentLocation,
+        @Valid @ModelAttribute UserLocation currentLocation,
         @RequestParam(defaultValue = ParamDefaults.TITLE) String title,
         @RequestParam(defaultValue = ParamDefaults.CATEGORY) Category category,
         @RequestParam(defaultValue = ParamDefaults.AREA) Area area,

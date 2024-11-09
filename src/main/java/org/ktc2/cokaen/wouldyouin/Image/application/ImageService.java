@@ -34,7 +34,7 @@ public abstract class ImageService<T extends Image> {
 
     public T getById(Long id) {
         return getImageRepository().findById(id)
-            .orElseThrow(() -> new EntityNotFoundException(getImageDomain().name() + " Image"));
+            .orElseThrow(() -> new EntityNotFoundException(getImageDomain().name() + " 이미지를 찾을 수 없습니다."));
     }
 
     protected ImageResponse create(ImageRequest imageRequest) {
@@ -42,8 +42,7 @@ public abstract class ImageService<T extends Image> {
     }
 
     protected void delete(Long id) {
-        getImageRepository().findById(id)
-            .orElseThrow(() -> new EntityNotFoundException(getImageDomain().name() + " Image"));
+        getById(id);
         getImageRepository().deleteById(id);
     }
 
@@ -59,9 +58,8 @@ public abstract class ImageService<T extends Image> {
 
     @Transactional
     public void deleteAndDelete(Long id) {
-        String url = getImageRepository().findById(id)
-            .orElseThrow(() -> new EntityNotFoundException(getImageDomain().name() + " Image")).getUrl();
+        T image = getById(id);
         delete(id);
-        imageStorage.delete(url);
+        imageStorage.delete(image.getUrl());
     }
 }

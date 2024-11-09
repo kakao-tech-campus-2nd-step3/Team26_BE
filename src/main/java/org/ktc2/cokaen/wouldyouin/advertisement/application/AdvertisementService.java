@@ -22,15 +22,21 @@ public class AdvertisementService {
     private final AdvertisementRepository adRepository;
     private final AdvertisementImageService adImageService;
 
-    @Transactional(readOnly = true)
-    public List<AdvertisementResponse> getAllActiveAdvertisements() {
-        return adRepository.findAllActiveAdvertisements(LocalDateTime.now()).stream()
-            .map(AdvertisementResponse::from).toList();
+    @Transactional
+    public Advertisement getByIdOrThrow(Long adId) {
+        return adRepository.findById(adId)
+            .orElseThrow(() -> new EntityNotFoundException("해당하는 광고를 찾을 수 없습니다."));
     }
 
     @Transactional(readOnly = true)
     public AdvertisementResponse getAdvertisementByAdId(Long adId) {
-        return AdvertisementResponse.from(adRepository.findById(adId).orElseThrow(() -> new EntityNotFoundException("Advertisement")));
+        return AdvertisementResponse.from(getByIdOrThrow(adId));
+    }
+
+    @Transactional(readOnly = true)
+    public List<AdvertisementResponse> getAllActiveAdvertisements() {
+        return adRepository.findAllActiveAdvertisements(LocalDateTime.now()).stream()
+            .map(AdvertisementResponse::from).toList();
     }
 
     // Todo: 롤백될 경우, 저장한 이미지 삭제
@@ -38,7 +44,7 @@ public class AdvertisementService {
     public AdvertisementResponse create(AdvertisementRequest adRequest, MultipartFile image) {
         AdvertisementImage adImage = adImageService.saveAndCreateImage(image);
         Advertisement ad = adRepository.save(adRequest.toEntity(adImage));
-        adImage.setAdvertisement(ad);
+        adImageService.setAd(adImage, ad);
         return AdvertisementResponse.from(ad);
     }
 
@@ -46,7 +52,7 @@ public class AdvertisementService {
     // Todo: 롤백될 경우, 저장한 이미지 삭제
     @Transactional
     public AdvertisementResponse update(Long adId, AdvertisementRequest adRequest, MultipartFile multipartFile) {
-        Advertisement ad = adRepository.findById(adId).orElseThrow(() -> new EntityNotFoundException("Advertisement"));
+        Advertisement ad = getByIdOrThrow(adId);
         Optional.ofNullable(multipartFile).ifPresentOrElse(
             image -> {
                 adImageService.deleteAndDelete(ad.getAdvertisementImage().getId());
@@ -64,7 +70,7 @@ public class AdvertisementService {
 
     @Transactional
     public void delete(Long adId) {
-        Advertisement ad = adRepository.findById(adId).orElseThrow(() -> new EntityNotFoundException("Advertisement"));
+        Advertisement ad = getByIdOrThrow(adId);
         adImageService.deleteAndDelete(ad.getAdvertisementImage().getId());
         adRepository.deleteById(adId);
     }
