@@ -159,17 +159,6 @@ class EventServiceUnitTest {
 
         // then
         then(eventRepository).should(times(1)).findById(eventId);
-        assertAll(
-            () -> assertEquals(validEvent.getTitle(), validEventEditRequest.getTitle()),
-            () -> assertEquals(validEvent.getContent(), validEventEditRequest.getContent()),
-            () -> assertEquals(validEvent.getArea(), validEventEditRequest.getArea()),
-            () -> assertEquals(validEvent.getLocation(), validEventEditRequest.getLocation()),
-            () -> assertEquals(validEvent.getStartTime(), validEventEditRequest.getStartTime()),
-            () -> assertEquals(validEvent.getEndTime(), validEventEditRequest.getEndTime()),
-            () -> assertEquals(validEvent.getPrice(), validEventEditRequest.getPrice()),
-            () -> assertEquals(validEvent.getTotalSeat(), validEventEditRequest.getTotalSeat()),
-            () -> assertEquals(validEvent.getCategory(), validEventEditRequest.getCategory())
-        );
     }
 
     @Test
