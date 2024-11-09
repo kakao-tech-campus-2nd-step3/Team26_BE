@@ -11,6 +11,7 @@ import static org.mockito.Mockito.times;
 
 import java.util.List;
 import java.util.Optional;
+import org.h2.engine.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;
+import org.ktc2.cokaen.wouldyouin._common.vo.UserLocation;
 import org.ktc2.cokaen.wouldyouin._global.TestData.EventDomain;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.LocationFilter;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
@@ -60,7 +62,7 @@ class EventServiceUnitTest {
     void getAllByFilterOrderByDistanceAsc() {
         // given
         LocationFilter location = new LocationFilter();
-        Location currentLocation = new Location(3.0, 2.0);
+        UserLocation currentLocation = new UserLocation(3.0, 2.0);
         String title = "testTitle";
         Category category = Category.공예;
         Area area = Area.광주;

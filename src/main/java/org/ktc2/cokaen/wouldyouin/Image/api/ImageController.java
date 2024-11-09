@@ -47,7 +47,7 @@ public class ImageController {
             System.out.println(Paths.get("static/images", domain, path));
             return ResponseEntity.status(HttpStatus.OK).body(Files.readAllBytes(resource.getFile().toPath()));
         } catch (IOException e) {
-            throw new FailToReadImageException();
+            throw new FailToReadImageException("이미지를 읽어오는데 실패했습니다.");
         }
     }
 

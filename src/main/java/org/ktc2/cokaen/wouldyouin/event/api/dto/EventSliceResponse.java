@@ -4,19 +4,25 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin._common.api.SliceInfo;
+import org.ktc2.cokaen.wouldyouin.event.persist.Event;
+import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationResponse;
+import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationSliceResponse;
+import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
+import org.springframework.data.domain.Slice;
 
 @Getter
 @Builder
 public class EventSliceResponse {
 
     private List<EventResponse> events;
-    private SliceInfo slice;
+    private SliceInfo sliceInfo;
 
-    public static EventSliceResponse of(List<EventResponse> eventResponses, int sliceSize, long lastId) {
+    public static EventSliceResponse from(Slice<Event> reservations, int size, Long lastId) {
         return EventSliceResponse.builder()
-            .events(eventResponses)
-            .slice(SliceInfo.builder()
-                .sliceSize(sliceSize)
+            .events(reservations.stream()
+                .map(EventResponse::from).toList())
+            .sliceInfo(SliceInfo.builder()
+                .sliceSize(size)
                 .lastId(lastId)
                 .build())
             .build();

@@ -64,7 +64,6 @@ class CurationControllerUnitTest {
 
     @BeforeEach
     public void setup() throws Exception {
-        objectMapper.registerModule(new JavaTimeModule());
         mockMvc = MockMvcBuilders
             .webAppContextSetup(context)
             .apply(springSecurity())
@@ -173,7 +172,9 @@ class CurationControllerUnitTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(CurationDomain.createValidCurationCreateRequest())))
             .andDo(print())
-            .andExpect(status().isUnauthorized());
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
+
 
         // then
         then(curationService).shouldHaveNoInteractions();
@@ -189,7 +190,9 @@ class CurationControllerUnitTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(CurationDomain.createValidCurationCreateRequest())))
             .andDo(print())
-            .andExpect(status().isUnauthorized());
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
+
 
         // then
         then(curationService).shouldHaveNoInteractions();
@@ -400,7 +403,9 @@ class CurationControllerUnitTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(CurationDomain.createValidCurationEditRequest())))
             .andDo(print())
-            .andExpect(status().isUnauthorized());
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
+
 
         // then
         then(curationService).shouldHaveNoInteractions();
@@ -416,7 +421,9 @@ class CurationControllerUnitTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(CurationDomain.createValidCurationEditRequest())))
             .andDo(print())
-            .andExpect(status().isUnauthorized());
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
+
 
         // then
         then(curationService).shouldHaveNoInteractions();
@@ -599,7 +606,9 @@ class CurationControllerUnitTest {
         mockMvc.perform(delete("/api/curations/" + randomId)
                 .with(csrf()))
             .andDo(print())
-            .andExpect(status().isUnauthorized());
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
+
 
         // then
         then(curationService).shouldHaveNoInteractions();
@@ -613,7 +622,9 @@ class CurationControllerUnitTest {
         mockMvc.perform(delete("/api/curations/" + randomId)
                 .with(csrf()))
             .andDo(print())
-            .andExpect(status().isUnauthorized());
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
+
 
         // then
         then(curationService).shouldHaveNoInteractions();

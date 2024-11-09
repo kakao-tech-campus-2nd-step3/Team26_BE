@@ -4,19 +4,22 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin._common.api.SliceInfo;
+import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
+import org.springframework.data.domain.Slice;
 
 @Getter
 @Builder
 public class CurationSliceResponse {
 
     private final List<CurationResponse> curations;
-    private final SliceInfo slice;
+    private final SliceInfo sliceInfo;
 
-    public static CurationSliceResponse of(List<CurationResponse> curationResponses, int sliceSize, long lastId) {
+    public static CurationSliceResponse from(Slice<Curation> curations, int size, Long lastId) {
         return CurationSliceResponse.builder()
-            .curations(curationResponses)
-            .slice(SliceInfo.builder()
-                .sliceSize(sliceSize)
+            .curations(curations.stream()
+                .map(CurationResponse::from).toList())
+            .sliceInfo(SliceInfo.builder()
+                .sliceSize(size)
                 .lastId(lastId)
                 .build())
             .build();

@@ -30,7 +30,7 @@ public class ImageStorage {
             Files.createDirectories(path.getParent());
             Files.write(path, image.getBytes());
         } catch (IOException ex) {
-            throw new FailedToUploadImageException();
+            throw new FailedToUploadImageException("이미지를 업로드하는데 실패했습니다.");
         }
         return subPath + "/" + fileName;
     }
@@ -54,7 +54,7 @@ public class ImageStorage {
                 Files.write(path, response.getBody());
             }
         } catch (IOException ex) {
-            throw new FailedToUploadImageException();
+            throw new FailedToUploadImageException("URL을 통해 이미지를 저장하는데 실패했습니다.");
         }
         String url = subPath + "/" + fileName;
         return ImageRequest.of(url, size, getExtension(imageUrl));
@@ -64,7 +64,7 @@ public class ImageStorage {
         try {
             Files.deleteIfExists(Paths.get(imagePath));
         } catch (IOException ex) {
-            throw new FailedToDeleteImageException();
+            throw new FailedToDeleteImageException("이미지를 삭제하는데 실패했습니다.");
         }
     }
 

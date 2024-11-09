@@ -1,13 +1,11 @@
 package org.ktc2.cokaen.wouldyouin.Image.application;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.api.ImageDomain;
 import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImageRepository;
 import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
-import org.ktc2.cokaen.wouldyouin._common.exception.EntityParamIsNullException;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -44,8 +42,6 @@ public class EventImageService extends ImageService<EventImage> {
 
     @Transactional
     public void setEvent(EventImage image, Event event) {
-        Optional.ofNullable(image).orElseThrow(() -> new EntityParamIsNullException(getImageDomain().name() + " image"));
-        Optional.ofNullable(event).orElseThrow(() -> new EntityParamIsNullException("event"));
         image.setEvent(event);
     }
 }

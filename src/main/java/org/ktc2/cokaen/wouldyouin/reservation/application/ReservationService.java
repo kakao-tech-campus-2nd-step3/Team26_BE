@@ -28,51 +28,56 @@ public class ReservationService {
     private final MemberService memberService;
     private final EventService eventService;
 
-    @Transactional(readOnly = true)
-    public ReservationSliceResponse getAllByMemberId(Long memberId, Pageable pageable, Long lastId) {
-        return getReservationSliceResponse(
-            reservationRepository.findByMemberIdOrderByReservationIdDesc(memberId, lastId, pageable), lastId);
-    }
-
-    @Transactional(readOnly = true)
-    public ReservationSliceResponse getAllByEventId(Long eventId, Pageable pageable, Long lastId) {
-        return getReservationSliceResponse(
-            reservationRepository.findByEventIdOrderByReservationIdDesc(eventId, lastId, pageable), lastId);
-    }
-
-    private ReservationSliceResponse getReservationSliceResponse(Slice<Reservation> reservationSlice, Long lastId) {
-        List<ReservationResponse> reservations = reservationSlice.stream().map(ReservationResponse::from).toList();
-        if (!reservationSlice.hasContent()) {
-            Long id = reservationSlice.getContent().getLast().getId();
-            return ReservationSliceResponse.of(reservations, reservationSlice.getSize(), id);
-        }
-        return ReservationSliceResponse.of(reservations, reservationSlice.getSize(), lastId);
+    @Transactional
+    public Reservation getByIdOrThrow(Long id) {
+        return reservationRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("해당하는 예약을 찾을 수 없습니다."));
     }
 
     @Transactional(readOnly = true)
     public ReservationResponse getById(Long id) {
-        Reservation target = reservationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("reservation "));
-        return ReservationResponse.from(target);
+        return ReservationResponse.from(getByIdOrThrow(id));
+    }
+
+    @Transactional(readOnly = true)
+    public ReservationSliceResponse getAllByMemberId(Long memberId, Pageable pageable, Long oldLastId) {
+        Slice<Reservation> reservations = reservationRepository.findByMemberIdOrderByReservationIdDesc(memberId, oldLastId, pageable);
+        Long newLastId = getLastId(reservations, oldLastId);
+        return ReservationSliceResponse.from(reservations, reservations.getSize(), newLastId);
+    }
+
+    @Transactional(readOnly = true)
+    public ReservationSliceResponse getAllByEventId(Long hostId, Long eventId, Pageable pageable, Long oldLastId) {
+        eventService.validateHostId(hostId, eventService.getByIdOrThrow(eventId));
+        Slice<Reservation> reservations = reservationRepository.findByEventIdOrderByReservationIdDesc(eventId, oldLastId, pageable);
+        Long newLastId = getLastId(reservations, oldLastId);
+        return ReservationSliceResponse.from(reservations, reservations.getSize(), newLastId);
+    }
+
+    private Long getLastId(Slice<Reservation> reservations, Long oldLastId) {
+        if (reservations.hasContent()) {
+            return reservations.getContent().getLast().getId();
+        }
+        return oldLastId;
     }
 
     @Transactional
     public KakaoPayResponse create(Long memberId, ReservationRequest reservationRequest) {
         Reservation reservation = reservationRepository.save(reservationRequest.toEntity(
             memberService.getByIdOrThrow(memberId),
-            eventService.getByIdOrThrow(reservationRequest.getEventId())));
+            eventService.getByIdOrThrow(reservationRequest.getEventId()))
+        );
         eventService.decreaseLeftSeat(reservation.getEvent().getId(), reservationRequest.getQuantity());
         return paymentService.createPayment(KakaoPayRequest.from(reservation));
     }
 
     @Transactional
     public void delete(Long memberId, Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-            .orElseThrow(() -> new EntityNotFoundException("reservation "));
-        validateMemberId(memberId, reservation);
+        validateMemberId(memberId, getByIdOrThrow(reservationId));
         reservationRepository.deleteById(reservationId);
     }
 
-    public void validateMemberId(Long memberId, Reservation reservation) {
+    private void validateMemberId(Long memberId, Reservation reservation) {
         if (!memberId.equals(reservation.getMember().getId())) {
             throw new UnauthorizedException("member ID가 예약의 member ID와 일치하지 않습니다.");
         }

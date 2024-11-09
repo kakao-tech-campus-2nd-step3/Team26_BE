@@ -42,11 +42,12 @@ public class ReservationController {
 
     @GetMapping("/events/{eventId}")
     public ResponseEntity<ApiResponseBody<ReservationSliceResponse>> getReservationsByEventId(
+        @Authorize(MemberType.host) MemberIdentifier host,
         @PathVariable Long eventId,
         @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
         @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
         @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId) {
-        return ApiResponse.ok(reservationService.getAllByEventId(eventId, PageRequest.of(page, size), lastId));
+        return ApiResponse.ok(reservationService.getAllByEventId(host.id(), eventId, PageRequest.of(page, size), lastId));
     }
 
     @GetMapping("/{reservationId}")

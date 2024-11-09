@@ -6,11 +6,11 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
-    UNEXPECTED(HttpStatus.BAD_REQUEST.value(), "-1", "Unexpected exception occurred"),
+    UNEXPECTED(HttpStatus.BAD_REQUEST.value(), "-1", "예상치 못한 오류가 발생했습니다."),
 
-    ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "-10404", "Can not find a %s Entity"),
+    ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "-10404", "엔티티를 찾을 수 없습니다."),
 
-    NO_LEFT_SEAT(HttpStatus.BAD_REQUEST.value(), "-10400", "No left seat"),
+    NO_LEFT_SEAT(HttpStatus.BAD_REQUEST.value(), "-10400", "남은 좌석이 부족합니다."),
 
     INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST.value(), "-20400", "Invalid Input Value"),
 
@@ -19,8 +19,6 @@ public enum ErrorCode {
     FAIL_TO_PAY(HttpStatus.CONFLICT.value(), "-20400", "Fail to %s"),
 
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED.value(), "-20400", "Unauthorized, %s."),
-
-    ENTITY_PARAM_IS_NULL(HttpStatus.BAD_REQUEST.value(), "-20400", "%s is null"),
 
     FAIL_TO_UPLOAD_IMAGE(HttpStatus.CONFLICT.value(), "-20400", "Fail to upload image"),
 

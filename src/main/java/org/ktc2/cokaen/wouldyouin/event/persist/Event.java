@@ -136,9 +136,6 @@ public class Event {
     }
 
     public void decreaseLeftSeat(Integer count) {
-        if (this.leftSeat < count) {
-            throw new NoLeftSeatException();
-        }
         this.leftSeat -= count;
     }
 }
