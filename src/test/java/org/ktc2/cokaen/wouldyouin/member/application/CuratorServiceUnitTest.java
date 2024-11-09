@@ -18,7 +18,7 @@ import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._global.TestUtil;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.request.edit.CuratorEditRequest;
+import org.ktc2.cokaen.wouldyouin.member.api.dto.request.edit.CuratorEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 import org.ktc2.cokaen.wouldyouin.member.persist.CuratorRepository;

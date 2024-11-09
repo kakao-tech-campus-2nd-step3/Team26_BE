@@ -9,5 +9,4 @@ class WouldYouInApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

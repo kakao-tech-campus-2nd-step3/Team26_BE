@@ -46,15 +46,15 @@ logging.level.org.ktc2.cokaen.wouldyouin: debug
 # for image storage path
 image:
   upload:
-    common-path: src/main/resources/static
+    parent-path: src/main/resources/static/images
     curation:
-      sub-path: images/curation
+      child-path: curation
     member:
-      sub-path: images/member
+      child-path: member
     event:
-      sub-path: images/event
+      child-path: event
     ad:
-      sub-path: images/ad
+      child-path: advertisement
 
 # for jwt
 jwt:
@@ -96,5 +96,5 @@ oauth:
     "cancel_url": "http://localhost:8080/api/events"
     "fail_url": "http://localhost:8080/api/events"
     "secret_key": ${KAKAOPAY_SECRET_KEY}
-    "kakao_pay_single_payment_url": "/online/v1/payment/ready"
-    "kakao_pay_request_host": "open-api.kakaopay.com"
+    "kakao_pay_single_payment_url": "online/v1/payment/ready"
+    "kakao-pay-request-host": "https://open-api.kakaopay.com"

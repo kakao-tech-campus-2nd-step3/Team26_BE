@@ -7,7 +7,7 @@ import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.relation.EventHostResponse;
+import org.ktc2.cokaen.wouldyouin.member.api.dto.relation.EventHostResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 
 @Builder

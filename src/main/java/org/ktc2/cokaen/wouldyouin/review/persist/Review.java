@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
-import org.ktc2.cokaen.wouldyouin.review.application.dto.ReviewEditRequest;
+import org.ktc2.cokaen.wouldyouin.review.api.dto.ReviewEditRequest;
 
 @Getter
 @Setter
