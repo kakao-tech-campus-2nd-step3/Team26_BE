@@ -9,7 +9,7 @@ spring:
   jpa:
     show-sql: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
 
 # log4j log level setting
 logging.level.org.ktc2.cokaen.wouldyouin: info
