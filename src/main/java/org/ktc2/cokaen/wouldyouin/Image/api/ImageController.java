@@ -10,6 +10,8 @@ import org.ktc2.cokaen.wouldyouin.Image.application.ImageServiceFactory;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin._common.exception.FailToReadImageException;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +39,13 @@ public class ImageController {
         return ApiResponse.ok(imageServiceFactory.getImageServiceByImageType(imageDomain).saveAndCreateImages(images));
     }
 
-    // Todo: path 수정
-    @GetMapping(value = "{path}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    public ResponseEntity<byte[]> getImage(@PathVariable String path) {
+    // Todo: path 수정, service로 로직이동
+    @GetMapping(value = "images/{domain}/{path}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    public ResponseEntity<byte[]> getImage(@PathVariable String domain, @PathVariable String path) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(Files.readAllBytes(Paths.get("src/main/resources/static", path)));
+            Resource resource = new ClassPathResource("static/images/" + domain + "/" + path);
+            System.out.println(Paths.get("static/images", domain, path));
+            return ResponseEntity.status(HttpStatus.OK).body(Files.readAllBytes(resource.getFile().toPath()));
         } catch (IOException e) {
             throw new FailToReadImageException();
         }
