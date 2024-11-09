@@ -176,6 +176,7 @@ public class TestData {
                 .endTime(LocalDateTime.now())
                 .price(10000)
                 .totalSeat(100)
+                .images(List.of())
                 .category(Category.밴드)
                 .build();
             validEvent.setHost(MemberDomain.createValidHost());
@@ -208,7 +209,7 @@ public class TestData {
                 .price(20000)
                 .totalSeat(200)
                 .category(Category.뮤지컬)
-                .imageIds(List.of())
+                .imageIds(List.of(1L, 2L))
                 .build();
         }
 
