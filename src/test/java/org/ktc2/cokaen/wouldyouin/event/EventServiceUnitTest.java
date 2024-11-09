@@ -19,9 +19,9 @@ import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
 import org.ktc2.cokaen.wouldyouin._global.TestData.EventDomain;
-import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationFilter;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationFilter;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.UserLocation;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
@@ -145,32 +145,32 @@ class EventServiceUnitTest {
         then(eventRepository).should(times(1)).save(any(Event.class));
     }
 
-//    @Test
-//    @DisplayName("행사 id를 통한 행사 수정 - 성공")
-//    void update() {
-//        // given
-//        Long eventId = validEvent.getId();
-//        Long hostId = validEvent.getHost().getId();
-//        EventEditRequest validEventEditRequest = EventDomain.createValidEventEditRequest();
-//        given(eventRepository.findById(eventId)).willReturn(Optional.of(validEvent));
-//
-//        // when
-//        eventService.update(hostId, eventId, validEventEditRequest);
-//
-//        // then
-//        then(eventRepository).should(times(1)).findById(eventId);
-//        assertAll(
-//            () -> assertEquals(validEvent.getTitle(), validEventEditRequest.getTitle()),
-//            () -> assertEquals(validEvent.getContent(), validEventEditRequest.getContent()),
-//            () -> assertEquals(validEvent.getArea(), validEventEditRequest.getArea()),
-//            () -> assertEquals(validEvent.getLocation(), validEventEditRequest.getLocation()),
-//            () -> assertEquals(validEvent.getStartTime(), validEventEditRequest.getStartTime()),
-//            () -> assertEquals(validEvent.getEndTime(), validEventEditRequest.getEndTime()),
-//            () -> assertEquals(validEvent.getPrice(), validEventEditRequest.getPrice()),
-//            () -> assertEquals(validEvent.getTotalSeat(), validEventEditRequest.getTotalSeat()),
-//            () -> assertEquals(validEvent.getCategory(), validEventEditRequest.getCategory())
-//        );
-//    }
+    @Test
+    @DisplayName("행사 id를 통한 행사 수정 - 성공")
+    void update() {
+        // given
+        Long eventId = validEvent.getId();
+        Long hostId = validEvent.getHost().getId();
+        EventEditRequest validEventEditRequest = EventDomain.createValidEventEditRequest();
+        given(eventRepository.findById(eventId)).willReturn(Optional.of(validEvent));
+
+        // when
+        eventService.update(hostId, eventId, validEventEditRequest);
+
+        // then
+        then(eventRepository).should(times(1)).findById(eventId);
+        assertAll(
+            () -> assertEquals(validEvent.getTitle(), validEventEditRequest.getTitle()),
+            () -> assertEquals(validEvent.getContent(), validEventEditRequest.getContent()),
+            () -> assertEquals(validEvent.getArea(), validEventEditRequest.getArea()),
+            () -> assertEquals(validEvent.getLocation(), validEventEditRequest.getLocation()),
+            () -> assertEquals(validEvent.getStartTime(), validEventEditRequest.getStartTime()),
+            () -> assertEquals(validEvent.getEndTime(), validEventEditRequest.getEndTime()),
+            () -> assertEquals(validEvent.getPrice(), validEventEditRequest.getPrice()),
+            () -> assertEquals(validEvent.getTotalSeat(), validEventEditRequest.getTotalSeat()),
+            () -> assertEquals(validEvent.getCategory(), validEventEditRequest.getCategory())
+        );
+    }
 
     @Test
     @DisplayName("유효하지 않은 행사 id를 통한 행사 수정 - 실패")

@@ -176,8 +176,8 @@ public class TestData {
                 .endTime(LocalDateTime.now())
                 .price(10000)
                 .totalSeat(100)
-                .images(List.of())
                 .category(Category.밴드)
+                .images(List.of())
                 .build();
             ReflectionTestUtils.setField(validEvent, "id", 1L);
             validEvent.setHost(MemberDomain.createValidHost());
