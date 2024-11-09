@@ -179,6 +179,7 @@ public class TestData {
                 .images(List.of())
                 .category(Category.밴드)
                 .build();
+            ReflectionTestUtils.setField(validEvent, "id", 1L);
             validEvent.setHost(MemberDomain.createValidHost());
             return validEvent;
         }

@@ -145,7 +145,7 @@ class EventServiceUnitTest {
         then(eventRepository).should(times(1)).save(any(Event.class));
     }
 
-//    @Test
+    @Test
     @DisplayName("행사 id를 통한 행사 수정 - 성공")
     void update() {
         // given
