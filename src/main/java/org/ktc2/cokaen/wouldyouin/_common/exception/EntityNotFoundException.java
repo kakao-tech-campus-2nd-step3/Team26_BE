@@ -4,7 +4,7 @@ import org.ktc2.cokaen.wouldyouin._common.error.ErrorCode;
 
 public class EntityNotFoundException extends BusinessException {
 
-    public EntityNotFoundException(String notFoundedEntityName) {
-        super(ErrorCode.ENTITY_NOT_FOUND, notFoundedEntityName);
+    public EntityNotFoundException(String message) {
+        super(message, ErrorCode.ENTITY_NOT_FOUND);
     }
 }
