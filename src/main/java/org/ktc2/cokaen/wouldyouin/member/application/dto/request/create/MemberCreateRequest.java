@@ -1,11 +1,10 @@
 package org.ktc2.cokaen.wouldyouin.member.application.dto.request.create;
 
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
-import org.ktc2.cokaen.wouldyouin._common.persist.Area;
+import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 
@@ -15,17 +14,17 @@ public class MemberCreateRequest extends MemberCreateRequestBase {
 
     protected AccountType accountType;
     protected String socialId;
-    protected MemberImage profileImage;
+    protected String profileImageUrl;
 
     @Builder
-    protected MemberCreateRequest(String nickname, String email, AccountType accountType, String socialId, MemberImage profileImage) {
+    protected MemberCreateRequest(String nickname, String email, AccountType accountType, String socialId, String profileImageUrl) {
         super(nickname, email);
         this.accountType = accountType;
         this.socialId = socialId;
-        this.profileImage = profileImage;
+        this.profileImageUrl = profileImageUrl;
     }
 
-    public Member toEntity() {
+    public Member toEntity(MemberImage profileImage) {
         return Member.builder()
             .nickname(this.nickname)
             .email(this.email)
@@ -34,7 +33,7 @@ public class MemberCreateRequest extends MemberCreateRequestBase {
             .socialId(this.socialId)
             .area(Area.서울)
             .gender("")
-            .profileImage(this.profileImage)
+            .profileImage(profileImage)
             .build();
     }
 }

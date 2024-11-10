@@ -3,13 +3,22 @@ package org.ktc2.cokaen.wouldyouin.event.application;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
+import org.ktc2.cokaen.wouldyouin._common.exception.CurrentLocationEmptyException;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
+import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
+import org.ktc2.cokaen.wouldyouin._common.vo.Area;
+import org.ktc2.cokaen.wouldyouin._common.vo.Category;
+import org.ktc2.cokaen.wouldyouin._common.vo.Location;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.LocationFilter;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventResponse;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.EventSliceResponse;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.event.persist.EventRepository;
 import org.ktc2.cokaen.wouldyouin.member.application.HostService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,13 +31,34 @@ public class EventService {
     private final EventImageService eventImageService;
 
     @Transactional(readOnly = true)
-    public List<EventResponse> getAll() {
-        return eventRepository.findAll().stream().map(EventResponse::from).toList();
+    public EventSliceResponse getAllByFilterOrderByDistanceAsc(LocationFilter location, Location currentLocation, String title,
+        Category category, Area area, Pageable pageable, Long lastId) {
+        validateCurrentLocation(currentLocation);
+        return getEventSliceResponse(
+            eventRepository.findAllByFilterOrderByDistance(location.getStartLatitude(), location.getStartLongitude(),
+                location.getEndLatitude(), location.getEndLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(),
+                title, category, area, pageable), lastId);
+    }
+
+    private void validateCurrentLocation(Location currentLocation) {
+        if (currentLocation.getLatitude() == null || currentLocation.getLongitude() == null) {
+            throw new CurrentLocationEmptyException();
+        }
     }
 
     @Transactional(readOnly = true)
-    public List<EventResponse> getAllByHostId(Long hostId) {
-        return eventRepository.findByHostId(hostId).stream().map(EventResponse::from).toList();
+    public EventSliceResponse getAllByHostIdOrderByCreatedDateDesc(Long hostId, Pageable pageable, Long lastId) {
+        return getEventSliceResponse(
+            eventRepository.findAllByHostIdOrderByEventIdDesc(hostId, lastId, pageable), lastId);
+    }
+
+    private EventSliceResponse getEventSliceResponse(Slice<Event> eventSlice, Long lastId) {
+        List<EventResponse> events = eventSlice.stream().map(EventResponse::from).toList();
+        if (eventSlice.hasContent()) {
+            Long id = eventSlice.getContent().getLast().getId();
+            return EventSliceResponse.of(events, eventSlice.getSize(), id);
+        }
+        return EventSliceResponse.of(events, eventSlice.getSize(), lastId);
     }
 
     @Transactional(readOnly = true)
@@ -41,31 +71,40 @@ public class EventService {
     }
 
     @Transactional
-    public EventResponse create(EventCreateRequest eventCreateRequest) {
-        return EventResponse.from(eventRepository.save(eventCreateRequest.toEntity(
-            hostService.getByIdOrThrow(eventCreateRequest.getHostId()),
+    public EventResponse create(Long hostId, EventCreateRequest eventCreateRequest) {
+        return EventResponse.from(
+            eventRepository.save(eventCreateRequest.toEntity(
+            hostService.getByIdOrThrow(hostId),
             eventCreateRequest.getImageIds().stream()
-                .map(eventImageService::getByIdOrThrow)
+                .map(eventImageService::getById)
                 .toList())));
     }
 
+    private void validateHostId(Long hostId, Event event) {
+        if (!hostId.equals(event.getHost().getId())) {
+            throw new UnauthorizedException("호스트 ID가 행사의 호스트 ID와 일치하지 않습니다.");
+        }
+    }
+
     @Transactional
-    public EventResponse update(Long id, EventEditRequest eventEditRequest) {
-        Event target = getByIdOrThrow(id);
-        target.updateFrom(eventEditRequest, eventEditRequest.getImageIds().stream()
-            .map(eventImageService::getByIdOrThrow)
+    public EventResponse update(Long hostId, Long eventId, EventEditRequest eventEditRequest) {
+        Event event = getByIdOrThrow(eventId);
+        validateHostId(hostId, event);
+        event.updateFrom(eventEditRequest, eventEditRequest.getImageIds().stream()
+            .map(eventImageService::getById)
             .toList());
-        return EventResponse.from(target);
+        return EventResponse.from(event);
     }
 
     @Transactional
-    public void decreaseLeftSeat(Long id, Integer count) {
-        getByIdOrThrow(id).decreaseLeftSeat(count);
+    public void delete(Long hostId, Long eventId) {
+        Event event = getByIdOrThrow(eventId);
+        validateHostId(hostId, event);
+        eventRepository.deleteById(eventId);
     }
 
     @Transactional
-    public void delete(Long id) {
-        getByIdOrThrow(id);
-        eventRepository.deleteById(id);
+    public void decreaseLeftSeat(Long eventId, Integer count) {
+        getByIdOrThrow(eventId).decreaseLeftSeat(count);
     }
 }

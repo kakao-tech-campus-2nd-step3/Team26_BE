@@ -1,6 +1,7 @@
 package org.ktc2.cokaen.wouldyouin.Image.persist;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.Builder;
@@ -13,13 +14,12 @@ import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 @NoArgsConstructor
 public class MemberImage extends Image {
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "base_member_id")
-    @Setter
     private BaseMember baseMember;
 
     @Builder
-    public MemberImage(String name, Long size, String extension) {
-        super(name, size, extension);
+    public MemberImage(String url, Long size, String extension) {
+        super(url, size, extension);
     }
 }

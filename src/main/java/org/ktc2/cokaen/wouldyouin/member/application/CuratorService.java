@@ -1,6 +1,5 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
@@ -62,7 +61,7 @@ public class CuratorService implements MemberServiceCommonBehavior, LikeableMemb
         Optional.ofNullable(request.getArea()).ifPresent(curator::setArea);
         Optional.ofNullable(request.getIntro()).ifPresent(curator::setIntro);
         Optional.ofNullable(request.getProfileImageId())
-            .map(memberImageService::getByIdOrThrow)
+            .map(memberImageService::getById)
             .ifPresent(curator::setProfileImage);
 
         return MemberResponse.from(curator);

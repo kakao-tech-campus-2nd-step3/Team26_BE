@@ -3,6 +3,7 @@ package org.ktc2.cokaen.wouldyouin.payment.application;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import org.ktc2.cokaen.wouldyouin._common.exception.FailedToPayException;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayRequest;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import org.springframework.web.client.RestClient;
 @Service
 public class PaymentService {
 
+    // Todo: util로 이동하여 재사용
     private final RestClient client = RestClient.builder().build();
 
     @Value("${oauth.payment.kakao_pay_request_host}")
@@ -38,16 +40,16 @@ public class PaymentService {
         try {
             return client.post()
                 .uri(URI.create("https://" + kakaoPayRequestHost + kakaoPaySinglePaymentUrl))
-                .headers(httpHeaders -> httpHeaders.addAll(createKakaoPayReqeustHeaders()))
+                .headers(httpHeaders -> httpHeaders.addAll(createKakaoPayRequestHeaders()))
                 .body(createKakaoPayRequestBody(kakaoPayRequest))
                 .retrieve()
                 .body(KakaoPayResponse.class);
         } catch (Exception ex) {
-            throw new RuntimeException();
+            throw new FailedToPayException("Kakao Pay");
         }
     }
 
-    private HttpHeaders createKakaoPayReqeustHeaders() {
+    private HttpHeaders createKakaoPayRequestHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Host", kakaoPayRequestHost);
         headers.add("Authorization", "SECRET_KEY " + secretKey);

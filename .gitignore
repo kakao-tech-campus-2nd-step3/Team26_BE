@@ -38,3 +38,6 @@ out/
 
 ### static images
 /src/main/resources/staticimages/
+
+### env file
+.env

@@ -3,9 +3,9 @@ package org.ktc2.cokaen.wouldyouin.event.api.dto;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-import org.ktc2.cokaen.wouldyouin._common.persist.Area;
-import org.ktc2.cokaen.wouldyouin._common.persist.Category;
-import org.ktc2.cokaen.wouldyouin._common.persist.Location;
+import org.ktc2.cokaen.wouldyouin._common.vo.Area;
+import org.ktc2.cokaen.wouldyouin._common.vo.Category;
+import org.ktc2.cokaen.wouldyouin._common.vo.Location;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.application.dto.relation.EventHostResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
@@ -34,15 +34,7 @@ public class EventResponse {
             .id(event.getId())
             .title(event.getTitle())
             .content(event.getContent())
-            .host(EventHostResponse.builder()
-                .nickname(host.getNickname())
-                .email(host.getEmail())
-                .phone(host.getPhone())
-                .profileImageUrl(host.getProfileImage().getUrl())
-                .intro(host.getIntro())
-                .likes(host.getLikes())
-                .hashtags(host.getHashTagList())
-                .build())
+            .host(EventHostResponse.from(host))
             .area(event.getArea())
             .location(event.getLocation())
             .startTime(event.getStartTime())

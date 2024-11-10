@@ -3,8 +3,11 @@
 
 spring:
   application.name: WouldYouIn
+
+  # 임시 프로젝트 url
+  wouldyouin-domain-name: http://52.78.71.136/
   profiles:
-    default: ${ACTIVE_PROFILE}
+    default: dev
 
   # 소셜로그인 테스트시 캐시 비활성화
   thymeleaf:
@@ -28,6 +31,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 100
     show-sql: true
     hibernate.ddl-auto: create
 

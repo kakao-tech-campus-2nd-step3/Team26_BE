@@ -2,6 +2,8 @@ package org.ktc2.cokaen.wouldyouin.event.api.dto;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -10,18 +12,15 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
-import org.ktc2.cokaen.wouldyouin._common.persist.Area;
-import org.ktc2.cokaen.wouldyouin._common.persist.Category;
-import org.ktc2.cokaen.wouldyouin._common.persist.Location;
+import org.ktc2.cokaen.wouldyouin._common.vo.Area;
+import org.ktc2.cokaen.wouldyouin._common.vo.Category;
+import org.ktc2.cokaen.wouldyouin._common.vo.Location;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 
 @Getter
 @Builder
 public class EventCreateRequest {
-
-    @NotNull(message = "hostId는 필수입니다.")
-    private Long hostId;
 
     @NotBlank(message = "제목은 필수입니다.")
     private String title;
@@ -43,10 +42,12 @@ public class EventCreateRequest {
     private LocalDateTime endTime;
 
     @NotNull(message = "가격은 필수입니다.")
-    @Size(min = 0, max = 1000000, message = "가격은 0원 이상 1,000,000원 이하입니다.")
+    @Min(value = 0, message = "가격은 0원 이상입니다.")
+    @Max(value = 1000000, message = "가격은 1,000,000원 이하입니다.")
     private Integer price;
 
-    @Size(min = 0, max = 1000, message = "총 좌석은 0석 이상 1,000석 이하입니다.")
+    @Min(value = 0, message = "총 좌석은 0석 이상입니다.")
+    @Max(value = 1000, message = "총 좌석은 1,000석 이하입니다.")
     private Integer totalSeat;
 
     @NotNull(message = "카테고리는 필수입니다.")
@@ -64,7 +65,7 @@ public class EventCreateRequest {
 
     @AssertTrue(message = "이미지는 최대 5개까지 등록할 수 있습니다.")
     public boolean isImageSizeValid() {
-        return imageIds.size() <= 5;
+        return imageIds == null || imageIds.size() <= 5;
     }
 
     public Event toEntity(Host host, List<EventImage> images) {

@@ -7,9 +7,13 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageServiceFactory;
+import org.ktc2.cokaen.wouldyouin.Image.application.ImageStorage;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin._common.exception.FailToReadImageException;
+import org.ktc2.cokaen.wouldyouin.auth.Authorize;
+import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +33,10 @@ public class ImageController {
 
     private final ImageServiceFactory imageServiceFactory;
 
+    // Todo: authorize
     @PostMapping("/images")
-    public ResponseEntity<ApiResponseBody<List<ImageResponse>>> uploadImages(@RequestParam List<MultipartFile> images,
+    public ResponseEntity<ApiResponseBody<List<ImageResponse>>> uploadImages(
+        @RequestParam List<MultipartFile> images,
         @RequestParam(value = "type") ImageDomain imageDomain) {
         return ApiResponse.ok(imageServiceFactory.getImageServiceByImageType(imageDomain).saveAndCreateImages(images));
     }
@@ -44,8 +50,11 @@ public class ImageController {
         }
     }
 
+    // Todo: authorize
     @DeleteMapping("/images/{id}")
-    public ResponseEntity<ApiResponseBody<Void>> deleteImage(@PathVariable Long id, @RequestParam ImageDomain imageDomain) {
+    public ResponseEntity<ApiResponseBody<Void>> deleteImage(
+        @PathVariable Long id,
+        @RequestParam(value = "type") ImageDomain imageDomain) {
         imageServiceFactory.getImageServiceByImageType(imageDomain).deleteAndDelete(id);
         return ApiResponse.noContent();
     }
