@@ -3,16 +3,16 @@ package org.ktc2.cokaen.wouldyouin.auth.application.oauth;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.util.Objects;
+import org.ktc2.cokaen.wouldyouin._common.util.RestClientUtil;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.AccessTokenResponse;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthRequest;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthResourcesResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class GoogleRequestService extends OauthRequestService {
@@ -38,11 +38,46 @@ public class GoogleRequestService extends OauthRequestService {
     @Value("${oauth.google.redirect_uri}")
     private String redirectUri;
 
+    private final RestClientUtil client;
+    private final String loginRequestUri;
+    private final String accessRequestUri;
+    private final HttpHeaders loginRequestHeaders;
+
+    public GoogleRequestService(RestClientUtil restClientUtil) {
+
+        this.client = restClientUtil;
+
+        loginRequestUri = UriComponentsBuilder.newInstance()
+            .scheme("https")
+            .host(loginRequestHost)
+            .path(loginRequestPath)
+            .build(true)
+            .toString();
+
+        accessRequestUri = UriComponentsBuilder.newInstance()
+            .scheme("https")
+            .host(accessRequestHost)
+            .path(accessRequestPath)
+            .build(true)
+            .toString();
+
+        loginRequestHeaders = new HttpHeaders();
+        loginRequestHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+    }
+
+    protected HttpHeaders getAccessRequestHeaders(AccessTokenResponse authenticationResponse) {
+        HttpHeaders accessRequestHeaders = new HttpHeaders();
+        accessRequestHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        accessRequestHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + authenticationResponse.getAccessToken());
+        return accessRequestHeaders;
+    }
+
     @Override
     protected AccountType getAccountType() {
         return AccountType.google;
     }
 
+    @Override
     protected OauthRequest getOauthRequestBase() {
         return OauthRequest.builder()
             .grantType("authorization_code")
@@ -54,36 +89,17 @@ public class GoogleRequestService extends OauthRequestService {
 
     @Override
     protected OauthResourcesResponse requestLoginAndAccessResources(OauthRequest request) {
-        AccessTokenResponse authenticationResponse = RestClient.create()
-            .post()
-            .uri(uriBuilder -> uriBuilder
-                .scheme("https")
-                .host(loginRequestHost)
-                .path(loginRequestPath)
-                .build(true))
-            .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-            .body(request)
-            .retrieve()
+
+        AccessTokenResponse authenticationResponse = client.post(
+            AccessTokenResponse.class, loginRequestUri, loginRequestHeaders, request,
             // TODO: 커스텀 예외 추가
-            .onStatus(HttpStatusCode::is4xxClientError, (httpRequest, clientHttpResponse) -> { throw new RuntimeException("에러"); })
-            .onStatus(HttpStatusCode::is5xxServerError, (httpRequest, clientHttpResponse) -> { throw new RuntimeException("에러"); })
-            .body(AccessTokenResponse.class);
+            (req, response) -> { throw new RuntimeException("에러"); });
 
         Objects.requireNonNull(authenticationResponse);
-        GoogleAccessRequestResponse result = RestClient.create()
-            .get()
-            .uri(uriBuilder -> uriBuilder
-                .scheme("https")
-                .host(accessRequestHost)
-                .path(accessRequestPath)
-                .build(true))
-            .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + authenticationResponse.getAccessToken())
-            .retrieve()
+        GoogleAccessRequestResponse result = client.get(
+            GoogleAccessRequestResponse.class, accessRequestUri, getAccessRequestHeaders(authenticationResponse),
             // TODO: 커스텀 예외 추가
-            .onStatus(HttpStatusCode::is4xxClientError, (httpRequest, clientHttpResponse) -> { throw new RuntimeException("에러"); })
-            .onStatus(HttpStatusCode::is5xxServerError, (httpRequest, clientHttpResponse) -> { throw new RuntimeException("에러"); })
-            .body(GoogleAccessRequestResponse.class);
+            (req, rsp) -> { throw new RuntimeException("에러"); });
 
         Objects.requireNonNull(result);
         return OauthResourcesResponse.builder()

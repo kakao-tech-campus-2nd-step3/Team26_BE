@@ -22,7 +22,7 @@ public abstract class ImageService<T extends Image> {
     protected ImageStorageService imageStorageService;
 
     @Value("${image.api-url}")
-    private String domainName;
+    private String apiUrl;
 
     protected abstract ImageRepository<T> getImageRepository();
 
@@ -38,7 +38,7 @@ public abstract class ImageService<T extends Image> {
     }
 
     protected ImageResponse create(ImageRequest imageRequest) {
-        return ImageResponse.from(getImageRepository().save(toEntity(imageRequest)), domainName);
+        return ImageResponse.from(getImageRepository().save(toEntity(imageRequest)), apiUrl);
     }
 
     protected void delete(Long id) {
