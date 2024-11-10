@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin._common.config;
+package org.ktc2.cokaen.wouldyouin._common.api;
 
 public class ParamDefaults {
 

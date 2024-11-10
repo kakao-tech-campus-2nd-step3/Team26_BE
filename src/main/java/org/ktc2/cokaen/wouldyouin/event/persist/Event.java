@@ -19,6 +19,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -118,9 +119,10 @@ public class Event {
         this.totalSeat = totalSeat;
         this.leftSeat = totalSeat;
         this.category = category;
-        this.images = images;
+        Optional.ofNullable(images).ifPresent(this::setImages);
     }
 
+    // Todo: oneToMany 연관관계에서 모든 null 처리
     public void updateFrom(EventEditRequest eventEditRequest, List<EventImage> images) {
         this.title = eventEditRequest.getTitle();
         this.content = eventEditRequest.getContent();

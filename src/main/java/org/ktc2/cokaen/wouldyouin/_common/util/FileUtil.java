@@ -15,7 +15,7 @@ public class FileUtil {
         try {
             return Files.readAllBytes(path);
         } catch (IOException e) {
-            throw new FailToReadImageException("이미지를 읽어오는데 실패했습니다.");
+            throw new FailToReadImageException("파일을 읽어오는데 실패했습니다.");
         }
     }
 
@@ -24,7 +24,7 @@ public class FileUtil {
             Files.createDirectories(path.getParent());
             Files.write(path, file.getBytes());
         } catch (IOException e) {
-            throw new FailedToUploadImageException("디렉토리에 이미지를 저장하는데 실패했습니다.");
+            throw new FailedToUploadImageException("디렉토리에 파일을 저장하는데 실패했습니다.");
         }
     }
 
@@ -33,7 +33,7 @@ public class FileUtil {
             Files.createDirectories(path.getParent());
             Files.write(path, file);
         } catch (IOException e) {
-            throw new FailedToUploadImageException("디렉토리에 이미지를 저장하는데 실패했습니다.");
+            throw new FailedToUploadImageException("디렉토리에 파일을 저장하는데 실패했습니다.");
         }
     }
 
@@ -41,7 +41,7 @@ public class FileUtil {
         try {
             Files.deleteIfExists(path);
         } catch (IOException e) {
-            throw new FailedToUploadImageException("디렉토리의 이미지를 삭제하는데 실패했습니다.");
+            throw new FailedToUploadImageException("해당 경로의 파일을 삭제하는데 실패했습니다.");
         }
     }
 

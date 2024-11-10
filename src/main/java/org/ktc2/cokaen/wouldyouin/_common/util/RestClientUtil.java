@@ -1,8 +1,6 @@
 package org.ktc2.cokaen.wouldyouin._common.util;
 
-import java.net.URI;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
