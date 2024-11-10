@@ -5,9 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin._common.api.SliceInfo;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
-import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationResponse;
-import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationSliceResponse;
-import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
 import org.springframework.data.domain.Slice;
 
 @Getter

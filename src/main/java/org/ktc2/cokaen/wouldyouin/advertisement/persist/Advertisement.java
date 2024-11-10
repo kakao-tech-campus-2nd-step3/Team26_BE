@@ -14,7 +14,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Comment;
 import org.ktc2.cokaen.wouldyouin.Image.persist.AdvertisementImage;
 import org.ktc2.cokaen.wouldyouin.advertisement.api.dto.AdvertisementRequest;
 

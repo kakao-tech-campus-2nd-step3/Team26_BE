@@ -7,7 +7,7 @@ import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.CurationEventResponse;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.relationResponse.CurationCuratorResponse;
+import org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse.CurationCuratorResponse;
 
 @Builder
 @Getter
