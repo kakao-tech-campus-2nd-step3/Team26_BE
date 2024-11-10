@@ -16,10 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class AdvertisementImageService extends ImageService<AdvertisementImage> {
 
-    private final ImageStorage imageStorage;
+    @Value("${image.upload.ad.child-path}")
+    private String childPath;
+    private final ImageStorageService imageStorageService;
     private final AdvertisementImageRepository adImageRepository;
-    @Value("${image.upload.ad.sub-path}")
-    private String subPath;
 
     @Override
     protected ImageRepository<AdvertisementImage> getImageRepository() {
@@ -32,8 +32,8 @@ public class AdvertisementImageService extends ImageService<AdvertisementImage> 
     }
 
     @Override
-    protected String getSubPath() {
-        return subPath;
+    protected String getChildPath() {
+        return childPath;
     }
 
     @Override
@@ -45,13 +45,12 @@ public class AdvertisementImageService extends ImageService<AdvertisementImage> 
     }
 
     @Transactional
-    public AdvertisementImage saveAndCreateImage(MultipartFile image) {
-        String path = imageStorage.save(image, getSubPath());
-        return adImageRepository.save(toEntity(ImageRequest.of(path, image.getSize(), ImageStorage.getExtension(image))));
+    public AdvertisementImage saveImage(MultipartFile image) {
+        return adImageRepository.save(toEntity(imageStorageService.saveToDirectory(image, getChildPath())));
     }
 
     @Transactional
-    public void setAd(AdvertisementImage image, Advertisement ad) {
+    public void setAdvertisement(AdvertisementImage image, Advertisement ad) {
         image.setAdvertisement(ad);
     }
 }

@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
-import org.ktc2.cokaen.wouldyouin._common.config.ParamDefaults;
+import org.ktc2.cokaen.wouldyouin._common.api.ParamDefaults;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;

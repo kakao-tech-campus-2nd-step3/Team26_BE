@@ -1,17 +1,13 @@
 package org.ktc2.cokaen.wouldyouin.Image.api;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageServiceFactory;
+import org.ktc2.cokaen.wouldyouin.Image.application.ImageStorageService;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
-import org.ktc2.cokaen.wouldyouin._common.exception.FailToReadImageException;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,37 +22,31 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/images")
 public class ImageController {
 
     private final ImageServiceFactory imageServiceFactory;
+    private final ImageStorageService imageStorageService;
+
+    @GetMapping(value = "/{directory}/{file}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    public ResponseEntity<byte[]> getImage(@PathVariable String directory, @PathVariable String file) {
+        return ResponseEntity.status(HttpStatus.OK).body(imageStorageService.readFromDirectory(Paths.get(directory, file)));
+    }
 
     // Todo: authorize
-    @PostMapping("/images")
+    @PostMapping
     public ResponseEntity<ApiResponseBody<List<ImageResponse>>> uploadImages(
         @RequestParam List<MultipartFile> images,
         @RequestParam(value = "type") ImageDomain imageDomain) {
-        return ApiResponse.ok(imageServiceFactory.getImageServiceByImageType(imageDomain).saveAndCreateImages(images));
-    }
-
-    // Todo: path 수정, service로 로직이동
-    @GetMapping(value = "images/{domain}/{path}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    public ResponseEntity<byte[]> getImage(@PathVariable String domain, @PathVariable String path) {
-        try {
-            Resource resource = new ClassPathResource("static/images/" + domain + "/" + path);
-            System.out.println(Paths.get("static/images", domain, path));
-            return ResponseEntity.status(HttpStatus.OK).body(Files.readAllBytes(resource.getFile().toPath()));
-        } catch (IOException e) {
-            throw new FailToReadImageException("이미지를 읽어오는데 실패했습니다.");
-        }
+        return ApiResponse.ok(imageServiceFactory.getImageService(imageDomain).saveImages(images));
     }
 
     // Todo: authorize
-    @DeleteMapping("/images/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseBody<Void>> deleteImage(
         @PathVariable Long id,
         @RequestParam(value = "type") ImageDomain imageDomain) {
-        imageServiceFactory.getImageServiceByImageType(imageDomain).deleteAndDelete(id);
+        imageServiceFactory.getImageService(imageDomain).deleteAndDelete(id);
         return ApiResponse.noContent();
     }
 }

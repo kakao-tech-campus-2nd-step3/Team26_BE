@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
+import org.ktc2.cokaen.wouldyouin.member.api.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;

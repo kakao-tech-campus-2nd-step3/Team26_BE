@@ -15,10 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class EventImageService extends ImageService<EventImage> {
 
+    @Value("${image.upload.event.child-path}")
+    private String childPath;
     private final EventImageRepository eventImageRepository;
-
-    @Value("${image.upload.event.sub-path}")
-    private String subPath;
 
     @Override
     public ImageRepository<EventImage> getImageRepository() {
@@ -31,13 +30,16 @@ public class EventImageService extends ImageService<EventImage> {
     }
 
     @Override
-    protected String getSubPath() {
-        return subPath;
+    protected String getChildPath() {
+        return childPath;
     }
 
     @Override
     protected EventImage toEntity(ImageRequest imageRequest) {
-        return EventImage.builder().url(imageRequest.getUrl()).size(imageRequest.getSize()).build();
+        return EventImage.builder()
+            .url(imageRequest.getUrl())
+            .size(imageRequest.getSize())
+            .build();
     }
 
     @Transactional

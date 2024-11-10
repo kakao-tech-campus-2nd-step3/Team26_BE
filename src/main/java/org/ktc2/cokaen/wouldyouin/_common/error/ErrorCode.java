@@ -24,6 +24,8 @@ public enum ErrorCode {
 
     FAIL_TO_DELETE_IMAGE(HttpStatus.CONFLICT.value(), "-20400", "Fail to delete image"),
 
+    URL_PARSING_FAILED(HttpStatus.BAD_REQUEST.value(), "-20400", "URL 파싱에 실패했습니다."),
+
     CURRENT_LOCATION_EMPTY(HttpStatus.BAD_REQUEST.value(), "-20400", "현재 위치 정보를 찾을 수 없습니다.");
 
     private final Integer status;

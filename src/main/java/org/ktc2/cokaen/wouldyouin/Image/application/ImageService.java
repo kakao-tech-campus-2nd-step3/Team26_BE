@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 public abstract class ImageService<T extends Image> {
 
     @Autowired
-    protected ImageStorage imageStorage;
+    protected ImageStorageService imageStorageService;
 
     @Value("${spring.wouldyouin-domain-name}")
     private String domainName;
@@ -28,7 +28,7 @@ public abstract class ImageService<T extends Image> {
 
     protected abstract ImageDomain getImageDomain();
 
-    protected abstract String getSubPath();
+    protected abstract String getChildPath();
 
     protected abstract T toEntity(ImageRequest imageRequest);
 
@@ -47,12 +47,9 @@ public abstract class ImageService<T extends Image> {
     }
 
     @Transactional
-    public List<ImageResponse> saveAndCreateImages(List<MultipartFile> images) {
+    public List<ImageResponse> saveImages(List<MultipartFile> images) {
         return images.stream()
-            .map(image -> {
-                String path = imageStorage.save(image, getSubPath());
-                return create(ImageRequest.of(path, image.getSize(), ImageStorage.getExtension(image)));
-            })
+            .map(image -> create(imageStorageService.saveToDirectory(image, getChildPath())))
             .toList();
     }
 
@@ -60,6 +57,6 @@ public abstract class ImageService<T extends Image> {
     public void deleteAndDelete(Long id) {
         T image = getById(id);
         delete(id);
-        imageStorage.delete(image.getUrl());
+        imageStorageService.delete(image.getUrl());
     }
 }

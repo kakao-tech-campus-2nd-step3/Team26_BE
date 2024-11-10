@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.ReservationEventResponse;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.relation.ReservationMemberResponse;
+import org.ktc2.cokaen.wouldyouin.member.api.dto.relation.ReservationMemberResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
 
 @Builder

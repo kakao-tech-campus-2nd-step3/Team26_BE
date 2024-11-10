@@ -15,10 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CurationImageService extends ImageService<CurationImage> {
 
+    @Value("${image.upload.curation.child-path}")
+    private String childPath;
     private final CurationImageRepository curationImageRepository;
-
-    @Value("${image.upload.curation.sub-path}")
-    private String subPath;
 
     @Override
     public ImageRepository<CurationImage> getImageRepository() {
@@ -31,8 +30,8 @@ public class CurationImageService extends ImageService<CurationImage> {
     }
 
     @Override
-    protected String getSubPath() {
-        return subPath;
+    protected String getChildPath() {
+        return childPath;
     }
 
     @Override

@@ -42,9 +42,9 @@ public class AdvertisementService {
     // Todo: 롤백될 경우, 저장한 이미지 삭제
     @Transactional
     public AdvertisementResponse create(AdvertisementRequest adRequest, MultipartFile image) {
-        AdvertisementImage adImage = adImageService.saveAndCreateImage(image);
+        AdvertisementImage adImage = adImageService.saveImage(image);
         Advertisement ad = adRepository.save(adRequest.toEntity(adImage));
-        adImageService.setAd(adImage, ad);
+        adImageService.setAdvertisement(adImage, ad);
         return AdvertisementResponse.from(ad);
     }
 
@@ -56,7 +56,7 @@ public class AdvertisementService {
         Optional.ofNullable(multipartFile).ifPresentOrElse(
             image -> {
                 adImageService.deleteAndDelete(ad.getAdvertisementImage().getId());
-                AdvertisementImage adImage = adImageService.saveAndCreateImage(image);
+                AdvertisementImage adImage = adImageService.saveImage(image);
                 ad.updateFrom(adRequest, adImage);
                 adImage.setAdvertisement(ad);
             },
