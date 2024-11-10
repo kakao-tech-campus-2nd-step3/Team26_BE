@@ -42,11 +42,12 @@ public class ImageController {
     }
 
     // Todo: authorize
+    // Todo: 삭제로직 수정필요
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseBody<Void>> deleteImage(
         @PathVariable Long id,
         @RequestParam(value = "type") ImageDomain imageDomain) {
-        imageServiceFactory.getImageService(imageDomain).deleteAndDelete(id);
+        imageServiceFactory.getImageService(imageDomain).deleteImage(id);
         return ApiResponse.noContent();
     }
 }

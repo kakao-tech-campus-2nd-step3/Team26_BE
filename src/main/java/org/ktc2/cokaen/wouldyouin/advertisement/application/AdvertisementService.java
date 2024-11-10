@@ -55,7 +55,7 @@ public class AdvertisementService {
         Advertisement ad = getByIdOrThrow(adId);
         Optional.ofNullable(multipartFile).ifPresentOrElse(
             image -> {
-                adImageService.deleteAndDelete(ad.getAdvertisementImage().getId());
+                adImageService.deleteImage(ad.getAdvertisementImage().getId());
                 AdvertisementImage adImage = adImageService.saveImage(image);
                 ad.updateFrom(adRequest, adImage);
                 adImage.setAdvertisement(ad);
@@ -71,7 +71,7 @@ public class AdvertisementService {
     @Transactional
     public void delete(Long adId) {
         Advertisement ad = getByIdOrThrow(adId);
-        adImageService.deleteAndDelete(ad.getAdvertisementImage().getId());
+        adImageService.deleteImage(ad.getAdvertisementImage().getId());
         adRepository.deleteById(adId);
     }
 }

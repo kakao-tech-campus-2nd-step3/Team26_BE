@@ -2,7 +2,7 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.createValidHost;
-import static org.ktc2.cokaen.wouldyouin._global.TestData.ImageDomain.createValidMemberImage;
+import static org.ktc2.cokaen.wouldyouin._global.TestData.ImageData.createValidMemberImage;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
