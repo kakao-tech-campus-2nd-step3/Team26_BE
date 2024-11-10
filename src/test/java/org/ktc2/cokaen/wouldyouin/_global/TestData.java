@@ -2,6 +2,8 @@ package org.ktc2.cokaen.wouldyouin._global;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
+import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
@@ -32,6 +34,8 @@ import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationRequest;
 import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationSliceResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class TestData {
@@ -43,7 +47,8 @@ public class TestData {
             .build();
     }
 
-    public static class ImageDomain {
+    // Todo: 클래스이름 Domain말고 Data는 어떤지..?, ImageDomain이 중복이라 사용할 수 없음 ㅜ
+    public static class ImageData {
 
         public static MemberImage createValidMemberImage(Long id) {
             MemberImage ret = MemberImage.builder()
@@ -67,12 +72,48 @@ public class TestData {
 
         public static CurationImage createValidCurationImage(Long id) {
             CurationImage ret = CurationImage.builder()
-                .url("curationImageUrl")
+                .url("curationImageUrl.jpg")
                 .size(10L)
-                .extension(".jpg")
+                .extension("jpg")
                 .build();
             ReflectionTestUtils.setField(ret, "id", id);
             return ret;
+        }
+
+        public static ImageRequest createValidImageRequest() {
+            return ImageRequest.builder()
+                .url("memberImage.png")
+                .size(20L)
+                .extension("png")
+                .build();
+        }
+
+        public static ImageResponse createValidImageResponse1() {
+            return ImageResponse.builder()
+                .id(1L)
+                .url("curationImageUrl.jpg")
+                .size(10L)
+                .extension(".jpg")
+                .createdDate(LocalDateTime.of(2024, 3, 23, 0, 0))
+                .build();
+        }
+
+        public static ImageResponse createValidImageResponse2() {
+            return ImageResponse.builder()
+                .id(2L)
+                .url("memberImage.png")
+                .size(20L)
+                .extension(".png")
+                .createdDate(LocalDateTime.of(2024, 3, 23, 0, 0))
+                .build();
+        }
+
+        public static MockMultipartFile createValidMultipartFile1() {
+            return new MockMultipartFile("image1", "image1.jpg", MediaType.IMAGE_JPEG_VALUE, "imageData1".getBytes());
+        }
+
+        public static MockMultipartFile createValidMultipartFile2() {
+            return new MockMultipartFile("image2", "image2.png", MediaType.IMAGE_JPEG_VALUE, "imageData2".getBytes());
         }
     }
 
@@ -84,7 +125,7 @@ public class TestData {
         public static final long validWelcomeMemberId = 4L;
 
         public static Member createValidMember() {
-            MemberImage memberImage = ImageDomain.createValidMemberImage(validMemberId);
+            MemberImage memberImage = ImageData.createValidMemberImage(validMemberId);
             Member ret = Member.builder()
                 .accountType(AccountType.kakao)
                 .email("member1@example.com")
@@ -102,7 +143,7 @@ public class TestData {
         }
 
         public static Curator createValidCurator() {
-            MemberImage memberImage = ImageDomain.createValidMemberImage(validCuratorId);
+            MemberImage memberImage = ImageData.createValidMemberImage(validCuratorId);
             Curator ret = Curator.curatorBuilder()
                 .accountType(AccountType.google)
                 .email("curator1@example.com")
@@ -121,7 +162,7 @@ public class TestData {
         }
 
         public static Host createValidHost() {
-            MemberImage memberImage = ImageDomain.createValidMemberImage(validHostId);
+            MemberImage memberImage = ImageData.createValidMemberImage(validHostId);
             Host ret = Host.builder()
                 .email("curator1@example.com")
                 .nickname("nick_curator_12")
@@ -137,7 +178,7 @@ public class TestData {
         }
 
         public static Member createValidWelcomeMember() {
-            MemberImage memberImage = ImageDomain.createValidMemberImage(validWelcomeMemberId);
+            MemberImage memberImage = ImageData.createValidMemberImage(validWelcomeMemberId);
             Member ret = Member.builder()
                 .accountType(AccountType.kakao)
                 .email("member2@example.com")

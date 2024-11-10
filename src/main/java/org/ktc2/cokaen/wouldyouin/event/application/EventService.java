@@ -75,7 +75,7 @@ public class EventService {
     public EventResponse update(Long hostId, Long eventId, EventEditRequest eventEditRequest) {
         Event event = getByIdOrThrow(eventId);
         validateHostId(hostId, event);
-        event.getImages().forEach(image -> eventImageService.deleteAndDelete(image.getId()));
+        event.getImages().forEach(image -> eventImageService.deleteImage(image.getId()));
         List<EventImage> images = eventEditRequest.getImageIds().stream()
             .map(eventImageService::getById).toList();
         event.updateFrom(eventEditRequest, images);

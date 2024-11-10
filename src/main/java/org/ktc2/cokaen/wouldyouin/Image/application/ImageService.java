@@ -21,7 +21,7 @@ public abstract class ImageService<T extends Image> {
     @Autowired
     protected ImageStorageService imageStorageService;
 
-    @Value("${spring.wouldyouin-domain-name}")
+    @Value("${image.api-url}")
     private String domainName;
 
     protected abstract ImageRepository<T> getImageRepository();
@@ -54,7 +54,7 @@ public abstract class ImageService<T extends Image> {
     }
 
     @Transactional
-    public void deleteAndDelete(Long id) {
+    public void deleteImage(Long id) {
         T image = getById(id);
         delete(id);
         imageStorageService.delete(image.getUrl());

@@ -46,20 +46,21 @@ import org.springframework.web.context.WebApplicationContext;
 class CurationControllerUnitTest {
 
     @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private WebApplicationContext context;
+
+    private static final long randomId = abs(new Random().nextLong());
 
     @MockBean
     private CurationService curationService;
 
     @MockBean
     private JwtAuthFilter jwtAuthFilter;
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private WebApplicationContext context;
-    private static final long randomId = abs(new Random().nextLong());
 
     @BeforeEach
     public void setup() throws Exception {
@@ -608,7 +609,6 @@ class CurationControllerUnitTest {
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
 
-
         // then
         then(curationService).shouldHaveNoInteractions();
     }
@@ -623,7 +623,6 @@ class CurationControllerUnitTest {
             .andDo(print())
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
-
 
         // then
         then(curationService).shouldHaveNoInteractions();
