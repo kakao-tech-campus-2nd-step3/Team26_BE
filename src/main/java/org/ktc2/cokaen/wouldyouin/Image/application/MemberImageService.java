@@ -7,7 +7,6 @@ import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImageRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
-import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberImageService extends ImageService<MemberImage> {
 
+    @Value("${image.upload.member.child-path}")
+    private String childPath;
     private final MemberImageRepository memberImageRepository;
-    private final BaseMemberRepository baseMemberRepository;
-
-    @Value("${image.upload.member.sub-path}")
-    private String subPath;
 
     @Override
     public ImageRepository<MemberImage> getImageRepository() {
@@ -33,8 +30,8 @@ public class MemberImageService extends ImageService<MemberImage> {
     }
 
     @Override
-    protected String getSubPath() {
-        return subPath;
+    protected String getChildPath() {
+        return childPath;
     }
 
     @Override
@@ -51,6 +48,7 @@ public class MemberImageService extends ImageService<MemberImage> {
     }
 
     public MemberImage convert(String imageUrl) {
-        return memberImageRepository.save(toEntity(imageStorage.save(imageUrl, subPath)));
+        ImageRequest imageRequest = imageStorageService.saveToDirectory(imageUrl, childPath);
+        return memberImageRepository.save(toEntity(imageRequest));
     }
 }

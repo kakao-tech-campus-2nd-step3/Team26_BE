@@ -1,7 +1,7 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
+import org.ktc2.cokaen.wouldyouin.member.api.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;

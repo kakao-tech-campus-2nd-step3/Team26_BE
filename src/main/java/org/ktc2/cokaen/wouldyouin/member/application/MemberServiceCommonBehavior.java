@@ -1,6 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
-import org.ktc2.cokaen.wouldyouin.member.application.dto.MemberResponse;
+import org.ktc2.cokaen.wouldyouin.member.api.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.transaction.annotation.Transactional;
 

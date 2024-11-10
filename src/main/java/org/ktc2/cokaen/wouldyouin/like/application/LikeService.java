@@ -1,8 +1,8 @@
 package org.ktc2.cokaen.wouldyouin.like.application;
 
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.like.application.dto.LikeResponse;
-import org.ktc2.cokaen.wouldyouin.like.application.dto.LikeToggleResponse;
+import org.ktc2.cokaen.wouldyouin.like.api.dto.LikeResponse;
+import org.ktc2.cokaen.wouldyouin.like.api.dto.LikeToggleResponse;
 import org.ktc2.cokaen.wouldyouin.like.persist.Like;
 import org.ktc2.cokaen.wouldyouin.like.persist.LikeRepository;
 import org.ktc2.cokaen.wouldyouin.member.application.LikeableMemberGetterFactory;

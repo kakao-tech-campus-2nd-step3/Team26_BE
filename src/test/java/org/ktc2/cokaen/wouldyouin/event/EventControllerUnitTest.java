@@ -25,15 +25,14 @@ import org.junit.jupiter.api.Test;
 
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
-import org.ktc2.cokaen.wouldyouin._common.vo.Location;
-import org.ktc2.cokaen.wouldyouin._common.vo.UserLocation;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtService;
-import org.ktc2.cokaen.wouldyouin.curation.api.dto.LocationFilter;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationFilter;
 import org.ktc2.cokaen.wouldyouin.event.api.EventController;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventSliceResponse;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.UserLocation;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin._global.TestData.EventDomain;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
