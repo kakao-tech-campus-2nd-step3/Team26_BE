@@ -2,13 +2,14 @@ package org.ktc2.cokaen.wouldyouin.Image.application;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin._common.exception.FailedToUploadImageException;
 import org.ktc2.cokaen.wouldyouin._common.util.FileUtil;
 import org.ktc2.cokaen.wouldyouin._common.util.RestClientUtil;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,19 +35,17 @@ public class ImageStorageService {
     }
 
     public ImageRequest saveToDirectory(String imageUrl, String subPath) {
-        ResponseEntity<byte[]> response = client.get(imageUrl, byte[].class);
-        if (response.getBody() == null) {
-            throw new FailedToUploadImageException("응답 본문이 비어있어 이미지를 가져올 수 없습니다.");
-        }
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new FailedToUploadImageException("이미지 URL에 대한 요청을 실패하였습니다.");
-        }
+        byte[] response = client.get(byte[].class, imageUrl, new HttpHeaders(),
+            (req, rsp) -> { throw new FailedToUploadImageException("이미지 URL에 대한 요청을 실패하였습니다."); }
+        );
+        Optional.ofNullable(response).orElseThrow(
+            () -> new FailedToUploadImageException("응답 본문이 비어있어 이미지를 가져올 수 없습니다."));
         String extension = FileUtil.getExtension(imageUrl);
         String fileName = FileUtil.generateUuidName() + "." + extension;
-        Path path = Paths.get(parentPath, subPath, fileName);
-        FileUtil.saveFile(response.getBody(), path);
-        long size = response.getBody().length;
-        return ImageRequest.of(path.toString(), size, extension);
+        String relativeFilePath = Paths.get(subPath, fileName).toString();
+        Path absoluteFilePath = Paths.get(parentPath, relativeFilePath);
+        FileUtil.saveFile(response, absoluteFilePath);
+        return ImageRequest.of(relativeFilePath, (long) response.length, extension);
     }
 
     public void delete(String imagePath) {

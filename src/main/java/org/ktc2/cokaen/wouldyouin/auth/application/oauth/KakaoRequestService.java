@@ -5,16 +5,16 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.util.RestClientUtil;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.AccessTokenResponse;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthRequest;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthResourcesResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class KakaoRequestService extends OauthRequestService {
@@ -45,6 +45,45 @@ public class KakaoRequestService extends OauthRequestService {
         return AccountType.kakao;
     }
 
+    private final RestClientUtil client;
+    private final String loginRequestUri;
+    private final String accessRequestUri;
+    private final HttpHeaders loginRequestHeaders;
+
+    public KakaoRequestService(RestClientUtil restClientUtil) {
+        this.client = restClientUtil;
+
+        OauthRequest request = getOauthRequestBase();
+        loginRequestUri = UriComponentsBuilder.newInstance()
+            .scheme("https")
+            .host(loginRequestHost)
+            .path(loginRequestPath)
+            .queryParam("grant_type", request.getGrantType())
+            .queryParam("client_id", request.getClientId())
+            .queryParam("client_secret", request.getClientSecret())
+            .queryParam("code", request.getCode())
+            .build(true)
+            .toString();
+
+        accessRequestUri = UriComponentsBuilder.newInstance()
+            .scheme("https")
+            .host(accessRequestHost)
+            .path(accessRequestPath)
+            .build(true)
+            .toString();
+
+        loginRequestHeaders = new HttpHeaders();
+        loginRequestHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+    }
+
+    protected HttpHeaders getAccessRequestHeaders(AccessTokenResponse authenticationResponse) {
+        HttpHeaders accessRequestHeaders = new HttpHeaders();
+        accessRequestHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+        accessRequestHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + authenticationResponse.getAccessToken());
+        return accessRequestHeaders;
+    }
+
+    @Override
     protected OauthRequest getOauthRequestBase() {
         return OauthRequest.builder()
             .grantType("authorization_code")
@@ -56,39 +95,16 @@ public class KakaoRequestService extends OauthRequestService {
 
     @Override
     protected OauthResourcesResponse requestLoginAndAccessResources(OauthRequest request) {
-        AccessTokenResponse authenticationResponse = RestClient.create()
-            .post()
-            .uri(uriBuilder -> uriBuilder
-                .scheme("https")
-                .host(loginRequestHost)
-                .path(loginRequestPath)
-                .queryParam("grant_type", request.getGrantType())
-                .queryParam("client_id", request.getClientId())
-                .queryParam("client_secret", request.getClientSecret())
-                .queryParam("code", request.getCode())
-                .build(true))
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-            .retrieve()
+        AccessTokenResponse authenticationResponse = client.post(
+            AccessTokenResponse.class, loginRequestUri, loginRequestHeaders,
             // TODO: 커스텀 예외 추가
-            .onStatus(HttpStatusCode::is4xxClientError, (httpRequest, clientHttpResponse) -> { throw new RuntimeException("에러"); })
-            .onStatus(HttpStatusCode::is5xxServerError, (httpRequest, clientHttpResponse) -> { throw new RuntimeException("에러"); })
-            .body(AccessTokenResponse.class);
+            (req, rsp) -> { throw new RuntimeException("에러"); });
 
         Objects.requireNonNull(authenticationResponse);
-        KakaoAccessRequestResponse result = RestClient.create()
-            .get()
-            .uri(uriBuilder -> uriBuilder
-                .scheme("https")
-                .host(accessRequestHost)
-                .path(accessRequestPath)
-                .build(true))
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + authenticationResponse.getAccessToken())
-            .retrieve()
+        KakaoAccessRequestResponse result = client.get(
+            KakaoAccessRequestResponse.class, accessRequestUri, getAccessRequestHeaders(authenticationResponse),
             // TODO: 커스텀 예외 추가
-            .onStatus(HttpStatusCode::is4xxClientError, (httpRequest, clientHttpResponse) -> { throw new RuntimeException("에러"); })
-            .onStatus(HttpStatusCode::is5xxServerError, (httpRequest, clientHttpResponse) -> { throw new RuntimeException("에러"); })
-            .body(KakaoAccessRequestResponse.class);
+            (req, rsp) -> { throw new RuntimeException("에러"); });
 
         Objects.requireNonNull(result);
         return OauthResourcesResponse.builder()
