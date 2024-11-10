@@ -48,7 +48,7 @@ public class CurationCardService {
     @Transactional
     public void delete(Long id) {
         CurationCard target = getByIdOrThrow(id);
-        target.getCurationImages().forEach(image -> curationImageService.deleteAndDelete(image.getId()));
+        target.getCurationImages().forEach(image -> curationImageService.deleteImage(image.getId()));
         curationCardRepository.deleteById(id);
     }
 }

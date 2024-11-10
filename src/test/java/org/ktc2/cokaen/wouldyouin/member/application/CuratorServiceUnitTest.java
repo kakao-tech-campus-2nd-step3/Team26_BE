@@ -1,7 +1,7 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.ktc2.cokaen.wouldyouin._global.TestData.ImageDomain.createValidMemberImage;
+import static org.ktc2.cokaen.wouldyouin._global.TestData.ImageData.createValidMemberImage;
 import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.createValidCurator;
 import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.createValidMember;
 import static org.mockito.ArgumentMatchers.any;
