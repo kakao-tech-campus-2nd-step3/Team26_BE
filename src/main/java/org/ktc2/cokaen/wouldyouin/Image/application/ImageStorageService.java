@@ -27,9 +27,10 @@ public class ImageStorageService {
     public ImageRequest saveToDirectory(MultipartFile image, String subPath) {
         String extension = FileUtil.getExtension(image);
         String fileName = FileUtil.generateUuidName() + "." + extension;
-        Path path = Paths.get(parentPath, subPath, fileName);
-        FileUtil.saveFile(image, path);
-        return ImageRequest.of(path.toString(), image.getSize(), FileUtil.getExtension(image));
+        String relativeFilePath = Paths.get(subPath, fileName).toString();
+        Path absoluteFilePath = Paths.get(parentPath, relativeFilePath);
+        FileUtil.saveFile(image, absoluteFilePath);
+        return ImageRequest.of(relativeFilePath, image.getSize(), FileUtil.getExtension(image));
     }
 
     public ImageRequest saveToDirectory(String imageUrl, String subPath) {

@@ -11,14 +11,17 @@ public class ImageResponse {
 
     private Long id;
     private String url;
-    private LocalDateTime createdDate;
     private Long size;
+    private String extension;
+    private LocalDateTime createdDate;
 
-    public static ImageResponse from(Image image, String domainName) {
+
+    public static ImageResponse from(Image image, String apiUrlHeader) {
         return ImageResponse.builder()
             .id(image.getId())
-            .url(domainName + image.getUrl())
+            .url(apiUrlHeader + "/" + image.getUrl())
             .size(image.getSize())
+            .extension(image.getExtension())
             .createdDate(image.getCreatedDate())
             .build();
     }
