@@ -23,7 +23,7 @@ public class LikeResponse {
             .memberId(member.getId())
             .nickname(member.getNickname())
             .intro(member.getIntro())
-            .hashtags(member.getHashTagList())
+            .hashtags(member.getHashtags())
             .profileImageUrl(member.getProfileImageUrl())
             .build();
     }

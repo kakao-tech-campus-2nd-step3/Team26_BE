@@ -26,7 +26,7 @@ public class CurationEditRequest {
     @NotNull(message = "지역은 필수입니다.")
     private Area area;
 
-    private List<String> hashTag;
+    private List<String> hashTags;
 
     private List<Long> eventIds;
 

@@ -14,4 +14,5 @@ import lombok.Setter;
 public class Location {
     Double longitude;
     Double latitude;
+    String detailAddress;
 }

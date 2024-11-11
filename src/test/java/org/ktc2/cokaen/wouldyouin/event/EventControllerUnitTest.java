@@ -32,7 +32,7 @@ import org.ktc2.cokaen.wouldyouin.event.api.EventController;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventSliceResponse;
-import org.ktc2.cokaen.wouldyouin.event.api.dto.UserLocation;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationRequest;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin._global.TestData.EventDomain;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
@@ -90,7 +90,7 @@ class EventControllerUnitTest {
     void getEventsByFilterOrderByDistanceAsc() throws Exception {
         // given
         LocationFilter locationFilter = new LocationFilter(0.0, 0.0, 10.0, 10.0);
-        UserLocation currentLocation = new UserLocation(3.0, 2.0);
+        LocationRequest currentLocation = new LocationRequest(3.0, 2.0);
         String title = "testTitle";
         Category category = Category.공예;
         Area area = Area.광주;
@@ -129,7 +129,7 @@ class EventControllerUnitTest {
         // then
         then(eventService).should(times(1)).getAllByFilterOrderByDistanceAsc(
             any(LocationFilter.class),
-            any(UserLocation.class),
+            any(LocationRequest.class),
             eq(title),
             eq(category),
             eq(area),

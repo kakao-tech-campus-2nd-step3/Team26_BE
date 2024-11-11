@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
+    // TODO: status,code, message 수정
+
     UNEXPECTED(HttpStatus.BAD_REQUEST.value(), "-1", "예상치 못한 오류가 발생했습니다."),
 
     ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "-10404", "엔티티를 찾을 수 없습니다."),

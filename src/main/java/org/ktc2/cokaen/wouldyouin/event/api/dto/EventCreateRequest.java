@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -53,6 +54,7 @@ public class EventCreateRequest {
     @NotNull(message = "카테고리는 필수입니다.")
     private Category category;
 
+    // TODO : 이미지 not null 고민, 큐레이션도!
     private List<Long> imageIds;
 
     @AssertTrue(message = "종료 시간은 시작 시간 이후여야 합니다.")
@@ -65,7 +67,7 @@ public class EventCreateRequest {
 
     @AssertTrue(message = "이미지는 최대 5개까지 등록할 수 있습니다.")
     public boolean isImageSizeValid() {
-        return imageIds == null || imageIds.size() <= 5;
+        return imageIds.size() <= 5;
     }
 
     public Event toEntity(Host host, List<EventImage> images) {

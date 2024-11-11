@@ -26,7 +26,7 @@ public class CurationCuratorResponse {
                 .profileImageUrl(curator.getProfileImageUrl())
                 .intro(curator.getIntro())
                 .likes(curator.getLikes())
-                .hashtags(curator.getHashTagList())
+                .hashtags(curator.getHashtags())
                 .build();
     }
 }
