@@ -17,6 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -59,7 +60,7 @@ public class Curation {
     private String content;
 
     @OneToMany(mappedBy = "curation", fetch = FetchType.LAZY)
-    private List<CurationCard> curationCards;
+    private List<CurationCard> curationCards = new ArrayList<>();
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -68,7 +69,7 @@ public class Curation {
 
     @Column(name = "hashtag")
     @Convert(converter = HashtagConverter.class)
-    private List<String> hashtags;
+    private List<String> hashtags = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -76,7 +77,7 @@ public class Curation {
         joinColumns = @JoinColumn(name = "curation_id"),
         inverseJoinColumns = @JoinColumn(name = "event_id")
     )
-    private List<Event> events;
+    private List<Event> events = new ArrayList<>();
 
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
