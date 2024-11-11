@@ -18,7 +18,7 @@ public class CurationCardResponse {
             .content(curationCard.getContent())
             .imageUrls(
                 curationCard.getCurationImages().stream()
-                    .map(CurationImage::getUrl)
+                    .map(CurationImage::getName)
                     .toList()
             )
             .build();

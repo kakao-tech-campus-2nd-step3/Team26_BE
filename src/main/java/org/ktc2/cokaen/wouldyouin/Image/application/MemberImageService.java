@@ -39,6 +39,7 @@ public class MemberImageService extends ImageService<MemberImage> {
         return MemberImage.builder()
             .url(imageRequest.getUrl())
             .size(imageRequest.getSize())
+            .extension(imageRequest.getExtension())
             .build();
     }
 

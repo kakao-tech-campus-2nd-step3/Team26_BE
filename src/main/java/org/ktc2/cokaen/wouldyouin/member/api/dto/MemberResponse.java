@@ -34,7 +34,7 @@ public class MemberResponse {
             .memberId(baseMember.getId())
             .nickname(baseMember.getNickname())
             .phoneNumber(baseMember.getPhone())
-            .profileUrl(baseMember.getProfileImage().getUrl());
+            .profileUrl(baseMember.getProfileImage().getName());
     }
 
     // TODO: normal member임에도 불구, curator 형식이 호출되는 현상 수정필요

@@ -41,6 +41,7 @@ public class AdvertisementImageService extends ImageService<AdvertisementImage> 
         return AdvertisementImage.builder()
             .name(imageRequest.getUrl())
             .size(imageRequest.getSize())
+            .extension(imageRequest.getExtension())
             .build();
     }
 

@@ -17,7 +17,7 @@ public class AdvertisementResponse {
         return AdvertisementResponse.builder()
             .id(advertisement.getId())
             .title(advertisement.getTitle())
-            .imageUrl(advertisement.getAdvertisementImage().getUrl())
+            .imageUrl(advertisement.getAdvertisementImage().getName())
             .startTime(advertisement.getStartTime())
             .endTime(advertisement.getEndTime())
             .build();
