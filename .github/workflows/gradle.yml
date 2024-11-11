@@ -3,13 +3,14 @@ name: CI/CD Github Action
 on:
   push:
     branches: [ "Master", "Weekly/*" ]
-  pull_request_target:
-    branches: [ "Master", "Weekly/*" ]
 
 permissions:
   contents: read
 
 env:
+  DATASOURCE_URL      : ${{ secrets.ENV_DATASOURCE_URL }}
+  DATASOURCE_USERNAME : ${{ secrets.ENV_DATASOURCE_USERNAME }}
+  DATASOURCE_PASSWORD : ${{ sccrets.ENV_DATASOURCE_PASSWORD }}
   GOOGLE_CLIENT_ID    : ${{ secrets.ENV_GOOGLE_CLIENT_ID }}
   GOOGLE_CLIENT_SECRET: ${{ secrets.ENV_GOOGLE_CLIENT_SECRET }}
   GOOGLE_REDIRECT_URI : ${{ secrets.ENV_GOOGLE_REDIRECT_URI }}
@@ -137,7 +138,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            echo "GOOGLE_CLIENT_ID=${{ secrets.ENV_GOOGLE_CLIENT_ID }}" > ~/.env
+            echo "DATASOURCE_URL=${{ secrets.ENV_DATASOURCE_URL }}" > ~/.env
+            echo "DATASOURCE_USERNAME=${{ secrets.ENV_DATASOURCE_USERNAME }}" >> ~/.env
+            echo "DATASOURCE_PASSWORD=${{ sccrets.ENV_DATASOURCE_PASSWORD }}" >> ~/.env
+            echo "GOOGLE_CLIENT_ID=${{ secrets.ENV_GOOGLE_CLIENT_ID }}" >> ~/.env
             echo "GOOGLE_CLIENT_SECRET=${{ secrets.ENV_GOOGLE_CLIENT_SECRET }}" >> ~/.env
             echo "GOOGLE_REDIRECT_URI=${{ secrets.ENV_GOOGLE_REDIRECT_URI }}" >> ~/.env
             echo "JWT_SECRET=${{ secrets.ENV_JWT_SECRET }}" >> ~/.env
