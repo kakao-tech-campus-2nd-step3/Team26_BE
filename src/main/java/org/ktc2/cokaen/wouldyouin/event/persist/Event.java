@@ -124,16 +124,16 @@ public class Event {
 
     // Todo: oneToMany 연관관계에서 모든 null 처리
     public void updateFrom(EventEditRequest eventEditRequest, List<EventImage> images) {
-        this.title = eventEditRequest.getTitle();
-        this.content = eventEditRequest.getContent();
-        this.area = eventEditRequest.getArea();
-        this.location = eventEditRequest.getLocation();
-        this.startTime = eventEditRequest.getStartTime();
-        this.endTime = eventEditRequest.getEndTime();
-        this.price = eventEditRequest.getPrice();
-        this.totalSeat = eventEditRequest.getTotalSeat();
-        this.category = eventEditRequest.getCategory();
-        this.images = images;
+        Optional.ofNullable(eventEditRequest.getTitle()).ifPresent(this::setTitle);
+        Optional.ofNullable(eventEditRequest.getContent()).ifPresent(this::setContent);
+        Optional.ofNullable(eventEditRequest.getArea()).ifPresent(this::setArea);
+        Optional.ofNullable(eventEditRequest.getLocation()).ifPresent(this::setLocation);
+        Optional.ofNullable(eventEditRequest.getStartTime()).ifPresent(this::setStartTime);
+        Optional.ofNullable(eventEditRequest.getEndTime()).ifPresent(this::setEndTime);
+        Optional.ofNullable(eventEditRequest.getPrice()).ifPresent(this::setPrice);
+        Optional.ofNullable(eventEditRequest.getTotalSeat()).ifPresent(this::setTotalSeat);
+        Optional.ofNullable(eventEditRequest.getCategory()).ifPresent(this::setCategory);
+        Optional.ofNullable(images).ifPresent(this::setImages);
     }
 
     public void decreaseLeftSeat(Integer count) {

@@ -9,7 +9,7 @@ import org.ktc2.cokaen.wouldyouin._common.exception.NoLeftSeatException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
-import org.ktc2.cokaen.wouldyouin.event.api.dto.UserLocation;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationFilter;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
@@ -43,7 +43,7 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public EventSliceResponse getAllByFilterOrderByDistanceAsc(LocationFilter location, UserLocation currentLocation, String title,
+    public EventSliceResponse getAllByFilterOrderByDistanceAsc(LocationFilter location, LocationRequest currentLocation, String title,
         Category category, Area area, Pageable pageable, Long beforeLastId) {
         Slice<Event> events = eventRepository.findAllByFilterOrderByDistance(
             location.getStartLatitude(), location.getStartLongitude(), location.getEndLatitude(),

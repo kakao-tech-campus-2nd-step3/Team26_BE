@@ -1,10 +1,11 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
-import org.ktc2.cokaen.wouldyouin.member.api.dto.request.edit.CuratorEditRequest;
+import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
+import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.MemberResponse;
+import org.ktc2.cokaen.wouldyouin.member.api.dto.request.edit.CuratorEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 import org.ktc2.cokaen.wouldyouin.member.persist.CuratorRepository;
@@ -23,10 +24,32 @@ public class CuratorService implements MemberServiceCommonBehavior, LikeableMemb
     private final BaseMemberRepository baseMemberRepository;
     private final MemberImageService memberImageService;
 
+    @Override
+    public LikeableMemberService<Curator> getLikeableMemberService() {
+        return this;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public MemberResponse getMemberResponseById(Long id) {
+        return MemberResponse.from(getByIdOrThrow(id));
+    }
+
+    @Override
+    public MemberType getTargetMemberType() {
+        return MemberType.curator;
+    }
+
+    @Transactional(readOnly = true)
+    public Curator getByIdOrThrow(Long id) {
+        return curatorRepository.findById(id).
+            orElseThrow(() -> new EntityNotFoundException("해당하는 큐레이터 정보를 찾을 수 없습니다."));
+    }
+
     @Transactional
     public MemberResponse createCurator(Long normalMemberId) {
-        //TODO: 커스텀 예외 필요
-        Member member = memberRepository.findById(normalMemberId).orElseThrow(RuntimeException::new);
+        Member member = memberRepository.findById(normalMemberId)
+            .orElseThrow(() -> new EntityNotFoundException("해당하는 멤버 정보를 찾을 수 없습니다."));
 
         // 일반 멤버 정보로 큐레이터 생성 후, 기존 일반멤버 및 BaseMember 정보는 데이터베이스에서 제거
         Curator curator = Curator.curatorBuilder()
@@ -52,18 +75,13 @@ public class CuratorService implements MemberServiceCommonBehavior, LikeableMemb
         return MemberResponse.from(curator);
     }
 
+    // TODO : 반대방향 연관관계 설정 setter?
     @Transactional
     public MemberResponse updateCurator(Long curatorId, CuratorEditRequest request) {
         Curator curator = getByIdOrThrow(curatorId);
-
-        Optional.ofNullable(request.getPhoneNumber()).ifPresent(curator::setPhone);
-        Optional.ofNullable(request.getNickname()).ifPresent(curator::setNickname);
-        Optional.ofNullable(request.getArea()).ifPresent(curator::setArea);
-        Optional.ofNullable(request.getIntro()).ifPresent(curator::setIntro);
-        Optional.ofNullable(request.getProfileImageId())
-            .map(memberImageService::getById)
-            .ifPresent(curator::setProfileImage);
-
+        MemberImage image = memberImageService.getById(request.getProfileImageId());
+        curator.updateFrom(request, image);
+        image.setBaseMember(curator);
         return MemberResponse.from(curator);
     }
 
@@ -71,27 +89,5 @@ public class CuratorService implements MemberServiceCommonBehavior, LikeableMemb
     @Transactional
     public void deleteById(Long id) {
         curatorRepository.delete(getByIdOrThrow(id));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public MemberResponse getMemberResponseById(Long id) {
-        return MemberResponse.from(getByIdOrThrow(id));
-    }
-
-    @Transactional(readOnly = true)
-    public Curator getByIdOrThrow(Long id) {
-        //TODO: 커스텀 예외 필요
-        return curatorRepository.findById(id).orElseThrow(RuntimeException::new);
-    }
-
-    @Override
-    public MemberType getTargetMemberType() {
-        return MemberType.curator;
-    }
-
-    @Override
-    public LikeableMemberService<Curator> getLikeableMemberService() {
-        return this;
     }
 }

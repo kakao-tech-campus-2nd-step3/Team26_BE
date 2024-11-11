@@ -109,11 +109,11 @@ public class TestData {
         }
 
         public static MockMultipartFile createValidMultipartFile1() {
-            return new MockMultipartFile("image1", "image1.jpg", MediaType.IMAGE_JPEG_VALUE, "imageData1".getBytes());
+            return new MockMultipartFile("images", "image1.jpg", MediaType.IMAGE_JPEG_VALUE, "imageData1".getBytes());
         }
 
         public static MockMultipartFile createValidMultipartFile2() {
-            return new MockMultipartFile("image2", "image2.png", MediaType.IMAGE_JPEG_VALUE, "imageData2".getBytes());
+            return new MockMultipartFile("images", "image2.png", MediaType.IMAGE_JPEG_VALUE, "imageData2".getBytes());
         }
     }
 
@@ -156,7 +156,7 @@ public class TestData {
                 .build();
             ReflectionTestUtils.setField(ret, "Id", validCuratorId);
             ReflectionTestUtils.setField(ret, "intro", "큐레이터 자기소개입니다.");
-            ReflectionTestUtils.setField(ret, "hashtag", "#큐레이터#해시태그#입니다");
+            ReflectionTestUtils.setField(ret, "hashtags", List.of("#큐레이터", "#해시태그", "#입니다"));
             ReflectionTestUtils.setField(memberImage, "baseMember", ret);
             return ret;
         }
@@ -172,7 +172,7 @@ public class TestData {
                 .build();
             ReflectionTestUtils.setField(ret, "Id", validHostId);
             ReflectionTestUtils.setField(ret, "intro", "주최자 자기소개입니다.");
-            ReflectionTestUtils.setField(ret, "hashtag", "#주최자#해시태그#입니다");
+            ReflectionTestUtils.setField(ret, "hashtags", List.of("#주최자", "#해시태그", "#입니다"));
             ReflectionTestUtils.setField(memberImage, "baseMember", ret);
             return ret;
         }
@@ -212,7 +212,7 @@ public class TestData {
                 .title("title")
                 .content("content")
                 .area(Area.전체)
-                .location(new Location(132.0, 43.0))
+                .location(new Location(132.0, 43.0, "광주 북구 용봉로77"))
                 .startTime(LocalDateTime.now())
                 .endTime(LocalDateTime.now())
                 .price(10000)
@@ -228,7 +228,7 @@ public class TestData {
                 .title("title")
                 .content("content 조홍식씨 최소글자 20자라고 해놓고 안 지켰어요.")
                 .area(Area.전체)
-                .location(new Location(132.0, 43.0))
+                .location(new Location(132.0, 43.0, "광주 북구 용봉로 77"))
                 .startTime(LocalDateTime.of(2025, 10, 1, 9, 0))
                 .endTime(LocalDateTime.of(2025, 10, 1, 10, 0))
                 .price(10000)
@@ -243,7 +243,7 @@ public class TestData {
                 .title("modifiedTitle")
                 .content("modifiedContent 조홍식씨 최소글자 20자라고 해놓고 안 지켰어요. ")
                 .area(Area.광주)
-                .location(new Location(232.0, 143.0))
+                .location(new Location(232.0, 143.0, "광주 북구 용봉로 77"))
                 .startTime(LocalDateTime.of(2024, 10, 2, 17, 0))
                 .endTime(LocalDateTime.of(2024, 10, 2, 18, 0))
                 .price(20000)
@@ -257,7 +257,7 @@ public class TestData {
             return CurationEventResponse.builder()
                 .id(1L)
                 .title("title")
-                .location(new Location(132.0, 43.0))
+                .location(new Location(132.0, 43.0, "광주 북구 용봉로 77"))
                 .thumbnailImageUrl("thumbnailImageUrl")
                 .hostProfileImageUrl("hostProfileImageUrl")
                 .hostNickname("nick_curator_12")
@@ -321,7 +321,7 @@ public class TestData {
                 .content("content")
                 .curationCards(List.of())
                 .area(Area.전체)
-                .hashTag(List.of("#해시태그1", "#해시태그2"))
+                .hashTags(List.of("#해시태그1", "#해시태그2"))
                 .events(List.of(EventDomain.createValidEvent()))
                 .build();
         }
@@ -364,7 +364,7 @@ public class TestData {
                 .content("큐레이션 카드 내용1 입니다. 큐레이션 카드의 내용은 최소 20자 최대 1000자 입니다.")
                 .curationCards(List.of(createValidCurationCardRequest1()))
                 .area(Area.광주)
-                .hashTag(List.of("#광주밴드", "#전남대"))
+                .hashTags(List.of("#광주밴드", "#전남대"))
                 .eventIds(List.of(1L, 2L))
                 .build();
         }
@@ -375,7 +375,7 @@ public class TestData {
                 .content("큐레이션 내용2 입니다.")
                 .curationCards(List.of(createValidCurationCardRequest2()))
                 .area(Area.서울)
-                .hashTag(List.of("#서울밴드", "#서울대"))
+                .hashTags(List.of("#서울밴드", "#서울대"))
                 .eventIds(List.of(3L, 4L))
                 .build();
         }
@@ -389,7 +389,7 @@ public class TestData {
                 .profileImageUrl(curator.getProfileImageUrl())
                 .intro(curator.getIntro())
                 .likes(curator.getLikes())
-                .hashtags(curator.getHashTagList())
+                .hashtags(curator.getHashtags())
                 .build();
         }
 

@@ -33,7 +33,7 @@ public class CurationResponse {
             .curationCards(curation.getCurationCards().stream()
                 .map(CurationCardResponse::from).toList())
             .area(curation.getArea())
-            .hashTag(curation.getHashTag())
+            .hashTag(curation.getHashTags())
             .eventsInfo(curation.getEvents().stream()
                 .map(CurationEventResponse::from).toList())
             .createdTime(curation.getCreatedDate())

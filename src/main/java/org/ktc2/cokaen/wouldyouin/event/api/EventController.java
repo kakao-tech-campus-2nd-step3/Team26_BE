@@ -7,7 +7,7 @@ import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin._common.api.ParamDefaults;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
-import org.ktc2.cokaen.wouldyouin.event.api.dto.UserLocation;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationRequest;
 import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationFilter;
@@ -39,8 +39,8 @@ public class EventController {
 
     @GetMapping
     public ResponseEntity<ApiResponseBody<EventSliceResponse>> getEventsByFilterOrderByDistanceAsc(
-        @ModelAttribute LocationFilter locationFilter,
-        @Valid @ModelAttribute UserLocation currentLocation,
+        @Valid @ModelAttribute LocationFilter locationFilter,
+        @Valid @ModelAttribute LocationRequest currentLocation,
         @RequestParam(defaultValue = ParamDefaults.TITLE) String title,
         @RequestParam(defaultValue = ParamDefaults.CATEGORY) Category category,
         @RequestParam(defaultValue = ParamDefaults.AREA) Area area,
