@@ -1,6 +1,5 @@
 package org.ktc2.cokaen.wouldyouin.reservation.persist;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -13,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -58,9 +58,9 @@ public class Reservation {
 
     @Builder
     protected Reservation(Member member, Event event, Integer price, Integer quantity) {
-        this.member = member;
-        this.event = event;
-        this.price = price;
-        this.quantity = quantity;
+        Optional.ofNullable(member).ifPresent(this::setMember);
+        Optional.ofNullable(event).ifPresent(this::setEvent);
+        Optional.ofNullable(price).ifPresent(this::setPrice);
+        Optional.ofNullable(quantity).ifPresent(this::setQuantity);
     }
 }

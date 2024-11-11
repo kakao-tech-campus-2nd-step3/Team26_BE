@@ -1,27 +1,35 @@
 package org.ktc2.cokaen.wouldyouin.image;
 
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.ktc2.cokaen.wouldyouin.Image.api.ImageController;
+import org.ktc2.cokaen.wouldyouin.Image.api.ImageDomain;
 import org.ktc2.cokaen.wouldyouin.Image.application.CurationImageService;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageServiceFactory;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageStorageService;
+import org.ktc2.cokaen.wouldyouin._global.TestData.ImageData;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -84,28 +92,26 @@ class ImageControllerTest {
     @WithMockMember
     void uploadImages() throws Exception {
 //        // given
-//        MockMultipartFile image1 = ImageData.createValidMultipartFile1();
-//        MockMultipartFile image2 = ImageData.createValidMultipartFile2();
-//        given((CurationImageService) imageServiceFactory.getImageService(ImageDomain.CURATION)).willReturn(curationImageService);
-//        given(curationImageService.saveImages(List.of(image1, image2)))
-//            .willReturn(List.of(ImageData.createValidImageResponse1(), ImageData.createValidImageResponse2()));
-//
-////        // when
-//        mockMvc.perform(multipart("/api/images")
-//                .file(ImageData.createValidMultipartFile1())
-//                .file(ImageData.createValidMultipartFile2())
-//                .contentType(MediaType.MULTIPART_FORM_DATA)
-//                .param("type", ImageDomain.CURATION.name())
-//                .with(csrf()))
-//            .andDo(print())
-//            .andExpect(status().isOk());
-//            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON)) // 응답 콘텐츠 타입 확인
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].imageName").value("image1.png")) // 첫 번째 이미지 이름 확인
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].imageName").value("image2.jpg")); // 두 번째 이미지 이름 확인
+        MockMultipartFile image1 = ImageData.createValidMultipartFile1();
+        MockMultipartFile image2 = ImageData.createValidMultipartFile2();
+        given((CurationImageService) imageServiceFactory.getImageService(ImageDomain.CURATION)).willReturn(curationImageService);
+        given(curationImageService.saveImages(List.of(image1, image2)))
+            .willReturn(List.of(ImageData.createValidImageResponse1(), ImageData.createValidImageResponse2()));
+
+//        // when
+        mockMvc.perform(multipart("/api/images?type=CURATION")
+                .file(ImageData.createValidMultipartFile1())
+                .file(ImageData.createValidMultipartFile2())
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .param("type", ImageDomain.CURATION.name())
+                .with(csrf()))
+            .andDo(print())
+            .andExpect(status().isOk());
+
 //        ArgumentCaptor<CurationCreateRequest> captor = ArgumentCaptor.forClass(CurationCreateRequest.class);
 //        CurationCreateRequest request = CurationDomain.createValidCurationCreateRequest();
-//
-//        // when
+
+        // when
 //        mockMvc.perform(post("/api/curations")
 //                .with(csrf())
 //                .contentType(MediaType.APPLICATION_JSON)

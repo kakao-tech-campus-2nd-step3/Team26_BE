@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserLocation {
+public class LocationRequest {
 
     @NotNull(message = "위도 값은 필수입니다.")
     @Min(value = -90, message = "위도는 -90 이상이어야 합니다.")

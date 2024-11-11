@@ -69,7 +69,7 @@ public class Curation {
 
     @Column(name = "hashtag")
     @Convert(converter = HashtagConverter.class)
-    private List<String> hashTag = new ArrayList<>();
+    private List<String> hashTags = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -88,22 +88,22 @@ public class Curation {
     private LocalDateTime modifiedDate;
 
     @Builder
-    public Curation(Curator curator, String title, String content, List<CurationCard> curationCards, Area area, List<String> hashTag,
+    public Curation(Curator curator, String title, String content, List<CurationCard> curationCards, Area area, List<String> hashTags,
         List<Event> events) {
         this.curator = curator;
         this.title = title;
         this.content = content;
-        this.curationCards = curationCards;
+        Optional.ofNullable(curationCards).ifPresent(this::setCurationCards);
         this.area = area;
-        this.hashTag = hashTag;
-        this.events = events;
+        Optional.ofNullable(hashTags).ifPresent(this::setHashTags);
+        Optional.ofNullable(events).ifPresent(this::setEvents);
     }
 
     public void updateFrom(CurationEditRequest curationEditRequest, List<CurationCard> curationCards, List<Event> events) {
         Optional.ofNullable(curationEditRequest.getTitle()).ifPresent(this::setTitle);
         Optional.ofNullable(curationEditRequest.getContent()).ifPresent(this::setContent);
         Optional.ofNullable(curationEditRequest.getArea()).ifPresent(this::setArea);
-        Optional.ofNullable(curationEditRequest.getHashTag()).ifPresent(this::setHashTag);
+        Optional.ofNullable(curationEditRequest.getHashTags()).ifPresent(this::setHashTags);
         Optional.ofNullable(curationCards).ifPresent(this::setCurationCards);
         Optional.ofNullable(events).ifPresent(this::setEvents);
     }

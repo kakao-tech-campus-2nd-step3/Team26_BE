@@ -17,7 +17,7 @@ public interface LikeableMember {
 
     void setLikes(Integer likes);
 
-    String getHashtag();
+    List<String> getHashtags();
 
     default void increaseLikes() {
         setLikes(getLikes() + 1);
@@ -25,10 +25,6 @@ public interface LikeableMember {
 
     default void decreaseLikes() {
         setLikes(getLikes() - 1);
-    }
-
-    default List<String> getHashTagList() {
-        return Arrays.stream(getHashtag().split("#")).toList();
     }
 
     static List<MemberType> getLikeableMemberTypes() {
