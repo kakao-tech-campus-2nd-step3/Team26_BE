@@ -22,7 +22,7 @@ public class EventHostResponse {
             .nickname(host.getNickname())
             .email(host.getEmail())
             .phone(host.getPhone())
-            .profileImageUrl(host.getProfileImage().getUrl())
+            .profileImageUrl(host.getProfileImage().getName())
             .intro(host.getIntro())
             .likes(host.getLikes())
             .hashtags(host.getHashTagList())

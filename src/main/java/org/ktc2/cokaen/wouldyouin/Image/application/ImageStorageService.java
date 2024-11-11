@@ -21,34 +21,32 @@ public class ImageStorageService {
     private String parentPath;
     private final RestClientUtil client;
 
-    public byte[] readFromDirectory(Path path) {
-        return FileUtil.readFile(Paths.get(parentPath).resolve(path));
+    public byte[] readFromDirectory(Path childPath) {
+        return FileUtil.readFile(Paths.get(parentPath).resolve(childPath));
     }
 
-    public ImageRequest saveToDirectory(MultipartFile image, String subPath) {
+    public ImageRequest saveToDirectory(MultipartFile image, String childPath) {
         String extension = FileUtil.getExtension(image);
-        String fileName = FileUtil.generateUuidName() + "." + extension;
-        String relativeFilePath = Paths.get(subPath, fileName).toString();
-        Path absoluteFilePath = Paths.get(parentPath, relativeFilePath);
-        FileUtil.saveFile(image, absoluteFilePath);
-        return ImageRequest.of(relativeFilePath, image.getSize(), FileUtil.getExtension(image));
+        String fileName = FileUtil.createRandomFileName(extension);
+        FileUtil.saveFile(image, Path.of(parentPath, childPath, fileName));
+        return ImageRequest.of(fileName, image.getSize(), extension);
     }
 
-    public ImageRequest saveToDirectory(String imageUrl, String subPath) {
+    public ImageRequest saveToDirectory(String imageUrl, String childPath) {
         byte[] response = client.get(byte[].class, imageUrl, new HttpHeaders(),
             (req, rsp) -> { throw new FailedToUploadImageException("이미지 URL에 대한 요청을 실패하였습니다."); }
         );
         Optional.ofNullable(response).orElseThrow(
-            () -> new FailedToUploadImageException("응답 본문이 비어있어 이미지를 가져올 수 없습니다."));
+            () -> new FailedToUploadImageException("응답 본문이 비어있어 이미지를 가져올 수 없습니다.")
+        );
         String extension = FileUtil.getExtension(imageUrl);
-        String fileName = FileUtil.generateUuidName() + "." + extension;
-        String relativeFilePath = Paths.get(subPath, fileName).toString();
-        Path absoluteFilePath = Paths.get(parentPath, relativeFilePath);
-        FileUtil.saveFile(response, absoluteFilePath);
-        return ImageRequest.of(relativeFilePath, (long) response.length, extension);
+        String fileName = FileUtil.createRandomFileName(extension);
+        Path path = Path.of(parentPath, childPath, fileName);
+        FileUtil.saveFile(response, path);
+        return ImageRequest.of(fileName, (long) response.length, extension);
     }
 
-    public void delete(String imagePath) {
-        FileUtil.deleteFile(Paths.get(imagePath));
+    public void delete(String childPath, String fileName) {
+        FileUtil.deleteFile(Path.of(parentPath, childPath, fileName));
     }
 }

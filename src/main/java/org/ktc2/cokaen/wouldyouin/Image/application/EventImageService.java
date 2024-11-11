@@ -39,6 +39,7 @@ public class EventImageService extends ImageService<EventImage> {
         return EventImage.builder()
             .url(imageRequest.getUrl())
             .size(imageRequest.getSize())
+            .extension(imageRequest.getExtension())
             .build();
     }
 

@@ -8,6 +8,7 @@ import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.Image.persist.Image;
 import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
+import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,20 +33,6 @@ public abstract class ImageService<T extends Image> {
 
     protected abstract T toEntity(ImageRequest imageRequest);
 
-    public T getById(Long id) {
-        return getImageRepository().findById(id)
-            .orElseThrow(() -> new EntityNotFoundException(getImageDomain().name() + " 이미지를 찾을 수 없습니다."));
-    }
-
-    protected ImageResponse create(ImageRequest imageRequest) {
-        return ImageResponse.from(getImageRepository().save(toEntity(imageRequest)), apiUrl);
-    }
-
-    protected void delete(Long id) {
-        getById(id);
-        getImageRepository().deleteById(id);
-    }
-
     @Transactional
     public List<ImageResponse> saveImages(List<MultipartFile> images) {
         return images.stream()
@@ -57,6 +44,20 @@ public abstract class ImageService<T extends Image> {
     public void deleteImage(Long id) {
         T image = getById(id);
         delete(id);
-        imageStorageService.delete(image.getUrl());
+        imageStorageService.delete(getChildPath(), image.getName());
+    }
+
+    public T getById(Long id) {
+        return getImageRepository().findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(getImageDomain().name() + " 이미지를 찾을 수 없습니다."));
+    }
+
+    protected ImageResponse create(ImageRequest imageRequest) {
+        return ImageResponse.from(getImageRepository().save(toEntity(imageRequest)), UriUtil.assembleFullUrl(apiUrl, getChildPath()));
+    }
+
+    protected void delete(Long id) {
+        getById(id);
+        getImageRepository().deleteById(id);
     }
 }
