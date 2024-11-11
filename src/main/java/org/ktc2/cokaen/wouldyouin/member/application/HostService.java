@@ -39,7 +39,7 @@ public class HostService implements MemberServiceCommonBehavior, LikeableMemberS
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(host::setPhone);
         Optional.ofNullable(request.getProfileImageId()).map(memberImageService::getById).ifPresent(host::setProfileImage);
         Optional.ofNullable(request.getIntro()).ifPresent(host::setIntro);
-        Optional.ofNullable(request.getHashtag()).ifPresent(host::setHashtag);
+        Optional.ofNullable(request.getHashtags()).ifPresent(host::setHashtags);
 
         return MemberResponse.from(host);
     }

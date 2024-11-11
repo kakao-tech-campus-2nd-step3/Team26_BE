@@ -5,6 +5,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -40,16 +41,16 @@ public class Member extends BaseMember {
     private String refreshToken;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<CuratorLike> curatorLikes;
+    private List<CuratorLike> curatorLikes = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<HostLike> hostLikes;
+    private List<HostLike> hostLikes = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<Reservation> reservations;
+    private List<Reservation> reservations = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<>();
 
     // for Curator
     protected Member(AccountType accountType, MemberType memberType, String email, String nickname, String phone, MemberImage profileImage, Area area, String gender, String socialId) {

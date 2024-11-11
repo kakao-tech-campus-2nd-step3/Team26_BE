@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -94,7 +95,7 @@ class HostServiceUnitTest {
             .phoneNumber(TestUtil.getOrNull("010-1010-8888"))
             .profileImageId(TestUtil.getOrNull(newProfileImageId))
             .intro(TestUtil.getOrNull("new intro"))
-            .hashtag(TestUtil.getOrNull("#new#hashtag"))
+            .hashtags(TestUtil.getOrNull(List.of("#new", "#hashtag")))
             .build();
 
         given(hostRepository.findById(validHost.getId())).willReturn(Optional.of(validHost));

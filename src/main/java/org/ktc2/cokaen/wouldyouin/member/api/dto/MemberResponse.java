@@ -51,7 +51,7 @@ public class MemberResponse {
             .memberType(host.getMemberType())
             .intro(host.getIntro())
             .likes(host.getLikes())
-            .hashtag(host.getHashTagList())
+            .hashtag(host.getHashtags())
             .build();
     }
 

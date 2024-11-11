@@ -25,7 +25,7 @@ public class EventHostResponse {
             .profileImageUrl(host.getProfileImage().getName())
             .intro(host.getIntro())
             .likes(host.getLikes())
-            .hashtags(host.getHashTagList())
+            .hashtags(host.getHashtags())
             .build();
     }
 }
