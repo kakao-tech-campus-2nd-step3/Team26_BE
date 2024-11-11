@@ -39,6 +39,7 @@ public class CurationImageService extends ImageService<CurationImage> {
         return CurationImage.builder()
             .url(imageRequest.getUrl())
             .size(imageRequest.getSize())
+            .extension(imageRequest.getExtension())
             .build();
     }
 

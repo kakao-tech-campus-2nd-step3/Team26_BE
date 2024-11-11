@@ -64,6 +64,6 @@ public abstract class BaseMember {
     }
 
     public String getProfileImageUrl() {
-        return profileImage.getUrl();
+        return profileImage.getName();
     }
 }

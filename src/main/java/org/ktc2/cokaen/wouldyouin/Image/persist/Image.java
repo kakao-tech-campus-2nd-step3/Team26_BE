@@ -29,8 +29,8 @@ public abstract class Image {
     protected Long id;
 
     @NotNull
-    @Column(name = "url")
-    protected String url;
+    @Column(name = "name")
+    protected String name;
 
     @Column(name = "size")
     private Long size;
@@ -42,8 +42,8 @@ public abstract class Image {
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    protected Image(String url, Long size, String extension) {
-        this.url = url;
+    protected Image(String name, Long size, String extension) {
+        this.name = name;
         this.size = size;
         this.extension = extension;
     }
