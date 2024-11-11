@@ -1,10 +1,10 @@
 package org.ktc2.cokaen.wouldyouin.Image.api.dto;
 
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin.Image.persist.Image;
+import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
 
 @Getter
 @Builder
@@ -16,10 +16,10 @@ public class ImageResponse {
     private String extension;
     private LocalDateTime createdDate;
 
-    public static ImageResponse from(Image image, String apiUrlHeader) {
+    public static ImageResponse from(Image image, String path) {
         return ImageResponse.builder()
             .id(image.getId())
-            .url(Paths.get(apiUrlHeader, image.getUrl()).toString())
+            .url(UriUtil.assembleFullUrl(path, image.getName()))
             .size(image.getSize())
             .extension(image.getExtension())
             .createdDate(image.getCreatedDate())

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.util.Objects;
 import org.ktc2.cokaen.wouldyouin._common.util.RestClientUtil;
+import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.AccessTokenResponse;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthRequest;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthResourcesResponse;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class GoogleRequestService extends OauthRequestService {
@@ -44,22 +44,10 @@ public class GoogleRequestService extends OauthRequestService {
     private final HttpHeaders loginRequestHeaders;
 
     public GoogleRequestService(RestClientUtil restClientUtil) {
-
         this.client = restClientUtil;
 
-        loginRequestUri = UriComponentsBuilder.newInstance()
-            .scheme("https")
-            .host(loginRequestHost)
-            .path(loginRequestPath)
-            .build(true)
-            .toString();
-
-        accessRequestUri = UriComponentsBuilder.newInstance()
-            .scheme("https")
-            .host(accessRequestHost)
-            .path(accessRequestPath)
-            .build(true)
-            .toString();
+        loginRequestUri = UriUtil.buildUrl("https", loginRequestHost, loginRequestPath);
+        accessRequestUri = UriUtil.buildUrl("https", accessRequestHost, accessRequestPath);
 
         loginRequestHeaders = new HttpHeaders();
         loginRequestHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);

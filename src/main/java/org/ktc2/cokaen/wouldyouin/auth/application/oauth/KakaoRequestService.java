@@ -6,6 +6,7 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.util.RestClientUtil;
+import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.AccessTokenResponse;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthRequest;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthResourcesResponse;
@@ -14,7 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 @Service
 public class KakaoRequestService extends OauthRequestService {
@@ -53,27 +55,21 @@ public class KakaoRequestService extends OauthRequestService {
     public KakaoRequestService(RestClientUtil restClientUtil) {
         this.client = restClientUtil;
 
-        OauthRequest request = getOauthRequestBase();
-        loginRequestUri = UriComponentsBuilder.newInstance()
-            .scheme("https")
-            .host(loginRequestHost)
-            .path(loginRequestPath)
-            .queryParam("grant_type", request.getGrantType())
-            .queryParam("client_id", request.getClientId())
-            .queryParam("client_secret", request.getClientSecret())
-            .queryParam("code", request.getCode())
-            .build(true)
-            .toString();
-
-        accessRequestUri = UriComponentsBuilder.newInstance()
-            .scheme("https")
-            .host(accessRequestHost)
-            .path(accessRequestPath)
-            .build(true)
-            .toString();
+        loginRequestUri = UriUtil.buildUrl("https", loginRequestHost, loginRequestPath, getLoginRequestQueryParams());
+        accessRequestUri = UriUtil.buildUrl("https", accessRequestHost, accessRequestPath);
 
         loginRequestHeaders = new HttpHeaders();
         loginRequestHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+    }
+
+    protected MultiValueMap<String, String> getLoginRequestQueryParams() {
+        OauthRequest request = getOauthRequestBase();
+        var queries = new LinkedMultiValueMap<String, String>();
+        queries.add("grant_type", request.getGrantType());
+        queries.add("client_id", request.getClientId());
+        queries.add("client_secret", request.getClientSecret());
+        queries.add("code", request.getCode());
+        return queries;
     }
 
     protected HttpHeaders getAccessRequestHeaders(AccessTokenResponse authenticationResponse) {

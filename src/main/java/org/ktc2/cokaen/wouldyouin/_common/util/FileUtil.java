@@ -45,8 +45,8 @@ public class FileUtil {
         }
     }
 
-    public static String generateUuidName() {
-        return UUID.randomUUID().toString().replace("-", "");
+    public static String createRandomFileName(String extension) {
+        return UUID.randomUUID().toString().replace("-", "") + "." + extension;
     }
 
     public static String getExtension(MultipartFile file) {
