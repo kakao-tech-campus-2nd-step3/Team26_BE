@@ -30,7 +30,7 @@ public class CurationCreateRequest {
     @NotNull(message = "지역은 필수입니다.")
     private Area area;
 
-    private List<String> hashTags;
+    private List<String> hashtags;
 
     private List<Long> eventIds;
 
@@ -49,7 +49,7 @@ public class CurationCreateRequest {
             .content(this.content)
             .curationCards(curationCards)
             .area(this.area)
-            .hashTags(this.hashTags)
+            .hashTags(this.hashtags)
             .events(events)
             .build();
     }

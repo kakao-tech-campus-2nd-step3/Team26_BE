@@ -103,7 +103,7 @@ public class Curation {
         Optional.ofNullable(curationEditRequest.getTitle()).ifPresent(this::setTitle);
         Optional.ofNullable(curationEditRequest.getContent()).ifPresent(this::setContent);
         Optional.ofNullable(curationEditRequest.getArea()).ifPresent(this::setArea);
-        Optional.ofNullable(curationEditRequest.getHashTags()).ifPresent(this::setHashTags);
+        Optional.ofNullable(curationEditRequest.getHashtags()).ifPresent(this::setHashTags);
         Optional.ofNullable(curationCards).ifPresent(this::setCurationCards);
         Optional.ofNullable(events).ifPresent(this::setEvents);
     }
