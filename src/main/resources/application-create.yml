@@ -7,6 +7,5 @@ spring:
     activate:
       on-profile: create
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: create
