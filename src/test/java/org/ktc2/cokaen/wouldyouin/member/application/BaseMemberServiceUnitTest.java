@@ -2,14 +2,6 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.createValidCurator;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.createValidHost;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.createValidMember;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.createValidWelcomeMember;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.validCuratorId;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.validHostId;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.validMemberId;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.validWelcomeMemberId;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -25,6 +17,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.curator;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.host;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.normal;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.welcome;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
@@ -61,10 +58,10 @@ class BaseMemberServiceUnitTest {
     private BaseMemberService baseMemberService;
 
     private static Map<Long, BaseMember> members;
-    private static final Member validMember = createValidMember();
-    private static final Member validWelcomeMember = createValidWelcomeMember();
-    private static final Host validHost = createValidHost();
-    private static final Curator validCurator = createValidCurator();
+    private static final Member validMember = MemberData.normal.entity.get();
+    private static final Member validWelcomeMember = MemberData.welcome.entity.get();
+    private static final Host validHost = MemberData.host.entity.get();
+    private static final Curator validCurator = MemberData.curator.entity.get();
 
     @BeforeAll
     static void beforeAll() {
@@ -92,7 +89,7 @@ class BaseMemberServiceUnitTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {validMemberId, validCuratorId, validHostId, validWelcomeMemberId})
+    @ValueSource(longs = {normal.id, curator.id, host.id, welcome.id})
     @DisplayName("임의의 사용자를 찾는 메서드 테스트")
     void getByIdOrThrow(long id) {
         // when
@@ -105,7 +102,7 @@ class BaseMemberServiceUnitTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {validMemberId, validCuratorId, validHostId, validWelcomeMemberId})
+    @ValueSource(longs = {normal.id, curator.id, host.id, welcome.id})
     @DisplayName("임의의 사용자의 타입을 반환하는 메서드 테스트")
     void getMemberType(long id) {
         // when
@@ -118,7 +115,7 @@ class BaseMemberServiceUnitTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {validMemberId, validCuratorId, validHostId, validWelcomeMemberId})
+    @ValueSource(longs = {normal.id, curator.id, host.id, welcome.id})
     @DisplayName("각 유형의 사용자를 찾고 응답 반환하는 메서드 테스트")
     void findById(long id) {
         // given
@@ -140,7 +137,7 @@ class BaseMemberServiceUnitTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {validMemberId, validCuratorId, validHostId, validWelcomeMemberId})
+    @ValueSource(longs = {normal.id, curator.id, host.id, welcome.id})
     @DisplayName("중복 있는 이메일 있는 경우 테스트")
     void checkUniqueEmailOrThrow(long id) {
         // given
@@ -169,7 +166,7 @@ class BaseMemberServiceUnitTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {validMemberId, validCuratorId, validHostId, validWelcomeMemberId})
+    @ValueSource(longs = {normal.id, curator.id, host.id, welcome.id})
     @DisplayName("각 유형의 사용자를 제거하는 메서드 테스트")
     void deleteById(long id) {
         // given

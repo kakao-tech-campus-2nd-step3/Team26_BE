@@ -40,7 +40,7 @@ public class CurationImageService extends ImageService<CurationImage> {
     @Override
     protected CurationImage toEntity(ImageRequest imageRequest) {
         return CurationImage.builder()
-            .name(imageRequest.getUrl())
+            .name(imageRequest.getName())
             .size(imageRequest.getSize())
             .extension(imageRequest.getExtension())
             .build();

@@ -1,10 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.image;
 
 import static java.lang.Math.abs;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidImageResponse1;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidImageResponse2;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidMultipartFile1;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidMultipartFile2;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -32,6 +28,9 @@ import org.ktc2.cokaen.wouldyouin.Image.application.ImageStorageService;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember;
 import org.ktc2.cokaen.wouldyouin._global.testdata.ImageData;
+import org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.mockMultipartFile1;
+import org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.mockMultipartFile2;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.curator;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -96,11 +95,11 @@ class ImageControllerTest {
     @WithMockCurator
     void uploadImages1() throws Exception {
         // given
-        MockMultipartFile image1 = createValidMultipartFile1();
-        MockMultipartFile image2 = createValidMultipartFile2();
+        MockMultipartFile image1 = mockMultipartFile1.get();
+        MockMultipartFile image2 = mockMultipartFile2.get();
         given((CurationImageService) imageServiceFactory.getImageService(ImageDomain.CURATION)).willReturn(curationImageService);
         given(curationImageService.saveImages(List.of(image1, image2)))
-            .willReturn(List.of(createValidImageResponse1(), createValidImageResponse2()));
+            .willReturn(List.of(ImageData.curation1.response.get(), ImageData.curation2.response.get()));
 
         // when
         mockMvc.perform(multipart("/api/images")
@@ -122,8 +121,8 @@ class ImageControllerTest {
     @WithMockCurator
     void uploadImages2() throws Exception {
         // given
-        MockMultipartFile image1 = createValidMultipartFile1();
-        MockMultipartFile image2 = createValidMultipartFile2();
+        MockMultipartFile image1 = mockMultipartFile1.get();
+        MockMultipartFile image2 = mockMultipartFile2.get();
 
         // when
         mockMvc.perform(multipart("/api/images")
@@ -157,7 +156,7 @@ class ImageControllerTest {
 
         // then
         then(imageServiceFactory).should(times(1)).getImageService(eq(ImageDomain.CURATION));
-        then(curationImageService).should(times(1)).deleteImage(randomId);
+        then(curationImageService).should(times(1)).deleteImage(curator.memberIdentifier, randomId);
     }
 
     @Test

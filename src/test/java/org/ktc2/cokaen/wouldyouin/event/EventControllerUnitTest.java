@@ -1,7 +1,5 @@
 package org.ktc2.cokaen.wouldyouin.event;
 
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.createValidHost;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.validHostId;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -24,8 +22,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
-import org.ktc2.cokaen.wouldyouin._global.TestData.EventDomain;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
+import org.ktc2.cokaen.wouldyouin._global.testdata.EventData;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.host;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.host.entity;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtService;
 import org.ktc2.cokaen.wouldyouin.event.api.EventController;
@@ -70,7 +70,7 @@ class EventControllerUnitTest {
     @BeforeAll
     public static void init() {
         id = 3L;
-        validHost = createValidHost();
+        validHost = entity.get();
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
     }
@@ -186,12 +186,12 @@ class EventControllerUnitTest {
         mockMvc.perform(post("/api/events")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(EventDomain.createValidEventCreateRequest())))
+                .content(objectMapper.writeValueAsString(EventData.event.request.create.get())))
             .andDo(print())
             .andExpect(status().isCreated());
 
         //then
-        then(eventService).should(times(1)).create(eq(validHostId), any(EventCreateRequest.class));
+        then(eventService).should(times(1)).create(eq(host.memberIdentifier), any(EventCreateRequest.class));
     }
 
     @Test
@@ -203,11 +203,12 @@ class EventControllerUnitTest {
         mockMvc.perform(put("/api/events/" + id)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(EventDomain.createValidEventCreateRequest())))
+                .content(objectMapper.writeValueAsString(EventData.event.request.create.get())))
+            .andDo(print())
             .andExpect(status().isOk());
 
         //then
-        then(eventService).should(times(1)).update(eq(validHostId), eq(id), any(EventEditRequest.class));
+        then(eventService).should(times(1)).update(eq(host.memberIdentifier), eq(id), any(EventEditRequest.class));
     }
 
     @Test
@@ -221,6 +222,6 @@ class EventControllerUnitTest {
         ).andExpect(status().isNoContent());
 
         //then
-        then(eventService).should(times(1)).delete(eq(validHostId), eq(id));
+        then(eventService).should(times(1)).delete(eq(host.memberIdentifier), eq(id));
     }
 }

@@ -40,7 +40,7 @@ public class MemberImageService extends ImageService<MemberImage> {
     @Override
     protected MemberImage toEntity(ImageRequest imageRequest) {
         return MemberImage.builder()
-            .name(imageRequest.getUrl())
+            .name(imageRequest.getName())
             .size(imageRequest.getSize())
             .extension(imageRequest.getExtension())
             .build();
