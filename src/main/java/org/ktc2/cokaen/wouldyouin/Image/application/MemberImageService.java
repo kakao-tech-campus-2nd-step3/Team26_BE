@@ -38,7 +38,7 @@ public class MemberImageService extends ImageService<MemberImage> {
     }
 
     @Override
-    protected MemberImage toEntity(ImageRequest imageRequest) {
+    protected MemberImage mapToEntityFrom(ImageRequest imageRequest) {
         return MemberImage.builder()
             .name(imageRequest.getName())
             .size(imageRequest.getSize())
@@ -60,6 +60,6 @@ public class MemberImageService extends ImageService<MemberImage> {
 
     public MemberImage convert(String imageUrl) {
         ImageRequest imageRequest = imageStorageService.saveToDirectory(imageUrl, childPath);
-        return memberImageRepository.save(toEntity(imageRequest));
+        return memberImageRepository.save(mapToEntityFrom(imageRequest));
     }
 }

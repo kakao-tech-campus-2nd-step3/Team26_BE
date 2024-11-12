@@ -1,8 +1,10 @@
 package org.ktc2.cokaen.wouldyouin.event.application;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
+import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin._common.exception.NoLeftSeatException;
@@ -33,6 +35,7 @@ public class EventService {
     private final EventRepository eventRepository;
     private final HostService hostService;
     private final EventImageService eventImageService;
+    private final MemberImageService memberImageService;
 
     @Transactional
     public Event getByIdOrThrow(Long id) throws EntityNotFoundException {
@@ -72,9 +75,17 @@ public class EventService {
         Host host = hostService.getByIdOrThrow(identifier.id());
         List<EventImage> images = eventCreateRequest.getImageIds().stream()
             .map(eventImageService::getById).toList();
-        Event event = eventRepository.save(eventCreateRequest.toEntity(host, images));
+        Event event = eventRepository.save(eventCreateRequest.toEntity(host, images, getThumbnailUrl(images)));
         images.forEach(image -> eventImageService.setEvent(image, event));
         return getEventResponse(event);
+    }
+
+    private String getThumbnailUrl(List<EventImage> images) {
+        return Optional.ofNullable(images)
+            .map(List::getFirst)
+            .map(EventImage::getName)
+            .map(eventImageService::createThumbnail)
+            .orElse("");
     }
 
     @Transactional
@@ -84,7 +95,7 @@ public class EventService {
         event.getImages().forEach(image -> eventImageService.deleteImage(identifier, image.getId()));
         List<EventImage> images = eventEditRequest.getImageIds().stream()
             .map(eventImageService::getById).toList();
-        event.updateFrom(eventEditRequest, images);
+        event.updateFrom(eventEditRequest, images, getThumbnailUrl(images));
         images.forEach(image -> eventImageService.setEvent(image, event));
         return getEventResponse(event);
     }
@@ -92,6 +103,7 @@ public class EventService {
     @Transactional
     public void delete(MemberIdentifier identifier, Long eventId) {
         validateHostId(identifier, getByIdOrThrow(eventId));
+        eventImageService.deleteImage(identifier, eventId);
         eventRepository.deleteById(eventId);
     }
 

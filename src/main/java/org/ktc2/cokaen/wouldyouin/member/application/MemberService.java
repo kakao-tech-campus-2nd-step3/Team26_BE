@@ -25,9 +25,11 @@ public class MemberService implements MemberServiceCommonBehavior {
     @Transactional
     public MemberResponse createMember(MemberCreateRequest request) {
         MemberImage profileImage = memberImageService.convert(request.getProfileImageUrl());
-        return MemberResponse.from(memberRepository.save(request.toEntity(profileImage)));
+        String thumbnailImageUrl = memberImageService.createThumbnail(profileImage.getName());
+        return MemberResponse.from(memberRepository.save(request.toEntity(profileImage, thumbnailImageUrl)));
     }
 
+    // TODO : 리팩토링 꼭 할 것, 멤버 전체에 대해 연관관계 설정할 것
     @Transactional
     public MemberResponse updateMember(Long memberId, MemberEditRequest editRequest) {
         Member member = getByIdOrThrow(memberId);
@@ -36,7 +38,11 @@ public class MemberService implements MemberServiceCommonBehavior {
         Optional.ofNullable(editRequest.getPhoneNumber()).ifPresent(member::setPhone);
         Optional.ofNullable(editRequest.getProfileImageId())
             .map(memberImageService::getById)
-            .ifPresent(member::setProfileImage);
+            .ifPresent((image) -> {
+                member.setProfileImage(image);
+                String url = memberImageService.createThumbnail(memberImageService.createThumbnail(image.getName()));
+                member.setProfileImageThumbnailUrl(url);
+            });
         return MemberResponse.from(member);
     }
 

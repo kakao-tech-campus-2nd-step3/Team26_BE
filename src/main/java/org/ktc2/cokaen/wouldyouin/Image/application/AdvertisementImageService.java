@@ -40,7 +40,7 @@ public class AdvertisementImageService extends ImageService<AdvertisementImage> 
     }
 
     @Override
-    protected AdvertisementImage toEntity(ImageRequest imageRequest) {
+    protected AdvertisementImage mapToEntityFrom(ImageRequest imageRequest) {
         return AdvertisementImage.builder()
             .name(imageRequest.getName())
             .size(imageRequest.getSize())
@@ -58,7 +58,7 @@ public class AdvertisementImageService extends ImageService<AdvertisementImage> 
 
     @Transactional
     public AdvertisementImage saveImage(MultipartFile image) {
-        return adImageRepository.save(toEntity(imageStorageService.saveToDirectory(image, getChildPath())));
+        return adImageRepository.save(mapToEntityFrom(imageStorageService.saveToDirectory(image, getChildPath())));
     }
 
     @Transactional

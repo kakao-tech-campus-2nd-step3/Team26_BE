@@ -38,7 +38,7 @@ public class EventImageService extends ImageService<EventImage> {
     }
 
     @Override
-    protected EventImage toEntity(ImageRequest imageRequest) {
+    protected EventImage mapToEntityFrom(ImageRequest imageRequest) {
         return EventImage.builder()
             .name(imageRequest.getName())
             .size(imageRequest.getSize())

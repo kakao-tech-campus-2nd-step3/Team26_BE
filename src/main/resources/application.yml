@@ -52,6 +52,11 @@ image:
       child-path: event
     ad:
       child-path: advertisement
+    thumbnail:
+      child-path: thumbnail
+      width: 130
+      height: 90
+      extension: png
 
 # for jwt
 jwt:

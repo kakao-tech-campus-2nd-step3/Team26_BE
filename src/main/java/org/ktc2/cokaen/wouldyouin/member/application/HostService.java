@@ -27,19 +27,27 @@ public class HostService implements MemberServiceCommonBehavior, LikeableMemberS
     public MemberResponse createHost(HostCreateRequest request) {
         String hashedPassword = passwordEncoder.encode(request.getPassword());
         MemberImage profileImage = memberImageService.getById(request.getProfileImageId());
-        Host createdHost = hostRepository.save(request.toEntity(hashedPassword, profileImage));
+        String profileImageThumbnailUrl = memberImageService.createThumbnail(profileImage.getName());
+        Host createdHost = hostRepository.save(request.toEntity(hashedPassword, profileImage, profileImageThumbnailUrl));
         memberImageService.setBaseMember(profileImage, createdHost);
         return MemberResponse.from(createdHost);
     }
 
+    // TODO: 리팩토링할것
     @Transactional
     public MemberResponse updateHost(Long hostId, HostEditRequest request) {
         Host host = getByIdOrThrow(hostId);
         Optional.ofNullable(request.getNickname()).ifPresent(host::setNickname);
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(host::setPhone);
-        Optional.ofNullable(request.getProfileImageId()).map(memberImageService::getById).ifPresent(host::setProfileImage);
         Optional.ofNullable(request.getIntro()).ifPresent(host::setIntro);
         Optional.ofNullable(request.getHashtags()).ifPresent(host::setHashtags);
+        Optional.ofNullable(request.getProfileImageId())
+            .map(memberImageService::getById)
+            .ifPresent((image) -> {
+                host.setProfileImage(image);
+                String url = memberImageService.createThumbnail(memberImageService.createThumbnail(image.getName()));
+                host.setProfileImageThumbnailUrl(url);
+            });
 
         return MemberResponse.from(host);
     }

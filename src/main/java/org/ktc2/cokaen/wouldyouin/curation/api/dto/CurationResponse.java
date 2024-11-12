@@ -1,6 +1,5 @@
 package org.ktc2.cokaen.wouldyouin.curation.api.dto;
 
-import jakarta.persistence.Column;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;

@@ -108,7 +108,7 @@ public class Event {
     @Builder
     protected Event(String title, String content, Host host, Area area, Location location,
         LocalDateTime startTime, LocalDateTime endTime, Integer price, Integer totalSeat,
-        Category category, List<EventImage> images) {
+        Category category, List<EventImage> images, String thumbnailUrl) {
         this.title = title;
         this.content = content;
         this.host = host;
@@ -121,10 +121,11 @@ public class Event {
         this.leftSeat = totalSeat;
         this.category = category;
         Optional.ofNullable(images).ifPresent(this::setImages);
+        Optional.of(thumbnailUrl).ifPresent(this::setThumbnailUrl);
     }
 
     // Todo: oneToMany 연관관계에서 모든 null 처리
-    public void updateFrom(EventEditRequest eventEditRequest, List<EventImage> images) {
+    public void updateFrom(EventEditRequest eventEditRequest, List<EventImage> images, String thumbnailUrl) {
         Optional.ofNullable(eventEditRequest.getTitle()).ifPresent(this::setTitle);
         Optional.ofNullable(eventEditRequest.getContent()).ifPresent(this::setContent);
         Optional.ofNullable(eventEditRequest.getArea()).ifPresent(this::setArea);
@@ -135,6 +136,7 @@ public class Event {
         Optional.ofNullable(eventEditRequest.getTotalSeat()).ifPresent(this::setTotalSeat);
         Optional.ofNullable(eventEditRequest.getCategory()).ifPresent(this::setCategory);
         Optional.ofNullable(images).ifPresent(this::setImages);
+        Optional.ofNullable(thumbnailUrl).ifPresent(this::setThumbnailUrl);
     }
 
     public void decreaseLeftSeat(Integer count) {

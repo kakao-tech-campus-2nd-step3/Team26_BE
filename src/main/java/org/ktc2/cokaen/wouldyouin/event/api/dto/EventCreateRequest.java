@@ -71,7 +71,7 @@ public class EventCreateRequest {
         return imageIds.size() <= 5;
     }
 
-    public Event toEntity(Host host, List<EventImage> images) {
+    public Event toEntity(Host host, List<EventImage> images, String thumbnailUrl) {
         return Event.builder()
             .title(title)
             .content(content)
@@ -84,6 +84,7 @@ public class EventCreateRequest {
             .category(category)
             .host(host)
             .images(images)
+            .thumbnailUrl(thumbnailUrl)
             .build();
     }
 }

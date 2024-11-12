@@ -53,8 +53,8 @@ public class Member extends BaseMember {
     private List<Review> reviews = new ArrayList<>();
 
     // for Curator
-    protected Member(AccountType accountType, MemberType memberType, String email, String nickname, String phone, MemberImage profileImage, Area area, String gender, String socialId) {
-        super(accountType, memberType, email, nickname, phone, profileImage);
+    protected Member(AccountType accountType, MemberType memberType, String email, String nickname, String phone, MemberImage profileImage, String profileImageThumbNailUrl, Area area, String gender, String socialId) {
+        super(accountType, memberType, email, nickname, phone, profileImage, profileImageThumbNailUrl);
         this.area = area;
         this.gender = gender;
         this.socialId = socialId;
@@ -62,8 +62,8 @@ public class Member extends BaseMember {
 
     @Builder
     // for public builder
-    protected Member(AccountType accountType, String email, String nickname, String phone, MemberImage profileImage, Area area, String gender, String socialId) {
-        this(accountType, MemberType.welcome, email, nickname, phone, profileImage, area, gender, socialId);
+    protected Member(AccountType accountType, String email, String nickname, String phone, MemberImage profileImage, String profileImageThumbnailUrl, Area area, String gender, String socialId) {
+        this(accountType, MemberType.welcome, email, nickname, phone, profileImage, profileImageThumbnailUrl, area, gender, socialId);
     }
 
     public void updateFrom(MemberAdditionalInfoRequest request) {
