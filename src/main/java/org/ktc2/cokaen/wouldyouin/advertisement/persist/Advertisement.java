@@ -47,7 +47,8 @@ public class Advertisement {
     private LocalDateTime endTime;
 
     @Builder
-    public Advertisement(String title, AdvertisementImage advertisementImage, LocalDateTime startTime,
+    public Advertisement(String title, AdvertisementImage advertisementImage,
+        LocalDateTime startTime,
         LocalDateTime endTime) {
         this.title = title;
         this.advertisementImage = advertisementImage;

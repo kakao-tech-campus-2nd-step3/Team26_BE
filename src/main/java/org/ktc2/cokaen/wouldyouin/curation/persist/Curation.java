@@ -87,7 +87,8 @@ public class Curation {
     private LocalDateTime modifiedDate;
 
     @Builder
-    public Curation(Curator curator, String title, String content, List<CurationCard> curationCards, Area area, List<String> hashtags,
+    public Curation(Curator curator, String title, String content, List<CurationCard> curationCards,
+        Area area, List<String> hashtags,
         List<Event> events) {
         this.curator = curator;
         this.title = title;
@@ -98,7 +99,8 @@ public class Curation {
         Optional.ofNullable(events).ifPresent(this::setEvents);
     }
 
-    public void updateFrom(CurationEditRequest curationEditRequest, List<CurationCard> curationCards, List<Event> events) {
+    public void updateFrom(CurationEditRequest curationEditRequest,
+        List<CurationCard> curationCards, List<Event> events) {
         Optional.ofNullable(curationEditRequest.getTitle()).ifPresent(this::setTitle);
         Optional.ofNullable(curationEditRequest.getContent()).ifPresent(this::setContent);
         Optional.ofNullable(curationEditRequest.getArea()).ifPresent(this::setArea);
