@@ -18,7 +18,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
-import org.ktc2.cokaen.wouldyouin._global.TestData.EventDomain;
+import org.ktc2.cokaen.wouldyouin._global.testdata.EventData;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.host;
+import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationFilter;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
@@ -27,6 +30,7 @@ import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.event.persist.EventRepository;
 import org.ktc2.cokaen.wouldyouin.member.application.HostService;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
@@ -52,7 +56,7 @@ class EventServiceUnitTest {
     @BeforeEach
     void setUp() {
         eventService = new EventService(eventRepository, hostService, eventImageService);
-        validEvent = EventDomain.createValidEvent();
+        validEvent = EventData.event.entity.get();
     }
 
     @Test
@@ -135,11 +139,11 @@ class EventServiceUnitTest {
     void create() {
         // given
         Long hostId = validEvent.getHost().getId();
-        EventCreateRequest validEventCreateRequest = EventDomain.createValidEventCreateRequest();
+        EventCreateRequest validEventCreateRequest = EventData.event.request.create.get();
         given(eventRepository.save(any())).willReturn(validEvent);
 
         // when
-        eventService.create(hostId, validEventCreateRequest);
+        eventService.create(host.memberIdentifier, validEventCreateRequest);
 
         // then
         then(eventRepository).should(times(1)).save(any(Event.class));
@@ -151,11 +155,11 @@ class EventServiceUnitTest {
         // given
         Long eventId = validEvent.getId();
         Long hostId = validEvent.getHost().getId();
-        EventEditRequest validEventEditRequest = EventDomain.createValidEventEditRequest();
+        EventEditRequest validEventEditRequest = EventData.event.request.edit.get();
         given(eventRepository.findById(eventId)).willReturn(Optional.of(validEvent));
 
         // when
-        eventService.update(hostId, eventId, validEventEditRequest);
+        eventService.update(host.memberIdentifier, eventId, validEventEditRequest);
 
         // then
         then(eventRepository).should(times(1)).findById(eventId);
@@ -176,14 +180,14 @@ class EventServiceUnitTest {
     @DisplayName("유효하지 않은 행사 id를 통한 행사 수정 - 실패")
     void updateByInvalidId() {
         // given
-        EventEditRequest request = EventDomain.createValidEventEditRequest();
+        EventEditRequest request = EventData.event.request.edit.get();
         Long invalidHostId = 999L;
         given(eventRepository.findById(invalidHostId)).willThrow(RuntimeException.class);
 
         // when & then
         assertThrows(RuntimeException.class,
-            () -> eventService.update(invalidHostId, validEvent.getId(),
-                EventDomain.createValidEventEditRequest()));
+            () -> eventService.update(new MemberIdentifier(invalidHostId, MemberType.host), validEvent.getId(),
+                EventData.event.request.edit.get()));
     }
 
     @Test
@@ -196,7 +200,7 @@ class EventServiceUnitTest {
         // when
         given(eventRepository.findById(eventId)).willReturn(Optional.of(validEvent));
         willDoNothing().given(eventRepository).deleteById(eventId);
-        eventService.delete(hostId, eventId);
+        eventService.delete(host.memberIdentifier, eventId);
 
         // then
         then(eventRepository).should(times(1)).findById(eventId);
@@ -212,6 +216,6 @@ class EventServiceUnitTest {
         given(eventRepository.findById(eventId)).willThrow(RuntimeException.class);
 
         // when & then
-        assertThrows(RuntimeException.class, () -> eventService.delete(hostId, eventId));
+        assertThrows(RuntimeException.class, () -> eventService.delete(host.memberIdentifier, eventId));
     }
 }

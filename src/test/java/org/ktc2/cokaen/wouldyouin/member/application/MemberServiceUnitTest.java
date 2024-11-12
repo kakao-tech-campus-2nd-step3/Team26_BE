@@ -2,9 +2,7 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidMemberImage;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.createValidMember;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.createValidWelcomeMember;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.member.normal.entity.get;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
@@ -18,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._global.TestUtil;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.MemberAdditionalInfoRequest;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.create.MemberCreateRequest;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.edit.MemberEditRequest;
@@ -53,7 +52,7 @@ class MemberServiceUnitTest {
 
     @BeforeEach
     void setUp() {
-        validMember = createValidMember();
+        validMember = MemberData.normal.entity.get();
     }
 
     @Test
@@ -76,7 +75,7 @@ class MemberServiceUnitTest {
     @DisplayName("사용자 업데이트 테스트")
     void updateMember() {
         // given
-        MemberImage validMemberImage = createValidMemberImage();
+        MemberImage validMemberImage = get();
         Long givenMemberId = validMember.getId();
         given(memberRepository.findById(givenMemberId)).willReturn(Optional.of(validMember));
         given(memberImageService.getById(validMember.getProfileImage().getId())).willReturn(validMemberImage);
@@ -101,7 +100,7 @@ class MemberServiceUnitTest {
     @Test
     @DisplayName("소셜 신규 사용자 추가정보 기입 테스트")
     void updateWelcomeMember() {
-        Member validWelcomeMember = createValidWelcomeMember();
+        Member validWelcomeMember = MemberData.welcome.entity.get();
         given(memberRepository.findById(validWelcomeMember.getId())).willReturn(Optional.of(validWelcomeMember));
         given(memberAdditionalInfoRequest.getPhone()).willReturn(validWelcomeMember.getPhone());
         given(memberAdditionalInfoRequest.getArea()).willReturn(validWelcomeMember.getArea());

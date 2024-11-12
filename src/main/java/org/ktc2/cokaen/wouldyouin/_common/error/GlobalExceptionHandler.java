@@ -33,6 +33,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponseBody<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         return ApiResponse.error(ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult().getFieldErrors().stream()
             .map(DefaultMessageSourceResolvable::getDefaultMessage)
+//            .map((reslover) -> "필드명: " + reslover.getField() + reslover.getDefaultMessage())
             .collect(Collectors.joining(", ")));
     }
 }

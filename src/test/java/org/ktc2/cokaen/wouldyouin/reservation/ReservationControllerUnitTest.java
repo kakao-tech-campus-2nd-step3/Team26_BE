@@ -2,9 +2,6 @@ package org.ktc2.cokaen.wouldyouin.reservation;
 
 import static java.lang.Math.abs;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.validCuratorId;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.validHostId;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.validMemberId;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -22,10 +19,13 @@ import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.ktc2.cokaen.wouldyouin._global.TestData.ReservationDomain;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.curator;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.host;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.normal;
+import org.ktc2.cokaen.wouldyouin._global.testdata.ReservationData;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.ktc2.cokaen.wouldyouin.reservation.api.ReservationController;
 import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationRequest;
@@ -80,7 +80,7 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByMemberId(
-            eq(validMemberId), eq(PageRequest.of(5, 20)), eq(100L));
+            eq(normal.id), eq(PageRequest.of(5, 20)), eq(100L));
     }
 
     @Test
@@ -93,7 +93,7 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByMemberId(
-            eq(validMemberId), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
+            eq(normal.id), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
     }
 
     @Test
@@ -109,7 +109,7 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByMemberId(
-            eq(validCuratorId), eq(PageRequest.of(5, 20)), eq(100L));
+            eq(curator.id), eq(PageRequest.of(5, 20)), eq(100L));
     }
 
     @Test
@@ -141,7 +141,7 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByEventId(
-            eq(validHostId), eq(randomId), eq(PageRequest.of(5, 20)), eq(100L));
+            eq(host.memberIdentifier), eq(randomId), eq(PageRequest.of(5, 20)), eq(100L));
     }
 
     @Test
@@ -155,7 +155,7 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByEventId(
-            eq(validHostId), eq(randomId), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
+            eq(host.memberIdentifier), eq(randomId), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
     }
 
     @Test
@@ -205,7 +205,7 @@ class ReservationControllerUnitTest {
     void createReservation1() throws Exception {
         // given
         ArgumentCaptor<ReservationRequest> captor = ArgumentCaptor.forClass(ReservationRequest.class);
-        ReservationRequest request = ReservationDomain.createValidReservationRequest();
+        ReservationRequest request = ReservationData.reservation.request.get();
 
         // when
         mockMvc.perform(post("/api/reservations")
@@ -216,7 +216,7 @@ class ReservationControllerUnitTest {
             .andExpect(status().isCreated());
 
         // then
-        then(reservationService).should(times(1)).create(eq(validMemberId), captor.capture());
+        then(reservationService).should(times(1)).create(eq(normal.id), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
@@ -226,7 +226,7 @@ class ReservationControllerUnitTest {
     void createReservation2() throws Exception {
         // given
         ArgumentCaptor<ReservationRequest> captor = ArgumentCaptor.forClass(ReservationRequest.class);
-        ReservationRequest request = ReservationDomain.createValidReservationRequest();
+        ReservationRequest request = ReservationData.reservation.request.get();
 
         // when
         mockMvc.perform(post("/api/reservations")
@@ -237,7 +237,7 @@ class ReservationControllerUnitTest {
             .andExpect(status().isCreated());
 
         // then
-        then(reservationService).should(times(1)).create(eq(validCuratorId), captor.capture());
+        then(reservationService).should(times(1)).create(eq(curator.id), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
@@ -249,7 +249,7 @@ class ReservationControllerUnitTest {
         mockMvc.perform(post("/api/reservations")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(ReservationDomain.createValidReservationRequest())))
+                .content(objectMapper.writeValueAsString(ReservationData.reservation.request.get())))
             .andDo(print())
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
@@ -263,7 +263,7 @@ class ReservationControllerUnitTest {
     @WithMockMember
     void createReservation4() throws Exception {
         // given
-        ReservationRequest request = ReservationDomain.createValidReservationRequest().toBuilder()
+        ReservationRequest request = ReservationData.reservation.request.get().toBuilder()
             .eventId(null).build();
 
         // when
@@ -284,7 +284,7 @@ class ReservationControllerUnitTest {
     @WithMockMember
     void createReservation5() throws Exception {
         // given
-        ReservationRequest request = ReservationDomain.createValidReservationRequest().toBuilder()
+        ReservationRequest request = ReservationData.reservation.request.get().toBuilder()
             .quantity(null).build();
 
         // when
@@ -305,7 +305,7 @@ class ReservationControllerUnitTest {
     @WithMockMember
     void createReservation6() throws Exception {
         // given
-        ReservationRequest request = ReservationDomain.createValidReservationRequest().toBuilder()
+        ReservationRequest request = ReservationData.reservation.request.get().toBuilder()
             .quantity(0).build();
 
         // when
@@ -332,7 +332,7 @@ class ReservationControllerUnitTest {
             .andExpect(status().isNoContent());
 
         // then
-        then(reservationService).should(times(1)).delete(validMemberId, randomId);
+        then(reservationService).should(times(1)).delete(normal.id, randomId);
     }
 
     @Test
@@ -346,7 +346,7 @@ class ReservationControllerUnitTest {
             .andExpect(status().isNoContent());
 
         // then
-        then(reservationService).should(times(1)).delete(validCuratorId, randomId);
+        then(reservationService).should(times(1)).delete(curator.id, randomId);
     }
 
     @Test
