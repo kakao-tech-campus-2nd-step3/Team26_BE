@@ -7,122 +7,189 @@ import org.ktc2.cokaen.wouldyouin.Image.persist.AdvertisementImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
+import org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.R.memberImage;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class ImageData {
 
-    public static final long validMemberImageId = 1101L;
-    public static final long validEventImageId = 1201L;
-    public static final long validCurationImageId = 1301L;
-    public static final long validAdImageId = 1401L;
-
-    public static MemberImage createValidMemberImage() {
-        MemberImage validMemberImage = MemberImage.builder()
-            .url("member/memberImage.jpg")
-            .size(10L)
-            .extension(".jpg")
-            .build();
-        ReflectionTestUtils.setField(validMemberImage, "id", 1101L);
-//            ReflectionTestUtils.setField(validMemberImage, "baseMember", MemberDomain.createValidMember());
-        return validMemberImage;
+    public static class R {
+        public static class memberImage {
+            public static final Long id = 1101L;
+            public static final String name = "memberImage1.jpg";
+            public static final String url = "https://wouldyouin.store/api/images/memberImage1.jpg";
+            public static final Long size = 10L;
+            public static final String extension = ".jpg";
+        }
     }
 
-    public static EventImage createValidEventImage() {
-        EventImage validEventImage = EventImage.builder()
-            .url("event/eventImage.jpg")
-            .size(20L)
-            .extension(".jpg")
-            .build();
-        ReflectionTestUtils.setField(validEventImage, "id", 1201L);
-//            ReflectionTestUtils.setField(validMemberImage, "baseMember", MemberDomain.createValidMember());
-        return validEventImage;
+    // name: v파일 이름만 있어야 함
+        // 예: memberImage1.png
+    // url: 도메인 그거
+        // 예: https://localhost:8080/images/member/Image1.png
+
+    public static class member {
+        public static class normal {
+            public static class entity {
+                public static MemberImage create() {
+                    MemberImage validMemberImage = MemberImage.builder()
+                        .name(memberImage.name)
+                        .size(memberImage.size)
+                        .extension(memberImage.extension)
+                        .build();
+                    ReflectionTestUtils.setField(validMemberImage, "id", memberImage.id);
+            //        ReflectionTestUtils.setField(validMemberImage, "baseMember", createValidMember());
+                    return validMemberImage;
+                }
+            }
+            public static class request {
+                public static ImageRequest create() {
+                    return ImageRequest.builder()
+                        .url(memberImage.url)
+                        .size(memberImage.size)
+                        .extension(memberImage.extension)
+                        .build();
+                }
+            }
+        }
+        public static class curator {
+            public static class entity {
+
+            }
+            public static class request {
+
+            }
+        }
+        public static class host {
+            public static class entity {
+
+            }
+            public static class request {
+
+            }
+        }
     }
 
-    public static CurationImage createValidCurationImage1() {
-        CurationImage validCurationImage = CurationImage.builder()
-            .url("curation/curationImage1.jpg")
-            .size(30L)
-            .extension(".jpg")
-            .build();
-        ReflectionTestUtils.setField(validCurationImage, "id", 1301L);
-//            ReflectionTestUtils.setField(validMemberImage, "baseMember", MemberDomain.createValidMember());
-        return validCurationImage;
+    public static class event {
+        public static class entity {
+
+            public static EventImage createValidEventImage() {
+                EventImage validEventImage = EventImage.builder()
+                    .name("wouldyouin.com/eventImage1.jpg")
+                    .size(20L)
+                    .extension(".jpg")
+                    .build();
+                ReflectionTestUtils.setField(validEventImage, "id", 1201L);
+        //        ReflectionTestUtils.setField(validEventImage, "baseMember", createValidHost());
+                return validEventImage;
+            }
+        }
+        public static class request {
+
+            public static ImageRequest createValidEventImageRequest() {
+                return ImageRequest.builder()
+                    .url("wouldyouin.com/eventImage1.jpg")
+                    .size(20L)
+                    .extension(".jpg")
+                    .build();
+            }
+        }
     }
 
-    public static CurationImage createValidCurationImage2() {
-        CurationImage validCurationImage = CurationImage.builder()
-            .url("curation/curationImage2.jpg")
-            .size(30L)
-            .extension(".jpg")
-            .build();
-        ReflectionTestUtils.setField(validCurationImage, "id", 1302L);
-//            ReflectionTestUtils.setField(validMemberImage, "baseMember", MemberDomain.createValidMember());
-        return validCurationImage;
+    public static class curation1 {
+        public static class entity {
+
+            public static CurationImage createValidCurationImage1() {
+                CurationImage validCurationImage = CurationImage.builder()
+                    .name("wouldyouin.com/curationImage1.jpg")
+                    .size(30L)
+                    .extension(".jpg")
+                    .build();
+                ReflectionTestUtils.setField(validCurationImage, "id", 1301L);
+        //        ReflectionTestUtils.setField(validCurationImage, "baseMember", createValidCurator());
+                return validCurationImage;
+            }
+        }
+        public static class request {
+
+            public static ImageRequest createValidCurationImageRequest() {
+                return ImageRequest.builder()
+                    .url("wouldyouin.com/curationImage1.jpg")
+                    .size(30L)
+                    .extension(".jpg")
+                    .build();
+            }
+        }
+        public static class response {
+
+            public static ImageResponse createValidCurationImageResponse1() {
+                return ImageResponse.builder()
+                    .id(1301L)
+                    .url("wouldyouin.com/curationImage1.jpg")
+                    .size(30L)
+                    .extension(".jpg")
+                    .createdDate(LocalDateTime.of(2024, 3, 23, 0, 0))
+                    .build();
+            }
+        }
     }
 
-    public static AdvertisementImage createValidAdImage() {
-        AdvertisementImage validAdImage = AdvertisementImage.builder()
-            .url("curation/curationImage.jpg")
-            .size(40L)
-            .extension(".jpg")
-            .build();
-        ReflectionTestUtils.setField(validAdImage, "id", 1401L);
-//            ReflectionTestUtils.setField(validMemberImage, "baseMember", MemberDomain.createValidMember());
-        return validAdImage;
+    public static class curation2 {
+        public static class entity {
+
+            public static CurationImage createValidCurationImage2() {
+                CurationImage validCurationImage = CurationImage.builder()
+                    .name("wouldyouin.com/curationImage2.jpg")
+                    .size(30L)
+                    .extension(".jpg")
+                    .build();
+                ReflectionTestUtils.setField(validCurationImage, "id", 1302L);
+        //        ReflectionTestUtils.setField(validCurationImage, "baseMember", createValidCurator());
+                return validCurationImage;
+            }
+        }
+        public static class request {
+
+        }
+        public static class response {
+
+            public static ImageResponse createValidCurationImageResponse2() {
+                return ImageResponse.builder()
+                    .id(1302L)
+                    .url("wouldyouin.com/curationImage2.jpg")
+                    .size(30L)
+                    .extension(".png")
+                    .createdDate(LocalDateTime.of(2024, 3, 23, 0, 0))
+                    .build();
+            }
+        }
     }
 
-    public static ImageRequest createValidMemberImageRequest() {
-        return ImageRequest.builder()
-            .url("member/memberImage.jpg")
-            .size(10L)
-            .extension(".jpg")
-            .build();
-    }
+    public static class advertisement {
+        public static class entity {
 
-    public static ImageRequest createValidEventImageRequest() {
-        return ImageRequest.builder()
-            .url("event/eventImage.jpg")
-            .size(20L)
-            .extension(".jpg")
-            .build();
-    }
+            public static AdvertisementImage createValidAdImage() {
+                AdvertisementImage validAdImage = AdvertisementImage.builder()
+                    .name("adImage1.jpg")
+                    .size(40L)
+                    .extension(".jpg")
+                    .build();
+                ReflectionTestUtils.setField(validAdImage, "id", 1401L);
+        //        ReflectionTestUtils.setField(validAdImage, "baseMember", createValidMember());
+                return validAdImage;
+            }
+        }
+        public static class request {
 
-    public static ImageRequest createValidCurationImageRequest() {
-        return ImageRequest.builder()
-            .url("curation/curationImage.jpg")
-            .size(30L)
-            .extension(".jpg")
-            .build();
-    }
-
-    public static ImageRequest createValidAdImageRequest() {
-        return ImageRequest.builder()
-            .url("ad/adImage.jpg")
-            .size(40L)
-            .extension(".jpg")
-            .build();
-    }
-
-    public static ImageResponse createValidImageResponse1() {
-        return ImageResponse.builder()
-            .id(1L)
-            .url("curationImageUrl.jpg")
-            .size(10L)
-            .extension(".jpg")
-            .createdDate(LocalDateTime.of(2024, 3, 23, 0, 0))
-            .build();
-    }
-
-    public static ImageResponse createValidImageResponse2() {
-        return ImageResponse.builder()
-            .id(2L)
-            .url("memberImage.png")
-            .size(20L)
-            .extension(".png")
-            .createdDate(LocalDateTime.of(2024, 3, 23, 0, 0))
-            .build();
+            public static ImageRequest createValidAdImageRequest() {
+                return ImageRequest.builder()
+                    .url("wouldyouin.com/adImage1.jpg")
+                    .size(40L)
+                    .extension(".jpg")
+                    .build();
+            }
+        }
     }
 
     public static MockMultipartFile createValidMultipartFile1() {

@@ -4,6 +4,7 @@ import static java.lang.Math.abs;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.createValidCuration;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.createValidCurationResponse;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -16,12 +17,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationResponse;
 import org.ktc2.cokaen.wouldyouin.curation.application.CurationCardService;
 import org.ktc2.cokaen.wouldyouin.curation.application.CurationService;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationRepository;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.member.application.CuratorService;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -45,20 +49,18 @@ class CurationServiceTest {
     @Mock
     private MemberImage memberImage;
 
-    private Curation validCuration;
-
     private final long randomId = abs(new Random().nextLong());
 
     @BeforeEach
     void setUp() {
         curationService = new CurationService(curationRepository, curatorService, eventService, curationCardService);
-        validCuration = createValidCuration();
     }
 
     @Test
     @DisplayName("큐레이션 ID를 통해 큐레이션 조회한다.")
     void getByIdOrThrow1() {
         // given
+        Curation validCuration = createValidCuration();
         given(curationRepository.findById(randomId)).willReturn(Optional.of(validCuration));
 
         // when
@@ -78,11 +80,23 @@ class CurationServiceTest {
         // when, then
         EntityNotFoundException thrown = assertThrows(
             EntityNotFoundException.class, () -> curationService.getByIdOrThrow(randomId));
+        then(curationRepository).should(times(1)).findById(randomId);
         assertThat(thrown.getMessage()).isEqualTo("해당하는 큐레이션을 찾을 수 없습니다.");
     }
 
     @Test
+    @DisplayName("큐레이션 ID를 통해 큐레이션을 찾지 못한 경우, 예외를 던진다.")
     void getById() {
+        // given
+        Curation validCuration = createValidCuration();
+        given(curationRepository.findById(randomId)).willReturn(Optional.of(validCuration));
+
+        // when
+        CurationResponse response = curationService.getById(randomId);
+
+        // then
+        then(curationRepository).should(times(1)).findById(randomId);
+        assertThat(response).usingRecursiveComparison().isEqualTo(createValidCurationResponse());
     }
 
     @Test

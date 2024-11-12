@@ -1,7 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidMemberImage;
 import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.createValidHost;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
+import org.ktc2.cokaen.wouldyouin._global.testdata.ImageData;
 import org.ktc2.cokaen.wouldyouin.auth.api.dto.LocalLoginRequest;
 import org.ktc2.cokaen.wouldyouin._global.TestUtil;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.create.HostCreateRequest;
@@ -88,7 +88,7 @@ class HostServiceUnitTest {
     void updateHost() {
         // given
         Long newProfileImageId = 5L;
-        MemberImage newProfileImage = createValidMemberImage();
+        MemberImage newProfileImage = ImageData.member.entity.create();
         newProfileImage.setBaseMember(validHost);
         HostEditRequest editRequest = HostEditRequest.builder()
             .nickname(TestUtil.getOrNull("newNickname"))

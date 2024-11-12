@@ -2,7 +2,7 @@ package org.ktc2.cokaen.wouldyouin.curation;
 
 import static java.lang.Math.abs;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.createValidCurationCardRequest1;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.createValidCurationCard1Request;
 import static org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.createValidCurationCreateRequest;
 import static org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.createValidCurationEditRequest;
 import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.validCuratorId;
@@ -29,7 +29,6 @@ import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember;
-import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.ktc2.cokaen.wouldyouin.curation.api.CurationController;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
@@ -228,7 +227,7 @@ class CurationControllerUnitTest {
     void createCuration5() throws Exception {
         // given
         CurationCreateRequest request = createValidCurationCreateRequest().toBuilder()
-            .curationCards(List.of(createValidCurationCardRequest1().toBuilder().subtitle("").build()))
+            .curationCards(List.of(createValidCurationCard1Request().toBuilder().subtitle("").build()))
             .build();
 
         // when
@@ -250,7 +249,7 @@ class CurationControllerUnitTest {
     void createCuration6() throws Exception {
         // given
         CurationCreateRequest request = createValidCurationCreateRequest().toBuilder()
-            .curationCards(List.of(createValidCurationCardRequest1().toBuilder().content(null).build()))
+            .curationCards(List.of(createValidCurationCard1Request().toBuilder().content(null).build()))
             .build();
 
         // when
@@ -272,7 +271,7 @@ class CurationControllerUnitTest {
     void createCuration7() throws Exception {
         // given
         CurationCreateRequest request = createValidCurationCreateRequest().toBuilder()
-            .curationCards(List.of(createValidCurationCardRequest1().toBuilder().content(null).build()))
+            .curationCards(List.of(createValidCurationCard1Request().toBuilder().content(null).build()))
             .build();
 
         // when
@@ -294,7 +293,7 @@ class CurationControllerUnitTest {
     void createCuration8() throws Exception {
         // given
         CurationCreateRequest request = createValidCurationCreateRequest().toBuilder()
-            .curationCards(List.of(createValidCurationCardRequest1().toBuilder().content("짧은 내용").build()))
+            .curationCards(List.of(createValidCurationCard1Request().toBuilder().content("짧은 내용").build()))
             .build();
 
         // when
@@ -316,7 +315,7 @@ class CurationControllerUnitTest {
     void createCuration9() throws Exception {
         // given
         CurationCreateRequest request =  createValidCurationCreateRequest().toBuilder()
-            .curationCards(List.of(createValidCurationCardRequest1().toBuilder()
+            .curationCards(List.of(createValidCurationCard1Request().toBuilder()
                 .imageIds(List.of(1L, 2L, 3L, 4L, 5L, 6L)).build()))
             .build();
 
@@ -459,7 +458,7 @@ class CurationControllerUnitTest {
     void updateCuration5() throws Exception {
         // given
         CurationEditRequest request = createValidCurationEditRequest().toBuilder()
-            .curationCards(List.of(createValidCurationCardRequest1().toBuilder()
+            .curationCards(List.of(createValidCurationCard1Request().toBuilder()
                 .subtitle("").build()))
             .build();
 
@@ -482,7 +481,7 @@ class CurationControllerUnitTest {
     void updateCuration6() throws Exception {
         // given
         CurationEditRequest request = createValidCurationEditRequest().toBuilder()
-            .curationCards(List.of(createValidCurationCardRequest1().toBuilder()
+            .curationCards(List.of(createValidCurationCard1Request().toBuilder()
                 .content(null).build()))
             .build();
 
@@ -505,7 +504,7 @@ class CurationControllerUnitTest {
     void updateCuration7() throws Exception {
         // given
         CurationEditRequest request = createValidCurationEditRequest().toBuilder()
-            .curationCards(List.of(createValidCurationCardRequest1().toBuilder()
+            .curationCards(List.of(createValidCurationCard1Request().toBuilder()
                 .content("짧은 내용").build()))
             .build();
 
@@ -528,7 +527,7 @@ class CurationControllerUnitTest {
     void updateCuration8() throws Exception {
         // given
         CurationEditRequest request = createValidCurationEditRequest().toBuilder()
-            .curationCards(List.of(createValidCurationCardRequest1().toBuilder()
+            .curationCards(List.of(createValidCurationCard1Request().toBuilder()
                 .imageIds(List.of(1L, 2L, 3L, 4L, 5L, 6L)).build()))
             .build();
 

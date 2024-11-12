@@ -3,6 +3,7 @@ package org.ktc2.cokaen.wouldyouin._global.testdata;
 import java.util.List;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
+import org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.member.normal.entity;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.relation.ReservationMemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
@@ -13,6 +14,69 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 public class MemberData {
 
+    public static class R {
+        public static class member {
+
+        }
+        public static class curator {
+
+        }
+        public static class host {
+
+        }
+        public static class welcome {
+
+        }
+        public static class admin {
+
+        }
+    }
+
+    public static class normal {
+        public static class entity {
+
+        }
+        public static class request {
+
+        }
+        public static class response {
+
+        }
+    }
+    public static class curator {
+        public static class entity {
+
+        }
+        public static class request {
+
+        }
+        public static class response {
+
+        }
+    }
+    public static class host {
+        public static class entity {
+
+        }
+        public static class request {
+
+        }
+        public static class response {
+
+        }
+    }
+    public static class welcome {
+        public static class entity {
+
+        }
+        public static class request {
+
+        }
+        public static class response {
+
+        }
+    }
+
     public static final long validMemberId = 101L;
     public static final long validCuratorId = 102L;
     public static final long validHostId = 103L;
@@ -20,7 +84,7 @@ public class MemberData {
     public static final long validAdminId = 105L;
 
     public static Member createValidMember() {
-        MemberImage memberImage = ImageData.createValidMemberImage();
+        MemberImage memberImage = entity.create();
         Member ret = Member.builder()
             .accountType(AccountType.kakao)
             .email("member1@example.com")
@@ -38,7 +102,7 @@ public class MemberData {
     }
 
     public static Curator createValidCurator() {
-        MemberImage memberImage = ImageData.createValidMemberImage();
+        MemberImage memberImage = entity.create();
         Curator ret = Curator.curatorBuilder()
             .accountType(AccountType.google)
             .email("curator1@example.com")
@@ -57,7 +121,7 @@ public class MemberData {
     }
 
     public static Host createValidHost() {
-        MemberImage memberImage = ImageData.createValidMemberImage();
+        MemberImage memberImage = entity.create();
         Host ret = Host.builder()
             .email("curator1@example.com")
             .nickname("nick_curator_12")
@@ -73,7 +137,7 @@ public class MemberData {
     }
 
     public static Member createValidWelcomeMember() {
-        MemberImage memberImage = ImageData.createValidMemberImage();
+        MemberImage memberImage = entity.create();
         Member ret = Member.builder()
             .accountType(AccountType.kakao)
             .email("member2@example.com")

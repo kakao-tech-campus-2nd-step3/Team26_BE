@@ -30,6 +30,8 @@ public class TestData {
             .build();
     }
 
+    public static
+
     public static class EventDomain {
 
         public static Event createValidEvent() {
@@ -37,7 +39,7 @@ public class TestData {
                 .title("title")
                 .content("content")
                 .area(Area.전체)
-                .location(new Location(132.0, 43.0, "광주 북구 용봉로77"))
+                .location(new Location(132.0, 43.0, "광주 북구 용봉로 77"))
                 .startTime(LocalDateTime.now())
                 .endTime(LocalDateTime.now())
                 .price(10000)
@@ -85,7 +87,7 @@ public class TestData {
                 .title("title")
                 .location(new Location(132.0, 43.0, "광주 북구 용봉로 77"))
                 .thumbnailImageUrl("thumbnailImageUrl")
-                .hostProfileImageUrl("hostProfileImageUrl")
+                .hostProfileImageUrl("wouldyouin.com/memberImage1.jpg")
                 .hostNickname("nick_curator_12")
                 .build();
         }

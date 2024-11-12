@@ -1,8 +1,8 @@
 package org.ktc2.cokaen.wouldyouin.image;
 
 import static java.lang.Math.abs;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidImageResponse1;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidImageResponse2;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.curation1.response.createValidCurationImageResponse1;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.curation2.response.createValidCurationImageResponse2;
 import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidMultipartFile1;
 import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidMultipartFile2;
 import static org.mockito.ArgumentMatchers.eq;
@@ -31,7 +31,6 @@ import org.ktc2.cokaen.wouldyouin.Image.application.ImageServiceFactory;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageStorageService;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember;
-import org.ktc2.cokaen.wouldyouin._global.testdata.ImageData;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -100,7 +99,7 @@ class ImageControllerTest {
         MockMultipartFile image2 = createValidMultipartFile2();
         given((CurationImageService) imageServiceFactory.getImageService(ImageDomain.CURATION)).willReturn(curationImageService);
         given(curationImageService.saveImages(List.of(image1, image2)))
-            .willReturn(List.of(createValidImageResponse1(), createValidImageResponse2()));
+            .willReturn(List.of(createValidCurationImageResponse1(), createValidCurationImageResponse2()));
 
         // when
         mockMvc.perform(multipart("/api/images")
