@@ -1,7 +1,10 @@
 package org.ktc2.cokaen.wouldyouin.curation.application;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin.Image.application.CurationImageService;
+import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
@@ -31,6 +34,7 @@ public class CurationService {
     private final CuratorService curatorService;
     private final EventService eventService;
     private final CurationCardService curationCardService;
+    private final CurationImageService curationImageService;
 
     @Transactional(readOnly = true)
     public Curation getByIdOrThrow(Long id) throws EntityNotFoundException {
@@ -66,9 +70,20 @@ public class CurationService {
         List<Event> events = curationCreateRequest.getEventIds().stream()
             .map(eventService::getByIdOrThrow)
             .toList();
-        Curation curation = curationRepository.save(curationCreateRequest.toEntity(curator, curationCards, events));
+        Curation curation = curationRepository.save(
+            curationCreateRequest.toEntity(curator, curationCards, events, getThumbnailUrl(curationCards)));
         curationCards.forEach(curationCard -> curationCardService.setCuration(curationCard, curation));
         return CurationResponse.from(curation);
+    }
+
+    private String getThumbnailUrl(List<CurationCard> curationCards) {
+        return Optional.ofNullable(curationCards)
+            .map(List::getFirst)
+            .map(CurationCard::getCurationImages)
+            .map(List::getFirst)
+            .map(CurationImage::getName)
+            .map(curationImageService::createThumbnail)
+            .orElse("");
     }
 
     @Transactional
@@ -82,7 +97,7 @@ public class CurationService {
             .map(eventService::getByIdOrThrow)
             .toList();
         curation.getCurationCards().forEach(card -> curationCardService.delete(identifier, card.getId()));
-        curation.updateFrom(curationEditRequest, curationCards, events);
+        curation.updateFrom(curationEditRequest, curationCards, events, getThumbnailUrl(curationCards));
         curationCards.forEach(curationCard -> curationCardService.setCuration(curationCard, curation));
         return CurationResponse.from(curation);
     }

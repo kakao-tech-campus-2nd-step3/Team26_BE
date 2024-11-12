@@ -51,14 +51,17 @@ public abstract class BaseMember {
     @OneToOne(mappedBy = "baseMember")
     private MemberImage profileImage;
 
+    private String profileImageThumbnailUrl;
+
     protected BaseMember(AccountType accountType, MemberType memberType, String email, String nickname, String phone,
-        MemberImage profileImage) {
+        MemberImage profileImage, String profileImageThumbnailUrl) {
         this.accountType = accountType;
         this.memberType = memberType;
         this.email = email;
         this.nickname = nickname;
         this.phone = phone;
         this.profileImage = profileImage;
+        this.profileImageThumbnailUrl = profileImageThumbnailUrl;
     }
 
     public String getProfileImageUrl() {

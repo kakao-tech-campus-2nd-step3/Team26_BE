@@ -42,19 +42,20 @@ public class Curator extends Member implements LikeableMember {
     private List<Curation> curations = new ArrayList<>();
 
     @Builder(builderMethodName = "curatorBuilder")
-    public Curator(AccountType accountType, String email, String nickname, String phone, MemberImage profileImage, Area area, String gender,
+    public Curator(AccountType accountType, String email, String nickname, String phone, MemberImage profileImage, String profileImageThumbnailUrl, Area area, String gender,
         String socialId) {
-        super(accountType, MemberType.curator, email, nickname, phone, profileImage, area, gender, socialId);
+        super(accountType, MemberType.curator, email, nickname, phone, profileImage, profileImageThumbnailUrl, area, gender, socialId);
         this.intro = "";
         this.likes = 0;
         hashtags = new ArrayList<>();
     }
 
-    public void updateFrom(CuratorEditRequest request, MemberImage image) {
+    public void updateFrom(CuratorEditRequest request, MemberImage image, String profileImageThumbnailUrl) {
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(this::setPhone);
         Optional.ofNullable(request.getNickname()).ifPresent(this::setNickname);
         Optional.ofNullable(request.getArea()).ifPresent(this::setArea);
         Optional.ofNullable(request.getIntro()).ifPresent(this::setIntro);
         Optional.ofNullable(image).ifPresent(this::setProfileImage);
+        Optional.ofNullable(profileImageThumbnailUrl).ifPresent(this::setProfileImageThumbnailUrl);
     }
 }

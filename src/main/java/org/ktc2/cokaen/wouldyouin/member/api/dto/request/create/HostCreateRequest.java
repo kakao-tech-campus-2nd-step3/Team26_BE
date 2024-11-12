@@ -20,7 +20,7 @@ public class HostCreateRequest extends MemberCreateRequestBase {
         this.profileImageId = profileImageId;
     }
 
-    public Host toEntity(String hashedPassword, MemberImage profileImage) {
+    public Host toEntity(String hashedPassword, MemberImage profileImage, String thumbnailImageUrl) {
 
         return Host.builder()
             .nickname(this.nickname)
@@ -28,6 +28,7 @@ public class HostCreateRequest extends MemberCreateRequestBase {
             .email(this.email)
             .phone(this.phone)
             .hashedPassword(hashedPassword)
+            .profileImageThumbnailUrl(thumbnailImageUrl)
             .build();
     }
 }

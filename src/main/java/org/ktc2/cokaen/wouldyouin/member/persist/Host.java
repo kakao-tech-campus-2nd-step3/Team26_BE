@@ -43,8 +43,8 @@ public class Host extends BaseMember implements LikeableMember {
     private List<Event> events = new ArrayList<>();
 
     @Builder
-    protected Host(String email, String nickname, String phone, String hashedPassword, MemberImage profileImage) {
-        super(AccountType.local, MemberType.host, email, nickname, phone, profileImage);
+    protected Host(String email, String nickname, String phone, String hashedPassword, MemberImage profileImage, String profileImageThumbnailUrl) {
+        super(AccountType.local, MemberType.host, email, nickname, phone, profileImage, profileImageThumbnailUrl);
         this.hashedPassword = hashedPassword;
         this.intro = "";
         this.likes = 0;

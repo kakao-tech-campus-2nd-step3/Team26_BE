@@ -32,7 +32,7 @@ public abstract class ImageService<T extends Image> {
 
     protected abstract String getChildPath();
 
-    protected abstract T toEntity(ImageRequest imageRequest);
+    protected abstract T mapToEntityFrom(ImageRequest imageRequest);
 
     protected abstract void validateMemberId(MemberIdentifier identifier, T image);
 
@@ -50,6 +50,11 @@ public abstract class ImageService<T extends Image> {
         validateMemberId(identifier, image);
         delete(imageId);
         imageStorageService.delete(getChildPath(), image.getName());
+        // ToDO : 썸네일도 지워라
+    }
+
+    public String createThumbnail(String fileName) {
+        return imageStorageService.createThumbnailImage(getChildPath(), fileName);
     }
 
     public T getById(Long id) {
@@ -58,7 +63,7 @@ public abstract class ImageService<T extends Image> {
     }
 
     protected ImageResponse create(ImageRequest imageRequest) {
-        T image = toEntity(imageRequest);
+        T image = mapToEntityFrom(imageRequest);
         return ImageResponse.from(getImageRepository().save(image), getImageUrl(image));
     }
 
