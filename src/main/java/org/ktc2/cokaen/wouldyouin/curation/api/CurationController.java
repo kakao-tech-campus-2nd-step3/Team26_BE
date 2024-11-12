@@ -64,23 +64,23 @@ public class CurationController {
     @PostMapping
     public ResponseEntity<ApiResponseBody<CurationResponse>> createCuration(
         @Valid @RequestBody CurationCreateRequest curationCreateRequest,
-        @Authorize(MemberType.curator) MemberIdentifier curator) {
-        return ApiResponse.created(curationService.create(curator.id(), curationCreateRequest));
+        @Authorize(MemberType.curator) MemberIdentifier identifier) {
+        return ApiResponse.created(curationService.create(identifier, curationCreateRequest));
     }
 
     @PutMapping("/{curationId}")
     public ResponseEntity<ApiResponseBody<CurationResponse>> updateCuration(
         @PathVariable Long curationId,
         @Valid @RequestBody CurationEditRequest curationEditRequest,
-        @Authorize(MemberType.curator) MemberIdentifier curator) {
-        return ApiResponse.ok(curationService.update(curator.id(), curationId, curationEditRequest));
+        @Authorize(MemberType.curator) MemberIdentifier identifier) {
+        return ApiResponse.ok(curationService.update(identifier, curationId, curationEditRequest));
     }
 
     @DeleteMapping("/{curationId}")
     public ResponseEntity<ApiResponseBody<Void>> deleteCuration(
         @PathVariable Long curationId,
-        @Authorize(MemberType.curator) MemberIdentifier curator) {
-        curationService.delete(curator.id(), curationId);
+        @Authorize(MemberType.curator) MemberIdentifier identifier) {
+        curationService.delete(identifier, curationId);
         return ApiResponse.noContent();
     }
 }

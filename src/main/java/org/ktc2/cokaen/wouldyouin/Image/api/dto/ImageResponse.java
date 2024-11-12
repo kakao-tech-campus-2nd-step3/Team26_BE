@@ -16,10 +16,10 @@ public class ImageResponse {
     private String extension;
     private LocalDateTime createdDate;
 
-    public static ImageResponse from(Image image, String path) {
+    public static ImageResponse from(Image image, String url) {
         return ImageResponse.builder()
             .id(image.getId())
-            .url(UriUtil.assembleFullUrl(path, image.getName()))
+            .url(url)
             .size(image.getSize())
             .extension(image.getExtension())
             .createdDate(image.getCreatedDate())

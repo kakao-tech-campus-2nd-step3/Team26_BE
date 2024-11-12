@@ -8,6 +8,9 @@ import org.ktc2.cokaen.wouldyouin.Image.application.ImageServiceFactory;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageStorageService;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
+import org.ktc2.cokaen.wouldyouin.auth.Authorize;
+import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,21 +36,21 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.OK).body(imageStorageService.readFromDirectory(Paths.get(directory, file)));
     }
 
-    // Todo: authorize
     @PostMapping
     public ResponseEntity<ApiResponseBody<List<ImageResponse>>> uploadImages(
         @RequestParam List<MultipartFile> images,
-        @RequestParam(value = "type") ImageDomain imageDomain) {
+        @RequestParam(value = "type") ImageDomain imageDomain,
+        @Authorize({MemberType.normal, MemberType.curator, MemberType.host}) MemberIdentifier identifier) {
         return ApiResponse.ok(imageServiceFactory.getImageService(imageDomain).saveImages(images));
     }
 
-    // Todo: authorize
     // Todo: 삭제로직 수정필요
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{imageId}")
     public ResponseEntity<ApiResponseBody<Void>> deleteImage(
-        @PathVariable Long id,
-        @RequestParam(value = "type") ImageDomain imageDomain) {
-        imageServiceFactory.getImageService(imageDomain).deleteImage(id);
+        @PathVariable Long imageId,
+        @RequestParam(value = "type") ImageDomain imageDomain,
+        @Authorize({MemberType.normal, MemberType.curator, MemberType.host}) MemberIdentifier identifier) {
+        imageServiceFactory.getImageService(imageDomain).deleteImage(identifier, imageId);
         return ApiResponse.noContent();
     }
 }
