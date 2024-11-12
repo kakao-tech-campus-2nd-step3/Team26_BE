@@ -73,22 +73,22 @@ public class EventController {
     @PostMapping
     public ResponseEntity<ApiResponseBody<EventResponse>> createEvent(
         @Valid @RequestBody EventCreateRequest eventCreateRequest,
-        @Authorize(MemberType.host) MemberIdentifier host) {
-        return ApiResponse.created(eventService.create(host.id(), eventCreateRequest));
+        @Authorize(MemberType.host) MemberIdentifier identifier) {
+        return ApiResponse.created(eventService.create(identifier, eventCreateRequest));
     }
 
     @PutMapping("/{eventId}")
     public ResponseEntity<ApiResponseBody<EventResponse>> updateEvent(@PathVariable Long eventId,
         @Valid @RequestBody EventEditRequest eventEditRequest,
-        @Authorize(MemberType.host) MemberIdentifier host) {
-        return ApiResponse.ok(eventService.update(host.id(), eventId, eventEditRequest));
+        @Authorize(MemberType.host) MemberIdentifier identifier) {
+        return ApiResponse.ok(eventService.update(identifier, eventId, eventEditRequest));
     }
 
     @DeleteMapping("/{eventId}")
     public ResponseEntity<ApiResponseBody<Void>> deleteEvent(
         @PathVariable("eventId") Long eventId,
-        @Authorize(MemberType.host) MemberIdentifier host) {
-        eventService.delete(host.id(), eventId);
+        @Authorize(MemberType.host) MemberIdentifier identifier) {
+        eventService.delete(identifier, eventId);
         return ApiResponse.noContent();
     }
 }

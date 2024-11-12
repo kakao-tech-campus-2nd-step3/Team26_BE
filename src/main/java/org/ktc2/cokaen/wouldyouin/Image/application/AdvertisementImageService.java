@@ -6,7 +6,10 @@ import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin.Image.persist.AdvertisementImage;
 import org.ktc2.cokaen.wouldyouin.Image.persist.AdvertisementImageRepository;
 import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
+import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin.advertisement.persist.Advertisement;
+import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,10 +42,18 @@ public class AdvertisementImageService extends ImageService<AdvertisementImage> 
     @Override
     protected AdvertisementImage toEntity(ImageRequest imageRequest) {
         return AdvertisementImage.builder()
-            .url(imageRequest.getUrl())
+            .name(imageRequest.getUrl())
             .size(imageRequest.getSize())
             .extension(imageRequest.getExtension())
             .build();
+    }
+
+    // TODO : ad image 삭제 인가
+    @Override
+    protected void validateMemberId(MemberIdentifier identifier, AdvertisementImage image) {
+        if (!identifier.type().equals(MemberType.admin)) {
+            throw new UnauthorizedException("광고 이미지에 접근할 권한이 없습니다.");
+        }
     }
 
     @Transactional

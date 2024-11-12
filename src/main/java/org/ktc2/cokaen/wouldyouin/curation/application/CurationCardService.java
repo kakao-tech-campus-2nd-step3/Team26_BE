@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.CurationImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
+import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardResponse;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
@@ -46,9 +47,9 @@ public class CurationCardService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(MemberIdentifier identifier, Long id) {
         CurationCard target = getByIdOrThrow(id);
-        target.getCurationImages().forEach(image -> curationImageService.deleteImage(image.getId()));
+        target.getCurationImages().forEach(image -> curationImageService.deleteImage(identifier, image.getId()));
         curationCardRepository.deleteById(id);
     }
 }

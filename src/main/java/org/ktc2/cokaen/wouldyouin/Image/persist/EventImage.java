@@ -5,11 +5,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 
 @Entity
+@Getter
 @Setter
 @NoArgsConstructor
 public class EventImage extends Image {
@@ -19,7 +21,7 @@ public class EventImage extends Image {
     private Event event;
 
     @Builder
-    public EventImage(String url, Long size, String extension) {
-        super(url, size, extension);
+    public EventImage(String name, Long size, String extension) {
+        super(name, size, extension);
     }
 }
