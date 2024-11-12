@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.FailedToPayException;
 import org.ktc2.cokaen.wouldyouin._common.util.KakaoPayUtil;
 import org.ktc2.cokaen.wouldyouin._common.util.RestClientUtil;
+import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayRequest;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +33,7 @@ public class PaymentService {
     public KakaoPayResponse createPayment(KakaoPayRequest kakaoPayRequest) {
         return client.post(
             KakaoPayResponse.class,
-            Paths.get(kakaoPayRequestHost, kakaoPaySinglePaymentUrl).toString(),
+            UriUtil.assembleFullUrl(kakaoPayRequestHost, kakaoPaySinglePaymentUrl),
             KakaoPayUtil.createKakaoPayRequestHeaders(kakaoPayRequestHost, secretKey),
             KakaoPayUtil.createKakaoPayRequestBody(kakaoPayRequest, approvalUrl, cancelUrl, failUrl),
             (req, rsp) -> { throw new FailedToPayException("카카오페이 API 요청을 실패하였습니다."); }

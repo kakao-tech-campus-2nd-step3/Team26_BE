@@ -24,7 +24,7 @@ public class MemberCreateRequest extends MemberCreateRequestBase {
         this.profileImageUrl = profileImageUrl;
     }
 
-    public Member toEntity(MemberImage profileImage) {
+    public Member toEntity(MemberImage profileImage, String thumbnailImageUrl) {
         return Member.builder()
             .nickname(this.nickname)
             .email(this.email)
@@ -34,6 +34,7 @@ public class MemberCreateRequest extends MemberCreateRequestBase {
             .area(Area.서울)
             .gender("")
             .profileImage(profileImage)
+            .profileImageThumbnailUrl(thumbnailImageUrl)
             .build();
     }
 }

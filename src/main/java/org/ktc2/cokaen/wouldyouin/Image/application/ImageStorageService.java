@@ -1,9 +1,13 @@
 package org.ktc2.cokaen.wouldyouin.Image.application;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import net.coobird.thumbnailator.Thumbnails;
 import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin._common.exception.FailedToUploadImageException;
 import org.ktc2.cokaen.wouldyouin._common.util.FileUtil;
@@ -19,6 +23,19 @@ public class ImageStorageService {
 
     @Value("${image.upload.parent-path}")
     private String parentPath;
+
+    @Value("${image.upload.thumbnail.child-path}")
+    private String thumbnailChildPath;
+
+    @Value("${image.upload.thumbnail.height}")
+    private Integer thumbnailHeight;
+
+    @Value("${image.upload.thumbnail.width}")
+    private Integer thumbnailWidth;
+
+    @Value("${image.upload.thumbnail.extension}")
+    private String thumbnailExtension;
+
     private final RestClientUtil client;
 
     public byte[] readFromDirectory(Path childPath) {
@@ -34,7 +51,9 @@ public class ImageStorageService {
 
     public ImageRequest saveToDirectory(String imageUrl, String childPath) {
         byte[] response = client.get(byte[].class, imageUrl, new HttpHeaders(),
-            (req, rsp) -> { throw new FailedToUploadImageException("이미지 URL에 대한 요청을 실패하였습니다."); }
+            (req, rsp) -> {
+                throw new FailedToUploadImageException("이미지 URL에 대한 요청을 실패하였습니다.");
+            }
         );
         Optional.ofNullable(response).orElseThrow(
             () -> new FailedToUploadImageException("응답 본문이 비어있어 이미지를 가져올 수 없습니다.")
@@ -44,6 +63,22 @@ public class ImageStorageService {
         Path path = Path.of(parentPath, childPath, fileName);
         FileUtil.saveFile(response, path);
         return ImageRequest.of(fileName, (long) response.length, extension);
+    }
+
+    // TODO : 썸네일 생성 코드 리팩토링, 파일 유틸로 이동
+    public String createThumbnailImage(String childPath, String originFileName) {
+        String fileName = FileUtil.createRandomFileName(thumbnailExtension);
+        String originImagePath = Path.of(parentPath, childPath, originFileName).toString();
+        String thumbnailImagePath = Path.of(parentPath, childPath, thumbnailChildPath).toString();
+        try {
+            Files.createDirectories(Paths.get(thumbnailImagePath));
+            Thumbnails.of(new File(originImagePath))
+                .size(thumbnailHeight, thumbnailWidth)
+                .toFile(new File(thumbnailImagePath, fileName));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return fileName;
     }
 
     public void delete(String childPath, String fileName) {

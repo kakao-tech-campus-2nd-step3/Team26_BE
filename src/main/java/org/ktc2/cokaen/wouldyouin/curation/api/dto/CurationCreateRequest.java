@@ -47,7 +47,7 @@ public class CurationCreateRequest {
     }
 
     public Curation toEntity(Curator curator, List<CurationCard> curationCards,
-        List<Event> events) {
+        List<Event> events, String thumbnailUrl) {
         return Curation.builder()
             .curator(curator)
             .title(this.title)
@@ -56,6 +56,7 @@ public class CurationCreateRequest {
             .area(this.area)
             .hashtags(this.hashtags)
             .events(events)
+            .thumbnailUrl(thumbnailUrl)
             .build();
     }
 }

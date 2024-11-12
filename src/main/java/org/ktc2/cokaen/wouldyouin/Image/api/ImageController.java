@@ -11,6 +11,9 @@ import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
+import org.ktc2.cokaen.wouldyouin.payment.application.PaymentService;
+import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayRequest;
+import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +33,7 @@ public class ImageController {
 
     private final ImageServiceFactory imageServiceFactory;
     private final ImageStorageService imageStorageService;
+    private final PaymentService paymentService;
 
     @GetMapping(value = "/{directory}/{file}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     public ResponseEntity<byte[]> getImage(@PathVariable String directory, @PathVariable String file) {

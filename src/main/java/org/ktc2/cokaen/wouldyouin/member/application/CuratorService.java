@@ -58,6 +58,7 @@ public class CuratorService implements MemberServiceCommonBehavior, LikeableMemb
             .nickname(member.getNickname())
             .phone(member.getPhone())
             .profileImage(member.getProfileImage())
+            .profileImageThumbnailUrl(member.getProfileImageThumbnailUrl())
             .area(member.getArea())
             .gender(member.getGender())
             .socialId(member.getSocialId())
@@ -80,7 +81,8 @@ public class CuratorService implements MemberServiceCommonBehavior, LikeableMemb
     public MemberResponse updateCurator(Long curatorId, CuratorEditRequest request) {
         Curator curator = getByIdOrThrow(curatorId);
         MemberImage image = memberImageService.getById(request.getProfileImageId());
-        curator.updateFrom(request, image);
+        String thumbnailImageUrl = memberImageService.createThumbnail(image.getName());
+        curator.updateFrom(request, image, thumbnailImageUrl);
         image.setBaseMember(curator);
         return MemberResponse.from(curator);
     }
