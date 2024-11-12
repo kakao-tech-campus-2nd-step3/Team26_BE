@@ -2,6 +2,9 @@ package org.ktc2.cokaen.wouldyouin.reservation;
 
 import static java.lang.Math.abs;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.validCuratorId;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.validHostId;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.validMemberId;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -19,7 +22,6 @@ import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain;
 import org.ktc2.cokaen.wouldyouin._global.TestData.ReservationDomain;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
@@ -78,7 +80,7 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByMemberId(
-            eq(MemberDomain.validMemberId), eq(PageRequest.of(5, 20)), eq(100L));
+            eq(validMemberId), eq(PageRequest.of(5, 20)), eq(100L));
     }
 
     @Test
@@ -91,7 +93,7 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByMemberId(
-            eq(MemberDomain.validMemberId), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
+            eq(validMemberId), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
     }
 
     @Test
@@ -107,7 +109,7 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByMemberId(
-            eq(MemberDomain.validCuratorId), eq(PageRequest.of(5, 20)), eq(100L));
+            eq(validCuratorId), eq(PageRequest.of(5, 20)), eq(100L));
     }
 
     @Test
@@ -139,7 +141,7 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByEventId(
-            eq(MemberDomain.validHostId), eq(randomId), eq(PageRequest.of(5, 20)), eq(100L));
+            eq(validHostId), eq(randomId), eq(PageRequest.of(5, 20)), eq(100L));
     }
 
     @Test
@@ -153,7 +155,7 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByEventId(
-            eq(MemberDomain.validHostId), eq(randomId), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
+            eq(validHostId), eq(randomId), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
     }
 
     @Test
@@ -214,7 +216,7 @@ class ReservationControllerUnitTest {
             .andExpect(status().isCreated());
 
         // then
-        then(reservationService).should(times(1)).create(eq(MemberDomain.validMemberId), captor.capture());
+        then(reservationService).should(times(1)).create(eq(validMemberId), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
@@ -235,7 +237,7 @@ class ReservationControllerUnitTest {
             .andExpect(status().isCreated());
 
         // then
-        then(reservationService).should(times(1)).create(eq(MemberDomain.validCuratorId), captor.capture());
+        then(reservationService).should(times(1)).create(eq(validCuratorId), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
@@ -330,7 +332,7 @@ class ReservationControllerUnitTest {
             .andExpect(status().isNoContent());
 
         // then
-        then(reservationService).should(times(1)).delete(MemberDomain.validMemberId, randomId);
+        then(reservationService).should(times(1)).delete(validMemberId, randomId);
     }
 
     @Test
@@ -344,7 +346,7 @@ class ReservationControllerUnitTest {
             .andExpect(status().isNoContent());
 
         // then
-        then(reservationService).should(times(1)).delete(MemberDomain.validCuratorId, randomId);
+        then(reservationService).should(times(1)).delete(validCuratorId, randomId);
     }
 
     @Test

@@ -2,6 +2,10 @@ package org.ktc2.cokaen.wouldyouin.curation;
 
 import static java.lang.Math.abs;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.createValidCurationCardRequest1;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.createValidCurationCreateRequest;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.createValidCurationEditRequest;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.validCuratorId;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -22,11 +26,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
-import org.ktc2.cokaen.wouldyouin._global.TestData.CurationDomain;
-import org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.ktc2.cokaen.wouldyouin.curation.api.CurationController;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
@@ -54,13 +57,13 @@ class CurationControllerUnitTest {
     @Autowired
     private WebApplicationContext context;
 
-    private static final long randomId = abs(new Random().nextLong());
-
     @MockBean
     private CurationService curationService;
 
     @MockBean
     private JwtAuthFilter jwtAuthFilter;
+
+    private final long randomId = abs(new Random().nextLong());
 
     @BeforeEach
     public void setup() throws Exception {
@@ -147,7 +150,7 @@ class CurationControllerUnitTest {
     void createCuration1() throws Exception {
         // given
         ArgumentCaptor<CurationCreateRequest> captor = ArgumentCaptor.forClass(CurationCreateRequest.class);
-        CurationCreateRequest request = CurationDomain.createValidCurationCreateRequest();
+        CurationCreateRequest request = createValidCurationCreateRequest();
 
         // when
         mockMvc.perform(post("/api/curations")
@@ -158,7 +161,7 @@ class CurationControllerUnitTest {
             .andExpect(status().isCreated());
 
         // then
-        then(curationService).should(times(1)).create(eq(MemberDomain.validCuratorId), captor.capture());
+        then(curationService).should(times(1)).create(eq(validCuratorId), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
@@ -170,7 +173,7 @@ class CurationControllerUnitTest {
         mockMvc.perform(post("/api/curations")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(CurationDomain.createValidCurationCreateRequest())))
+                .content(objectMapper.writeValueAsString(createValidCurationCreateRequest())))
             .andDo(print())
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
@@ -188,7 +191,7 @@ class CurationControllerUnitTest {
         mockMvc.perform(post("/api/curations")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(CurationDomain.createValidCurationCreateRequest())))
+                .content(objectMapper.writeValueAsString(createValidCurationCreateRequest())))
             .andDo(print())
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
@@ -203,7 +206,7 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void createCuration4() throws Exception {
         // given
-        CurationCreateRequest request = CurationDomain.createValidCurationCreateRequest().toBuilder()
+        CurationCreateRequest request = createValidCurationCreateRequest().toBuilder()
             .title("").build();
 
         // when
@@ -224,8 +227,8 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void createCuration5() throws Exception {
         // given
-        CurationCreateRequest request = CurationDomain.createValidCurationCreateRequest().toBuilder()
-            .curationCards(List.of(CurationDomain.createValidCurationCardRequest1().toBuilder().subtitle("").build()))
+        CurationCreateRequest request = createValidCurationCreateRequest().toBuilder()
+            .curationCards(List.of(createValidCurationCardRequest1().toBuilder().subtitle("").build()))
             .build();
 
         // when
@@ -246,8 +249,8 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void createCuration6() throws Exception {
         // given
-        CurationCreateRequest request = CurationDomain.createValidCurationCreateRequest().toBuilder()
-            .curationCards(List.of(CurationDomain.createValidCurationCardRequest1().toBuilder().content(null).build()))
+        CurationCreateRequest request = createValidCurationCreateRequest().toBuilder()
+            .curationCards(List.of(createValidCurationCardRequest1().toBuilder().content(null).build()))
             .build();
 
         // when
@@ -268,8 +271,8 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void createCuration7() throws Exception {
         // given
-        CurationCreateRequest request = CurationDomain.createValidCurationCreateRequest().toBuilder()
-            .curationCards(List.of(CurationDomain.createValidCurationCardRequest1().toBuilder().content(null).build()))
+        CurationCreateRequest request = createValidCurationCreateRequest().toBuilder()
+            .curationCards(List.of(createValidCurationCardRequest1().toBuilder().content(null).build()))
             .build();
 
         // when
@@ -290,8 +293,8 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void createCuration8() throws Exception {
         // given
-        CurationCreateRequest request = CurationDomain.createValidCurationCreateRequest().toBuilder()
-            .curationCards(List.of(CurationDomain.createValidCurationCardRequest1().toBuilder().content("짧은 내용").build()))
+        CurationCreateRequest request = createValidCurationCreateRequest().toBuilder()
+            .curationCards(List.of(createValidCurationCardRequest1().toBuilder().content("짧은 내용").build()))
             .build();
 
         // when
@@ -312,8 +315,8 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void createCuration9() throws Exception {
         // given
-        CurationCreateRequest request = CurationDomain.createValidCurationCreateRequest().toBuilder()
-            .curationCards(List.of(CurationDomain.createValidCurationCardRequest1().toBuilder()
+        CurationCreateRequest request =  createValidCurationCreateRequest().toBuilder()
+            .curationCards(List.of(createValidCurationCardRequest1().toBuilder()
                 .imageIds(List.of(1L, 2L, 3L, 4L, 5L, 6L)).build()))
             .build();
 
@@ -335,7 +338,7 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void createCuration10() throws Exception {
         // given
-        CurationCreateRequest request = CurationDomain.createValidCurationCreateRequest().toBuilder()
+        CurationCreateRequest request = createValidCurationCreateRequest().toBuilder()
             .area(null).build();
 
         // when
@@ -356,7 +359,7 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void createCuration11() throws Exception {
         // given
-        CurationCreateRequest request = CurationDomain.createValidCurationCreateRequest().toBuilder().
+        CurationCreateRequest request = createValidCurationCreateRequest().toBuilder().
             curationCards(List.of()).build();
 
         // when
@@ -378,7 +381,7 @@ class CurationControllerUnitTest {
     void updateCuration1() throws Exception {
         // given
         ArgumentCaptor<CurationEditRequest> captor = ArgumentCaptor.forClass(CurationEditRequest.class);
-        CurationEditRequest request = CurationDomain.createValidCurationEditRequest();
+        CurationEditRequest request =  createValidCurationEditRequest();
 
         // when
         mockMvc.perform(put("/api/curations/" + randomId)
@@ -389,7 +392,7 @@ class CurationControllerUnitTest {
             .andExpect(status().isOk());
 
         // then
-        then(curationService).should(times(1)).update(eq(MemberDomain.validCuratorId), eq(randomId), captor.capture());
+        then(curationService).should(times(1)).update(eq(validCuratorId), eq(randomId), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
@@ -401,7 +404,7 @@ class CurationControllerUnitTest {
         mockMvc.perform(put("/api/curations/" + randomId)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(CurationDomain.createValidCurationEditRequest())))
+                .content(objectMapper.writeValueAsString(createValidCurationEditRequest())))
             .andDo(print())
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
@@ -419,7 +422,7 @@ class CurationControllerUnitTest {
         mockMvc.perform(put("/api/curations/" + randomId)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(CurationDomain.createValidCurationEditRequest())))
+                .content(objectMapper.writeValueAsString(createValidCurationEditRequest())))
             .andDo(print())
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
@@ -434,7 +437,7 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void updateCuration4() throws Exception {
         // given
-        CurationEditRequest request = CurationDomain.createValidCurationEditRequest().toBuilder()
+        CurationEditRequest request = createValidCurationEditRequest().toBuilder()
             .title(null).build();
 
         // when
@@ -455,8 +458,8 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void updateCuration5() throws Exception {
         // given
-        CurationEditRequest request = CurationDomain.createValidCurationEditRequest().toBuilder()
-            .curationCards(List.of(CurationDomain.createValidCurationCardRequest1().toBuilder()
+        CurationEditRequest request = createValidCurationEditRequest().toBuilder()
+            .curationCards(List.of(createValidCurationCardRequest1().toBuilder()
                 .subtitle("").build()))
             .build();
 
@@ -478,8 +481,8 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void updateCuration6() throws Exception {
         // given
-        CurationEditRequest request = CurationDomain.createValidCurationEditRequest().toBuilder()
-            .curationCards(List.of(CurationDomain.createValidCurationCardRequest1().toBuilder()
+        CurationEditRequest request = createValidCurationEditRequest().toBuilder()
+            .curationCards(List.of(createValidCurationCardRequest1().toBuilder()
                 .content(null).build()))
             .build();
 
@@ -501,8 +504,8 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void updateCuration7() throws Exception {
         // given
-        CurationEditRequest request = CurationDomain.createValidCurationEditRequest().toBuilder()
-            .curationCards(List.of(CurationDomain.createValidCurationCardRequest1().toBuilder()
+        CurationEditRequest request = createValidCurationEditRequest().toBuilder()
+            .curationCards(List.of(createValidCurationCardRequest1().toBuilder()
                 .content("짧은 내용").build()))
             .build();
 
@@ -524,8 +527,8 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void updateCuration8() throws Exception {
         // given
-        CurationEditRequest request = CurationDomain.createValidCurationEditRequest().toBuilder()
-            .curationCards(List.of(CurationDomain.createValidCurationCardRequest1().toBuilder()
+        CurationEditRequest request = createValidCurationEditRequest().toBuilder()
+            .curationCards(List.of(createValidCurationCardRequest1().toBuilder()
                 .imageIds(List.of(1L, 2L, 3L, 4L, 5L, 6L)).build()))
             .build();
 
@@ -547,7 +550,7 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void updateCuration9() throws Exception {
         // given
-        CurationEditRequest request = CurationDomain.createValidCurationEditRequest().toBuilder()
+        CurationEditRequest request = createValidCurationEditRequest().toBuilder()
             .area(null).build();
 
         // when
@@ -568,7 +571,7 @@ class CurationControllerUnitTest {
     @WithMockCurator
     void updateCuration10() throws Exception {
         // given
-        CurationEditRequest request = CurationDomain.createValidCurationEditRequest().toBuilder()
+        CurationEditRequest request = createValidCurationEditRequest().toBuilder()
             .curationCards(List.of()).build();
 
         // when
@@ -595,7 +598,7 @@ class CurationControllerUnitTest {
             .andExpect(status().isNoContent());
 
         // then
-        then(curationService).should(times(1)).delete(eq(MemberDomain.validCuratorId), eq(randomId));
+        then(curationService).should(times(1)).delete(eq(validCuratorId), eq(randomId));
     }
 
     @Test

@@ -21,8 +21,8 @@ public class CurationResponse {
     private final Area area;
     private final List<String> hashTag;
     private final List<CurationEventResponse> eventsInfo;
-    private LocalDateTime modifiedDate;
     private final LocalDateTime createdTime;
+    private final LocalDateTime modifiedDate;
 
     public static CurationResponse from(Curation curation) {
         return CurationResponse.builder()
@@ -33,7 +33,7 @@ public class CurationResponse {
             .curationCards(curation.getCurationCards().stream()
                 .map(CurationCardResponse::from).toList())
             .area(curation.getArea())
-            .hashTag(curation.getHashTags())
+            .hashTag(curation.getHashtags())
             .eventsInfo(curation.getEvents().stream()
                 .map(CurationEventResponse::from).toList())
             .createdTime(curation.getCreatedDate())
