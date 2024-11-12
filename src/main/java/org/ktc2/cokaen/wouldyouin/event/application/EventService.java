@@ -2,7 +2,6 @@ package org.ktc2.cokaen.wouldyouin.event.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
