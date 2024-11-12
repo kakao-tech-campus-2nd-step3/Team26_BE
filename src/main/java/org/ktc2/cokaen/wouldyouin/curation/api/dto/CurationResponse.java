@@ -1,5 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.curation.api.dto;
 
+import jakarta.persistence.Column;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class CurationResponse {
     private final Area area;
     private final List<String> hashtags;
     private final List<CurationEventResponse> eventsInfo;
+    private final String thumbnailUrl;
     private final LocalDateTime createdTime;
     private final LocalDateTime modifiedDate;
 
@@ -38,6 +40,7 @@ public class CurationResponse {
             .hashtags(curation.getHashtags())
             .eventsInfo(curation.getEvents().stream()
                 .map(CurationEventResponse::from).toList())
+            .thumbnailUrl(curation.getThumbnailUrl())
             .createdTime(curation.getCreatedDate())
             .modifiedDate(curation.getModifiedDate())
             .build();
