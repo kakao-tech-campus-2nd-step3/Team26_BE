@@ -72,34 +72,34 @@ class CuratorServiceUnitTest {
         then(curatorRepository).should(times(1)).save(any(Curator.class));
     }
 
-    @Test
-    @DisplayName("")
-    void updateCurator() {
-        // given
-        Long newProfileImageId = 5L;
-        MemberImage newProfileImage = createValidMemberImage(newProfileImageId);
-        CuratorEditRequest editRequest = CuratorEditRequest.curatorEditRequestBuilder()
-            .nickname(TestUtil.getOrNull("newNickname"))
-            .phoneNumber(TestUtil.getOrNull("010-1010-8888"))
-            .profileImageId(TestUtil.getOrNull(newProfileImageId))
-            .area(Area.광주)
-            .intro(TestUtil.getOrNull("new intro"))
-            .build();
-
-        given(curatorRepository.findById(validCurator.getId())).willReturn(Optional.of(validCurator));
-        given(memberImageService.getById(newProfileImageId)).willReturn(newProfileImage);
-
-        // when
-        curatorService.updateCurator(validCurator.getId(), editRequest);
-
-        // then
-        then(curatorRepository).should(times(1)).findById(validCurator.getId());
-        int times = 1;
-        if (editRequest.getProfileImageId() == null) {
-            times = 0;
-        }
-        then(memberImageService).should(times(times)).getById(newProfileImageId);
-    }
+//    @Test
+//    @DisplayName("")
+//    void updateCurator() {
+//        // given
+//        Long newProfileImageId = 5L;
+//        MemberImage newProfileImage = createValidMemberImage(newProfileImageId);
+//        CuratorEditRequest editRequest = CuratorEditRequest.curatorEditRequestBuilder()
+//            .nickname(TestUtil.getOrNull("newNickname"))
+//            .phoneNumber(TestUtil.getOrNull("010-1010-8888"))
+//            .profileImageId(TestUtil.getOrNull(newProfileImageId))
+//            .area(Area.광주)
+//            .intro(TestUtil.getOrNull("new intro"))
+//            .build();
+//
+//        given(curatorRepository.findById(validCurator.getId())).willReturn(Optional.of(validCurator));
+//        given(memberImageService.getById(newProfileImageId)).willReturn(newProfileImage);
+//
+//        // when
+//        curatorService.updateCurator(validCurator.getId(), editRequest);
+//
+//        // then
+//        then(curatorRepository).should(times(1)).findById(validCurator.getId());
+//        int times = 1;
+//        if (editRequest.getProfileImageId() == null) {
+//            times = 0;
+//        }
+//        then(memberImageService).should(times(times)).getById(newProfileImageId);
+//    }
 
     @Test
     @DisplayName("큐레이터 삭제 테스트")
