@@ -40,7 +40,7 @@ public class EventImageService extends ImageService<EventImage> {
     @Override
     protected EventImage toEntity(ImageRequest imageRequest) {
         return EventImage.builder()
-            .name(imageRequest.getUrl())
+            .name(imageRequest.getName())
             .size(imageRequest.getSize())
             .extension(imageRequest.getExtension())
             .build();

@@ -7,13 +7,13 @@ import lombok.Getter;
 @Builder
 public class ImageRequest {
 
-    private String url;
+    private String name;
     private Long size;
     private String extension;
 
-    public static ImageRequest of(String url, Long size, String extension) {
+    public static ImageRequest of(String name, Long size, String extension) {
         return ImageRequest.builder()
-            .url(url)
+            .name(name)
             .size(size)
             .extension(extension)
             .build();
