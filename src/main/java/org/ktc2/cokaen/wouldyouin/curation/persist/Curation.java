@@ -78,6 +78,9 @@ public class Curation {
     )
     private List<Event> events;
 
+    @Column(name = "thumbnail_url")
+    private String thumbnailUrl;
+
     @CreatedDate
     @Column(name = "created_date")
     private LocalDateTime createdDate;
