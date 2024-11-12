@@ -15,7 +15,6 @@ import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;
-import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 
 @Getter
 @Builder(toBuilder = true)
@@ -66,19 +65,5 @@ public class EventEditRequest {
     @AssertTrue(message = "이미지는 최대 5개까지 등록할 수 있습니다.")
     public boolean isImageSizeValid() {
         return imageIds.size() <= 5;
-    }
-
-    public Event toEntity() {
-        return Event.builder()
-            .title(title)
-            .content(content)
-            .area(area)
-            .location(location)
-            .startTime(startTime)
-            .endTime(endTime)
-            .price(price)
-            .totalSeat(totalSeat)
-            .category(category)
-            .build();
     }
 }

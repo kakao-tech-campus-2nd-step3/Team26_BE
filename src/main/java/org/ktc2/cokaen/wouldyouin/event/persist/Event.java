@@ -56,7 +56,7 @@ public class Event {
     private String content;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_id")
     private Host host;
 
@@ -107,7 +107,8 @@ public class Event {
 
     @Builder
     protected Event(String title, String content, Host host, Area area, Location location,
-        LocalDateTime startTime, LocalDateTime endTime, Integer price, Integer totalSeat, Category category, List<EventImage> images) {
+        LocalDateTime startTime, LocalDateTime endTime, Integer price, Integer totalSeat,
+        Category category, List<EventImage> images) {
         this.title = title;
         this.content = content;
         this.host = host;
