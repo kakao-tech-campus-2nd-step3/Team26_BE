@@ -19,7 +19,6 @@ public class EventResponse {
     private Long id;
     private String title;
     private String content;
-    private List<String> images;
     private EventHostResponse host;
     private Area area;
     private Location location;
@@ -29,6 +28,8 @@ public class EventResponse {
     private Integer totalSeat;
     private Integer leftSeat;
     private Category category;
+    private String thumbnailUrl;
+    private List<String> images;
     private Boolean expired;
 
     public static EventResponse from(Event event, List<String> imageUrls) {
@@ -37,7 +38,6 @@ public class EventResponse {
             .id(event.getId())
             .title(event.getTitle())
             .content(event.getContent())
-            .images(imageUrls)
             .host(EventHostResponse.from(host))
             .area(event.getArea())
             .location(event.getLocation())
@@ -47,6 +47,8 @@ public class EventResponse {
             .totalSeat(event.getTotalSeat())
             .leftSeat(event.getLeftSeat())
             .category(event.getCategory())
+            .thumbnailUrl(event.getThumbnailUrl())
+            .images(imageUrls)
             .expired(event.getStartTime().isAfter(LocalDateTime.now()))
             .build();
     }
