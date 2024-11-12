@@ -10,7 +10,7 @@ import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 @Builder
 public class CurationEventResponse {
 
-    private Long id;
+    private Long eventId;
     private String title;
     private Location location;
     private LocalDateTime startTime;
@@ -20,7 +20,7 @@ public class CurationEventResponse {
 
     public static CurationEventResponse from(Event event) {
         return CurationEventResponse.builder()
-            .id(event.getId())
+            .eventId(event.getId())
             .title(event.getTitle())
             .location(event.getLocation())
             .startTime(event.getStartTime())
