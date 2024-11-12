@@ -23,8 +23,6 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    # jdbc:mysql://localhost:3306/would_you_in
-    # jdbc:mysql://would-you-in-db.ctu2qyeiusxz.ap-northeast-2.rds.amazonaws.com:3306/would_you_in
     url: ${DATASOURCE_URL}?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
