@@ -3,7 +3,7 @@ package org.ktc2.cokaen.wouldyouin._global.testdata;
 import java.util.List;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
-import org.ktc2.cokaen.wouldyouin.member.api.dto.relation.ReservationMemberResponse;
+import org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse.ReservationMemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;

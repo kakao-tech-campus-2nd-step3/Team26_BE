@@ -20,18 +20,11 @@ public class ReviewResponse {
 
     public static ReviewResponse from(final Review review) {
         Member member = review.getMember();
-        Event eventInReview = review.getEvent();
+        Event event = review.getEvent();
         return ReviewResponse.builder()
             .id(review.getId())
-            .member(ReviewMemberResponse.builder()
-                .id(member.getId())
-                .nickname(member.getNickname())
-                .build())
-            .event(ReviewEventResponse.builder()
-                .id(eventInReview.getId())
-                .title(eventInReview.getTitle())
-//                .mainImage(eventInCuration.getMainImage())
-                .build())
+            .member(ReviewMemberResponse.from(member))
+            .event(ReviewEventResponse.from(event))
             .score(review.getScore())
             .content(review.getContent())
             .build();

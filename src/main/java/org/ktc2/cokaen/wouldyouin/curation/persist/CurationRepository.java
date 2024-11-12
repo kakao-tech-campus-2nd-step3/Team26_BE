@@ -19,5 +19,6 @@ public interface CurationRepository extends JpaRepository<Curation, Long> {
     @Query("SELECT C FROM Curation C JOIN FETCH C.curator "
         + "WHERE C.curator = :curator AND C.id > :lastId "
         + "ORDER BY C.id DESC")
-    Slice<Curation> findAllByCuratorOrderByCreatedDateDesc(Curator curator, Long lastId, Pageable pageable);
+    Slice<Curation> findAllByCuratorOrderByCreatedDateDesc(Curator curator, Long lastId,
+        Pageable pageable);
 }

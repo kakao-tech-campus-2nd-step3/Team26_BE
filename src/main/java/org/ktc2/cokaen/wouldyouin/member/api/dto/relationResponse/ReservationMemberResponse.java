@@ -1,22 +1,26 @@
 package org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse;
 
-import java.awt.MenuBar;
 import lombok.Builder;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
-import org.ktc2.cokaen.wouldyouin.review.persist.Review;
 
 @Getter
 @Builder
-public class ReviewMemberResponse {
+public class ReservationMemberResponse {
 
     private Long memberId;
+    private String email;
     private String nickname;
+    private String phone;
+    private String gender;
 
-    public static ReviewMemberResponse from(Member member){
-        return builder()
+    public static ReservationMemberResponse from(Member member) {
+        return ReservationMemberResponse.builder()
             .memberId(member.getId())
+            .email(member.getEmail())
             .nickname(member.getNickname())
+            .phone(member.getPhone())
+            .gender(member.getGender())
             .build();
     }
 }
