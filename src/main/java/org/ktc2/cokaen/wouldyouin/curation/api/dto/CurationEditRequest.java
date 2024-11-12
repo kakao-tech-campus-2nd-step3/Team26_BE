@@ -2,8 +2,10 @@ package org.ktc2.cokaen.wouldyouin.curation.api.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -18,6 +20,8 @@ public class CurationEditRequest {
     @NotEmpty(message = "제목은 필수입니다.")
     private String title;
 
+    @NotBlank(message = "내용은 필수입니다.")
+    @Size(min = 20, max = 1000, message = "내용은 20자 이상 1000자 이하입니다.")
     private String content;
 
     @Valid

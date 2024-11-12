@@ -49,7 +49,8 @@ public class AdvertisementController {
         return ApiResponse.created(advertisementService.create(advertisementRequest, image));
     }
 
-    @PutMapping(path = "/{adId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PutMapping(path = "/{adId}", consumes = {MediaType.APPLICATION_JSON_VALUE,
+        MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ApiResponseBody<AdvertisementResponse>> updateAdvertisement(
         @PathVariable Long adId,
         @Valid @RequestPart AdvertisementRequest advertisementRequest,
