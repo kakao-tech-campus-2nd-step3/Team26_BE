@@ -28,6 +28,8 @@ public enum ErrorCode {
 
     URL_PARSING_FAILED(HttpStatus.BAD_REQUEST.value(), "-20400", "URL 파싱에 실패했습니다."),
 
+    INVALID_IMAGE_DOMAIN(HttpStatus.BAD_REQUEST.value(), "-20400", "해당 이미지 도메인에 대한 서비스가 존재하지 않습니다."),
+
     CURRENT_LOCATION_EMPTY(HttpStatus.BAD_REQUEST.value(), "-20400", "현재 위치 정보를 찾을 수 없습니다.");
 
     private final Integer status;

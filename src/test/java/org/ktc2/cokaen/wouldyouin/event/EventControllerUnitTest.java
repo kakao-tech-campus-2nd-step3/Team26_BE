@@ -1,7 +1,7 @@
 package org.ktc2.cokaen.wouldyouin.event;
 
-
-import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.createValidHost;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.createValidHost;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.validHostId;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -22,20 +22,19 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
+import org.ktc2.cokaen.wouldyouin._global.TestData.EventDomain;
+import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtService;
-import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationFilter;
 import org.ktc2.cokaen.wouldyouin.event.api.EventController;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventSliceResponse;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationFilter;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationRequest;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
-import org.ktc2.cokaen.wouldyouin._global.TestData.EventDomain;
-import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
 import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -192,7 +191,7 @@ class EventControllerUnitTest {
             .andExpect(status().isCreated());
 
         //then
-        then(eventService).should(times(1)).create(eq(id), any(EventCreateRequest.class));
+        then(eventService).should(times(1)).create(eq(validHostId), any(EventCreateRequest.class));
     }
 
     @Test
@@ -208,7 +207,7 @@ class EventControllerUnitTest {
             .andExpect(status().isOk());
 
         //then
-        then(eventService).should(times(1)).update(eq(id), eq(id), any(EventEditRequest.class));
+        then(eventService).should(times(1)).update(eq(validHostId), eq(id), any(EventEditRequest.class));
     }
 
     @Test
@@ -222,6 +221,6 @@ class EventControllerUnitTest {
         ).andExpect(status().isNoContent());
 
         //then
-        then(eventService).should(times(1)).delete(eq(id), eq(id));
+        then(eventService).should(times(1)).delete(eq(validHostId), eq(id));
     }
 }

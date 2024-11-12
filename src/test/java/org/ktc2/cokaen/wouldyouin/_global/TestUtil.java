@@ -9,5 +9,4 @@ public class TestUtil {
     public static <T> T getOrNull(T object) {
         return getLeftOrRight(object, null);
     }
-
 }

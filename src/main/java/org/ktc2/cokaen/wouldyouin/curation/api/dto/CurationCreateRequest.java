@@ -49,7 +49,7 @@ public class CurationCreateRequest {
             .content(this.content)
             .curationCards(curationCards)
             .area(this.area)
-            .hashTags(this.hashtags)
+            .hashtags(this.hashtags)
             .events(events)
             .build();
     }
