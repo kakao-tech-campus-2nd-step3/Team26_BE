@@ -5,11 +5,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.ktc2.cokaen.wouldyouin.advertisement.persist.Advertisement;
 
 @Entity
+@Getter
 @Setter
 @NoArgsConstructor
 public class AdvertisementImage extends Image {
@@ -19,8 +21,8 @@ public class AdvertisementImage extends Image {
     private Advertisement advertisement;
 
     @Builder
-    public AdvertisementImage(String url, Long size, String extension, Advertisement advertisement) {
-        super(url, size, extension);
+    public AdvertisementImage(String name, Long size, String extension, Advertisement advertisement) {
+        super(name, size, extension);
         this.advertisement = advertisement;
     }
 }

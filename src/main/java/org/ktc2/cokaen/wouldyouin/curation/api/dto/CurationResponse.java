@@ -3,6 +3,7 @@ package org.ktc2.cokaen.wouldyouin.curation.api.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
@@ -11,6 +12,7 @@ import org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse.CurationCurato
 
 @Builder
 @Getter
+@EqualsAndHashCode
 public class CurationResponse {
 
     private final Long id;
@@ -19,7 +21,7 @@ public class CurationResponse {
     private final String content;
     private final List<CurationCardResponse> curationCards;
     private final Area area;
-    private final List<String> hashTag;
+    private final List<String> hashtags;
     private final List<CurationEventResponse> eventsInfo;
     private final LocalDateTime createdTime;
     private final LocalDateTime modifiedDate;
@@ -33,7 +35,7 @@ public class CurationResponse {
             .curationCards(curation.getCurationCards().stream()
                 .map(CurationCardResponse::from).toList())
             .area(curation.getArea())
-            .hashTag(curation.getHashtags())
+            .hashtags(curation.getHashtags())
             .eventsInfo(curation.getEvents().stream()
                 .map(CurationEventResponse::from).toList())
             .createdTime(curation.getCreatedDate())

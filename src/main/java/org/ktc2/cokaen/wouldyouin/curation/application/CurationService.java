@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
+import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationEditRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationResponse;
@@ -16,6 +17,7 @@ import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.application.CuratorService;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -56,8 +58,8 @@ public class CurationService {
     }
 
     @Transactional
-    public CurationResponse create(Long curatorId, CurationCreateRequest curationCreateRequest) {
-        Curator curator = curatorService.getByIdOrThrow(curatorId);
+    public CurationResponse create(MemberIdentifier identifier, CurationCreateRequest curationCreateRequest) {
+        Curator curator = curatorService.getByIdOrThrow(identifier.id());
         List<CurationCard> curationCards = curationCreateRequest.getCurationCards().stream()
             .map(curationCardService::create)
             .toList();
@@ -70,27 +72,27 @@ public class CurationService {
     }
 
     @Transactional
-    public CurationResponse update(Long curatorId, Long curationId, CurationEditRequest curationEditRequest) {
+    public CurationResponse update(MemberIdentifier identifier, Long curationId, CurationEditRequest curationEditRequest) {
         Curation curation = getByIdOrThrow(curationId);
-        validateCuratorId(curatorId, curation);
+        validateCuratorId(identifier, curation);
         List<CurationCard> curationCards = curationEditRequest.getCurationCards().stream()
             .map(curationCardService::create)
             .toList();
         List<Event> events = curationEditRequest.getEventIds().stream()
             .map(eventService::getByIdOrThrow)
             .toList();
-        curation.getCurationCards().forEach(card -> curationCardService.delete(card.getId()));
+        curation.getCurationCards().forEach(card -> curationCardService.delete(identifier, card.getId()));
         curation.updateFrom(curationEditRequest, curationCards, events);
         curationCards.forEach(curationCard -> curationCardService.setCuration(curationCard, curation));
         return CurationResponse.from(curation);
     }
 
     @Transactional
-    public void delete(Long curatorId, Long curationId) {
+    public void delete(MemberIdentifier identifier, Long curationId) {
         Curation curation = getByIdOrThrow(curationId);
-        validateCuratorId(curatorId, curation);
+        validateCuratorId(identifier, curation);
         curation.getCurationCards()
-            .forEach(curationCard -> curationCardService.delete(curationCard.getId()));
+            .forEach(curationCard -> curationCardService.delete(identifier, curationCard.getId()));
         curationRepository.deleteById(curationId);
     }
 
@@ -101,9 +103,9 @@ public class CurationService {
         return oldLastId;
     }
 
-    public void validateCuratorId(Long curatorId, Curation curation) {
-        if (!curatorId.equals(curation.getCurator().getId())) {
-            throw new UnauthorizedException("큐레이터 ID가 큐레이션의 큐레이터 ID와 일치하지 않습니다.");
+    private void validateCuratorId(MemberIdentifier identifier, Curation curation) {
+        if (!identifier.type().equals(MemberType.admin) && !identifier.id().equals(curation.getCurator().getId())) {
+            throw new UnauthorizedException("큐레이션에 접근할 권한이 없습니다.");
         }
     }
 }

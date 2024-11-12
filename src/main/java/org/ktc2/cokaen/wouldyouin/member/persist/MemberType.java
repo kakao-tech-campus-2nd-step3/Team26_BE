@@ -9,5 +9,4 @@ public enum MemberType {
     curator,
     host,
     admin;
-
 }

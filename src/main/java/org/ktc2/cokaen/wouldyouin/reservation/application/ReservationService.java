@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin._common.exception.ReservationNotFoundForReviewException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
+import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
 import org.ktc2.cokaen.wouldyouin.payment.application.PaymentService;
@@ -54,8 +55,8 @@ public class ReservationService {
     }
 
     @Transactional(readOnly = true)
-    public ReservationSliceResponse getAllByEventId(Long hostId, Long eventId, Pageable pageable, Long oldLastId) {
-        eventService.validateHostId(hostId, eventService.getByIdOrThrow(eventId));
+    public ReservationSliceResponse getAllByEventId(MemberIdentifier identifier, Long eventId, Pageable pageable, Long oldLastId) {
+        eventService.validateHostId(identifier, eventService.getByIdOrThrow(eventId));
         Slice<Reservation> reservations = reservationRepository.findByEventIdOrderByReservationIdDesc(eventId, oldLastId, pageable);
         Long newLastId = getLastId(reservations, oldLastId);
         return ReservationSliceResponse.from(reservations, reservations.getSize(), newLastId);

@@ -9,6 +9,7 @@ import org.ktc2.cokaen.wouldyouin.Image.persist.Image;
 import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
+import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public abstract class ImageService<T extends Image> {
     protected ImageStorageService imageStorageService;
 
     @Value("${image.api-url}")
-    private String apiUrl;
+    private String parentPath;
 
     protected abstract ImageRepository<T> getImageRepository();
 
@@ -33,6 +34,8 @@ public abstract class ImageService<T extends Image> {
 
     protected abstract T toEntity(ImageRequest imageRequest);
 
+    protected abstract void validateMemberId(MemberIdentifier identifier, T image);
+
     @Transactional
     public List<ImageResponse> saveImages(List<MultipartFile> images) {
         return images.stream()
@@ -40,10 +43,12 @@ public abstract class ImageService<T extends Image> {
             .toList();
     }
 
+    // TODO: delete 이미지 바꿔야함
     @Transactional
-    public void deleteImage(Long id) {
-        T image = getById(id);
-        delete(id);
+    public void deleteImage(MemberIdentifier identifier, Long imageId) {
+        T image = getById(imageId);
+        validateMemberId(identifier, image);
+        delete(imageId);
         imageStorageService.delete(getChildPath(), image.getName());
     }
 
@@ -58,7 +63,7 @@ public abstract class ImageService<T extends Image> {
     }
 
     public String getImageUrl(T image) {
-        return UriUtil.assembleFullUrl(apiUrl, getChildPath(), image.getName());
+        return UriUtil.assembleFullUrl(parentPath, getChildPath(), image.getName());
     }
 
     protected void delete(Long id) {
