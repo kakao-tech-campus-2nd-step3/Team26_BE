@@ -5,11 +5,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
 
 @Entity
+@Getter
 @Setter
 @NoArgsConstructor
 public class CurationImage extends Image {
@@ -19,7 +21,7 @@ public class CurationImage extends Image {
     private CurationCard curationCard;
 
     @Builder
-    public CurationImage(String url, Long size, String extension) {
-        super(url, size, extension);
+    public CurationImage(String name, Long size, String extension) {
+        super(name, size, extension);
     }
 }
