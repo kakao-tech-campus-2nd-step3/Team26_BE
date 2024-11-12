@@ -2,7 +2,6 @@ package org.ktc2.cokaen.wouldyouin.event.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
@@ -10,12 +9,12 @@ import org.ktc2.cokaen.wouldyouin._common.exception.NoLeftSeatException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
-import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationRequest;
-import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationFilter;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventResponse;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventSliceResponse;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationFilter;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationRequest;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.event.persist.EventRepository;
 import org.ktc2.cokaen.wouldyouin.member.application.HostService;
@@ -33,9 +32,17 @@ public class EventService {
     private final HostService hostService;
     private final EventImageService eventImageService;
 
+    private static Long getLastId(Slice<Event> events, Long oldLastId) {
+        if (events.hasContent()) {
+            return events.getContent().getLast().getId();
+        }
+        return oldLastId;
+    }
+
     @Transactional
     public Event getByIdOrThrow(Long id) throws EntityNotFoundException {
-        return eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당하는 이벤트를 찾을 수 없습니다."));
+        return eventRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("해당하는 이벤트를 찾을 수 없습니다."));
     }
 
     @Transactional(readOnly = true)
@@ -45,11 +52,13 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public EventSliceResponse getAllByFilterOrderByDistanceAsc(LocationFilter location, LocationRequest currentLocation, String title,
+    public EventSliceResponse getAllByFilterOrderByDistanceAsc(LocationFilter location,
+        LocationRequest currentLocation, String title,
         Category category, Area area, Pageable pageable, Long beforeLastId) {
         Slice<Event> events = eventRepository.findAllByFilterOrderByDistance(
             location.getStartLatitude(), location.getStartLongitude(), location.getEndLatitude(),
-            location.getEndLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(),
+            location.getEndLongitude(), currentLocation.getLatitude(),
+            currentLocation.getLongitude(),
             title, category, area, pageable
         );
         Long newLastId = getLastId(events, beforeLastId);
@@ -58,8 +67,10 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public EventSliceResponse getAllByHostIdOrderByCreatedDateDesc(Long hostId, Pageable pageable, Long beforeLastId) {
-        Slice<Event> events = eventRepository.findAllByHostIdOrderByEventIdDesc(hostId, beforeLastId, pageable);
+    public EventSliceResponse getAllByHostIdOrderByCreatedDateDesc(Long hostId, Pageable pageable,
+        Long beforeLastId) {
+        Slice<Event> events = eventRepository.findAllByHostIdOrderByEventIdDesc(hostId,
+            beforeLastId, pageable);
         Long newLastId = getLastId(events, beforeLastId);
         List<EventResponse> responses = events.stream().map(this::getEventResponse).toList();
         return EventSliceResponse.from(responses, events.getSize(), newLastId);
@@ -100,13 +111,6 @@ public class EventService {
             throw new NoLeftSeatException("남은 좌석이 부족합니다.");
         }
         event.decreaseLeftSeat(count);
-    }
-
-    private static Long getLastId(Slice<Event> events, Long oldLastId) {
-        if (events.hasContent()) {
-            return events.getContent().getLast().getId();
-        }
-        return oldLastId;
     }
 
     public void validateHostId(Long hostId, Event event) {
