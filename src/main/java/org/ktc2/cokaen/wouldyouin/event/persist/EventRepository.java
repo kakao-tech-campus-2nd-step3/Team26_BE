@@ -27,5 +27,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
         + "(:currentLongitude - E.location.longitude) * (:currentLongitude - E.location.longitude) ASC")
     Slice<Event> findAllByFilterOrderByDistance(
         Double startLatitude, Double startLongitude, Double endLatitude, Double endLongitude,
-        Double currentLatitude, Double currentLongitude, String title, Category category, Area area, Pageable pageable);
+        Double currentLatitude, Double currentLongitude, String title, Category category, Area area,
+        Pageable pageable);
 }
