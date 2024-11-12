@@ -14,6 +14,8 @@ public enum ErrorCode {
 
     NO_LEFT_SEAT(HttpStatus.BAD_REQUEST.value(), "-10400", "남은 좌석이 부족합니다."),
 
+    RESERVATION_NOT_FOUND_FOR_REVIEW(HttpStatus.NOT_FOUND.value(), "14044", "리뷰를 작성할 자격이 없습니다."),
+
     INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST.value(), "-20400", "Invalid Input Value"),
 
     FAIL_TO_READ_IMAGE(HttpStatus.CONFLICT.value(), "-20400", "Fail to read image"),
