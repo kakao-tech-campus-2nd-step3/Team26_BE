@@ -2,6 +2,7 @@ package org.ktc2.cokaen.wouldyouin.event.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.Image.application.EventImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
@@ -39,7 +40,8 @@ public class EventService {
 
     @Transactional(readOnly = true)
     public EventResponse getById(Long id) {
-        return EventResponse.from(getByIdOrThrow(id));
+        Event event = getByIdOrThrow(id);
+        return EventResponse.from(event, getImageUrl(event));
     }
 
     @Transactional(readOnly = true)
@@ -51,14 +53,16 @@ public class EventService {
             title, category, area, pageable
         );
         Long newLastId = getLastId(events, beforeLastId);
-        return EventSliceResponse.from(events, events.getSize(), newLastId);
+        List<EventResponse> responses = events.stream().map(this::getEventResponse).toList();
+        return EventSliceResponse.from(responses, events.getSize(), newLastId);
     }
 
     @Transactional(readOnly = true)
     public EventSliceResponse getAllByHostIdOrderByCreatedDateDesc(Long hostId, Pageable pageable, Long beforeLastId) {
         Slice<Event> events = eventRepository.findAllByHostIdOrderByEventIdDesc(hostId, beforeLastId, pageable);
         Long newLastId = getLastId(events, beforeLastId);
-        return EventSliceResponse.from(events, events.getSize(), newLastId);
+        List<EventResponse> responses = events.stream().map(this::getEventResponse).toList();
+        return EventSliceResponse.from(responses, events.getSize(), newLastId);
     }
 
     @Transactional
@@ -68,7 +72,7 @@ public class EventService {
             .map(eventImageService::getById).toList();
         Event event = eventRepository.save(eventCreateRequest.toEntity(host, images));
         images.forEach(image -> eventImageService.setEvent(image, event));
-        return EventResponse.from(event);
+        return getEventResponse(event);
     }
 
     @Transactional
@@ -80,7 +84,7 @@ public class EventService {
             .map(eventImageService::getById).toList();
         event.updateFrom(eventEditRequest, images);
         images.forEach(image -> eventImageService.setEvent(image, event));
-        return EventResponse.from(event);
+        return getEventResponse(event);
     }
 
     @Transactional
@@ -109,5 +113,15 @@ public class EventService {
         if (!hostId.equals(event.getHost().getId())) {
             throw new UnauthorizedException("호스트 ID가 행사의 호스트 ID와 일치하지 않습니다.");
         }
+    }
+
+    private EventResponse getEventResponse(Event event) {
+        return EventResponse.from(event, getImageUrl(event));
+    }
+
+    private List<String> getImageUrl(Event event) {
+        return event.getImages().stream()
+            .map(eventImageService::getImageUrl)
+            .toList();
     }
 }

@@ -2,9 +2,9 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.ktc2.cokaen.wouldyouin._global.TestData.ImageData.createValidMemberImage;
-import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.createValidMember;
-import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.createValidWelcomeMember;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidMemberImage;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.createValidMember;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.createValidWelcomeMember;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
@@ -76,7 +76,7 @@ class MemberServiceUnitTest {
     @DisplayName("사용자 업데이트 테스트")
     void updateMember() {
         // given
-        MemberImage validMemberImage = createValidMemberImage(5L);
+        MemberImage validMemberImage = createValidMemberImage();
         Long givenMemberId = validMember.getId();
         given(memberRepository.findById(givenMemberId)).willReturn(Optional.of(validMember));
         given(memberImageService.getById(validMember.getProfileImage().getId())).willReturn(validMemberImage);

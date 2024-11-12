@@ -39,7 +39,7 @@ public class AdvertisementImageService extends ImageService<AdvertisementImage> 
     @Override
     protected AdvertisementImage toEntity(ImageRequest imageRequest) {
         return AdvertisementImage.builder()
-            .name(imageRequest.getUrl())
+            .url(imageRequest.getUrl())
             .size(imageRequest.getSize())
             .extension(imageRequest.getExtension())
             .build();

@@ -53,7 +53,12 @@ public abstract class ImageService<T extends Image> {
     }
 
     protected ImageResponse create(ImageRequest imageRequest) {
-        return ImageResponse.from(getImageRepository().save(toEntity(imageRequest)), UriUtil.assembleFullUrl(apiUrl, getChildPath()));
+        T image = toEntity(imageRequest);
+        return ImageResponse.from(getImageRepository().save(image), getImageUrl(image));
+    }
+
+    public String getImageUrl(T image) {
+        return UriUtil.assembleFullUrl(apiUrl, getChildPath(), image.getName());
     }
 
     protected void delete(Long id) {
