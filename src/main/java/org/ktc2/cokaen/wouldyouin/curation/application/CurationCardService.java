@@ -1,9 +1,11 @@
 package org.ktc2.cokaen.wouldyouin.curation.application;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.Image.application.CurationImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
+import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardRequest;
