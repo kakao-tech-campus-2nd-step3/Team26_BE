@@ -77,7 +77,7 @@ public class Curation {
         joinColumns = @JoinColumn(name = "curation_id"),
         inverseJoinColumns = @JoinColumn(name = "event_id")
     )
-    private List<Event> events = new ArrayList<>();
+    private List<Event> events;
 
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
