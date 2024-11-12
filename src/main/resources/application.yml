@@ -9,7 +9,6 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
-  # 임시 프로젝트 url
   profiles:
     default: dev
 
@@ -22,31 +21,31 @@ spring:
     restart:
       enabled: false
 
-  # h2 database settings
-  h2:
-    console:
-      enabled: true
-
   datasource:
-    url: jdbc:h2:mem:test
-    driver-class-name: org.h2.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # jdbc:mysql://localhost:3306/would_you_in
+    # jdbc:mysql://would-you-in-db.ctu2qyeiusxz.ap-northeast-2.rds.amazonaws.com:3306/would_you_in
+    url: ${DATASOURCE_URL}?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
 
   jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
     properties:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 100
     show-sql: true
-    hibernate.ddl-auto: create
 
 # log4j log level setting
 logging.level.org.ktc2.cokaen.wouldyouin: debug
 
 # for image storage path
 image:
-  api-url: http://52.78.71.136/api/images
+  api-url: ${SERVER_DOMAIN_NAME}/api/images
   upload:
-    parent-path: src/main/resources/static/images
+    parent-path: ${IMAGE_UPLOAD_PATH}
     curation:
       child-path: curation
     member:
@@ -75,7 +74,7 @@ oauth:
     client:
       id: ${KAKAO_CLIENT_ID}
       secret: ${KAKAO_CLIENT_SECRET}
-    redirect_uri: ${KAKAO_REDIRECT_URI}
+    redirect_uri: ${SERVER_DOMAIN_NAME}/api/auth/social/redirect/kakao
   google:
     uri:
       login:
@@ -87,14 +86,14 @@ oauth:
     client:
       id: ${GOOGLE_CLIENT_ID}
       secret: ${GOOGLE_CLIENT_SECRET}
-    redirect_uri: ${GOOGLE_REDIRECT_URI}
+    redirect_uri: ${SERVER_DOMAIN_NAME}/api/auth/social/redirect/google
     scope:
       - email
       - profile
   payment:
-    "approval_url": "http://localhost:8080/api/events"
-    "cancel_url": "http://localhost:8080/api/events"
-    "fail_url": "http://localhost:8080/api/events"
+    "approval_url": ${SERVER_DOMAIN_NAME}/api/events
+    "cancel_url": ${SERVER_DOMAIN_NAME}/api/events
+    "fail_url": ${SERVER_DOMAIN_NAME}/api/events
     "secret_key": ${KAKAOPAY_SECRET_KEY}
-    "kakao_pay_single_payment_url": "online/v1/payment/ready"
-    "kakao-pay-request-host": "https://open-api.kakaopay.com"
+    "kakao_pay_single_payment_url": online/v1/payment/ready
+    "kakao-pay-request-host": https://open-api.kakaopay.com
