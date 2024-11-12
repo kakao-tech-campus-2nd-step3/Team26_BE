@@ -18,4 +18,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
         + "WHERE R.event.id = :eventId AND R.id > :lastId "
         + "ORDER BY R.id DESC")
     Slice<Reservation> findByEventIdOrderByReservationIdDesc(Long eventId, Long lastId, Pageable pageable);
+
+    Reservation findByMemberIdAndEventId(Long memberId, Long eventId);
 }

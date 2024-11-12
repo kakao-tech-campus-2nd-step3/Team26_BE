@@ -2,6 +2,7 @@ package org.ktc2.cokaen.wouldyouin.reservation.application;
 
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
+import org.ktc2.cokaen.wouldyouin._common.exception.ReservationNotFoundForReviewException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
@@ -36,6 +37,13 @@ public class ReservationService {
     @Transactional(readOnly = true)
     public ReservationResponse getById(Long id) {
         return ReservationResponse.from(getByIdOrThrow(id));
+    }
+
+    @Transactional
+    public void validateByMemberIdAndEventId(Long memberId, Long eventId) {
+        if (reservationRepository.findByMemberIdAndEventId(memberId, eventId) == null) {
+            throw new ReservationNotFoundForReviewException("해당 이벤트에 대한 리뷰를 작성할 자격이 없습니다.");
+        }
     }
 
     @Transactional(readOnly = true)

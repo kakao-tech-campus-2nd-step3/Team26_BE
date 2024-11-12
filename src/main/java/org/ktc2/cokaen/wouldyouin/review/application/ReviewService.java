@@ -1,15 +1,22 @@
 package org.ktc2.cokaen.wouldyouin.review.application;
 
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
+import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
+import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
+import org.ktc2.cokaen.wouldyouin.member.persist.Member;
+import org.ktc2.cokaen.wouldyouin.reservation.application.ReservationService;
 import org.ktc2.cokaen.wouldyouin.review.api.dto.ReviewCreateRequest;
 import org.ktc2.cokaen.wouldyouin.review.api.dto.ReviewEditRequest;
 import org.ktc2.cokaen.wouldyouin.review.api.dto.ReviewResponse;
+import org.ktc2.cokaen.wouldyouin.review.api.dto.ReviewSliceResponse;
 import org.ktc2.cokaen.wouldyouin.review.persist.Review;
 import org.ktc2.cokaen.wouldyouin.review.persist.ReviewRepository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,43 +27,70 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final EventService eventService;
     private final MemberService memberService;
+    private final ReservationService reservationService;
 
     @Transactional(readOnly = true)
     public ReviewResponse getById(Long reviewId) {
-        Review target = reviewRepository.findById(reviewId).orElseThrow(RuntimeException::new);
-        return ReviewResponse.from(target);
+        return ReviewResponse.from(getByIdOrThrow(reviewId));
     }
 
     @Transactional(readOnly = true)
-    public List<ReviewResponse> getAllByMemberId(Long memberId) {
-        return reviewRepository.findByMemberId(memberId).stream().map(ReviewResponse::from)
-            .toList();
+    public ReviewSliceResponse getAllByMemberId(Long memberId, Long oldLastId, Pageable pageable) {
+        Slice<Review> reviews = reviewRepository.findByMemberIdOrderByReviewIdDesc(memberId,
+            oldLastId, pageable);
+        Long newLastId = getLastId(reviews, oldLastId);
+        return ReviewSliceResponse.from(reviews, reviews.getSize(), newLastId);
     }
 
     @Transactional(readOnly = true)
-    public List<ReviewResponse> getAllByEventId(Long eventId) {
-        return reviewRepository.findByEventId(eventId).stream().map(ReviewResponse::from)
-            .toList();
+    public ReviewSliceResponse getAllByEventId(Long eventId, Long oldLastId, Pageable pageable) {
+        Slice<Review> reviews = reviewRepository.findByEventIdOrderByReviewIdDesc(eventId,
+            oldLastId, pageable);
+        Long newLastId = getLastId(reviews, oldLastId);
+        return ReviewSliceResponse.from(reviews, reviews.getSize(), newLastId);
+    }
+
+    private Long getLastId(Slice<Review> reviews, Long oldLastId) {
+        if (reviews.hasContent()) {
+            return reviews.getContent().getLast().getId();
+        }
+        return oldLastId;
     }
 
     @Transactional
-    public ReviewResponse create(Long eventId, ReviewCreateRequest reviewCreateRequest) {
-        Review review = reviewRepository.save(reviewCreateRequest.toEntity());
-        review.setMember(memberService.getByIdOrThrow(reviewCreateRequest.getMemberId()));
-        review.setEvent(eventService.getByIdOrThrow(eventId));
+    public ReviewResponse create(Long memberId, ReviewCreateRequest reviewCreateRequest) {
+        reservationService.validateByMemberIdAndEventId(memberId, reviewCreateRequest.getEventId());
+        Review review = reviewRepository.save(
+            reviewCreateRequest.toEntity(
+                memberService.getByIdOrThrow(memberId),
+                eventService.getByIdOrThrow(reviewCreateRequest.getEventId())));
         return ReviewResponse.from(review);
     }
 
     @Transactional
-    public ReviewResponse update(Long reviewId, ReviewEditRequest reviewEditRequest) {
-        Review target = reviewRepository.findById(reviewId).orElseThrow(RuntimeException::new);
+    public ReviewResponse update(Long memberId, Long reviewId,
+        ReviewEditRequest reviewEditRequest) {
+        Review target = getByIdOrThrow(reviewId);
+        validateMemberId(memberId, target);
         target.updateFrom(reviewEditRequest);
         return ReviewResponse.from(target);
     }
 
     @Transactional
-    public void delete(Long reviewId) {
-        reviewRepository.findById(reviewId).orElseThrow(RuntimeException::new);
+    public void delete(Long memberId, Long reviewId) {
+        validateMemberId(memberId, getByIdOrThrow(reviewId));
         reviewRepository.deleteById(reviewId);
+    }
+
+    @Transactional
+    public Review getByIdOrThrow(Long id) {
+        return reviewRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("해당하는 리뷰를 찾을 수 없습니다."));
+    }
+
+    private void validateMemberId(Long memberId, Review review) {
+        if (!memberId.equals(review.getMember().getId())) {
+            throw new UnauthorizedException("member ID가 리뷰의 member ID와 일치하지 않습니다.");
+        }
     }
 }
