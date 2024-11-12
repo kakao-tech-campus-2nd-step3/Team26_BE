@@ -56,7 +56,7 @@ public class Event {
     private String content;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_id")
     private Host host;
 

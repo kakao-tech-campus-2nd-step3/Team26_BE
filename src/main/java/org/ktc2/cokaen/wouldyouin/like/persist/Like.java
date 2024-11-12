@@ -1,6 +1,7 @@
 package org.ktc2.cokaen.wouldyouin.like.persist;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,7 +29,7 @@ public abstract class Like<T extends LikeableMember> {
     private Long id;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private T likeableMember;
 
@@ -37,7 +38,7 @@ public abstract class Like<T extends LikeableMember> {
     private MemberType likeableMemberType;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Member member;
 
