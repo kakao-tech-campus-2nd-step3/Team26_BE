@@ -1,19 +1,26 @@
 package org.ktc2.cokaen.wouldyouin.image;
 
+import static java.lang.Math.abs;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidImageResponse1;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidImageResponse2;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidMultipartFile1;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.createValidMultipartFile2;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
+import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,8 +29,9 @@ import org.ktc2.cokaen.wouldyouin.Image.api.ImageDomain;
 import org.ktc2.cokaen.wouldyouin.Image.application.CurationImageService;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageServiceFactory;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageStorageService;
-import org.ktc2.cokaen.wouldyouin._global.TestData.ImageData;
+import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember;
+import org.ktc2.cokaen.wouldyouin._global.testdata.ImageData;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -55,6 +63,8 @@ class ImageControllerTest {
     @MockBean
     private JwtAuthFilter jwtAuthFilter;
 
+    private final long randomId = abs(new Random().nextLong());
+
     @BeforeEach
     public void setup() throws Exception {
 
@@ -70,61 +80,103 @@ class ImageControllerTest {
     void getImage() throws Exception {
         // given
         String directory = "member";
-        String file = UUID.randomUUID().toString() + ".png";
+        String file = "image.jpg";
 
         // when
-        mockMvc.perform(get("/api/images/" + directory + "/" + file))
+        mockMvc.perform(get("/api/images/{directory}/{file}", directory, file))
             .andDo(print())
             .andExpect(status().isOk());
 
-//         then
+        // then
         then(imageStorageService).should(times(1)).readFromDirectory(eq(Paths.get(directory, file)));
     }
 
-//    @PostMapping
-//    public ResponseEntity<ApiResponseBody<List<ImageResponse>>> uploadImages(
-//        @RequestParam List<MultipartFile> images,
-//        @RequestParam(value = "type") ImageDomain imageDomain) {
-//        return ApiResponse.ok(imageServiceFactory.getImageService(imageDomain).saveImages(images));
-//    }
-
     @Test
-    @WithMockMember
-    void uploadImages() throws Exception {
-//        // given
-        MockMultipartFile image1 = ImageData.createValidMultipartFile1();
-        MockMultipartFile image2 = ImageData.createValidMultipartFile2();
+    @DisplayName("RequestParam으로 이미지 도메인을 받아 첨부된 이미지를 업로드한다.")
+    @WithMockCurator
+    void uploadImages1() throws Exception {
+        // given
+        MockMultipartFile image1 = createValidMultipartFile1();
+        MockMultipartFile image2 = createValidMultipartFile2();
         given((CurationImageService) imageServiceFactory.getImageService(ImageDomain.CURATION)).willReturn(curationImageService);
         given(curationImageService.saveImages(List.of(image1, image2)))
-            .willReturn(List.of(ImageData.createValidImageResponse1(), ImageData.createValidImageResponse2()));
+            .willReturn(List.of(createValidImageResponse1(), createValidImageResponse2()));
 
-//        // when
-        mockMvc.perform(multipart("/api/images?type=CURATION")
-                .file(ImageData.createValidMultipartFile1())
-                .file(ImageData.createValidMultipartFile2())
+        // when
+        mockMvc.perform(multipart("/api/images")
+                .file(image1)
+                .file(image2)
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .param("type", ImageDomain.CURATION.name())
                 .with(csrf()))
             .andDo(print())
             .andExpect(status().isOk());
 
-//        ArgumentCaptor<CurationCreateRequest> captor = ArgumentCaptor.forClass(CurationCreateRequest.class);
-//        CurationCreateRequest request = CurationDomain.createValidCurationCreateRequest();
-
-        // when
-//        mockMvc.perform(post("/api/curations")
-//                .with(csrf())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(request)))
-//            .andDo(print())
-//            .andExpect(status().isCreated());
-//
-//        // then
-//        then(curationService).should(times(1)).create(eq(MemberDomain.validCuratorId), captor.capture());
-//        assertThat(captor.getValue()).isEqualTo(request);
+        // then
+        then(imageServiceFactory).should(times(1)).getImageService(eq(ImageDomain.CURATION));
+        then(curationImageService).should(times(1)).saveImages(List.of(image1, image2));
     }
 
     @Test
-    void deleteImage() {
+    @DisplayName("RequestParam의 이미지 도메인의 값으로는 MEMBER, CURATION, ADVERTISEMENT, EVENT만 사용할 수 있다.")
+    @WithMockCurator
+    void uploadImages2() throws Exception {
+        // given
+        MockMultipartFile image1 = createValidMultipartFile1();
+        MockMultipartFile image2 = createValidMultipartFile2();
+
+        // when
+        mockMvc.perform(multipart("/api/images")
+                .file(image1)
+                .file(image2)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .param("type", "INVALID")
+                .with(csrf()))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("해당 이미지 도메인에 대한 서비스가 존재하지 않습니다."));
+
+        // then
+        then(imageServiceFactory).shouldHaveNoInteractions();
+        then(curationImageService).shouldHaveNoInteractions();
+    }
+
+    @Test
+    @DisplayName("PathVariable로 이미지의 ID를 받아 이미지를 삭제한다.")
+    @WithMockCurator
+    void deleteImage1() throws Exception {
+        // given
+        given((CurationImageService) imageServiceFactory.getImageService(ImageDomain.CURATION)).willReturn(curationImageService);
+
+        // when
+        mockMvc.perform(delete("/api/images/" + randomId)
+                .param("type", ImageDomain.CURATION.name())
+                .with(csrf()))
+            .andDo(print())
+            .andExpect(status().isNoContent());
+
+        // then
+        then(imageServiceFactory).should(times(1)).getImageService(eq(ImageDomain.CURATION));
+        then(curationImageService).should(times(1)).deleteImage(randomId);
+    }
+
+    @Test
+    @DisplayName("RequestParam의 이미지 도메인의 값으로는 MEMBER, CURATION, ADVERTISEMENT, EVENT만 사용할 수 있다.")
+    @WithMockCurator
+    void deleteImage2() throws Exception {
+        // given
+        given((CurationImageService) imageServiceFactory.getImageService(ImageDomain.CURATION)).willReturn(curationImageService);
+
+        // when
+        mockMvc.perform(delete("/api/images/" + randomId)
+                .param("type", "INVALID")
+                .with(csrf()))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("해당 이미지 도메인에 대한 서비스가 존재하지 않습니다."));
+
+        // then
+        then(imageServiceFactory).shouldHaveNoInteractions();
+        then(curationImageService).shouldHaveNoInteractions();
     }
 }

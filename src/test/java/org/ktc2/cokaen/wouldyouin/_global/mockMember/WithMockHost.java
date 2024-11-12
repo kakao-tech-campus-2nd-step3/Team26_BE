@@ -2,11 +2,11 @@ package org.ktc2.cokaen.wouldyouin._global.mockMember;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 
 @Retention(RetentionPolicy.RUNTIME)
-@WithMockCustomUser(memberId = MemberDomain.validHostId, memberType = MemberType.host)
+@WithMockCustomUser(memberId = MemberData.validHostId, memberType = MemberType.host)
 public @interface WithMockHost {
 
 }

@@ -1,5 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.event.api.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Max;
@@ -33,6 +34,7 @@ public class EventCreateRequest {
     @NotNull(message = "지역는 필수입니다.")
     private Area area;
 
+    @Valid
     @NotNull(message = "장소는 필수입니다.")
     private Location location;
 

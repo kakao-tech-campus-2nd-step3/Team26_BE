@@ -1,9 +1,8 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.ktc2.cokaen.wouldyouin._global.TestData.ImageData.createValidMemberImage;
-import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.createValidCurator;
-import static org.ktc2.cokaen.wouldyouin._global.TestData.MemberDomain.createValidMember;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.createValidCurator;
+import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.createValidMember;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -15,10 +14,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
-import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
-import org.ktc2.cokaen.wouldyouin._common.vo.Area;
-import org.ktc2.cokaen.wouldyouin._global.TestUtil;
-import org.ktc2.cokaen.wouldyouin.member.api.dto.request.edit.CuratorEditRequest;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 import org.ktc2.cokaen.wouldyouin.member.persist.CuratorRepository;

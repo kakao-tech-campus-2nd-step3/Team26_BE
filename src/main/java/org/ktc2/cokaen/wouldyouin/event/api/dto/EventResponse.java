@@ -1,8 +1,10 @@
 package org.ktc2.cokaen.wouldyouin.event.api.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;
@@ -17,6 +19,7 @@ public class EventResponse {
     private Long id;
     private String title;
     private String content;
+    private List<String> images;
     private EventHostResponse host;
     private Area area;
     private Location location;
@@ -28,12 +31,13 @@ public class EventResponse {
     private Category category;
     private Boolean expired;
 
-    public static EventResponse from(Event event) {
+    public static EventResponse from(Event event, List<String> imageUrls) {
         Host host = event.getHost();
         return EventResponse.builder()
             .id(event.getId())
             .title(event.getTitle())
             .content(event.getContent())
+            .images(imageUrls)
             .host(EventHostResponse.from(host))
             .area(event.getArea())
             .location(event.getLocation())
