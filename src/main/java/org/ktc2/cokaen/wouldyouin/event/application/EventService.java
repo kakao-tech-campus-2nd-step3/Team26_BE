@@ -20,6 +20,7 @@ import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.event.persist.EventRepository;
 import org.ktc2.cokaen.wouldyouin.member.application.HostService;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
