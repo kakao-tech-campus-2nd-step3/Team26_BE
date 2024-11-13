@@ -14,10 +14,9 @@ public class CurationSliceResponse {
     private final List<CurationResponse> curations;
     private final SliceInfo sliceInfo;
 
-    public static CurationSliceResponse from(Slice<Curation> curations, int size, Long lastId) {
+    public static CurationSliceResponse from(List<CurationResponse> curations, int size, Long lastId) {
         return CurationSliceResponse.builder()
-            .curations(curations.stream()
-                .map(CurationResponse::from).toList())
+            .curations(curations)
             .sliceInfo(SliceInfo.builder()
                 .sliceSize(size)
                 .lastId(lastId)

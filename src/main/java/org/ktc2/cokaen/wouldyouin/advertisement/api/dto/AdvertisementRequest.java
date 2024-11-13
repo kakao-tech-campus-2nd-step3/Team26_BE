@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-import org.ktc2.cokaen.wouldyouin.Image.persist.AdvertisementImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.AdvertisementImage;
 import org.ktc2.cokaen.wouldyouin.advertisement.persist.Advertisement;
 
 @Getter

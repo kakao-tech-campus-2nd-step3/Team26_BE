@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.Image.api.dto;
+package org.ktc2.cokaen.wouldyouin.image.api.dto;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -17,7 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
 
 @Getter
 @Setter

@@ -8,7 +8,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
 
 @Getter

@@ -13,9 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Helper;
-import lombok.experimental.SuperBuilder;
-import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._common.converter.HashtagConverter;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 

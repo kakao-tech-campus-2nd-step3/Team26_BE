@@ -1,11 +1,11 @@
-package org.ktc2.cokaen.wouldyouin.Image.application;
+package org.ktc2.cokaen.wouldyouin.image.application;
 
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.Image.api.ImageDomain;
-import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
-import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
-import org.ktc2.cokaen.wouldyouin.Image.persist.EventImageRepository;
-import org.ktc2.cokaen.wouldyouin.Image.persist.ImageRepository;
+import org.ktc2.cokaen.wouldyouin.image.api.ImageDomain;
+import org.ktc2.cokaen.wouldyouin.image.api.dto.ImageRequest;
+import org.ktc2.cokaen.wouldyouin.image.persist.EventImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.EventImageRepository;
+import org.ktc2.cokaen.wouldyouin.image.persist.ImageRepository;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;

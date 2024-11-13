@@ -2,11 +2,9 @@ package org.ktc2.cokaen.wouldyouin._global.testdata;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.R.curationEditRequest;
-import org.ktc2.cokaen.wouldyouin._global.testdata.EventData.event1;
-import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.curator1;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardResponse;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
@@ -76,7 +74,7 @@ public class CurationData {
             public static CurationCard get() {
                 CurationCard validCurationCard1 = CurationCard.builder()
                     .subtitle(R.curationCard1.subtitle)
-                    .content(R.curationCard2.content)
+                    .content(R.curationCard1.content)
         //            .curation(createValidCuration())
                     .images(R.curationCard1.images)
                     .build();
