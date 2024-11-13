@@ -13,10 +13,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.ktc2.cokaen.wouldyouin.Image.application.CurationImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin._global.testdata.CurationData;
-import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationResponse;
 import org.ktc2.cokaen.wouldyouin.curation.application.CurationCardService;
 import org.ktc2.cokaen.wouldyouin.curation.application.CurationService;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
@@ -44,13 +44,16 @@ class CurationServiceTest {
     private CurationCardService curationCardService;
 
     @Mock
+    private CurationImageService curationImageService;
+
+    @Mock
     private MemberImage memberImage;
 
     private final long randomId = abs(new Random().nextLong());
 
     @BeforeEach
     void setUp() {
-        curationService = new CurationService(curationRepository, curatorService, eventService, curationCardService);
+        curationService = new CurationService(curationRepository, curatorService, eventService, curationCardService, curationImageService);
     }
 
     @Test
