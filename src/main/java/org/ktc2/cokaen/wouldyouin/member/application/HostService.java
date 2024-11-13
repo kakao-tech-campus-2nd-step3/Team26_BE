@@ -30,7 +30,7 @@ public class HostService implements MemberServiceCommonBehavior, LikeableMemberS
         String profileImageThumbnailUrl = memberImageService.createThumbnail(profileImage.getName());
         Host createdHost = hostRepository.save(request.toEntity(hashedPassword, profileImage, profileImageThumbnailUrl));
         memberImageService.setBaseMember(profileImage, createdHost);
-        return MemberResponse.from(createdHost);
+        return MemberResponse.from(createdHost, memberImageService.getImageUrl(profileImage));
     }
 
     // TODO: 리팩토링할것
@@ -49,7 +49,7 @@ public class HostService implements MemberServiceCommonBehavior, LikeableMemberS
                 host.setProfileImageThumbnailUrl(url);
             });
 
-        return MemberResponse.from(host);
+        return MemberResponse.from(host, memberImageService.getImageUrl(host.getProfileImage()));
     }
 
     @Override
@@ -61,16 +61,15 @@ public class HostService implements MemberServiceCommonBehavior, LikeableMemberS
     @Override
     @Transactional(readOnly = true)
     public MemberResponse getMemberResponseById(Long id) {
-        return MemberResponse.from(getByIdOrThrow(id));
+        Host host = getByIdOrThrow(id);
+        return MemberResponse.from(host, memberImageService.getImageUrl(host.getProfileImage()));
     }
 
     @Transactional(readOnly = true)
     public MemberResponse getMemberResponseBy(LocalLoginRequest loginRequest) {
-        return MemberResponse.from(hostRepository
-            .findByEmailAndHashedPassword(
-                loginRequest.email(),
-                passwordEncoder.encode(loginRequest.password()))
-            .orElseThrow(RuntimeException::new));
+        Host host = hostRepository.findByEmailAndHashedPassword(loginRequest.email(), passwordEncoder.encode(loginRequest.password()))
+            .orElseThrow(RuntimeException::new);
+        return MemberResponse.from(host, memberImageService.getImageUrl(host.getProfileImage()));
     }
 
     @Transactional(readOnly = true)

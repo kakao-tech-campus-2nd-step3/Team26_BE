@@ -8,7 +8,7 @@ import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 @RequiredArgsConstructor
 public class MemberAdditionalInfoRequest {
 
-    private final String phone;
-    private final Area area;
-    private final String gender;
+    private String phone;
+    private Area area;
+    private String gender;
 }

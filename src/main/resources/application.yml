@@ -23,7 +23,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DATASOURCE_URL}?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    url: ${DATASOURCE_URL}?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
 
