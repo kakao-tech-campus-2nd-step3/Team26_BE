@@ -37,7 +37,7 @@ public class EventController {
 
     private final EventService eventService;
 
-    @GetMapping
+    @GetMapping("/filter")
     public ResponseEntity<ApiResponseBody<EventSliceResponse>> getEventsByFilterOrderByDistanceAsc(
         @Valid @ModelAttribute LocationFilter locationFilter,
         @Valid @ModelAttribute LocationRequest currentLocation,
@@ -51,6 +51,16 @@ public class EventController {
         return ApiResponse.ok(eventService.getAllByFilterOrderByDistanceAsc(
             locationFilter, currentLocation, title, category, area, PageRequest.of(page, size),
             lastId));
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponseBody<EventSliceResponse>> getEvents(
+        @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
+        @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
+        @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId
+    ) {
+        return ApiResponse.ok(eventService.getAllByCreatedDateDesc(
+            PageRequest.of(page, size), lastId));
     }
 
     @GetMapping("/hosts/{hostId}")
