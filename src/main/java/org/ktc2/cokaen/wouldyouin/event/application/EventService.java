@@ -70,6 +70,14 @@ public class EventService {
         return EventSliceResponse.from(responses, events.getSize(), newLastId);
     }
 
+    @Transactional(readOnly = true)
+    public EventSliceResponse getAllByCreatedDateDesc(Pageable pageable, Long beforeLastId) {
+        Slice<Event> events = eventRepository.findAllByEventIdDesc(beforeLastId, pageable);
+        Long newLastId = getLastId(events, beforeLastId);
+        List<EventResponse> responses = events.stream().map(this::getEventResponse).toList();
+        return EventSliceResponse.from(responses, events.getSize(), newLastId);
+    }
+
     @Transactional
     public EventResponse create(MemberIdentifier identifier, EventCreateRequest eventCreateRequest) {
         Host host = hostService.getByIdOrThrow(identifier.id());
