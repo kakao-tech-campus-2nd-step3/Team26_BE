@@ -1,10 +1,9 @@
-package org.ktc2.cokaen.wouldyouin.Image.api.dto;
+package org.ktc2.cokaen.wouldyouin.image.api.dto;
 
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-import org.ktc2.cokaen.wouldyouin.Image.persist.Image;
-import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
+import org.ktc2.cokaen.wouldyouin.image.persist.Image;
 
 @Getter
 @Builder

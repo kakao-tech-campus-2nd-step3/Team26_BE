@@ -63,6 +63,13 @@ public class ReservationController {
         return ApiResponse.created(reservationService.create(member.id(), reservationRequest));
     }
 
+    @PostMapping("/test")
+    public ResponseEntity<ApiResponseBody<ReservationResponse>> createTestReservation(
+        @Valid @RequestBody ReservationRequest reservationRequest,
+        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier member) {
+        return ApiResponse.created(reservationService.createTest(member.id(), reservationRequest));
+    }
+
     @DeleteMapping("/{reservationId}")
     public ResponseEntity<ApiResponseBody<Void>> deleteReservation(
         @PathVariable Long reservationId,

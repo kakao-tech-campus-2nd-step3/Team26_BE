@@ -2,7 +2,7 @@ package org.ktc2.cokaen.wouldyouin.member.api.dto.request.create;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 
 @Getter

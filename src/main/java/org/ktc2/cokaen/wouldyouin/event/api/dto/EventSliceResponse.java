@@ -3,7 +3,6 @@ package org.ktc2.cokaen.wouldyouin.event.api.dto;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin._common.api.SliceInfo;
 
 @Getter
