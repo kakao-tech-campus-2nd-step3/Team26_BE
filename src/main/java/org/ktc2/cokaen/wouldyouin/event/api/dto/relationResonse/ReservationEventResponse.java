@@ -1,5 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse;
 
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;
@@ -13,6 +14,7 @@ public class ReservationEventResponse {
     private String title;
     private Integer price;
     private Location location;
+    private LocalDateTime startTime;
     private String thumbnailUrl;
 
     public static ReservationEventResponse from(Event event) {
@@ -21,6 +23,7 @@ public class ReservationEventResponse {
             .title(event.getTitle())
             .price(event.getPrice())
             .location(event.getLocation())
+            .startTime(event.getStartTime())
             .thumbnailUrl(event.getThumbnailUrl())
             .build();
     }
