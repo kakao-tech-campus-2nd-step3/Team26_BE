@@ -4,8 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
-import org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.R.curationCard1;
 import org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.R.curationEditRequest;
+import org.ktc2.cokaen.wouldyouin._global.testdata.EventData.event1;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.curator1;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardResponse;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
@@ -54,7 +55,7 @@ public class CurationData {
             public static final Area area = Area.전체;
             public static final List<String> hashtags = List.of("#큐레이션", "#해시태그");
             public static final List<Long> eventIds = List.of(201L);
-            public static final List<Event> events = List.of(EventData.event.entity.get());
+            public static final List<Event> events = List.of(EventData.event1.entity.get());
             public static final LocalDateTime createdDate = LocalDateTime.of(2023, 3, 23, 0, 0);
             public static final LocalDateTime modifiedDate = LocalDateTime.of(2024, 3, 23, 0, 0);
         }
@@ -140,7 +141,7 @@ public class CurationData {
         public static class entity {
             public static Curation get() {
                 Curation validCuration = Curation.builder()
-                    .curator(MemberData.curator.entity.get())
+                    .curator(MemberData.curator1.entity.get())
                     .title(R.curation.title)
                     .content(R.curation.content)
                     .curationCards(R.curation.curationCards)

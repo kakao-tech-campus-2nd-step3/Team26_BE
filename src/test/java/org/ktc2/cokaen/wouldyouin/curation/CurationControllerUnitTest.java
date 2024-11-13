@@ -22,11 +22,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
-import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator;
-import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
-import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember;
+import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator1;
+import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost1;
+import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember1;
 import org.ktc2.cokaen.wouldyouin._global.testdata.CurationData;
-import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.curator;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.curator1;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.ktc2.cokaen.wouldyouin.curation.api.CurationController;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
@@ -72,7 +72,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("RequestParam을 통해 전달받은 지역의 큐레이션 목록을 조회한다.")
-    @WithMockMember
+    @WithMockMember1
     void getCurationsByAreaOrderByCreatedDateDesc1() throws Exception {
         // given, when
         mockMvc.perform(get("/api/curations")
@@ -89,7 +89,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("RequestParam을 통해 지역을 지정하지 않은 경우, 전체 지역의 큐레이션 목록을 조회한다.")
-    @WithMockMember
+    @WithMockMember1
     void getCurationsByAreaOrderByCreatedDateDesc2() throws Exception {
         // given, when
         mockMvc.perform(get("/api/curations")).andDo(print())
@@ -102,7 +102,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("ReqeustParam을 통해 요청할 페이지에 대한 정보를 전달받아, 해당하는 호스트의 큐레이션 목록을 조회한다.")
-    @WithMockMember
+    @WithMockMember1
     void getCurationsByCuratorIdOrderByCreatedDateDesc1() throws Exception {
         // given, when
         mockMvc.perform(get("/api/curations/curators/" + randomId)
@@ -118,7 +118,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("RequestParam을 통해 페이지 정보를 지정하지 않은 경우, 디폴트 값으로 해당하는 호스트의 큐레이션 목록을 조회한다.")
-    @WithMockMember
+    @WithMockMember1
     void getCurationsByCuratorIdOrderByCreatedDateDesc2() throws Exception {
         // given, when
         mockMvc.perform(get("/api/curations/curators/" + randomId)).andDo(print())
@@ -131,7 +131,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 ID를 통해 해당하는 큐레이션을 조회한다.")
-    @WithMockMember
+    @WithMockMember1
     void getCurationByCurationId() throws Exception {
         // given, when
         mockMvc.perform(get("/api/curations/" + randomId)).andDo(print())
@@ -143,7 +143,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("RequestBody로 전달받은 정보를 통해 큐레이션을 생성한다.")
-    @WithMockCurator
+    @WithMockCurator1
     void createCuration1() throws Exception {
         // given
         ArgumentCaptor<CurationCreateRequest> captor = ArgumentCaptor.forClass(CurationCreateRequest.class);
@@ -158,13 +158,13 @@ class CurationControllerUnitTest {
             .andExpect(status().isCreated());
 
         // then
-        then(curationService).should(times(1)).create(eq(curator.memberIdentifier), captor.capture());
+        then(curationService).should(times(1)).create(eq(curator1.memberIdentifier), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
     @Test
     @DisplayName("호스트의 권한으로는 큐레이션을 생성할 수 없다.")
-    @WithMockHost
+    @WithMockHost1
     void createCuration2() throws Exception {
         // given, when
         mockMvc.perform(post("/api/curations")
@@ -182,7 +182,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("멤버의 권한으로는 큐레이션을 생성할 수 없다.")
-    @WithMockMember
+    @WithMockMember1
     void createCuration3() throws Exception {
         // given, when
         mockMvc.perform(post("/api/curations")
@@ -200,7 +200,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 생성 시, 제목에는 빈 값이 들어갈 수 없다.")
-    @WithMockCurator
+    @WithMockCurator1
     void createCuration4() throws Exception {
         // given
         CurationCreateRequest request = CurationData.curation.request.create.get().toBuilder()
@@ -221,7 +221,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 생성 시, 큐레이션 카드의 부제목에는 빈 값이 들어갈 수 없다.")
-    @WithMockCurator
+    @WithMockCurator1
     void createCuration5() throws Exception {
         // given
         CurationCreateRequest request = CurationData.curation.request.create.get().toBuilder()
@@ -243,7 +243,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 생성 시, 큐레이션 카드의 내용에는 빈 값이 들어갈 수 없다.")
-    @WithMockCurator
+    @WithMockCurator1
     void createCuration6() throws Exception {
         // given
         CurationCreateRequest request = CurationData.curation.request.create.get().toBuilder()
@@ -265,7 +265,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 생성 시, 큐레이션 카드의 내용에는 빈 값이 들어갈 수 없다.")
-    @WithMockCurator
+    @WithMockCurator1
     void createCuration7() throws Exception {
         // given
         CurationCreateRequest request = CurationData.curation.request.create.get().toBuilder()
@@ -287,7 +287,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 생성 시, 큐레이션 카드의 내용은 20자 이상 1000자 이하이어야 한다.")
-    @WithMockCurator
+    @WithMockCurator1
     void createCuration8() throws Exception {
         // given
         CurationCreateRequest request = CurationData.curation.request.create.get().toBuilder()
@@ -309,7 +309,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 생성 시, 각 큐레이션 카드에는 이미지를 최대 5개까지 등록할 수 있다.")
-    @WithMockCurator
+    @WithMockCurator1
     void createCuration9() throws Exception {
         // given
         CurationCreateRequest request =  CurationData.curation.request.create.get().toBuilder()
@@ -332,7 +332,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 생성 시, 지역에는 빈 값이 들어갈 수 없다.")
-    @WithMockCurator
+    @WithMockCurator1
     void createCuration10() throws Exception {
         // given
         CurationCreateRequest request = CurationData.curation.request.create.get().toBuilder()
@@ -353,7 +353,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 생성 시, 큐레이션 카드의 개수는 1개 이상 10개 이하이어야 한다.")
-    @WithMockCurator
+    @WithMockCurator1
     void createCuration11() throws Exception {
         // given
         CurationCreateRequest request = CurationData.curation.request.create.get().toBuilder().
@@ -374,7 +374,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("RequestBody로 전달받은 정보를 통해 큐레이션을 수정한다.")
-    @WithMockCurator
+    @WithMockCurator1
     void updateCuration1() throws Exception {
         // given
         ArgumentCaptor<CurationEditRequest> captor = ArgumentCaptor.forClass(CurationEditRequest.class);
@@ -389,13 +389,13 @@ class CurationControllerUnitTest {
             .andExpect(status().isOk());
 
         // then
-        then(curationService).should(times(1)).update(eq(curator.memberIdentifier), eq(randomId), captor.capture());
+        then(curationService).should(times(1)).update(eq(curator1.memberIdentifier), eq(randomId), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
     @Test
     @DisplayName("Host의 권한으로는 큐레이션을 수정할 수 없다.")
-    @WithMockHost
+    @WithMockHost1
     void updateCuration2() throws Exception {
         // given, when
         mockMvc.perform(put("/api/curations/" + randomId)
@@ -413,7 +413,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("Member의 권한으로는 큐레이션을 수정할 수 없다.")
-    @WithMockMember
+    @WithMockMember1
     void updateCuration3() throws Exception {
         // given, when
         mockMvc.perform(put("/api/curations/" + randomId)
@@ -431,7 +431,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 수정 시, 제목에는 빈 값이 들어갈 수 없다.")
-    @WithMockCurator
+    @WithMockCurator1
     void updateCuration4() throws Exception {
         // given
         CurationEditRequest request = CurationData.curation.request.edit.get().toBuilder()
@@ -452,7 +452,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 수정 시, 큐레이션 카드의 부제목에는 빈 값이 들어갈 수 없다.")
-    @WithMockCurator
+    @WithMockCurator1
     void updateCuration5() throws Exception {
         // given
         CurationEditRequest request = CurationData.curation.request.edit.get().toBuilder()
@@ -475,7 +475,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 수정 시, 큐레이션 카드의 내용에는 빈 값이 들어갈 수 없다.")
-    @WithMockCurator
+    @WithMockCurator1
     void updateCuration6() throws Exception {
         // given
         CurationEditRequest request = CurationData.curation.request.edit.get().toBuilder()
@@ -498,7 +498,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 수정 시, 큐레이션 카드의 내용의 길이는 20자 이상 1000자 이하이어야 한다.")
-    @WithMockCurator
+    @WithMockCurator1
     void updateCuration7() throws Exception {
         // given
         CurationEditRequest request = CurationData.curation.request.edit.get().toBuilder()
@@ -521,7 +521,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 수정 시, 각 큐레이션 카드에는 이미지를 최대 5개 등록할 수 있다.")
-    @WithMockCurator
+    @WithMockCurator1
     void updateCuration8() throws Exception {
         // given
         CurationEditRequest request = CurationData.curation.request.edit.get().toBuilder()
@@ -544,7 +544,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 수정 시, 지역에는 빈 값이 들어갈 수 없다.")
-    @WithMockCurator
+    @WithMockCurator1
     void updateCuration9() throws Exception {
         // given
         CurationEditRequest request = CurationData.curation.request.edit.get().toBuilder()
@@ -565,7 +565,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("큐레이션 수정 시, 큐레이션 카드는 1개 이상 10개 이하이어야 한다.")
-    @WithMockCurator
+    @WithMockCurator1
     void updateCuration10() throws Exception {
         // given
         CurationEditRequest request = CurationData.curation.request.edit.get().toBuilder()
@@ -586,7 +586,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("PathVariable로 전달받은 큐레이션 ID에 해당하는 큐레이션을 삭제한다.")
-    @WithMockCurator
+    @WithMockCurator1
     void deleteCuration1() throws Exception {
         // given, when
         mockMvc.perform(delete("/api/curations/" + randomId)
@@ -595,12 +595,12 @@ class CurationControllerUnitTest {
             .andExpect(status().isNoContent());
 
         // then
-        then(curationService).should(times(1)).delete(eq(curator.memberIdentifier), eq(randomId));
+        then(curationService).should(times(1)).delete(eq(curator1.memberIdentifier), eq(randomId));
     }
 
     @Test
     @DisplayName("Host의 권한으로는 큐레이션을 삭제할 수 없다.")
-    @WithMockHost
+    @WithMockHost1
     void deleteCuration2() throws Exception {
         // given, when
         mockMvc.perform(delete("/api/curations/" + randomId)
@@ -615,7 +615,7 @@ class CurationControllerUnitTest {
 
     @Test
     @DisplayName("Member의 권한으로는 큐레이션을 삭제할 수 없다.")
-    @WithMockMember
+    @WithMockMember1
     void deleteCuration3() throws Exception {
         // given, when
         mockMvc.perform(delete("/api/curations/" + randomId)

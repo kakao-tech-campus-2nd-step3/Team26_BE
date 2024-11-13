@@ -52,7 +52,7 @@ class MemberServiceUnitTest {
 
     @BeforeEach
     void setUp() {
-        validMember = MemberData.normal.entity.get();
+        validMember = MemberData.normal1.entity.get();
     }
 
     @Test
@@ -60,9 +60,10 @@ class MemberServiceUnitTest {
     void createMember() {
         // given
         given(memberCreateRequest.getProfileImageUrl()).willReturn(validMember.getProfileImageUrl());
-        given(memberCreateRequest.toEntity(validMember.getProfileImage())).willReturn(validMember);
+        given(memberCreateRequest.toEntity(validMember.getProfileImage(), validMember.getProfileImageThumbnailUrl())).willReturn(validMember);
         given(memberRepository.save(validMember)).willReturn(validMember);
         given(memberImageService.convert(memberCreateRequest.getProfileImageUrl())).willReturn(validMember.getProfileImage());
+        given(memberImageService.createThumbnail(validMember.getProfileImage().getName())).willReturn(validMember.getProfileImageThumbnailUrl());
 
         // when
         memberService.createMember(memberCreateRequest);
@@ -100,7 +101,7 @@ class MemberServiceUnitTest {
     @Test
     @DisplayName("소셜 신규 사용자 추가정보 기입 테스트")
     void updateWelcomeMember() {
-        Member validWelcomeMember = MemberData.welcome.entity.get();
+        Member validWelcomeMember = MemberData.welcome1.entity.get();
         given(memberRepository.findById(validWelcomeMember.getId())).willReturn(Optional.of(validWelcomeMember));
         given(memberAdditionalInfoRequest.getPhone()).willReturn(validWelcomeMember.getPhone());
         given(memberAdditionalInfoRequest.getArea()).willReturn(validWelcomeMember.getArea());
