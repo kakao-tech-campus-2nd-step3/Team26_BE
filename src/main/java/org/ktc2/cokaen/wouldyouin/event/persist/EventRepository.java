@@ -13,9 +13,14 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT E FROM Event E JOIN FETCH E.host "
         + "WHERE E.host.Id = :hostId "
-        + "AND E.host.Id > :lastId "
+        + "AND E.id > :lastId "
         + "ORDER BY E.id DESC")
     Slice<Event> findAllByHostIdOrderByEventIdDesc(Long hostId, Long lastId, Pageable pageable);
+
+    @Query("SELECT E FROM Event E JOIN FETCH E.host "
+        + "WHERE E.id > :lastId "
+        + "ORDER BY E.id DESC")
+    Slice<Event> findAllByEventIdDesc(Long lastId, Pageable pageable);
 
     @Query("SELECT E FROM Event E JOIN FETCH E.host "
         + "WHERE (E.location.latitude between :startLatitude AND :endLatitude) "
