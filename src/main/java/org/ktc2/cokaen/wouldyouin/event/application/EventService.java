@@ -124,7 +124,7 @@ public class EventService {
         event.decreaseLeftSeat(count);
     }
 
-    private static Long getLastId(Slice<Event> events, Long oldLastId) {
+    public static Long getLastId(Slice<Event> events, Long oldLastId) {
         if (events.hasContent()) {
             return events.getContent().getLast().getId();
         }

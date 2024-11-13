@@ -1,13 +1,15 @@
 package org.ktc2.cokaen.wouldyouin.review.application;
 
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.ReviewEventResponse;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.ReviewEventSliceResponse;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.application.MemberService;
-import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.reservation.application.ReservationService;
 import org.ktc2.cokaen.wouldyouin.review.api.dto.ReviewCreateRequest;
 import org.ktc2.cokaen.wouldyouin.review.api.dto.ReviewEditRequest;
@@ -55,6 +57,15 @@ public class ReviewService {
             return reviews.getContent().getLast().getId();
         }
         return oldLastId;
+    }
+
+    @Transactional
+    public ReviewEventSliceResponse getUnreviewedEventsByMemberId(Long memberId, Pageable pageable, Long beforeLastId) {
+        Slice<Event> unreviewedEvents = reviewRepository.findUnreviewedEventsByMemberId(memberId, beforeLastId, pageable);
+        Long newLastId = EventService.getLastId(unreviewedEvents, beforeLastId);
+        List<ReviewEventResponse> responses = unreviewedEvents.stream()
+            .map(ReviewEventResponse::from).toList();
+        return ReviewEventSliceResponse.from(responses, unreviewedEvents.getSize(), newLastId);
     }
 
     @Transactional
