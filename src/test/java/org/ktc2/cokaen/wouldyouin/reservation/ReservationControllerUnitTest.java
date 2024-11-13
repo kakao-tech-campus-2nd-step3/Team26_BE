@@ -19,12 +19,12 @@ import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator;
-import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
-import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember;
-import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.curator;
-import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.host;
-import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.normal;
+import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator1;
+import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost1;
+import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember1;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.curator1;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.host1;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.normal1;
 import org.ktc2.cokaen.wouldyouin._global.testdata.ReservationData;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.ktc2.cokaen.wouldyouin.reservation.api.ReservationController;
@@ -69,7 +69,7 @@ class ReservationControllerUnitTest {
 
     @Test
     @DisplayName("jwt 토큰 정보에 해당하는 member의 예약 목록을 조회한다.")
-    @WithMockMember
+    @WithMockMember1
     void getReservationsByMemberId1() throws Exception {
         // given, when
         mockMvc.perform(get("/api/reservations")
@@ -80,12 +80,12 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByMemberId(
-            eq(normal.id), eq(PageRequest.of(5, 20)), eq(100L));
+            eq(normal1.id), eq(PageRequest.of(5, 20)), eq(100L));
     }
 
     @Test
     @DisplayName("RequestParam으로 페이지 정보가 주어지지 않으면 기본값으로 예약을 조회한다.")
-    @WithMockMember
+    @WithMockMember1
     void getReservationsByMemberId2() throws Exception {
         // given, when
         mockMvc.perform(get("/api/reservations")).andDo(print())
@@ -93,12 +93,12 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByMemberId(
-            eq(normal.id), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
+            eq(normal1.id), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
     }
 
     @Test
     @DisplayName("jwt 토큰 정보에 해당하는 curator의 예약 목록을 조회한다.")
-    @WithMockCurator
+    @WithMockCurator1
     void getReservationsByMemberId3() throws Exception {
         // given, when
         mockMvc.perform(get("/api/reservations")
@@ -109,12 +109,12 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByMemberId(
-            eq(curator.id), eq(PageRequest.of(5, 20)), eq(100L));
+            eq(curator1.id), eq(PageRequest.of(5, 20)), eq(100L));
     }
 
     @Test
     @DisplayName("Host의 권한으로 자신의 예약을 조회할 수 없다.")
-    @WithMockHost
+    @WithMockHost1
     void getReservationsByMemberId4() throws Exception {
         // given, when
         mockMvc.perform(get("/api/reservations")
@@ -130,7 +130,7 @@ class ReservationControllerUnitTest {
 
     @Test
     @DisplayName("PathVariable로 이벤트 ID를 받아 해당하는 이벤트를 조회한다.")
-    @WithMockHost
+    @WithMockHost1
     void getReservationByEventId1() throws Exception {
         // given, when
         mockMvc.perform(get("/api/reservations/events/" + randomId)
@@ -141,12 +141,12 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByEventId(
-            eq(host.memberIdentifier), eq(randomId), eq(PageRequest.of(5, 20)), eq(100L));
+            eq(host1.memberIdentifier), eq(randomId), eq(PageRequest.of(5, 20)), eq(100L));
     }
 
     @Test
     @DisplayName("RequestParam으로 페이지 정보가 주어지지 않으면 기본값으로 예약을 조회한다.")
-    @WithMockHost
+    @WithMockHost1
     void getReservationByEventId2() throws Exception {
         // given, when
         mockMvc.perform(get("/api/reservations/events/" + randomId))
@@ -155,12 +155,12 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByEventId(
-            eq(host.memberIdentifier), eq(randomId), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
+            eq(host1.memberIdentifier), eq(randomId), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
     }
 
     @Test
     @DisplayName("Member의 권한으로 이벤트 ID를 통해 이벤트의 예약을 조회할 수 없다.")
-    @WithMockMember
+    @WithMockMember1
     void getReservationByEventId3() throws Exception {
         // given, when
         mockMvc.perform(get("/api/reservations/events/" + randomId))
@@ -174,7 +174,7 @@ class ReservationControllerUnitTest {
 
     @Test
     @DisplayName("Curator의 권한으로 이벤트 ID를 통해 이벤트의 예약을 조회할 수 없다.")
-    @WithMockCurator
+    @WithMockCurator1
     void getReservationByEventId4() throws Exception {
         // given, when
         mockMvc.perform(get("/api/reservations/events/" + randomId))
@@ -188,7 +188,7 @@ class ReservationControllerUnitTest {
 
     @Test
     @DisplayName("예약 ID를 통해 예약을 조회한다.")
-    @WithMockCurator
+    @WithMockCurator1
     void getReservationById1() throws Exception {
         // given, when
         mockMvc.perform(get("/api/reservations/" + randomId))
@@ -201,11 +201,11 @@ class ReservationControllerUnitTest {
 
     @Test
     @DisplayName("Member 권한으로 RequestBody를 통해 예약을 생성한다.")
-    @WithMockMember
+    @WithMockMember1
     void createReservation1() throws Exception {
         // given
         ArgumentCaptor<ReservationRequest> captor = ArgumentCaptor.forClass(ReservationRequest.class);
-        ReservationRequest request = ReservationData.reservation.request.get();
+        ReservationRequest request = ReservationData.reservation1.request.get();
 
         // when
         mockMvc.perform(post("/api/reservations")
@@ -216,17 +216,17 @@ class ReservationControllerUnitTest {
             .andExpect(status().isCreated());
 
         // then
-        then(reservationService).should(times(1)).create(eq(normal.id), captor.capture());
+        then(reservationService).should(times(1)).create(eq(normal1.id), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
     @Test
     @DisplayName("Curator 권한으로 RequestBody를 통해 예약을 생성한다.")
-    @WithMockCurator
+    @WithMockCurator1
     void createReservation2() throws Exception {
         // given
         ArgumentCaptor<ReservationRequest> captor = ArgumentCaptor.forClass(ReservationRequest.class);
-        ReservationRequest request = ReservationData.reservation.request.get();
+        ReservationRequest request = ReservationData.reservation1.request.get();
 
         // when
         mockMvc.perform(post("/api/reservations")
@@ -237,19 +237,19 @@ class ReservationControllerUnitTest {
             .andExpect(status().isCreated());
 
         // then
-        then(reservationService).should(times(1)).create(eq(curator.id), captor.capture());
+        then(reservationService).should(times(1)).create(eq(curator1.id), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
     @Test
     @DisplayName("Host 권한으로 예약을 생성할 수 없다.")
-    @WithMockHost
+    @WithMockHost1
     void createReservation3() throws Exception {
         // given, when
         mockMvc.perform(post("/api/reservations")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(ReservationData.reservation.request.get())))
+                .content(objectMapper.writeValueAsString(ReservationData.reservation1.request.get())))
             .andDo(print())
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
@@ -260,10 +260,10 @@ class ReservationControllerUnitTest {
 
     @Test
     @DisplayName("예약 생성 시 이벤트 ID는 빈 값이 될 수 없다.")
-    @WithMockMember
+    @WithMockMember1
     void createReservation4() throws Exception {
         // given
-        ReservationRequest request = ReservationData.reservation.request.get().toBuilder()
+        ReservationRequest request = ReservationData.reservation1.request.get().toBuilder()
             .eventId(null).build();
 
         // when
@@ -281,10 +281,10 @@ class ReservationControllerUnitTest {
 
     @Test
     @DisplayName("예약 생성 시 수량은 빈 값이 될 수 없다.")
-    @WithMockMember
+    @WithMockMember1
     void createReservation5() throws Exception {
         // given
-        ReservationRequest request = ReservationData.reservation.request.get().toBuilder()
+        ReservationRequest request = ReservationData.reservation1.request.get().toBuilder()
             .quantity(null).build();
 
         // when
@@ -302,10 +302,10 @@ class ReservationControllerUnitTest {
 
     @Test
     @DisplayName("예약 생성 시 수량은 1개 이상이어야 한다.")
-    @WithMockMember
+    @WithMockMember1
     void createReservation6() throws Exception {
         // given
-        ReservationRequest request = ReservationData.reservation.request.get().toBuilder()
+        ReservationRequest request = ReservationData.reservation1.request.get().toBuilder()
             .quantity(0).build();
 
         // when
@@ -323,7 +323,7 @@ class ReservationControllerUnitTest {
 
     @Test
     @DisplayName("Member 권한으로 예약 ID를 통해 예약을 삭제한다.")
-    @WithMockMember
+    @WithMockMember1
     void deleteReservation1() throws Exception {
         // given, when
         mockMvc.perform(delete("/api/reservations/" + randomId)
@@ -332,12 +332,12 @@ class ReservationControllerUnitTest {
             .andExpect(status().isNoContent());
 
         // then
-        then(reservationService).should(times(1)).delete(normal.id, randomId);
+        then(reservationService).should(times(1)).delete(normal1.id, randomId);
     }
 
     @Test
     @DisplayName("Curator 권한으로 예약 ID를 통해 예약을 삭제한다.")
-    @WithMockCurator
+    @WithMockCurator1
     void deleteReservation2() throws Exception {
         // given, when
         mockMvc.perform(delete("/api/reservations/" + randomId)
@@ -346,12 +346,12 @@ class ReservationControllerUnitTest {
             .andExpect(status().isNoContent());
 
         // then
-        then(reservationService).should(times(1)).delete(curator.id, randomId);
+        then(reservationService).should(times(1)).delete(curator1.id, randomId);
     }
 
     @Test
     @DisplayName("Host 권한으로 예약 ID를 통해 예약을 삭제한다.")
-    @WithMockHost
+    @WithMockHost1
     void deleteReservation3() throws Exception {
         // given, when
         mockMvc.perform(delete("/api/reservations/" + randomId)

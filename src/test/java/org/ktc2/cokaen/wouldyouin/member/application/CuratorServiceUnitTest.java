@@ -45,14 +45,14 @@ class CuratorServiceUnitTest {
 
     @BeforeEach
     void setUp() {
-        validCurator = MemberData.curator.entity.get();
+        validCurator = MemberData.curator1.entity.get();
     }
 
     @Test
     @DisplayName("큐레이터 사용자 생성 테스트")
     void createCurator() {
         // given
-        Member validMember = MemberData.normal.entity.get();
+        Member validMember = MemberData.normal1.entity.get();
         given(memberRepository.findById(validMember.getId())).willReturn(Optional.of(validMember));
 
         // when
