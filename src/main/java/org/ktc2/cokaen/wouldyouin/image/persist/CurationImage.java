@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.Image.persist;
+package org.ktc2.cokaen.wouldyouin.image.persist;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,20 +8,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.ktc2.cokaen.wouldyouin.event.persist.Event;
+import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class EventImage extends Image {
+public class CurationImage extends Image {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
-    private Event event;
+    @JoinColumn(name = "curation_card_id")
+    private CurationCard curationCard;
 
     @Builder
-    public EventImage(String name, Long size, String extension) {
+    public CurationImage(String name, Long size, String extension) {
         super(name, size, extension);
     }
 }

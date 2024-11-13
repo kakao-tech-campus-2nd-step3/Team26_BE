@@ -1,13 +1,13 @@
 package org.ktc2.cokaen.wouldyouin._global.testdata;
 
 import java.time.LocalDateTime;
-import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
-import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
-import org.ktc2.cokaen.wouldyouin.Image.persist.AdvertisementImage;
-import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
-import org.ktc2.cokaen.wouldyouin.Image.persist.EventImage;
-import org.ktc2.cokaen.wouldyouin.Image.persist.Image;
-import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
+import org.ktc2.cokaen.wouldyouin.image.api.dto.ImageRequest;
+import org.ktc2.cokaen.wouldyouin.image.api.dto.ImageResponse;
+import org.ktc2.cokaen.wouldyouin.image.persist.AdvertisementImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.EventImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.Image;
+import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;

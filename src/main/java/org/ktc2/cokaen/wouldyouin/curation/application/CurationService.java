@@ -3,8 +3,8 @@ package org.ktc2.cokaen.wouldyouin.curation.application;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.Image.application.CurationImageService;
-import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
+import org.ktc2.cokaen.wouldyouin.image.application.CurationImageService;
+import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
@@ -37,11 +37,6 @@ public class CurationService {
     private final CurationImageService curationImageService;
 
     @Transactional(readOnly = true)
-    public Curation getByIdOrThrow(Long id) throws EntityNotFoundException {
-        return curationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당하는 큐레이션을 찾을 수 없습니다."));
-    }
-
-    @Transactional(readOnly = true)
     public CurationResponse getById(Long curationId) {
         return CurationResponse.from(getByIdOrThrow(curationId));
     }
@@ -65,25 +60,13 @@ public class CurationService {
     public CurationResponse create(MemberIdentifier identifier, CurationCreateRequest curationCreateRequest) {
         Curator curator = curatorService.getByIdOrThrow(identifier.id());
         List<CurationCard> curationCards = curationCreateRequest.getCurationCards().stream()
-            .map(curationCardService::create)
-            .toList();
+            .map(curationCardService::create).toList();
         List<Event> events = curationCreateRequest.getEventIds().stream()
-            .map(eventService::getByIdOrThrow)
-            .toList();
+            .map(eventService::getByIdOrThrow).toList();
         Curation curation = curationRepository.save(
             curationCreateRequest.toEntity(curator, curationCards, events, getThumbnailUrl(curationCards)));
         curationCards.forEach(curationCard -> curationCardService.setCuration(curationCard, curation));
         return CurationResponse.from(curation);
-    }
-
-    private String getThumbnailUrl(List<CurationCard> curationCards) {
-        return Optional.ofNullable(curationCards)
-            .map(List::getFirst)
-            .map(CurationCard::getCurationImages)
-            .map(List::getFirst)
-            .map(CurationImage::getName)
-            .map(curationImageService::createThumbnail)
-            .orElse("");
     }
 
     @Transactional
@@ -91,11 +74,9 @@ public class CurationService {
         Curation curation = getByIdOrThrow(curationId);
         validateCuratorId(identifier, curation);
         List<CurationCard> curationCards = curationEditRequest.getCurationCards().stream()
-            .map(curationCardService::create)
-            .toList();
+            .map(curationCardService::create).toList();
         List<Event> events = curationEditRequest.getEventIds().stream()
-            .map(eventService::getByIdOrThrow)
-            .toList();
+            .map(eventService::getByIdOrThrow).toList();
         curation.getCurationCards().forEach(card -> curationCardService.delete(identifier, card.getId()));
         curation.updateFrom(curationEditRequest, curationCards, events, getThumbnailUrl(curationCards));
         curationCards.forEach(curationCard -> curationCardService.setCuration(curationCard, curation));
@@ -111,11 +92,25 @@ public class CurationService {
         curationRepository.deleteById(curationId);
     }
 
+    private Curation getByIdOrThrow(Long id) throws EntityNotFoundException {
+        return curationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당하는 큐레이션을 찾을 수 없습니다."));
+    }
+
     private Long getLastId(Slice<Curation> curations, Long oldLastId) {
         if (curations.hasContent()) {
             return curations.getContent().getLast().getId();
         }
         return oldLastId;
+    }
+
+    private String getThumbnailUrl(List<CurationCard> curationCards) {
+        return Optional.ofNullable(curationCards)
+            .map(List::getFirst)
+            .map(CurationCard::getCurationImages)
+            .map(List::getFirst)
+            .map(CurationImage::getName)
+            .map(curationImageService::createThumbnail)
+            .orElse("");
     }
 
     private void validateCuratorId(MemberIdentifier identifier, Curation curation) {

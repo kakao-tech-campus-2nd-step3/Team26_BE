@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;

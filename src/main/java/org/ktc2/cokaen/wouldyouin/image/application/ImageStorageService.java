@@ -1,14 +1,13 @@
-package org.ktc2.cokaen.wouldyouin.Image.application;
+package org.ktc2.cokaen.wouldyouin.image.application;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
-import org.ktc2.cokaen.wouldyouin.Image.api.dto.ImageRequest;
+import org.ktc2.cokaen.wouldyouin.image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin._common.exception.FailedToUploadImageException;
 import org.ktc2.cokaen.wouldyouin._common.util.FileUtil;
 import org.ktc2.cokaen.wouldyouin._common.util.RestClientUtil;

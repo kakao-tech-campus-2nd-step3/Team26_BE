@@ -1,11 +1,11 @@
-package org.ktc2.cokaen.wouldyouin.Image.application;
+package org.ktc2.cokaen.wouldyouin.image.application;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.ktc2.cokaen.wouldyouin.Image.api.ImageDomain;
-import org.ktc2.cokaen.wouldyouin.Image.persist.Image;
+import org.ktc2.cokaen.wouldyouin.image.api.ImageDomain;
+import org.ktc2.cokaen.wouldyouin.image.persist.Image;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.Image.api;
+package org.ktc2.cokaen.wouldyouin.image.api;
 
 public enum ImageDomain {
     MEMBER,

@@ -2,7 +2,7 @@ package org.ktc2.cokaen.wouldyouin.curation.api.dto;
 
 import java.util.List;
 import lombok.Builder;
-import org.ktc2.cokaen.wouldyouin.Image.persist.CurationImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
 
 @Builder
