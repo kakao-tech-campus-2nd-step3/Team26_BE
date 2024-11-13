@@ -29,7 +29,7 @@ public abstract class BaseMember {
     @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // TODO: 네이밍 소문자로 바꾸기
-    private Long Id;
+    private Long id;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
