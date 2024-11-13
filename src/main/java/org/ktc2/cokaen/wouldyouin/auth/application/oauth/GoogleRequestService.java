@@ -2,7 +2,10 @@ package org.ktc2.cokaen.wouldyouin.auth.application.oauth;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import jakarta.annotation.PostConstruct;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.ktc2.cokaen.wouldyouin._common.util.RestClientUtil;
 import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.AccessTokenResponse;
@@ -14,7 +17,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class GoogleRequestService extends OauthRequestService {
 
     @Value("${oauth.google.uri.login.host}")
@@ -39,13 +44,12 @@ public class GoogleRequestService extends OauthRequestService {
     private String redirectUri;
 
     private final RestClientUtil client;
-    private final String loginRequestUri;
-    private final String accessRequestUri;
-    private final HttpHeaders loginRequestHeaders;
+    private String loginRequestUri;
+    private String accessRequestUri;
+    private HttpHeaders loginRequestHeaders;
 
-    public GoogleRequestService(RestClientUtil restClientUtil) {
-        this.client = restClientUtil;
-
+    @PostConstruct
+    private void init() {
         loginRequestUri = UriUtil.buildUrl("https", loginRequestHost, loginRequestPath);
         accessRequestUri = UriUtil.buildUrl("https", accessRequestHost, accessRequestPath);
 
@@ -88,6 +92,8 @@ public class GoogleRequestService extends OauthRequestService {
             GoogleAccessRequestResponse.class, accessRequestUri, getAccessRequestHeaders(authenticationResponse),
             // TODO: 커스텀 예외 추가
             (req, rsp) -> { throw new RuntimeException("에러"); });
+
+        log.debug("#### GoogleAccessRequestResponse result = {}", result);
 
         Objects.requireNonNull(result);
         return OauthResourcesResponse.builder()

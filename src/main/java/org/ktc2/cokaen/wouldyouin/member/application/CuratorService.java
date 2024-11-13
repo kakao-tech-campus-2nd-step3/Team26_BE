@@ -32,7 +32,8 @@ public class CuratorService implements MemberServiceCommonBehavior, LikeableMemb
     @Override
     @Transactional(readOnly = true)
     public MemberResponse getMemberResponseById(Long id) {
-        return MemberResponse.from(getByIdOrThrow(id));
+        Curator curator = getByIdOrThrow(id);
+        return MemberResponse.from(curator, memberImageService.getImageUrl(curator.getProfileImage()));
     }
 
     @Override
@@ -73,18 +74,17 @@ public class CuratorService implements MemberServiceCommonBehavior, LikeableMemb
         baseMemberRepository.flush();
 
         curatorRepository.save(curator);
-        return MemberResponse.from(curator);
+        return MemberResponse.from(curator, memberImageService.getImageUrl(curator.getProfileImage()));
     }
 
-    // TODO : 반대방향 연관관계 설정 setter?
     @Transactional
     public MemberResponse updateCurator(Long curatorId, CuratorEditRequest request) {
         Curator curator = getByIdOrThrow(curatorId);
         MemberImage image = memberImageService.getById(request.getProfileImageId());
         String thumbnailImageUrl = memberImageService.createThumbnail(image.getName());
         curator.updateFrom(request, image, thumbnailImageUrl);
-        image.setBaseMember(curator);
-        return MemberResponse.from(curator);
+        memberImageService.setBaseMember(image, curator);
+        return MemberResponse.from(curator, memberImageService.getImageUrl(curator.getProfileImage()));
     }
 
     @Override

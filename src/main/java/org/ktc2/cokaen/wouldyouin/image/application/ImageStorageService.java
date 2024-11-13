@@ -11,8 +11,10 @@ import org.ktc2.cokaen.wouldyouin.image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin._common.exception.FailedToUploadImageException;
 import org.ktc2.cokaen.wouldyouin._common.util.FileUtil;
 import org.ktc2.cokaen.wouldyouin._common.util.RestClientUtil;
+import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,31 +44,36 @@ public class ImageStorageService {
     }
 
     public ImageRequest saveToDirectory(MultipartFile image, String childPath) {
-        String extension = FileUtil.getExtension(image);
+        String extension = FileUtil.getExtension(image.getContentType());
         String fileName = FileUtil.createRandomFileName(extension);
         FileUtil.saveFile(image, Path.of(parentPath, childPath, fileName));
         return ImageRequest.of(fileName, image.getSize(), extension);
     }
 
     public ImageRequest saveToDirectory(String imageUrl, String childPath) {
-        byte[] response = client.get(byte[].class, imageUrl, new HttpHeaders(),
+        ResponseEntity<byte[]> response = client.getResponseEntity(byte[].class, imageUrl, new HttpHeaders(),
             (req, rsp) -> {
                 throw new FailedToUploadImageException("이미지 URL에 대한 요청을 실패하였습니다.");
             }
         );
-        Optional.ofNullable(response).orElseThrow(
+
+        String contentType = Optional.ofNullable(response.getHeaders().getContentType()).orElseThrow(
+            () -> new FailedToUploadImageException("응답 헤더에 콘텐츠 타입이 없어 이미지를 가져올 수 없습니다.")
+        ).toString();
+        byte[] body = Optional.ofNullable(response.getBody()).orElseThrow(
             () -> new FailedToUploadImageException("응답 본문이 비어있어 이미지를 가져올 수 없습니다.")
         );
-        String extension = FileUtil.getExtension(imageUrl);
+
+        String extension = FileUtil.getExtension(contentType);
         String fileName = FileUtil.createRandomFileName(extension);
         Path path = Path.of(parentPath, childPath, fileName);
-        FileUtil.saveFile(response, path);
-        return ImageRequest.of(fileName, (long) response.length, extension);
+        FileUtil.saveFile(response.getBody(), path);
+        return ImageRequest.of(fileName, (long)body.length, extension);
     }
 
     // TODO : 썸네일 생성 코드 리팩토링, 파일 유틸로 이동
-    public String createThumbnailImage(String childPath, String originFileName) {
-        String fileName = FileUtil.createRandomFileName(thumbnailExtension);
+    public String createThumbnailImage(String apiHeader, String childPath, String originFileName) {
+        String fileName = originFileName;
         String originImagePath = Path.of(parentPath, childPath, originFileName).toString();
         String thumbnailImagePath = Path.of(parentPath, childPath, thumbnailChildPath).toString();
         try {
@@ -77,7 +84,7 @@ public class ImageStorageService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return fileName;
+        return UriUtil.assembleFullUrl(apiHeader,childPath, thumbnailChildPath, fileName);
     }
 
     public void delete(String childPath, String fileName) {

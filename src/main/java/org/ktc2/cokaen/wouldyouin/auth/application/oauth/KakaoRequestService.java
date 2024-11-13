@@ -2,9 +2,12 @@ package org.ktc2.cokaen.wouldyouin.auth.application.oauth;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import jakarta.annotation.PostConstruct;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.ktc2.cokaen.wouldyouin._common.util.RestClientUtil;
 import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.AccessTokenResponse;
@@ -16,9 +19,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class KakaoRequestService extends OauthRequestService {
 
     @Value("${oauth.kakao.uri.login.host}")
@@ -48,28 +52,23 @@ public class KakaoRequestService extends OauthRequestService {
     }
 
     private final RestClientUtil client;
-    private final String loginRequestUri;
-    private final String accessRequestUri;
-    private final HttpHeaders loginRequestHeaders;
+    private String accessRequestUri;
+    private HttpHeaders loginRequestHeaders;
 
-    public KakaoRequestService(RestClientUtil restClientUtil) {
-        this.client = restClientUtil;
-
-        loginRequestUri = UriUtil.buildUrl("https", loginRequestHost, loginRequestPath, getLoginRequestQueryParams());
+    @PostConstruct
+    private void init() {
         accessRequestUri = UriUtil.buildUrl("https", accessRequestHost, accessRequestPath);
-
         loginRequestHeaders = new HttpHeaders();
         loginRequestHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
     }
 
-    protected MultiValueMap<String, String> getLoginRequestQueryParams() {
-        OauthRequest request = getOauthRequestBase();
+    protected String getLoginRequestUri(OauthRequest request) {
         var queries = new LinkedMultiValueMap<String, String>();
         queries.add("grant_type", request.getGrantType());
         queries.add("client_id", request.getClientId());
         queries.add("client_secret", request.getClientSecret());
         queries.add("code", request.getCode());
-        return queries;
+        return UriUtil.buildUrl("https", loginRequestHost, loginRequestPath, queries);
     }
 
     protected HttpHeaders getAccessRequestHeaders(AccessTokenResponse authenticationResponse) {
@@ -92,15 +91,19 @@ public class KakaoRequestService extends OauthRequestService {
     @Override
     protected OauthResourcesResponse requestLoginAndAccessResources(OauthRequest request) {
         AccessTokenResponse authenticationResponse = client.post(
-            AccessTokenResponse.class, loginRequestUri, loginRequestHeaders,
+            AccessTokenResponse.class, getLoginRequestUri(request), loginRequestHeaders,
             // TODO: 커스텀 예외 추가
-            (req, rsp) -> { throw new RuntimeException("에러"); });
+            (req, rsp) -> {
+                throw new RuntimeException("에러");
+            });
 
         Objects.requireNonNull(authenticationResponse);
         KakaoAccessRequestResponse result = client.get(
             KakaoAccessRequestResponse.class, accessRequestUri, getAccessRequestHeaders(authenticationResponse),
             // TODO: 커스텀 예외 추가
             (req, rsp) -> { throw new RuntimeException("에러"); });
+
+        log.debug("#### KakaoAccessRequestResponse result = {}", result);
 
         Objects.requireNonNull(result);
         return OauthResourcesResponse.builder()
@@ -114,6 +117,7 @@ public class KakaoRequestService extends OauthRequestService {
     @JsonNaming(SnakeCaseStrategy.class)
     @RequiredArgsConstructor
     @Getter
+    @ToString
     static class KakaoAccessRequestResponse {
 
         private final Long id;
@@ -123,6 +127,7 @@ public class KakaoRequestService extends OauthRequestService {
         @JsonNaming(SnakeCaseStrategy.class)
         @RequiredArgsConstructor
         @Getter
+        @ToString
         static class KakaoAccount {
 
             private final Profile profile;
@@ -132,6 +137,7 @@ public class KakaoRequestService extends OauthRequestService {
             @JsonNaming(SnakeCaseStrategy.class)
             @RequiredArgsConstructor
             @Getter
+            @ToString
             static class Profile {
 
                 private final String nickname;
