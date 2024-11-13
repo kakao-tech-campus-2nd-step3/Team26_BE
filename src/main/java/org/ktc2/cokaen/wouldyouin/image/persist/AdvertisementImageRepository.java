@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin.Image.persist;
+package org.ktc2.cokaen.wouldyouin.image.persist;
 
 import org.springframework.stereotype.Repository;
 

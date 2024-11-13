@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
+import org.ktc2.cokaen.wouldyouin.image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;

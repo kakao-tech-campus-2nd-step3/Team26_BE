@@ -80,6 +80,15 @@ public class ReservationService {
     }
 
     @Transactional
+    public ReservationResponse createTest(Long memberId, ReservationRequest reservationRequest) {
+        Reservation reservation = reservationRepository.save(reservationRequest.toEntity(
+            memberService.getByIdOrThrow(memberId),
+            eventService.getByIdOrThrow(reservationRequest.getEventId())));
+        eventService.decreaseLeftSeat(reservation.getEvent().getId(), reservationRequest.getQuantity());
+        return ReservationResponse.from(reservation);
+    }
+
+    @Transactional
     public void delete(Long memberId, Long reservationId) {
         validateMemberId(memberId, getByIdOrThrow(reservationId));
         reservationRepository.deleteById(reservationId);
