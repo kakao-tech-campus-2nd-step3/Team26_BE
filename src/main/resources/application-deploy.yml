@@ -9,3 +9,5 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  datasource:
+    url: ${DATASOURCE_URL}?useSSL=true&useUnicode=true&serverTimezone=Asia/Seoul

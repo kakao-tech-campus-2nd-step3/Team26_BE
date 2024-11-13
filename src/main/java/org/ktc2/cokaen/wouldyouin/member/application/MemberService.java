@@ -26,7 +26,9 @@ public class MemberService implements MemberServiceCommonBehavior {
     public MemberResponse createMember(MemberCreateRequest request) {
         MemberImage profileImage = memberImageService.convert(request.getProfileImageUrl());
         String thumbnailImageUrl = memberImageService.createThumbnail(profileImage.getName());
-        return MemberResponse.from(memberRepository.save(request.toEntity(profileImage, thumbnailImageUrl)));
+        Member member = memberRepository.save(request.toEntity(profileImage, thumbnailImageUrl));
+        memberImageService.setBaseMember(profileImage, member);
+        return MemberResponse.from(member, memberImageService.getImageUrl(profileImage));
     }
 
     // TODO : 리팩토링 꼭 할 것, 멤버 전체에 대해 연관관계 설정할 것
@@ -43,18 +45,19 @@ public class MemberService implements MemberServiceCommonBehavior {
                 String url = memberImageService.createThumbnail(memberImageService.createThumbnail(image.getName()));
                 member.setProfileImageThumbnailUrl(url);
             });
-        return MemberResponse.from(member);
+        return MemberResponse.from(member, memberImageService.getImageUrl(member.getProfileImage()));
     }
 
     @Transactional
     public MemberResponse updateWelcomeMember(Long welcomeMemberId, MemberAdditionalInfoRequest additionalInfoRequest) {
         Member member = getByIdOrThrow(welcomeMemberId);
+        // TODO : validate
         if (member.getMemberType() != MemberType.welcome) {
             // TODO: 커스텀 예외 필요
             throw new RuntimeException("Welcome Member가 아닙니다.");
         }
         member.updateFrom(additionalInfoRequest);
-        return MemberResponse.from(member);
+        return MemberResponse.from(member, memberImageService.getImageUrl(member.getProfileImage()));
     }
 
     @Override
@@ -66,7 +69,8 @@ public class MemberService implements MemberServiceCommonBehavior {
     @Override
     @Transactional(readOnly = true)
     public MemberResponse getMemberResponseById(Long id) {
-        return MemberResponse.from(getByIdOrThrow(id));
+        Member member = getByIdOrThrow(id);
+        return MemberResponse.from(member, memberImageService.getImageUrl(member.getProfileImage()));
     }
 
     @Transactional(readOnly = true)

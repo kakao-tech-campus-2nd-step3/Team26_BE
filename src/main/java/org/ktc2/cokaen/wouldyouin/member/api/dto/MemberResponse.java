@@ -19,6 +19,7 @@ public class MemberResponse {
     private String nickname;
     private String phoneNumber;
     private String profileUrl;
+    private String profileThumbnailUrl;
     private MemberType memberType;
 
     private Area area;
@@ -29,25 +30,27 @@ public class MemberResponse {
 
     private List<String> hashtag;
 
-    private static MemberResponseBuilder responseBase(BaseMember baseMember) {
+    private static MemberResponseBuilder responseBase(BaseMember baseMember, String profileUrl) {
         return MemberResponse.builder()
             .memberId(baseMember.getId())
             .nickname(baseMember.getNickname())
             .phoneNumber(baseMember.getPhone())
-            .profileUrl(baseMember.getProfileImage().getName());
+            .profileUrl(profileUrl)
+            .profileThumbnailUrl(baseMember.getProfileImageThumbnailUrl());
+
     }
 
     // TODO: normal member임에도 불구, curator 형식이 호출되는 현상 수정필요
-    public static MemberResponse from(final Member member) {
-        return responseBase(member)
+    public static MemberResponse from(final Member member, String profileUrl) {
+        return responseBase(member, profileUrl)
             .memberType(member.getMemberType())
             .area(member.getArea())
             .gender(member.getGender())
             .build();
     }
 
-    public static MemberResponse from(final Host host) {
-        return responseBase(host)
+    public static MemberResponse from(final Host host, String profileUrl) {
+        return responseBase(host, profileUrl)
             .memberType(host.getMemberType())
             .intro(host.getIntro())
             .likes(host.getLikes())
@@ -55,8 +58,8 @@ public class MemberResponse {
             .build();
     }
 
-    public static MemberResponse from(final Curator curator) {
-        return responseBase(curator)
+    public static MemberResponse from(final Curator curator, String profileUrl) {
+        return responseBase(curator, profileUrl)
             .memberType(curator.getMemberType())
             .area(curator.getArea())
             .gender(curator.getGender())

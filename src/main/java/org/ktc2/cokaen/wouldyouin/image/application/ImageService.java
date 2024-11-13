@@ -54,7 +54,7 @@ public abstract class ImageService<T extends Image> {
     }
 
     public String createThumbnail(String fileName) {
-        return imageStorageService.createThumbnailImage(getChildPath(), fileName);
+        return imageStorageService.createThumbnailImage(parentPath, getChildPath(), fileName);
     }
 
     public T getById(Long id) {
