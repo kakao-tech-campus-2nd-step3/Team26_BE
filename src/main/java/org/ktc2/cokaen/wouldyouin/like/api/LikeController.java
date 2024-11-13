@@ -6,12 +6,11 @@ import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin._common.api.ParamDefaults;
 import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
-import org.ktc2.cokaen.wouldyouin.like.application.LikeServiceFactory;
-import org.ktc2.cokaen.wouldyouin.like.api.dto.LikeResponse;
+import org.ktc2.cokaen.wouldyouin.like.api.dto.LikeSliceResponse;
 import org.ktc2.cokaen.wouldyouin.like.api.dto.LikeToggleResponse;
+import org.ktc2.cokaen.wouldyouin.like.application.LikeServiceFactory;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +27,7 @@ public class LikeController {
     private final LikeServiceFactory likeServiceFactory;
 
     @GetMapping
-    public ResponseEntity<ApiResponseBody<Slice<LikeResponse>>> getLikes(
+    public ResponseEntity<ApiResponseBody<LikeSliceResponse>> getLikes(
         @Authorize(MemberType.normal) MemberIdentifier identifier,
         @RequestParam("type") MemberType memberType,
         @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
