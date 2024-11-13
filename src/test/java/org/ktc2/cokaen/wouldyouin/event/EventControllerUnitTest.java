@@ -22,10 +22,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
-import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost;
+import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost1;
 import org.ktc2.cokaen.wouldyouin._global.testdata.EventData;
-import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.host;
-import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.host.entity;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.host1;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.host1.entity;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtService;
 import org.ktc2.cokaen.wouldyouin.event.api.EventController;
@@ -85,7 +85,7 @@ class EventControllerUnitTest {
 
     @Test
     @DisplayName("모든 행사 조회 - 성공")
-    @WithMockHost
+    @WithMockHost1
     void getEventsByFilterOrderByDistanceAsc() throws Exception {
         // given
         LocationFilter locationFilter = new LocationFilter(0.0, 0.0, 10.0, 10.0);
@@ -139,7 +139,7 @@ class EventControllerUnitTest {
 
     @Test
     @DisplayName("주최자 id를 통한 모든 행사 조회 - 성공")
-    @WithMockHost
+    @WithMockHost1
     void getEventsByLocationByHostId() throws Exception {
         // given
         int pageNumber = 1;
@@ -165,7 +165,7 @@ class EventControllerUnitTest {
 
     @Test
     @DisplayName("행사 id를 통한 행사 조회 - 성공")
-    @WithMockHost
+    @WithMockHost1
     void getEventByEventId() throws Exception {
         //given
         //when
@@ -179,41 +179,41 @@ class EventControllerUnitTest {
 
     @Test
     @DisplayName("행사 생성 - 성공")
-    @WithMockHost
+    @WithMockHost1
     void createEvent() throws Exception {
         //given
         //when
         mockMvc.perform(post("/api/events")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(EventData.event.request.create.get())))
+                .content(objectMapper.writeValueAsString(EventData.event1.request.create.get())))
             .andDo(print())
             .andExpect(status().isCreated());
 
         //then
-        then(eventService).should(times(1)).create(eq(host.memberIdentifier), any(EventCreateRequest.class));
+        then(eventService).should(times(1)).create(eq(host1.memberIdentifier), any(EventCreateRequest.class));
     }
 
     @Test
     @DisplayName("행사 수정 - 성공")
-    @WithMockHost
+    @WithMockHost1
     void updateEvent() throws Exception {
         //given
         //when
         mockMvc.perform(put("/api/events/" + id)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(EventData.event.request.create.get())))
+                .content(objectMapper.writeValueAsString(EventData.event1.request.create.get())))
             .andDo(print())
             .andExpect(status().isOk());
 
         //then
-        then(eventService).should(times(1)).update(eq(host.memberIdentifier), eq(id), any(EventEditRequest.class));
+        then(eventService).should(times(1)).update(eq(host1.memberIdentifier), eq(id), any(EventEditRequest.class));
     }
 
     @Test
     @DisplayName("행사 삭제 - 성공")
-    @WithMockHost
+    @WithMockHost1
     void deleteEvent() throws Exception {
         //given
         //when
@@ -222,6 +222,6 @@ class EventControllerUnitTest {
         ).andExpect(status().isNoContent());
 
         //then
-        then(eventService).should(times(1)).delete(eq(host.memberIdentifier), eq(id));
+        then(eventService).should(times(1)).delete(eq(host1.memberIdentifier), eq(id));
     }
 }

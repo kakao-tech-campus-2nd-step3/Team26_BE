@@ -1,7 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.host.entity.get;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.ktc2.cokaen.wouldyouin.Image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin.Image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._global.testdata.ImageData;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData;
 import org.ktc2.cokaen.wouldyouin.auth.api.dto.LocalLoginRequest;
 import org.ktc2.cokaen.wouldyouin._global.TestUtil;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.create.HostCreateRequest;
@@ -50,7 +50,7 @@ class HostServiceUnitTest {
 
     @BeforeEach
     void setUp() {
-        validHost = get();
+        validHost = MemberData.host1.entity.get();
     }
 
     @Test
@@ -60,13 +60,15 @@ class HostServiceUnitTest {
         String password = "host0password";
         String hashedPassword = validHost.getHashedPassword();
         MemberImage profileImage = validHost.getProfileImage();
+        String thumbnailImageUrl = validHost.getProfileImageThumbnailUrl();
         Long profileImageId = profileImage.getId();
 
         given(hostCreateRequest.getPassword()).willReturn(password);
         given(hostCreateRequest.getProfileImageId()).willReturn(profileImageId);
         given(passwordEncoder.encode(password)).willReturn(hashedPassword);
         given(memberImageService.getById(profileImageId)).willReturn(profileImage);
-        given(hostCreateRequest.toEntity(hashedPassword, profileImage)).willReturn(validHost);
+        given(memberImageService.createThumbnail(profileImage.getName())).willReturn(thumbnailImageUrl);
+        given(hostCreateRequest.toEntity(hashedPassword, profileImage, thumbnailImageUrl)).willReturn(validHost);
         given(hostRepository.save(validHost)).willReturn(validHost);
 
         // when
@@ -78,7 +80,7 @@ class HostServiceUnitTest {
         then(passwordEncoder).should(times(1)).encode(password);
         then(memberImageService).should(times(1)).getById(profileImageId);
         then(hostCreateRequest).should(times(1))
-            .toEntity(hashedPassword, profileImage);
+            .toEntity(hashedPassword, profileImage, thumbnailImageUrl);
         then(hostRepository).should(times(1)).save(validHost);
         then(memberImageService).should(times(1)).setBaseMember(profileImage, validHost);
     }

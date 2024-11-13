@@ -25,13 +25,14 @@ import org.ktc2.cokaen.wouldyouin.Image.api.ImageDomain;
 import org.ktc2.cokaen.wouldyouin.Image.application.CurationImageService;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageServiceFactory;
 import org.ktc2.cokaen.wouldyouin.Image.application.ImageStorageService;
-import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator;
-import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember;
+import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator1;
+import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember1;
 import org.ktc2.cokaen.wouldyouin._global.testdata.ImageData;
 import org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.mockMultipartFile1;
 import org.ktc2.cokaen.wouldyouin._global.testdata.ImageData.mockMultipartFile2;
-import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.curator;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.curator1;
 import org.ktc2.cokaen.wouldyouin.auth.application.JwtAuthFilter;
+import org.ktc2.cokaen.wouldyouin.payment.application.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -60,6 +61,9 @@ class ImageControllerTest {
     private ImageStorageService imageStorageService;
 
     @MockBean
+    private PaymentService paymentService;
+
+    @MockBean
     private JwtAuthFilter jwtAuthFilter;
 
     private final long randomId = abs(new Random().nextLong());
@@ -75,7 +79,7 @@ class ImageControllerTest {
 
     @Test
     @DisplayName("이미지 경로를 통해 이미지를 조회한다.")
-    @WithMockMember
+    @WithMockMember1
     void getImage() throws Exception {
         // given
         String directory = "member";
@@ -92,7 +96,7 @@ class ImageControllerTest {
 
     @Test
     @DisplayName("RequestParam으로 이미지 도메인을 받아 첨부된 이미지를 업로드한다.")
-    @WithMockCurator
+    @WithMockCurator1
     void uploadImages1() throws Exception {
         // given
         MockMultipartFile image1 = mockMultipartFile1.get();
@@ -118,7 +122,7 @@ class ImageControllerTest {
 
     @Test
     @DisplayName("RequestParam의 이미지 도메인의 값으로는 MEMBER, CURATION, ADVERTISEMENT, EVENT만 사용할 수 있다.")
-    @WithMockCurator
+    @WithMockCurator1
     void uploadImages2() throws Exception {
         // given
         MockMultipartFile image1 = mockMultipartFile1.get();
@@ -142,7 +146,7 @@ class ImageControllerTest {
 
     @Test
     @DisplayName("PathVariable로 이미지의 ID를 받아 이미지를 삭제한다.")
-    @WithMockCurator
+    @WithMockCurator1
     void deleteImage1() throws Exception {
         // given
         given((CurationImageService) imageServiceFactory.getImageService(ImageDomain.CURATION)).willReturn(curationImageService);
@@ -156,12 +160,12 @@ class ImageControllerTest {
 
         // then
         then(imageServiceFactory).should(times(1)).getImageService(eq(ImageDomain.CURATION));
-        then(curationImageService).should(times(1)).deleteImage(curator.memberIdentifier, randomId);
+        then(curationImageService).should(times(1)).deleteImage(curator1.memberIdentifier, randomId);
     }
 
     @Test
     @DisplayName("RequestParam의 이미지 도메인의 값으로는 MEMBER, CURATION, ADVERTISEMENT, EVENT만 사용할 수 있다.")
-    @WithMockCurator
+    @WithMockCurator1
     void deleteImage2() throws Exception {
         // given
         given((CurationImageService) imageServiceFactory.getImageService(ImageDomain.CURATION)).willReturn(curationImageService);
