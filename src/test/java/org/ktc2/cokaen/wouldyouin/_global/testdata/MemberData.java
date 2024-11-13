@@ -126,7 +126,7 @@ public class MemberData {
                     .gender(R.normal1.gender)
                     .socialId(R.normal1.socialId)
                     .build();
-                ReflectionTestUtils.setField(ret, "Id", R.normal1.id);
+                ReflectionTestUtils.setField(ret, "id", R.normal1.id);
                 ReflectionTestUtils.setField(ret, "memberType", R.normal1.memberType);
 //                ReflectionTestUtils.setField(ret.getProfileImage(), "baseMember", ret);
                 return ret;
@@ -154,7 +154,7 @@ public class MemberData {
                     .gender(R.curator1.gender)
                     .socialId(R.curator1.socialId)
                     .build();
-                ReflectionTestUtils.setField(ret, "Id", R.curator1.id);
+                ReflectionTestUtils.setField(ret, "id", R.curator1.id);
                 ReflectionTestUtils.setField(ret, "intro", R.curator1.intro);
                 ReflectionTestUtils.setField(ret, "hashtags", R.curator1.hashtags);
 //                ReflectionTestUtils.setField(ret.getProfileImage(), "baseMember", ret);
@@ -180,7 +180,7 @@ public class MemberData {
                     .profileImage(R.host1.profileImage)
                     .profileImageThumbnailUrl(R.host1.profileImageThumbnailUrl)
                     .build();
-                ReflectionTestUtils.setField(ret, "Id", R.host1.id);
+                ReflectionTestUtils.setField(ret, "id", R.host1.id);
                 ReflectionTestUtils.setField(ret, "intro", R.host1.intro);
                 ReflectionTestUtils.setField(ret, "hashtags", R.host1.hashtags);
 //                ReflectionTestUtils.setField(ret.getProfileImage(), "baseMember", ret);
@@ -209,7 +209,7 @@ public class MemberData {
                     .gender(R.welcome1.gender)
                     .socialId(R.welcome1.socialId)
                     .build();
-                ReflectionTestUtils.setField(ret, "Id", R.welcome1.id);
+                ReflectionTestUtils.setField(ret, "id", R.welcome1.id);
 //                ReflectionTestUtils.setField(ret.getProfileImage(), "baseMember", ret);
                 return ret;
             }
