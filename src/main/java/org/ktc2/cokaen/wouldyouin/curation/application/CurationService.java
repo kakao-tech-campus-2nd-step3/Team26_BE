@@ -9,6 +9,7 @@ import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
+import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardResponse;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCreateRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationEditRequest;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationResponse;
@@ -38,14 +39,15 @@ public class CurationService {
 
     @Transactional(readOnly = true)
     public CurationResponse getById(Long curationId) {
-        return CurationResponse.from(getByIdOrThrow(curationId));
+        Curation curation = getByIdOrThrow(curationId);
+        return CurationResponse.from(curation, getCurationCardResponses(curation));
     }
 
     @Transactional(readOnly = true)
     public CurationSliceResponse getAllByAreaOrderByCreatedDateDesc(Area area, Pageable pageable, Long oldLastId) {
         Slice<Curation> curations = curationRepository.findAllByAreaOrderByCreatedDateDesc(area, oldLastId, pageable);
         Long newLastId = getLastId(curations, oldLastId);
-        return CurationSliceResponse.from(curations, curations.getSize(), newLastId);
+        return CurationSliceResponse.from(getCurationResponses(curations), curations.getSize(), newLastId);
     }
 
     @Transactional(readOnly = true)
@@ -53,20 +55,22 @@ public class CurationService {
         Slice<Curation> curations = curationRepository.findAllByCuratorOrderByCreatedDateDesc(
             curatorService.getByIdOrThrow(curatorId), lastId, pageable);
         Long newLastId = getLastId(curations, lastId);
-        return CurationSliceResponse.from(curations, curations.getSize(), newLastId);
+        return CurationSliceResponse.from(getCurationResponses(curations), curations.getSize(), newLastId);
     }
 
     @Transactional
     public CurationResponse create(MemberIdentifier identifier, CurationCreateRequest curationCreateRequest) {
         Curator curator = curatorService.getByIdOrThrow(identifier.id());
         List<CurationCard> curationCards = curationCreateRequest.getCurationCards().stream()
-            .map(curationCardService::create).toList();
+            .map(curationCardService::create)
+            .toList();
         List<Event> events = curationCreateRequest.getEventIds().stream()
-            .map(eventService::getByIdOrThrow).toList();
+            .map(eventService::getByIdOrThrow)
+            .toList();
         Curation curation = curationRepository.save(
             curationCreateRequest.toEntity(curator, curationCards, events, getThumbnailUrl(curationCards)));
         curationCards.forEach(curationCard -> curationCardService.setCuration(curationCard, curation));
-        return CurationResponse.from(curation);
+        return CurationResponse.from(curation, getCurationCardResponses(curation));
     }
 
     @Transactional
@@ -80,7 +84,7 @@ public class CurationService {
         curation.getCurationCards().forEach(card -> curationCardService.delete(identifier, card.getId()));
         curation.updateFrom(curationEditRequest, curationCards, events, getThumbnailUrl(curationCards));
         curationCards.forEach(curationCard -> curationCardService.setCuration(curationCard, curation));
-        return CurationResponse.from(curation);
+        return CurationResponse.from(curation, getCurationCardResponses(curation));
     }
 
     @Transactional
@@ -92,15 +96,35 @@ public class CurationService {
         curationRepository.deleteById(curationId);
     }
 
-    private Curation getByIdOrThrow(Long id) throws EntityNotFoundException {
-        return curationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당하는 큐레이션을 찾을 수 없습니다."));
-    }
-
     private Long getLastId(Slice<Curation> curations, Long oldLastId) {
         if (curations.hasContent()) {
             return curations.getContent().getLast().getId();
         }
         return oldLastId;
+    }
+
+    private void validateCuratorId(MemberIdentifier identifier, Curation curation) {
+        if (!identifier.type().equals(MemberType.admin) && !identifier.id().equals(curation.getCurator().getId())) {
+            throw new UnauthorizedException("큐레이션에 접근할 권한이 없습니다.");
+        }
+    }
+
+    private Curation getByIdOrThrow(Long id) throws EntityNotFoundException {
+        return curationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당하는 큐레이션을 찾을 수 없습니다."));
+    }
+
+    private List<CurationResponse> getCurationResponses(Slice<Curation> curations) {
+        return curations.getContent().stream()
+            .map(curation -> CurationResponse.from(curation, getCurationCardResponses(curation)))
+            .toList();
+    }
+
+    private List<CurationCardResponse> getCurationCardResponses(Curation curation) {
+        return curation.getCurationCards().stream()
+            .map(curationCard -> CurationCardResponse.from(
+                curationCard, curationCard.getCurationImages().stream()
+                    .map(curationImageService::getImageUrl).toList()))
+            .toList();
     }
 
     private String getThumbnailUrl(List<CurationCard> curationCards) {
@@ -111,11 +135,5 @@ public class CurationService {
             .map(CurationImage::getName)
             .map(curationImageService::createThumbnail)
             .orElse("");
-    }
-
-    private void validateCuratorId(MemberIdentifier identifier, Curation curation) {
-        if (!identifier.type().equals(MemberType.admin) && !identifier.id().equals(curation.getCurator().getId())) {
-            throw new UnauthorizedException("큐레이션에 접근할 권한이 없습니다.");
-        }
     }
 }

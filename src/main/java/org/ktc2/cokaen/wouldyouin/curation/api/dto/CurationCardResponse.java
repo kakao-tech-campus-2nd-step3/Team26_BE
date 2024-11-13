@@ -12,15 +12,11 @@ public class CurationCardResponse {
     private String content;
     private List<String> imageUrls;
 
-    public static CurationCardResponse from(CurationCard curationCard) {
+    public static CurationCardResponse from(CurationCard curationCard, List<String> imageUrls) {
         return CurationCardResponse.builder()
             .subtitle(curationCard.getSubtitle())
             .content(curationCard.getContent())
-            .imageUrls(
-                curationCard.getCurationImages().stream()
-                    .map(CurationImage::getName)
-                    .toList()
-            )
+            .imageUrls(imageUrls)
             .build();
     }
 }
