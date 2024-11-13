@@ -5,8 +5,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
-import org.ktc2.cokaen.wouldyouin.event.api.dto.EventResponse;
-import org.ktc2.cokaen.wouldyouin.event.api.dto.EventSliceResponse;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.ReviewEventResponse;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.ReviewEventSliceResponse;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;

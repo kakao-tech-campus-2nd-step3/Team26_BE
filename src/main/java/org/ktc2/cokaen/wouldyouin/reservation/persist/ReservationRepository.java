@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
     @Query("SELECT R FROM Reservation R JOIN FETCH R.member JOIN FETCH R.event "
-        + "WHERE R.member.Id = :memberId AND R.id > :lastId "
+        + "WHERE R.member.id = :memberId AND R.id > :lastId "
         + "ORDER BY R.id DESC")
     Slice<Reservation> findByMemberIdOrderByReservationIdDesc(Long memberId, Long lastId, Pageable pageable);
 
