@@ -38,6 +38,11 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.OK).body(imageStorageService.readFromDirectory(Paths.get(directory, file)));
     }
 
+    @GetMapping(value = "/{directory}/{thumbnail}/{file}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    public ResponseEntity<byte[]> getThumnailImage(@PathVariable String directory, @PathVariable String thumbnail, @PathVariable String file) {
+        return ResponseEntity.status(HttpStatus.OK).body(imageStorageService.readFromDirectory(Paths.get(directory, thumbnail, file)));
+    }
+
     @PostMapping
     public ResponseEntity<ApiResponseBody<List<ImageResponse>>> uploadImages(
         @RequestParam List<MultipartFile> images,

@@ -49,21 +49,13 @@ public class FileUtil {
         return UUID.randomUUID().toString().replace("-", "") + "." + extension;
     }
 
-    public static String getExtension(MultipartFile file) {
-        if (file == null || file.getContentType() == null) {
-            throw new ExtensionParsingException("파일이 존재하지 않거나 콘텐츠 타입이 없습니다.");
-        }
+    public static String getExtension(String contentType) {
         try {
-            return file.getContentType().split("/")[1];
+            return contentType.split("/")[1];
+        } catch (NullPointerException e) {
+            throw new ExtensionParsingException("파일이 존재하지 않거나 콘텐츠 타입이 없습니다.");
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new ExtensionParsingException("파일의 확장자를 찾을 수 없습니다.");
         }
-    }
-
-    public static String getExtension(String url) {
-        if (url == null || !url.contains(".")) {
-            throw new ExtensionParsingException("URL이 존재하지 않거나 확장자가 없습니다.");
-        }
-        return url.substring(url.lastIndexOf('.') + 1);
     }
 }
