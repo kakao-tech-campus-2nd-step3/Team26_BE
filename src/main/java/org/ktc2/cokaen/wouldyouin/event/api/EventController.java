@@ -64,6 +64,16 @@ public class EventController {
             hostId, PageRequest.of(page, size), lastId));
     }
 
+    @GetMapping
+    public ResponseEntity<ApiResponseBody<EventSliceResponse>> getEvents(
+        @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
+        @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
+        @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId
+    ) {
+        return ApiResponse.ok(eventService.getAllByCreatedDateDesc(
+            PageRequest.of(page, size), lastId));
+    }
+
     @GetMapping("/{eventId}")
     public ResponseEntity<ApiResponseBody<EventResponse>> getEventByEventId(
         @PathVariable("eventId") Long eventId) {

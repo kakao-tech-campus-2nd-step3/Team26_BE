@@ -1,7 +1,9 @@
 package org.ktc2.cokaen.wouldyouin.like.application;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.like.api.dto.LikeResponse;
+import org.ktc2.cokaen.wouldyouin.like.api.dto.LikeSliceResponse;
 import org.ktc2.cokaen.wouldyouin.like.api.dto.LikeToggleResponse;
 import org.ktc2.cokaen.wouldyouin.like.persist.Like;
 import org.ktc2.cokaen.wouldyouin.like.persist.LikeRepository;
@@ -29,10 +31,13 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
     public abstract MemberType getTargetLikeableMemberType();
 
     @Transactional(readOnly = true)
-    public Slice<LikeResponse> getLikes(Long memberId, Pageable pageable, Long lastId) {
-        return getLikeRepository().findAllByMember(
-                memberService.getByIdOrThrow(memberId), lastId, pageable)
-            .map(like -> LikeResponse.from(like.getLikeableMember()));
+    public LikeSliceResponse getLikes(Long memberId, Pageable pageable, Long beforeLastId) {
+        Slice<LikeType> likes = getLikeRepository().findAllByMember(
+            memberService.getByIdOrThrow(memberId), beforeLastId, pageable);
+        Long newLastId = getLastId(likes, beforeLastId);
+        List<LikeResponse> responses = likes.stream()
+            .map(like -> LikeResponse.from(like.getLikeableMember())).toList();
+        return LikeSliceResponse.from(responses, likes.getSize(), newLastId);
     }
 
     @Transactional
@@ -56,5 +61,12 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
     protected LikeableMember getLikeableMemberByIdOrThrow(Long likeableMemberId) {
         return likeableMemberGetterFactory.get(getTargetLikeableMemberType())
             .getByIdOrThrow(likeableMemberId);
+    }
+
+    private Long getLastId(Slice<LikeType> likes, Long oldLastId) {
+        if (likes.hasContent()) {
+            return likes.getContent().getLast().getId();
+        }
+        return oldLastId;
     }
 }
