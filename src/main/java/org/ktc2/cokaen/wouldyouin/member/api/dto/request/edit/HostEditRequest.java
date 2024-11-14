@@ -1,12 +1,15 @@
 package org.ktc2.cokaen.wouldyouin.member.api.dto.request.edit;
 
-
 import jakarta.annotation.Nullable;
 import java.util.List;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@EqualsAndHashCode(callSuper = true)
+@ToString
 public class HostEditRequest extends MemberEditRequestBase {
 
     @Nullable private final String intro;

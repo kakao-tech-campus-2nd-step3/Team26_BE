@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.CurationEventResponse;
@@ -13,6 +14,7 @@ import org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse.CurationCurato
 @Builder
 @Getter
 @EqualsAndHashCode
+@ToString
 public class CurationResponse {
 
     private final Long id;

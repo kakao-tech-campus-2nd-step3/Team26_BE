@@ -2,8 +2,6 @@ package org.ktc2.cokaen.wouldyouin.curation.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.image.application.CurationImageService;
-import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardRequest;
@@ -11,6 +9,8 @@ import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardResponse;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCardRepository;
+import org.ktc2.cokaen.wouldyouin.image.application.CurationImageService;
+import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

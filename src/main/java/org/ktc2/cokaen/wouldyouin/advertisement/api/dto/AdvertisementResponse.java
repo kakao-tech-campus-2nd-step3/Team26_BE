@@ -2,9 +2,13 @@ package org.ktc2.cokaen.wouldyouin.advertisement.api.dto;
 
 import java.time.LocalDateTime;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.advertisement.persist.Advertisement;
 
 @Builder
+@EqualsAndHashCode
+@ToString
 public class AdvertisementResponse {
 
     private Long id;

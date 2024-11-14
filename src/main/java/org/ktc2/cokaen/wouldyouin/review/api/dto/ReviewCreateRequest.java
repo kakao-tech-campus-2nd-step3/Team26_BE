@@ -6,13 +6,17 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.review.persist.Review;
 
 @Getter
 @Builder
+@EqualsAndHashCode
+@ToString
 public class ReviewCreateRequest {
 
     @NotNull(message = "이벤트 ID는 필수입니다.")

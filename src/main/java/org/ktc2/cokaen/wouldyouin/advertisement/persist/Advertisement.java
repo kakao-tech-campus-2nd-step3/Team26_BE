@@ -13,16 +13,20 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.ktc2.cokaen.wouldyouin.image.persist.AdvertisementImage;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.advertisement.api.dto.AdvertisementRequest;
+import org.ktc2.cokaen.wouldyouin.image.persist.AdvertisementImage;
 
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@EqualsAndHashCode
+@ToString
 public class Advertisement {
 
     @Id

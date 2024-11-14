@@ -1,7 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.like.persist;
 
 
-import java.util.List;
 import java.util.Optional;
 import org.ktc2.cokaen.wouldyouin.member.persist.LikeableMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;

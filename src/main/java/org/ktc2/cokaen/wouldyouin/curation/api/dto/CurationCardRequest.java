@@ -8,12 +8,14 @@ import java.util.List;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
+import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
 
 @Getter
 @Builder(toBuilder = true)
 @EqualsAndHashCode
+@ToString
 public class CurationCardRequest {
 
     @NotEmpty(message = "부제목은 필수입니다.")

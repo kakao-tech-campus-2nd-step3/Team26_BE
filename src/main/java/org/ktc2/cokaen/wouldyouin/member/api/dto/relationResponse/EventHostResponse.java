@@ -2,11 +2,15 @@ package org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse;
 
 import java.util.List;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 
 @Builder
 @Getter
+@EqualsAndHashCode
+@ToString
 public class EventHostResponse {
 
     private Long hostId;

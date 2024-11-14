@@ -5,10 +5,14 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Builder(toBuilder = true)
+@EqualsAndHashCode
+@ToString
 public class ReviewEditRequest {
 
     @NotBlank(message = "별점은 필수입니다.")
