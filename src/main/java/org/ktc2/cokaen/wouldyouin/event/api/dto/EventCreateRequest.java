@@ -22,7 +22,7 @@ import org.ktc2.cokaen.wouldyouin.image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @EqualsAndHashCode
 @ToString
 public class EventCreateRequest {
