@@ -24,7 +24,7 @@ import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("Host")
 @EqualsAndHashCode(callSuper = true)
-@ToString
+@ToString()
 @Entity
 public class Host extends BaseMember implements LikeableMember {
 
@@ -41,6 +41,7 @@ public class Host extends BaseMember implements LikeableMember {
     @Convert(converter = HashtagConverter.class)
     private List<String> hashtags;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "host", fetch = FetchType.LAZY)
     private List<Event> events = new ArrayList<>();
 

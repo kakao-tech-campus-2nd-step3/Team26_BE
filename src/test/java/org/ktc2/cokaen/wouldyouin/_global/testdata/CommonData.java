@@ -11,11 +11,14 @@ public class CommonData {
 
     public static class sliceInfo {
 
-        public static SliceInfo get() {
-            return SliceInfo.builder()
-                .sliceSize(10)
-                .lastId(100L)
-                .build();
+        public static class curation {
+
+            public static SliceInfo get() {
+                return SliceInfo.builder()
+                    .sliceSize(10)
+                    .lastId(301L)
+                    .build();
+            }
         }
     }
 }
