@@ -2,6 +2,7 @@ package org.ktc2.cokaen.wouldyouin.advertisement.api.dto;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import org.ktc2.cokaen.wouldyouin.advertisement.persist.Advertisement;
 @Builder(toBuilder = true)
 public class AdvertisementRequest {
 
-    @NotEmpty(message = "광고명은 필수입니다.")
+    @NotBlank(message = "광고명은 필수입니다.")
     private String title;
 
     @NotNull(message = "광고게시 시작 시간은 필수입니다.")

@@ -30,7 +30,7 @@ public class AdvertisementService {
     }
 
     @Transactional(readOnly = true)
-    public AdvertisementResponse getAdvertisementByAdId(Long adId) {
+    public AdvertisementResponse getById(Long adId) {
         return AdvertisementResponse.from(getByIdOrThrow(adId));
     }
 

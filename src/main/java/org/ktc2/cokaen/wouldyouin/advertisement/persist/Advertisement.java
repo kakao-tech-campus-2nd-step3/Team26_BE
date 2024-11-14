@@ -7,8 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,11 +27,11 @@ public class Advertisement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "advertisement_id")
     @Setter(AccessLevel.NONE)
+    @Column(name = "advertisement_id")
     private Long id;
 
-    @NotNull
+    @NotBlank
     @Column(name = "title")
     private String title;
 
@@ -57,9 +59,9 @@ public class Advertisement {
     }
 
     public void updateFrom(AdvertisementRequest advertisementRequest, AdvertisementImage adImage) {
-        this.title = advertisementRequest.getTitle();
-        this.advertisementImage = adImage;
-        this.startTime = advertisementRequest.getStartTime();
-        this.endTime = advertisementRequest.getEndTime();
+        Optional.ofNullable(advertisementRequest.getTitle()).ifPresent(this::setTitle);
+        Optional.ofNullable(adImage).ifPresent(this::setAdvertisementImage);
+        Optional.ofNullable(advertisementRequest.getStartTime()).ifPresent(this::setStartTime);
+        Optional.ofNullable(advertisementRequest.getEndTime()).ifPresent(this::setEndTime);
     }
 }

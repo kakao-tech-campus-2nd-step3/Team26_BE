@@ -47,7 +47,7 @@ public class Event {
     @Column(name = "event_id")
     private Long id;
 
-    @NotNull
+    @NotBlank
     @Column(name = "title")
     private String title;
 
@@ -70,9 +70,11 @@ public class Event {
     @Column(name = "location")
     private Location location;
 
+    @NotNull
     @Column(name = "start_time")
     private LocalDateTime startTime;
 
+    @NotNull
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
@@ -81,10 +83,12 @@ public class Event {
     @Column(name = "price")
     private Integer price;
 
+    @NotNull
     @Min(1)
     @Column(name = "total_seat")
     private Integer totalSeat;
 
+    @NotNull
     @Min(0)
     @Column(name = "left_seat")
     private Integer leftSeat;
@@ -101,6 +105,7 @@ public class Event {
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     private List<EventImage> images = new ArrayList<>();
 
+    @NotNull
     @CreatedDate
     @Column(name = "created_date")
     private LocalDateTime createdDate;
