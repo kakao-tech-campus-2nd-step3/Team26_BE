@@ -34,9 +34,6 @@ public class ImageStorageService {
     @Value("${image.upload.thumbnail.width}")
     private Integer thumbnailWidth;
 
-    @Value("${image.upload.thumbnail.extension}")
-    private String thumbnailExtension;
-
     private final RestClientUtil client;
 
     public byte[] readFromDirectory(Path childPath) {
@@ -56,7 +53,6 @@ public class ImageStorageService {
                 throw new FailedToUploadImageException("이미지 URL에 대한 요청을 실패하였습니다.");
             }
         );
-
         String contentType = Optional.ofNullable(response.getHeaders().getContentType()).orElseThrow(
             () -> new FailedToUploadImageException("응답 헤더에 콘텐츠 타입이 없어 이미지를 가져올 수 없습니다.")
         ).toString();
@@ -71,23 +67,15 @@ public class ImageStorageService {
         return ImageRequest.of(fileName, (long)body.length, extension);
     }
 
-    // TODO : 썸네일 생성 코드 리팩토링, 파일 유틸로 이동
     public String createThumbnailImage(String apiHeader, String childPath, String originFileName) {
-        String fileName = originFileName;
         String originImagePath = Path.of(parentPath, childPath, originFileName).toString();
         String thumbnailImagePath = Path.of(parentPath, childPath, thumbnailChildPath).toString();
-        try {
-            Files.createDirectories(Paths.get(thumbnailImagePath));
-            Thumbnails.of(new File(originImagePath))
-                .size(thumbnailHeight, thumbnailWidth)
-                .toFile(new File(thumbnailImagePath, fileName));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return UriUtil.assembleFullUrl(apiHeader,childPath, thumbnailChildPath, fileName);
+        FileUtil.createThumbnail(originImagePath, originFileName, thumbnailImagePath, thumbnailWidth, thumbnailHeight);
+        return UriUtil.assembleFullUrl(apiHeader,childPath, thumbnailChildPath, originFileName);
     }
 
     public void delete(String childPath, String fileName) {
         FileUtil.deleteFile(Path.of(parentPath, childPath, fileName));
+        FileUtil.deleteFile(Path.of(parentPath, childPath, thumbnailChildPath, fileName));
     }
 }

@@ -9,6 +9,7 @@ import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayResponse;
+import org.ktc2.cokaen.wouldyouin.reservation.api.dto.KakaoPayReservationResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationRequest;
 import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationResponse;
 import org.ktc2.cokaen.wouldyouin.reservation.api.dto.ReservationSliceResponse;
@@ -33,11 +34,11 @@ public class ReservationController {
 
     @GetMapping
     public ResponseEntity<ApiResponseBody<ReservationSliceResponse>> getReservationsByMemberId(
-        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier member,
+        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier identifier,
         @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
         @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
         @RequestParam(defaultValue =  ParamDefaults.LAST_ID) Long lastId) {
-        return ApiResponse.ok(reservationService.getAllByMemberId(member.id(), PageRequest.of(page, size), lastId));
+        return ApiResponse.ok(reservationService.getAllByMemberId(identifier, PageRequest.of(page, size), lastId));
     }
 
     @GetMapping("/events/{eventId}")
@@ -57,24 +58,24 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseBody<KakaoPayResponse>> createReservation(
+    public ResponseEntity<ApiResponseBody<KakaoPayReservationResponse>> createReservation(
         @Valid @RequestBody ReservationRequest reservationRequest,
-        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier member) {
-        return ApiResponse.created(reservationService.create(member.id(), reservationRequest));
+        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier identifier) {
+        return ApiResponse.created(reservationService.create(identifier, reservationRequest));
     }
 
     @PostMapping("/test")
     public ResponseEntity<ApiResponseBody<ReservationResponse>> createTestReservation(
         @Valid @RequestBody ReservationRequest reservationRequest,
-        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier member) {
-        return ApiResponse.created(reservationService.createTest(member.id(), reservationRequest));
+        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier identifier) {
+        return ApiResponse.created(reservationService.createTest(identifier, reservationRequest));
     }
 
     @DeleteMapping("/{reservationId}")
     public ResponseEntity<ApiResponseBody<Void>> deleteReservation(
         @PathVariable Long reservationId,
-        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier member) {
-        reservationService.delete(member.id(), reservationId);
+        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier identifier) {
+        reservationService.delete(identifier, reservationId);
         return ApiResponse.noContent();
     }
 }

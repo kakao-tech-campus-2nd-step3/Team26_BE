@@ -14,13 +14,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor
 @Service
 public class EventImageService extends ImageService<EventImage> {
 
     @Value("${image.upload.event.child-path}")
     private String childPath;
     private final EventImageRepository eventImageRepository;
+
+    public EventImageService(ImageStorageService imageStorageService, EventImageRepository eventImageRepository) {
+        this.imageStorageService = imageStorageService;
+        this.eventImageRepository = eventImageRepository;
+    }
 
     @Override
     public ImageRepository<EventImage> getImageRepository() {
@@ -48,7 +52,8 @@ public class EventImageService extends ImageService<EventImage> {
 
     @Override
     protected void validateMemberId(MemberIdentifier identifier, EventImage image) {
-        if (!identifier.type().equals(MemberType.admin) && !identifier.id().equals(image.getEvent().getHost().getId())) {
+        if (!identifier.type().equals(MemberType.admin) &&
+            !identifier.id().equals(image.getEvent().getHost().getId())) {
             throw new UnauthorizedException("해당 이벤트 이미지에 접근할 권한이 없습니다.");
         }
     }

@@ -16,13 +16,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-@RequiredArgsConstructor
 public class AdvertisementImageService extends ImageService<AdvertisementImage> {
 
     @Value("${image.upload.ad.child-path}")
     private String childPath;
-    private final ImageStorageService imageStorageService;
     private final AdvertisementImageRepository adImageRepository;
+
+    public AdvertisementImageService(ImageStorageService imageStorageService, AdvertisementImageRepository adImageRepository) {
+        this.imageStorageService = imageStorageService;
+        this.adImageRepository = adImageRepository;
+    }
 
     @Override
     protected ImageRepository<AdvertisementImage> getImageRepository() {
@@ -48,7 +51,6 @@ public class AdvertisementImageService extends ImageService<AdvertisementImage> 
             .build();
     }
 
-    // TODO : ad image 삭제 인가
     @Override
     protected void validateMemberId(MemberIdentifier identifier, AdvertisementImage image) {
         if (!identifier.type().equals(MemberType.admin)) {

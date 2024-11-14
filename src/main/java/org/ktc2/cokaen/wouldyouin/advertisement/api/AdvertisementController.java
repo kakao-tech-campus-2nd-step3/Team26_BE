@@ -49,16 +49,6 @@ public class AdvertisementController {
         return ApiResponse.created(advertisementService.create(advertisementRequest, image));
     }
 
-    @PutMapping(path = "/{adId}", consumes = {MediaType.APPLICATION_JSON_VALUE,
-        MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiResponseBody<AdvertisementResponse>> updateAdvertisement(
-        @PathVariable Long adId,
-        @Valid @RequestPart AdvertisementRequest advertisementRequest,
-        @RequestPart(required = false) MultipartFile image,
-        @Authorize(MemberType.admin) MemberIdentifier identifier) {
-        return ApiResponse.ok(advertisementService.update(identifier, adId, advertisementRequest, image));
-    }
-
     @DeleteMapping("/{adId}")
     public ResponseEntity<ApiResponseBody<Void>> deleteAdvertisement(
         @PathVariable Long adId,
