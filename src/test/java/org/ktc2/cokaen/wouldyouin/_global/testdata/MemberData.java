@@ -10,6 +10,7 @@ import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.like.persist.CuratorLike;
 import org.ktc2.cokaen.wouldyouin.like.persist.HostLike;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse.CurationCuratorResponse;
+import org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse.ReviewMemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse.ReservationMemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
@@ -295,7 +296,11 @@ public class MemberData {
                 return ReservationMemberResponse.from(normal1.entity.get());
             }
         }
-
+        public static class review1Member1 {
+            public static ReviewMemberResponse get(){
+                return ReviewMemberResponse.from(normal1.entity.get());
+            }
+        }
         public static class curation1Curator1 {
 
             public static CurationCuratorResponse get() {

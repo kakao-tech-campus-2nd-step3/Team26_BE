@@ -37,7 +37,7 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public ReviewSliceResponse getAllByMemberId(Long memberId, Long oldLastId, Pageable pageable) {
+    public ReviewSliceResponse getAllByMemberId(Long memberId, Pageable pageable, Long oldLastId) {
         Slice<Review> reviews = reviewRepository.findByMemberIdOrderByReviewIdDesc(memberId,
             oldLastId, pageable);
         Long newLastId = getLastId(reviews, oldLastId);
@@ -45,7 +45,7 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public ReviewSliceResponse getAllByEventId(Long eventId, Long oldLastId, Pageable pageable) {
+    public ReviewSliceResponse getAllByEventId(Long eventId, Pageable pageable, Long oldLastId) {
         Slice<Review> reviews = reviewRepository.findByEventIdOrderByReviewIdDesc(eventId,
             oldLastId, pageable);
         Long newLastId = getLastId(reviews, oldLastId);
@@ -60,8 +60,10 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewEventSliceResponse getUnreviewedEventsByMemberId(Long memberId, Pageable pageable, Long beforeLastId) {
-        Slice<Event> unreviewedEvents = reviewRepository.findUnreviewedEventsByMemberId(memberId, beforeLastId, pageable);
+    public ReviewEventSliceResponse getUnreviewedEventsByMemberId(Long memberId, Pageable pageable,
+        Long beforeLastId) {
+        Slice<Event> unreviewedEvents = reviewRepository.findUnreviewedEventsByMemberId(memberId,
+            beforeLastId, pageable);
         Long newLastId = EventService.getLastId(unreviewedEvents, beforeLastId);
         List<ReviewEventResponse> responses = unreviewedEvents.stream()
             .map(ReviewEventResponse::from).toList();

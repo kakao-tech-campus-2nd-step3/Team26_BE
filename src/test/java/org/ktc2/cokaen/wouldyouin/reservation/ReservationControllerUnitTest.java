@@ -43,21 +43,17 @@ import org.springframework.web.context.WebApplicationContext;
 @WebMvcTest(ReservationController.class)
 class ReservationControllerUnitTest {
 
+    private static final long randomId = abs(new Random().nextLong());
     @Autowired
     private ObjectMapper objectMapper;
-
     @MockBean
     private ReservationService reservationService;
-
     @MockBean
     private JwtAuthFilter jwtAuthFilter;
-
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private WebApplicationContext context;
-    private static final long randomId = abs(new Random().nextLong());
 
     @BeforeEach
     public void setup() throws Exception {
@@ -155,7 +151,8 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByEventId(
-            eq(host1.memberIdentifier), eq(randomId), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
+            eq(host1.memberIdentifier), eq(randomId), eq(PageRequest.of(0, 10)),
+            eq(Long.MAX_VALUE));
     }
 
     @Test
@@ -191,8 +188,7 @@ class ReservationControllerUnitTest {
     @WithMockCurator1
     void getReservationById1() throws Exception {
         // given, when
-        mockMvc.perform(get("/api/reservations/" + randomId))
-            .andDo(print())
+        mockMvc.perform(get("/api/reservations/" + randomId)).andDo(print())
             .andExpect(status().isOk());
 
         // then
@@ -204,7 +200,8 @@ class ReservationControllerUnitTest {
     @WithMockMember1
     void createReservation1() throws Exception {
         // given
-        ArgumentCaptor<ReservationRequest> captor = ArgumentCaptor.forClass(ReservationRequest.class);
+        ArgumentCaptor<ReservationRequest> captor = ArgumentCaptor.forClass(
+            ReservationRequest.class);
         ReservationRequest request = ReservationData.reservation1.request.get();
 
         // when
@@ -225,7 +222,8 @@ class ReservationControllerUnitTest {
     @WithMockCurator1
     void createReservation2() throws Exception {
         // given
-        ArgumentCaptor<ReservationRequest> captor = ArgumentCaptor.forClass(ReservationRequest.class);
+        ArgumentCaptor<ReservationRequest> captor = ArgumentCaptor.forClass(
+            ReservationRequest.class);
         ReservationRequest request = ReservationData.reservation1.request.get();
 
         // when
@@ -350,7 +348,7 @@ class ReservationControllerUnitTest {
     }
 
     @Test
-    @DisplayName("Host 권한으로 예약 ID를 통해 예약을 삭제한다.")
+    @DisplayName("Host 권한으로 예약 ID를 통해 예약을 삭제할 수 없다.")
     @WithMockHost1
     void deleteReservation3() throws Exception {
         // given, when
