@@ -2,9 +2,9 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
-import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.MemberAdditionalInfoRequest;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.create.MemberCreateRequest;

@@ -13,15 +13,19 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.review.api.dto.ReviewEditRequest;
 
 @Getter
 @Setter
+@EqualsAndHashCode
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Review {

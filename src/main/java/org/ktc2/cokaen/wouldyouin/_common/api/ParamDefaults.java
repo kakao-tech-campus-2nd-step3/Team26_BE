@@ -1,5 +1,10 @@
 package org.ktc2.cokaen.wouldyouin._common.api;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+@EqualsAndHashCode
+@ToString
 public class ParamDefaults {
 
     public static final String PAGE = "0";

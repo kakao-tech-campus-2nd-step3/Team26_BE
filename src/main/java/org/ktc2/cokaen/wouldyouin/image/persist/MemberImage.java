@@ -5,14 +5,18 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 
 @Entity
 @Setter
 @Getter
+@EqualsAndHashCode(callSuper = true)
+@ToString
 @NoArgsConstructor
 public class MemberImage extends Image {
 

@@ -10,17 +10,21 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin._common.converter.HashtagConverter;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
+import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("Host")
+@EqualsAndHashCode(callSuper = true)
+@ToString
 @Entity
 public class Host extends BaseMember implements LikeableMember {
 

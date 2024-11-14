@@ -22,20 +22,24 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.ktc2.cokaen.wouldyouin.image.persist.EventImage;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
+import org.ktc2.cokaen.wouldyouin.image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Setter
+@EqualsAndHashCode
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Entity

@@ -11,19 +11,23 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin._common.converter.HashtagConverter;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
+import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.edit.CuratorEditRequest;
 
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("Curator")
+@EqualsAndHashCode(callSuper = true)
+@ToString
 @Entity
 public class Curator extends Member implements LikeableMember {
 

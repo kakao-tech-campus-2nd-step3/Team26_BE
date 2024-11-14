@@ -1,10 +1,14 @@
 package org.ktc2.cokaen.wouldyouin._common.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode
+@ToString
 public class ApiResponseBody<D> {
 
     private final Boolean success;

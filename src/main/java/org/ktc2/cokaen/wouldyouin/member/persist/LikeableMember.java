@@ -1,6 +1,5 @@
 package org.ktc2.cokaen.wouldyouin.member.persist;
 
-import java.util.Arrays;
 import java.util.List;
 
 public interface LikeableMember {

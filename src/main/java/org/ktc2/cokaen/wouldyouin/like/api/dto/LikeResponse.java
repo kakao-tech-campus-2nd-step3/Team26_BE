@@ -3,12 +3,16 @@ package org.ktc2.cokaen.wouldyouin.like.api.dto;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.member.persist.LikeableMember;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode
+@ToString
 @Builder
 public class LikeResponse {
 

@@ -12,9 +12,11 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 
 @Getter
@@ -22,6 +24,8 @@ import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
+@EqualsAndHashCode
+@ToString
 @Entity
 public abstract class BaseMember {
 
