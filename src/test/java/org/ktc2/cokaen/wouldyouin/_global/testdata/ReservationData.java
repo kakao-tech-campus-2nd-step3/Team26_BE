@@ -16,27 +16,33 @@ import org.springframework.test.util.ReflectionTestUtils;
 public class ReservationData {
 
     public static class R {
+
         public static class reservation1 {
-            public static class _Relation {
-                public static Member member() {
-                    return MemberData.normal1.entity.get();
-                }
-                public static Event event() {
-                    return EventData.event1.entity.get();
-                }
-            }
+
             public static final Long id = 1L;
             public static final Integer price = _Relation.event().getPrice();
             public static final Integer quantity = 2;
             public static final LocalDateTime reservationDate = LocalDateTime.of(2024, 3, 23, 0, 0);
-
             public static final ReservationMemberResponse memberResponse = reservation1Member1.get();
             public static final ReservationEventResponse eventResponse = EventData.response.reservationEvent.createValidReservationEventResponse();
+
+            public static class _Relation {
+
+                public static Member member() {
+                    return MemberData.normal1.entity.get();
+                }
+
+                public static Event event() {
+                    return EventData.event1.entity.get();
+                }
+            }
         }
     }
 
     public static class reservation1 {
+
         public static class entity {
+
             public static Reservation get() {
                 Reservation ret = Reservation.builder()
                     .member(R.reservation1._Relation.member())
@@ -45,11 +51,14 @@ public class ReservationData {
                     .quantity(R.reservation1.quantity)
                     .build();
                 ReflectionTestUtils.setField(ret, "id", R.reservation1.id);
-                ReflectionTestUtils.setField(ret, "reservationDate", R.reservation1.reservationDate);
+                ReflectionTestUtils.setField(ret, "reservationDate",
+                    R.reservation1.reservationDate);
                 return ret;
             }
         }
+
         public static class request {
+
             public static ReservationRequest get() {
                 return ReservationRequest.builder()
                     .eventId(R.reservation1._Relation.event().getId())
@@ -57,21 +66,24 @@ public class ReservationData {
                     .build();
             }
         }
+
         public static class response {
+
             public static ReservationResponse get() {
                 return ReservationResponse.from(reservation1.entity.get());
             }
 
         }
     }
+
     public static class sliceResponse {
+
         public static ReservationSliceResponse get() {
             return ReservationSliceResponse.builder()
                 .reservations(List.of(
                     ReservationData.reservation1.response.get()))
-                .sliceInfo(CommonData.sliceInfo.curation.get())
+                .sliceInfo(CommonData.sliceInfo.reservation.get())
                 .build();
         }
     }
-
 }
