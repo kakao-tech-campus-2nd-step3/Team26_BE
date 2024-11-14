@@ -23,12 +23,6 @@ public class AdvertisementService {
     private final AdvertisementRepository adRepository;
     private final AdvertisementImageService adImageService;
 
-    @Transactional
-    public Advertisement getByIdOrThrow(Long adId) {
-        return adRepository.findById(adId)
-            .orElseThrow(() -> new EntityNotFoundException("해당하는 광고를 찾을 수 없습니다."));
-    }
-
     @Transactional(readOnly = true)
     public AdvertisementResponse getById(Long adId) {
         return AdvertisementResponse.from(getByIdOrThrow(adId));
@@ -40,7 +34,6 @@ public class AdvertisementService {
             .map(AdvertisementResponse::from).toList();
     }
 
-    // Todo: 롤백될 경우, 저장한 이미지 삭제
     @Transactional
     public AdvertisementResponse create(AdvertisementRequest adRequest, MultipartFile image) {
         AdvertisementImage adImage = adImageService.saveImage(image);
@@ -49,30 +42,15 @@ public class AdvertisementService {
         return AdvertisementResponse.from(ad);
     }
 
-    // Todo: 수정될 때 이미지가 null인 경우 기존 이미지로 대체하는 로직 프론트와 협의
-    // Todo: 롤백될 경우, 저장한 이미지 삭제
-    @Transactional
-    public AdvertisementResponse update(MemberIdentifier identifier, Long adId, AdvertisementRequest adRequest, MultipartFile multipartFile) {
-        Advertisement ad = getByIdOrThrow(adId);
-        Optional.ofNullable(multipartFile).ifPresentOrElse(
-            image -> {
-                adImageService.deleteImage(identifier, ad.getAdvertisementImage().getId());
-                AdvertisementImage adImage = adImageService.saveImage(image);
-                ad.updateFrom(adRequest, adImage);
-                adImage.setAdvertisement(ad);
-            },
-            () -> {
-                AdvertisementImage adImage = ad.getAdvertisementImage();
-                ad.updateFrom(adRequest, adImage);
-            }
-        );
-        return AdvertisementResponse.from(ad);
-    }
-
     @Transactional
     public void delete(MemberIdentifier identifier, Long adId) {
         Advertisement ad = getByIdOrThrow(adId);
         adImageService.deleteImage(identifier, ad.getAdvertisementImage().getId());
         adRepository.deleteById(adId);
+    }
+
+    private Advertisement getByIdOrThrow(Long adId) {
+        return adRepository.findById(adId)
+            .orElseThrow(() -> new EntityNotFoundException("해당하는 광고를 찾을 수 없습니다."));
     }
 }

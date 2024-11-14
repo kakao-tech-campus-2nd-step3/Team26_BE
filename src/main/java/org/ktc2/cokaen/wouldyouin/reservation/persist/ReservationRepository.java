@@ -1,5 +1,6 @@
 package org.ktc2.cokaen.wouldyouin.reservation.persist;
 
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,5 +20,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
         + "ORDER BY R.id DESC")
     Slice<Reservation> findByEventIdOrderByReservationIdDesc(Long eventId, Long lastId, Pageable pageable);
 
-    Reservation findByMemberIdAndEventId(Long memberId, Long eventId);
+    @Query("SELECT R FROM Reservation R JOIN FETCH R.member JOIN FETCH R.event "
+        + "WHERE R.member.id = :memberId "
+        + "AND R.event.id = :eventId "
+        + "AND R.event.endTime > CURRENT_TIMESTAMP")
+    List<Reservation> findByMemberIdAndEventId(Long memberId, Long eventId);
 }

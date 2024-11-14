@@ -13,6 +13,7 @@ import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 @ToString
 public class CurationCuratorResponse {
 
+    private Long curatorId;
     private String nickname;
     private String email;
     private String phone;
@@ -24,6 +25,7 @@ public class CurationCuratorResponse {
     public static CurationCuratorResponse from(Curator curator) {
         return
             CurationCuratorResponse.builder()
+                .curatorId(curator.getId())
                 .nickname(curator.getNickname())
                 .email(curator.getEmail())
                 .phone(curator.getPhone())
