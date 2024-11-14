@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockCurator1;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockHost1;
 import org.ktc2.cokaen.wouldyouin._global.mockMember.WithMockMember1;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData;
 import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.curator1;
 import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.host1;
 import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.normal1;
@@ -76,7 +77,7 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByMemberId(
-            eq(normal1.id), eq(PageRequest.of(5, 20)), eq(100L));
+            eq(normal1.memberIdentifier), eq(PageRequest.of(5, 20)), eq(100L));
     }
 
     @Test
@@ -89,7 +90,7 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByMemberId(
-            eq(normal1.id), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
+            eq(normal1.memberIdentifier), eq(PageRequest.of(0, 10)), eq(Long.MAX_VALUE));
     }
 
     @Test
@@ -105,7 +106,7 @@ class ReservationControllerUnitTest {
 
         // then
         then(reservationService).should(times(1)).getAllByMemberId(
-            eq(curator1.id), eq(PageRequest.of(5, 20)), eq(100L));
+            eq(curator1.memberIdentifier), eq(PageRequest.of(5, 20)), eq(100L));
     }
 
     @Test
@@ -213,7 +214,7 @@ class ReservationControllerUnitTest {
             .andExpect(status().isCreated());
 
         // then
-        then(reservationService).should(times(1)).create(eq(normal1.id), captor.capture());
+        then(reservationService).should(times(1)).create(eq(normal1.memberIdentifier), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
@@ -235,7 +236,7 @@ class ReservationControllerUnitTest {
             .andExpect(status().isCreated());
 
         // then
-        then(reservationService).should(times(1)).create(eq(curator1.id), captor.capture());
+        then(reservationService).should(times(1)).create(eq(curator1.memberIdentifier), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
@@ -330,7 +331,7 @@ class ReservationControllerUnitTest {
             .andExpect(status().isNoContent());
 
         // then
-        then(reservationService).should(times(1)).delete(normal1.id, randomId);
+        then(reservationService).should(times(1)).delete(normal1.memberIdentifier, randomId);
     }
 
     @Test
@@ -344,7 +345,7 @@ class ReservationControllerUnitTest {
             .andExpect(status().isNoContent());
 
         // then
-        then(reservationService).should(times(1)).delete(curator1.id, randomId);
+        then(reservationService).should(times(1)).delete(curator1.memberIdentifier, randomId);
     }
 
     @Test

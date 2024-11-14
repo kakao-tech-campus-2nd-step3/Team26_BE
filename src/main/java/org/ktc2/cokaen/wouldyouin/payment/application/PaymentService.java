@@ -38,5 +38,4 @@ public class PaymentService {
             (req, rsp) -> { throw new FailedToPayException("카카오페이 API 요청을 실패하였습니다."); }
         );
     }
-    // Todo: pay 취소 기능 추가
 }

@@ -11,7 +11,6 @@ import org.ktc2.cokaen.wouldyouin.image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.image.application.ImageServiceFactory;
 import org.ktc2.cokaen.wouldyouin.image.application.ImageStorageService;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
-import org.ktc2.cokaen.wouldyouin.payment.application.PaymentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +30,6 @@ public class ImageController {
 
     private final ImageServiceFactory imageServiceFactory;
     private final ImageStorageService imageStorageService;
-    private final PaymentService paymentService;
 
     @GetMapping(value = "/{directory}/{file}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     public ResponseEntity<byte[]> getImage(@PathVariable String directory, @PathVariable String file) {
@@ -39,7 +37,8 @@ public class ImageController {
     }
 
     @GetMapping(value = "/{directory}/{thumbnail}/{file}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    public ResponseEntity<byte[]> getThumnailImage(@PathVariable String directory, @PathVariable String thumbnail, @PathVariable String file) {
+    public ResponseEntity<byte[]> getThumnailImage(@PathVariable String directory, @PathVariable String thumbnail,
+        @PathVariable String file) {
         return ResponseEntity.status(HttpStatus.OK).body(imageStorageService.readFromDirectory(Paths.get(directory, thumbnail, file)));
     }
 
@@ -51,7 +50,6 @@ public class ImageController {
         return ApiResponse.ok(imageServiceFactory.getImageService(imageDomain).saveImages(images));
     }
 
-    // Todo: 삭제로직 수정필요
     @DeleteMapping("/{imageId}")
     public ResponseEntity<ApiResponseBody<Void>> deleteImage(
         @PathVariable Long imageId,

@@ -52,7 +52,7 @@ public class CurationCardService {
         return curationCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당하는 큐레이션 카드를 찾을 수 없습니다."));
     }
 
-    public List<String> getImageUrls(CurationCard curationCard) {
+    private List<String> getImageUrls(CurationCard curationCard) {
         return curationCard.getCurationImages().stream()
             .map(curationImageService::getImageUrl)
             .toList();
