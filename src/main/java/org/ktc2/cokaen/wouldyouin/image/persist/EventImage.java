@@ -20,6 +20,7 @@ import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 @NoArgsConstructor
 public class EventImage extends Image {
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Event event;

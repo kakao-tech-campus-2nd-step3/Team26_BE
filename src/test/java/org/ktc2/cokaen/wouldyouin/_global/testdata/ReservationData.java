@@ -69,7 +69,7 @@ public class ReservationData {
             return ReservationSliceResponse.builder()
                 .reservations(List.of(
                     ReservationData.reservation1.response.get()))
-                .sliceInfo(CommonData.sliceInfo.get())
+                .sliceInfo(CommonData.sliceInfo.curation.get())
                 .build();
         }
     }
