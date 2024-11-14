@@ -38,14 +38,14 @@ public class AdvertisementController {
     @GetMapping("/{adId}")
     public ResponseEntity<ApiResponseBody<AdvertisementResponse>> getAdvertisementByAdId(
         @PathVariable Long adId) {
-        return ApiResponse.ok(advertisementService.getAdvertisementByAdId(adId));
+        return ApiResponse.ok(advertisementService.getById(adId));
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ApiResponseBody<AdvertisementResponse>> createAdvertisement(
         @Valid @RequestPart AdvertisementRequest advertisementRequest,
         @RequestPart(required = false) MultipartFile image,
-        @Authorize(MemberType.admin) MemberIdentifier admin) {
+        @Authorize(MemberType.admin) MemberIdentifier identifier) {
         return ApiResponse.created(advertisementService.create(advertisementRequest, image));
     }
 
