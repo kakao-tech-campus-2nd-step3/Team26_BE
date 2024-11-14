@@ -2,14 +2,14 @@ package org.ktc2.cokaen.wouldyouin.image.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
+import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
+import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.image.api.ImageDomain;
 import org.ktc2.cokaen.wouldyouin.image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin.image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.image.persist.Image;
 import org.ktc2.cokaen.wouldyouin.image.persist.ImageRepository;
-import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
-import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
-import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

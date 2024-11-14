@@ -2,10 +2,13 @@ package org.ktc2.cokaen.wouldyouin.curation.api.dto;
 
 import java.util.List;
 import lombok.Builder;
-import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
 
 @Builder
+@EqualsAndHashCode
+@ToString
 public class CurationCardResponse {
 
     private String subtitle;

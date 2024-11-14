@@ -14,14 +14,18 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
 
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CurationCard {
 

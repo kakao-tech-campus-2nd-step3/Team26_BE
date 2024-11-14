@@ -1,14 +1,17 @@
 package org.ktc2.cokaen.wouldyouin.payment.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 @JsonNaming(value = SnakeCaseStrategy.class)
 public class KakaoPayResponse {
 

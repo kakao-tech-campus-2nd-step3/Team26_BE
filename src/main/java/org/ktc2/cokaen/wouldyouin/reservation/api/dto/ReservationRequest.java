@@ -1,11 +1,11 @@
 package org.ktc2.cokaen.wouldyouin.reservation.api.dto;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
@@ -13,6 +13,7 @@ import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
 @Getter
 @Builder(toBuilder = true)
 @EqualsAndHashCode
+@ToString
 public class ReservationRequest {
 
     @NotNull(message = "이벤트 ID는 필수입니다.")

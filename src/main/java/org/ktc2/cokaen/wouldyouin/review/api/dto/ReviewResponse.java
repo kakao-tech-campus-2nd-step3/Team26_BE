@@ -1,7 +1,9 @@
 package org.ktc2.cokaen.wouldyouin.review.api.dto;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.ReviewEventResponse;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse.ReviewMemberResponse;
@@ -10,6 +12,8 @@ import org.ktc2.cokaen.wouldyouin.review.persist.Review;
 
 @Builder
 @Getter
+@EqualsAndHashCode
+@ToString
 public class ReviewResponse {
 
     private Long id;

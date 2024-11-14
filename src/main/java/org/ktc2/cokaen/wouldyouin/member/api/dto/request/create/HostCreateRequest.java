@@ -1,11 +1,15 @@
 package org.ktc2.cokaen.wouldyouin.member.api.dto.request.create;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 
 @Getter
+@EqualsAndHashCode(callSuper = true)
+@ToString
 @RequiredArgsConstructor
 public class HostCreateRequest extends MemberCreateRequestBase {
 
