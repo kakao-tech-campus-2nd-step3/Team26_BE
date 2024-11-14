@@ -34,9 +34,11 @@ public class EventEditRequest {
     @NotNull(message = "장소는 필수입니다.")
     private Location location;
 
+    @NotNull(message = "시작 시간은 필수입니다.")
     @FutureOrPresent(message = "시작 시간은 현재 시간 이후여야 합니다.")
     private LocalDateTime startTime;
 
+    @NotNull(message = "종료 시간은 필수입니다.")
     @FutureOrPresent(message = "종료 시간은 현재 시간 이후여야 합니다.")
     private LocalDateTime endTime;
 
@@ -45,6 +47,7 @@ public class EventEditRequest {
     @Max(value = 1000000, message = "가격은 1,000,000원 이하입니다.")
     private Integer price;
 
+    @NotNull(message = "좌석은 필수입니다.")
     @Min(value = 0, message = "총 좌석은 0석 이상입니다.")
     @Max(value = 1000, message = "총 좌석은 1,000석 이하입니다.")
     private Integer totalSeat;
