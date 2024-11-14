@@ -7,7 +7,6 @@ import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
 import org.ktc2.cokaen.wouldyouin._common.api.ParamDefaults;
 import org.ktc2.cokaen.wouldyouin.auth.Authorize;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
-import org.ktc2.cokaen.wouldyouin.event.api.dto.EventSliceResponse;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.ReviewEventSliceResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.ktc2.cokaen.wouldyouin.review.api.dto.ReviewCreateRequest;

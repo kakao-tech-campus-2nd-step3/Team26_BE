@@ -1,14 +1,14 @@
 package org.ktc2.cokaen.wouldyouin.image.application;
 
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
+import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
+import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
 import org.ktc2.cokaen.wouldyouin.image.api.ImageDomain;
 import org.ktc2.cokaen.wouldyouin.image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
 import org.ktc2.cokaen.wouldyouin.image.persist.CurationImageRepository;
 import org.ktc2.cokaen.wouldyouin.image.persist.ImageRepository;
-import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
-import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
-import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

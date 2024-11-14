@@ -1,17 +1,20 @@
 package org.ktc2.cokaen.wouldyouin.member.api.dto;
 
+import java.util.List;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
-import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
-
-import java.util.List;
+import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 
 @Getter
+@EqualsAndHashCode
+@ToString
 @Builder
 public class MemberResponse {
 

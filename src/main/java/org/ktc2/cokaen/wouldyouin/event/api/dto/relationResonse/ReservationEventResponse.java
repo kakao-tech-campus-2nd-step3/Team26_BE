@@ -2,12 +2,16 @@ package org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse;
 
 import java.time.LocalDateTime;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 
 @Getter
 @Builder
+@EqualsAndHashCode
+@ToString
 public class ReservationEventResponse {
 
     private Long eventId;

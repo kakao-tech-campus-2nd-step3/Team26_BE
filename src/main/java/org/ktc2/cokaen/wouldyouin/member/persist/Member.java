@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
+import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.like.persist.CuratorLike;
 import org.ktc2.cokaen.wouldyouin.like.persist.HostLike;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.MemberAdditionalInfoRequest;
@@ -24,6 +26,8 @@ import org.ktc2.cokaen.wouldyouin.review.persist.Review;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("Member")
+@EqualsAndHashCode(callSuper = true)
+@ToString
 @Entity
 public class Member extends BaseMember {
 

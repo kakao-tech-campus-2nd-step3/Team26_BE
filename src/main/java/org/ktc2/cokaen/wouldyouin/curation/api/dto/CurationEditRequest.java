@@ -10,11 +10,13 @@ import java.util.List;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 
 @Getter
 @Builder(toBuilder = true)
 @EqualsAndHashCode
+@ToString
 public class CurationEditRequest {
 
     @NotEmpty(message = "제목은 필수입니다.")

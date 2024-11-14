@@ -3,16 +3,19 @@ package org.ktc2.cokaen.wouldyouin.advertisement.api.dto;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.ktc2.cokaen.wouldyouin.image.persist.AdvertisementImage;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.advertisement.persist.Advertisement;
+import org.ktc2.cokaen.wouldyouin.image.persist.AdvertisementImage;
 
 @Getter
 @Builder(toBuilder = true)
+@EqualsAndHashCode
+@ToString
 public class AdvertisementRequest {
 
     @NotBlank(message = "광고명은 필수입니다.")

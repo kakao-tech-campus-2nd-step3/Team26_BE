@@ -1,11 +1,15 @@
 package org.ktc2.cokaen.wouldyouin.payment.dto;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.reservation.persist.Reservation;
 
 @Getter
 @Builder
+@EqualsAndHashCode
+@ToString
 public class KakaoPayRequest {
 
     private String reservationId;
