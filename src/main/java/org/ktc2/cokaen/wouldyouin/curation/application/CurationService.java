@@ -53,7 +53,7 @@ public class CurationService {
     @Transactional(readOnly = true)
     public CurationSliceResponse getAllByCuratorIdOrderByCreatedDateDesc(Long curatorId, Pageable pageable, Long lastId) {
         Slice<Curation> curations = curationRepository.findAllByCuratorOrderByCreatedDateDesc(
-            curatorService.getByIdOrThrow(curatorId), lastId, pageable);
+            curatorId, lastId, pageable);
         Long newLastId = getLastId(curations, lastId);
         return CurationSliceResponse.from(getCurationResponses(curations), curations.getSize(), newLastId);
     }

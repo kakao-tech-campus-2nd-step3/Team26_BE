@@ -1,15 +1,16 @@
 package org.ktc2.cokaen.wouldyouin._global.testdata;
 
 import java.util.List;
-import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
+import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.curator1;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
+import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.like.persist.CuratorLike;
 import org.ktc2.cokaen.wouldyouin.like.persist.HostLike;
-import org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse.ReservationMemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse.CurationCuratorResponse;
+import org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse.ReservationMemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
@@ -22,21 +23,28 @@ import org.springframework.test.util.ReflectionTestUtils;
 public class MemberData {
 
     public static class R {
+
         public static class normal1 {
+
             public static class _Relation {
+
                 public static List<CuratorLike> curatorLikes() {
                     return null; // TODO: Implement
                 }
+
                 public static List<HostLike> hostLikes() {
                     return null; // TODO: Implement
                 }
+
                 public static List<Reservation> reservations() {
                     return null; // TODO: Implement
                 }
+
                 public static List<Review> reviews() {
                     return null; // TODO: Implement
                 }
             }
+
             public static final long id = 101L;
             public static final MemberIdentifier memberIdentifier = new MemberIdentifier(id, MemberType.normal);
             public static final AccountType accountType = AccountType.kakao;
@@ -51,18 +59,23 @@ public class MemberData {
             public static final String socialId = "100100100100100";
             public static final MemberType memberType = MemberType.normal;
         }
+
         public static class curator1 {
+
             public static class _Relation {
+
                 public static List<Curation> curations() {
                     return null; // TODO: Implement
                 }
             }
+
             public static final long id = 201L;
             public static final MemberIdentifier memberIdentifier = new MemberIdentifier(id, MemberType.curator);
             public static final AccountType accountType = AccountType.google;
             public static final String email = "curator1@example.com";
             public static final String nickname = "nick_curator_12";
             public static final String phone = "010-4545-6767";
+            public static final Integer likes = 10;
             public static final MemberImage profileImage = ImageData.member.curator.entity.get();
             public static final String profileImageUrl = ImageData.R.member.curator.url;
             public static final String profileImageThumbnailUrl = ImageData.getThumbnailUrl(profileImage);
@@ -72,12 +85,16 @@ public class MemberData {
             public static final String intro = "큐레이터 자기소개입니다.";
             public static final List<String> hashtags = List.of("#큐레이터", "#해시태그", "#입니다");
         }
+
         public static class host1 {
+
             public static class _Relation {
+
                 public static List<Event> events() {
                     return null; // TODO: Implement
                 }
             }
+
             public static final long id = 301;
             public static final MemberIdentifier memberIdentifier = new MemberIdentifier(id, MemberType.host);
             public static final String email = "host1@example.com";
@@ -91,7 +108,9 @@ public class MemberData {
             public static final List<String> hashtags = List.of("#주최자", "#해시태그", "#입니다");
 
         }
+
         public static class welcome1 {
+
             public static final long id = 401;
             public static final MemberIdentifier memberIdentifier = new MemberIdentifier(id, MemberType.welcome);
             public static final AccountType accountType = AccountType.kakao;
@@ -106,14 +125,18 @@ public class MemberData {
             public static final String socialId = "456456456456";
 
         }
+
         public static class admin1 {
+
             public static final long id = 501L;
             public static final MemberIdentifier memberIdentifier = new MemberIdentifier(id, MemberType.admin);
         }
     }
 
     public static class normal1 {
+
         public static class entity {
+
             public static Member get() {
                 Member ret = Member.builder()
                     .accountType(R.normal1.accountType)
@@ -128,20 +151,24 @@ public class MemberData {
                     .build();
                 ReflectionTestUtils.setField(ret, "id", R.normal1.id);
                 ReflectionTestUtils.setField(ret, "memberType", R.normal1.memberType);
-//                ReflectionTestUtils.setField(ret.getProfileImage(), "baseMember", ret);
+                ReflectionTestUtils.setField(ret.getProfileImage(), "baseMember", ret);
                 return ret;
             }
         }
+
         public static class request {
 
         }
+
         public static class response {
 
         }
     }
 
     public static class curator1 {
+
         public static class entity {
+
             public static Curator get() {
                 Curator ret = Curator.curatorBuilder()
                     .accountType(R.curator1.accountType)
@@ -157,20 +184,36 @@ public class MemberData {
                 ReflectionTestUtils.setField(ret, "id", R.curator1.id);
                 ReflectionTestUtils.setField(ret, "intro", R.curator1.intro);
                 ReflectionTestUtils.setField(ret, "hashtags", R.curator1.hashtags);
-//                ReflectionTestUtils.setField(ret.getProfileImage(), "baseMember", ret);
+                ReflectionTestUtils.setField(ret, "likes", R.curator1.likes);
+
+                ReflectionTestUtils.setField(ret.getProfileImage(), "baseMember", ret);
                 return ret;
             }
         }
         public static class request {
 
         }
+
         public static class response {
 
+            public static CurationCuratorResponse getCurationCuratorResponse() {
+                return CurationCuratorResponse.builder()
+                    .nickname(R.curator1.nickname)
+                    .email(R.curator1.email)
+                    .phone(R.curator1.phone)
+                    .profileImageUrl(R.curator1.profileImageUrl)
+                    .intro(R.curator1.intro)
+                    .likes(R.curator1.likes)
+                    .hashtags(R.curator1.hashtags)
+                    .build();
+            }
         }
     }
 
     public static class host1 {
+
         public static class entity {
+
             public static Host get() {
                 Host ret = Host.builder()
                     .email(R.host1.email)
@@ -187,16 +230,20 @@ public class MemberData {
                 return ret;
             }
         }
+
         public static class request {
 
         }
+
         public static class response {
 
         }
     }
 
     public static class welcome1 {
+
         public static class entity {
+
             public static Member get() {
                 Member ret = Member.builder()
                     .accountType(R.welcome1.accountType)
@@ -214,34 +261,43 @@ public class MemberData {
                 return ret;
             }
         }
+
         public static class request {
 
         }
+
         public static class response {
 
         }
     }
 
     public static class admin1 {
+
         public static class entity {
 
             public static final long validAdminId = 105L;
         }
+
         public static class request {
 
         }
+
         public static class response {
 
         }
     }
 
     public static class response {
+
         public static class reservation1Member1 {
+
             public static ReservationMemberResponse get() {
                 return ReservationMemberResponse.from(normal1.entity.get());
             }
         }
+
         public static class curation1Curator1 {
+
             public static CurationCuratorResponse get() {
                 return CurationCuratorResponse.from(curator1.entity.get());
             }
