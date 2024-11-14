@@ -1,11 +1,13 @@
-package org.ktc2.cokaen.wouldyouin.auth.temp;
+package org.ktc2.cokaen.wouldyouin._develop.api;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
+@Controller()
+@RequestMapping("/api/test")
 public class TempLoginController {
 
     @Value("${oauth.kakao.client.id}")
@@ -20,7 +22,7 @@ public class TempLoginController {
     @Value("${oauth.google.redirect_uri}")
     private String googleRedirectUri;
 
-    @GetMapping("/social-login-test")
+    @GetMapping("/social-login")
     public String LoginPage(Model model) {
 
         String googleSocialLoginUri = "https://accounts.google.com/o/oauth2/auth" +

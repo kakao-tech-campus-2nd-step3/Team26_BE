@@ -24,12 +24,6 @@ public class CuratorController {
 
     private final CuratorService curatorService;
 
-    // 테스트: 큐레이터 생성
-    @PostMapping("/test-create/{memberId}")
-    public ResponseEntity<ApiResponseBody<MemberResponse>> testCreateCurator(@PathVariable("memberId") Long id) {
-        return ApiResponse.created(curatorService.createCurator(id));
-    }
-
     @PostMapping
     public ResponseEntity<ApiResponseBody<MemberResponse>> createCurator(@Authorize(MemberType.normal) MemberIdentifier identifier) {
         return ApiResponse.created(curatorService.createCurator(identifier.id()));
