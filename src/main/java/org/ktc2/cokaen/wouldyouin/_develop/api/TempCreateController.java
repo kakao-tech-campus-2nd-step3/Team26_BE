@@ -75,6 +75,7 @@ public class TempCreateController {
     }
 
     private TokenResponse createToken(MemberIdentifier identifier) {
-        return TokenResponse.from(jwtService.createAccessToken(identifier.id(), identifier.type()));
+        String accessToken = jwtService.createAccessToken(identifier.id(), identifier.type());
+        return TokenResponse.of(accessToken, identifier.id(), identifier.type());
     }
 }
