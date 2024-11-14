@@ -28,22 +28,28 @@ public class LikeController {
 
     @GetMapping
     public ResponseEntity<ApiResponseBody<LikeSliceResponse>> getLikes(
-        @Authorize(MemberType.normal) MemberIdentifier identifier,
+        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier identifier,
         @RequestParam("type") MemberType memberType,
         @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
         @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
         @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId
     ) {
         return ApiResponse.ok(
-            likeServiceFactory.getLikeServiceFrom(memberType)
-                .getLikes(identifier.id(), PageRequest.of(page, size), lastId));
+            likeServiceFactory
+                .getLikeServiceFrom(memberType)
+                .getLikes(identifier, PageRequest.of(page, size), lastId));
     }
 
     @PostMapping("/{targetMemberId}")
     public ResponseEntity<ApiResponseBody<LikeToggleResponse>> createOrDeleteLike(
-        @Authorize(MemberType.normal) MemberIdentifier identifier,
+        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier identifier,
+        @RequestParam("type") MemberType memberType,
         @PathVariable("targetMemberId") Long targetId) {
         return ApiResponse.created(
-            likeServiceFactory.getLikeServiceFrom(targetId).toggleLike(identifier.id(), targetId));
+            likeServiceFactory.getLikeServiceFrom(memberType)
+                .toggleLike(identifier, targetId));
     }
 }
+
+// TODO: Like service에 Identifier 넘겨주기
+// TODO: Review service에 Identifier 넘겨주기

@@ -1,8 +1,11 @@
 package org.ktc2.cokaen.wouldyouin._global.testdata;
 
 import java.util.List;
+import org.ktc2.cokaen.wouldyouin._global.testdata.LikeData.R.likeHost1.byNormal1;
+import org.ktc2.cokaen.wouldyouin._global.testdata.LikeData.R.likeHost1.byNormal1.create;
 import org.ktc2.cokaen.wouldyouin.like.api.dto.LikeResponse;
 import org.ktc2.cokaen.wouldyouin.like.api.dto.LikeSliceResponse;
+import org.ktc2.cokaen.wouldyouin.like.api.dto.LikeToggleResponse;
 import org.ktc2.cokaen.wouldyouin.like.persist.CuratorLike;
 import org.ktc2.cokaen.wouldyouin.like.persist.HostLike;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
@@ -29,6 +32,10 @@ public class LikeData {
                     public static final List<String> hashtags = MemberData.R.host1.hashtags;
                     public static final String profileImageUrl = MemberData.R.host1.profileImageUrl;
                 }
+                public static class create{
+                    public static final Boolean created = true;
+                    public static final Boolean deleted = false;
+                }
             }
             public static class byCurator1 {
                 public static class _Relation {
@@ -45,6 +52,10 @@ public class LikeData {
                     public static final String intro = MemberData.R.host1.intro;
                     public static final List<String> hashtags = MemberData.R.host1.hashtags;
                     public static final String profileImageUrl = MemberData.R.host1.profileImageUrl;
+                }
+                public static class create{
+                    public static final Boolean created = true;
+                    public static final Boolean deleted = false;
                 }
             }
         }
@@ -137,28 +148,71 @@ public class LikeData {
             }
         }
     }
+    public static class toggleResponse{
+        public static class hostLikes {
+            public static class create {
 
-    public static class normal1LikeSliceResponse {
-        public static LikeSliceResponse get() {
-            return LikeSliceResponse.builder()
-                .likes(List.of(
-                    LikeResponse.builder()
-                        .memberId(R.likeHost1.byNormal1.response.id)
-                        .nickname(R.likeHost1.byNormal1.response.nickname)
-                        .intro(R.likeHost1.byNormal1.response.intro)
-                        .hashtags(R.likeHost1.byNormal1.response.hashtags)
-                        .profileImageUrl(R.likeHost1.byNormal1.response.profileImageUrl)
-                        .build(),
-                    LikeResponse.builder()
-                        .memberId(R.likeCurator1.byNormal1.response.id)
-                        .nickname(R.likeCurator1.byNormal1.response.nickname)
-                        .intro(R.likeCurator1.byNormal1.response.intro)
-                        .hashtags(R.likeCurator1.byNormal1.response.hashtags)
-                        .profileImageUrl(R.likeCurator1.byNormal1.response.profileImageUrl)
-                        .build()
-                ))
-                .sliceInfo(CommonData.sliceInfo.like.get())
-                .build();
+                public static LikeToggleResponse get() {
+                    return LikeToggleResponse.builder().isLiked(byNormal1.create.created).build();
+                }
+            }
+            public static class delete {
+
+                public static LikeToggleResponse get() {
+                    return LikeToggleResponse.builder().isLiked(byNormal1.create.deleted).build();
+                }
+            }
+        }
+    }
+    public static class sliceResponse {
+        public static class normal1 {
+            public static class hostLikes {
+                public static LikeSliceResponse get() {
+                    return LikeSliceResponse.builder()
+                        .likes(List.of(
+                            LikeResponse.builder()
+                                .memberId(R.likeHost1.byNormal1.response.id)
+                                .nickname(R.likeHost1.byNormal1.response.nickname)
+                                .intro(R.likeHost1.byNormal1.response.intro)
+                                .hashtags(R.likeHost1.byNormal1.response.hashtags)
+                                .profileImageUrl(R.likeHost1.byNormal1.response.profileImageUrl)
+                                .build()))
+                        .sliceInfo(CommonData.sliceInfo.like.normal1.hostLikes.get())
+                        .build();
+                }
+            }
+            public static class curatorLikes {
+                public static LikeSliceResponse get() {
+                    return LikeSliceResponse.builder()
+                        .likes(List.of(
+                            LikeResponse.builder()
+                                .memberId(R.likeCurator1.byNormal1.response.id)
+                                .nickname(R.likeCurator1.byNormal1.response.nickname)
+                                .intro(R.likeCurator1.byNormal1.response.intro)
+                                .hashtags(R.likeCurator1.byNormal1.response.hashtags)
+                                .profileImageUrl(R.likeCurator1.byNormal1.response.profileImageUrl)
+                                .build()))
+                        .sliceInfo(CommonData.sliceInfo.like.normal1.curatorLikes.get())
+                        .build();
+                }
+            }
+        }
+        public static class curator1 {
+            public static class hostLikes {
+                public static LikeSliceResponse get() {
+                    return LikeSliceResponse.builder()
+                        .likes(List.of(
+                            LikeResponse.builder()
+                                .memberId(R.likeHost1.byCurator1.response.id)
+                                .nickname(R.likeHost1.byCurator1.response.nickname)
+                                .intro(R.likeHost1.byCurator1.response.intro)
+                                .hashtags(R.likeHost1.byCurator1.response.hashtags)
+                                .profileImageUrl(R.likeHost1.byCurator1.response.profileImageUrl)
+                                .build()))
+                        .sliceInfo(CommonData.sliceInfo.like.curator1.hostLikes.get())
+                        .build();
+                }
+            }
         }
     }
 }
