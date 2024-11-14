@@ -45,22 +45,17 @@ import org.springframework.web.context.WebApplicationContext;
 @WebMvcTest(CurationController.class)
 class CurationControllerUnitTest {
 
+    private final long randomId = abs(new Random().nextLong());
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private WebApplicationContext context;
-
     @MockBean
     private CurationService curationService;
-
     @MockBean
     private JwtAuthFilter jwtAuthFilter;
-
-    private final long randomId = abs(new Random().nextLong());
 
     @BeforeEach
     public void setup() throws Exception {
@@ -101,7 +96,7 @@ class CurationControllerUnitTest {
     }
 
     @Test
-    @DisplayName("ReqeustParam을 통해 요청할 페이지에 대한 정보를 전달받아, 해당하는 호스트의 큐레이션 목록을 조회한다.")
+    @DisplayName("ReqeustParam을 통해 요청할 페이지에 대한 정보를 전달받아, 해당하는 큐레이터의 큐레이션 목록을 조회한다.")
     @WithMockMember1
     void getCurationsByCuratorIdOrderByCreatedDateDesc1() throws Exception {
         // given, when
@@ -146,7 +141,8 @@ class CurationControllerUnitTest {
     @WithMockCurator1
     void createCuration1() throws Exception {
         // given
-        ArgumentCaptor<CurationCreateRequest> captor = ArgumentCaptor.forClass(CurationCreateRequest.class);
+        ArgumentCaptor<CurationCreateRequest> captor = ArgumentCaptor.forClass(
+            CurationCreateRequest.class);
         CurationCreateRequest request = CurationData.curation.request.create.get();
 
         // when
@@ -158,7 +154,8 @@ class CurationControllerUnitTest {
             .andExpect(status().isCreated());
 
         // then
-        then(curationService).should(times(1)).create(eq(curator1.memberIdentifier), captor.capture());
+        then(curationService).should(times(1))
+            .create(eq(curator1.memberIdentifier), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
@@ -174,7 +171,6 @@ class CurationControllerUnitTest {
             .andDo(print())
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
-
 
         // then
         then(curationService).shouldHaveNoInteractions();
@@ -192,7 +188,6 @@ class CurationControllerUnitTest {
             .andDo(print())
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
-
 
         // then
         then(curationService).shouldHaveNoInteractions();
@@ -225,7 +220,8 @@ class CurationControllerUnitTest {
     void createCuration5() throws Exception {
         // given
         CurationCreateRequest request = CurationData.curation.request.create.get().toBuilder()
-            .curationCards(List.of(CurationData.curationCard1.request.get().toBuilder().subtitle("").build()))
+            .curationCards(
+                List.of(CurationData.curationCard1.request.get().toBuilder().subtitle("").build()))
             .build();
 
         // when
@@ -247,7 +243,8 @@ class CurationControllerUnitTest {
     void createCuration6() throws Exception {
         // given
         CurationCreateRequest request = CurationData.curation.request.create.get().toBuilder()
-            .curationCards(List.of(CurationData.curationCard1.request.get().toBuilder().content(null).build()))
+            .curationCards(
+                List.of(CurationData.curationCard1.request.get().toBuilder().content(null).build()))
             .build();
 
         // when
@@ -269,7 +266,8 @@ class CurationControllerUnitTest {
     void createCuration7() throws Exception {
         // given
         CurationCreateRequest request = CurationData.curation.request.create.get().toBuilder()
-            .curationCards(List.of(CurationData.curationCard1.request.get().toBuilder().content(null).build()))
+            .curationCards(
+                List.of(CurationData.curationCard1.request.get().toBuilder().content(null).build()))
             .build();
 
         // when
@@ -291,7 +289,8 @@ class CurationControllerUnitTest {
     void createCuration8() throws Exception {
         // given
         CurationCreateRequest request = CurationData.curation.request.create.get().toBuilder()
-            .curationCards(List.of(CurationData.curationCard1.request.get().toBuilder().content("짧은 내용").build()))
+            .curationCards(List.of(
+                CurationData.curationCard1.request.get().toBuilder().content("짧은 내용").build()))
             .build();
 
         // when
@@ -312,7 +311,7 @@ class CurationControllerUnitTest {
     @WithMockCurator1
     void createCuration9() throws Exception {
         // given
-        CurationCreateRequest request =  CurationData.curation.request.create.get().toBuilder()
+        CurationCreateRequest request = CurationData.curation.request.create.get().toBuilder()
             .curationCards(List.of(CurationData.curationCard1.request.get().toBuilder()
                 .imageIds(List.of(1L, 2L, 3L, 4L, 5L, 6L)).build()))
             .build();
@@ -377,8 +376,9 @@ class CurationControllerUnitTest {
     @WithMockCurator1
     void updateCuration1() throws Exception {
         // given
-        ArgumentCaptor<CurationEditRequest> captor = ArgumentCaptor.forClass(CurationEditRequest.class);
-        CurationEditRequest request =  CurationData.curation.request.edit.get();
+        ArgumentCaptor<CurationEditRequest> captor = ArgumentCaptor.forClass(
+            CurationEditRequest.class);
+        CurationEditRequest request = CurationData.curation.request.edit.get();
 
         // when
         mockMvc.perform(put("/api/curations/" + randomId)
@@ -389,7 +389,8 @@ class CurationControllerUnitTest {
             .andExpect(status().isOk());
 
         // then
-        then(curationService).should(times(1)).update(eq(curator1.memberIdentifier), eq(randomId), captor.capture());
+        then(curationService).should(times(1))
+            .update(eq(curator1.memberIdentifier), eq(randomId), captor.capture());
         assertThat(captor.getValue()).isEqualTo(request);
     }
 
@@ -405,7 +406,6 @@ class CurationControllerUnitTest {
             .andDo(print())
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
-
 
         // then
         then(curationService).shouldHaveNoInteractions();
@@ -423,7 +423,6 @@ class CurationControllerUnitTest {
             .andDo(print())
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.message").value("요구된 멤버 형식과 실제 형식이 다릅니다."));
-
 
         // then
         then(curationService).shouldHaveNoInteractions();
