@@ -35,12 +35,12 @@ public class ReviewController {
 
     @GetMapping
     public ResponseEntity<ApiResponseBody<ReviewSliceResponse>> getReviewsByMemberId(
-        @Authorize({MemberType.normal}) MemberIdentifier member,
+        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier member,
         @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
         @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
         @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId) {
         return ApiResponse.ok(
-            reviewService.getAllByMemberId(member.id(), lastId, PageRequest.of(page, size)));
+            reviewService.getAllByMemberId(member.id(), PageRequest.of(page, size), lastId));
     }
 
     @GetMapping("/events/{eventId}")
@@ -50,7 +50,7 @@ public class ReviewController {
         @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
         @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId) {
         return ApiResponse.ok(
-            reviewService.getAllByEventId(eventId, lastId, PageRequest.of(page, size)));
+            reviewService.getAllByEventId(eventId, PageRequest.of(page, size), lastId));
     }
 
     @GetMapping("/{reviewId}")
@@ -61,16 +61,18 @@ public class ReviewController {
 
     @GetMapping("events")
     public ResponseEntity<ApiResponseBody<ReviewEventSliceResponse>> getUnreviewedEventsByMemberId(
-        @Authorize(MemberType.normal) MemberIdentifier identifier,
+        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier identifier,
         @RequestParam(defaultValue = ParamDefaults.PAGE) Integer page,
         @RequestParam(defaultValue = ParamDefaults.PAGE_SIZE) Integer size,
-        @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId){
-        return ApiResponse.ok(reviewService.getUnreviewedEventsByMemberId(identifier.id(), PageRequest.of(page, size), lastId));
+        @RequestParam(defaultValue = ParamDefaults.LAST_ID) Long lastId) {
+        return ApiResponse.ok(
+            reviewService.getUnreviewedEventsByMemberId(identifier.id(), PageRequest.of(page, size),
+                lastId));
     }
 
     @PostMapping
     public ResponseEntity<ApiResponseBody<ReviewResponse>> createReview(
-        @Authorize(MemberType.normal) MemberIdentifier member,
+        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier member,
         @Valid @RequestBody ReviewCreateRequest reviewCreateRequest) {
         return ApiResponse.created(reviewService.create(member.id(), reviewCreateRequest));
     }
@@ -78,7 +80,7 @@ public class ReviewController {
     @PutMapping("/{reviewId}")
     public ResponseEntity<ApiResponseBody<ReviewResponse>> updateReview(
         @PathVariable("reviewId") Long reviewId,
-        @Authorize(MemberType.normal) MemberIdentifier member,
+        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier member,
         @Valid @RequestBody ReviewEditRequest reviewEditRequest) {
         return ApiResponse.ok(reviewService.update(member.id(), reviewId, reviewEditRequest));
     }
@@ -86,7 +88,7 @@ public class ReviewController {
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<ApiResponseBody<Void>> deleteReview(
         @PathVariable("reviewId") Long reviewId,
-        @Authorize(MemberType.normal) MemberIdentifier member) {
+        @Authorize({MemberType.normal, MemberType.curator}) MemberIdentifier member) {
         reviewService.delete(member.id(), reviewId);
         return ApiResponse.noContent();
     }
