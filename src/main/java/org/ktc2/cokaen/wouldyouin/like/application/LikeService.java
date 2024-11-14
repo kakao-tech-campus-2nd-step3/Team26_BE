@@ -2,6 +2,7 @@ package org.ktc2.cokaen.wouldyouin.like.application;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.like.api.dto.LikeResponse;
 import org.ktc2.cokaen.wouldyouin.like.api.dto.LikeSliceResponse;
 import org.ktc2.cokaen.wouldyouin.like.api.dto.LikeToggleResponse;
@@ -31,9 +32,9 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
     public abstract MemberType getTargetLikeableMemberType();
 
     @Transactional(readOnly = true)
-    public LikeSliceResponse getLikes(Long memberId, Pageable pageable, Long beforeLastId) {
+    public LikeSliceResponse getLikes(MemberIdentifier identifier, Pageable pageable, Long beforeLastId) {
         Slice<LikeType> likes = getLikeRepository().findAllByMember(
-            memberService.getByIdOrThrow(memberId), beforeLastId, pageable);
+            memberService.getByIdOrThrow(identifier.id()), beforeLastId, pageable);
         Long newLastId = getLastId(likes, beforeLastId);
         List<LikeResponse> responses = likes.stream()
             .map(like -> LikeResponse.from(like.getLikeableMember())).toList();
@@ -41,8 +42,8 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
     }
 
     @Transactional
-    public LikeToggleResponse toggleLike(Long memberId, Long targetMemberId) {
-        Member member = memberService.getByIdOrThrow(memberId);
+    public LikeToggleResponse toggleLike(MemberIdentifier identifier, Long targetMemberId) {
+        Member member = memberService.getByIdOrThrow(identifier.id());
         LikeableMember targetLikeableMember = getLikeableMemberByIdOrThrow(targetMemberId);
         return getLikeRepository().findByMemberAndLikeableMember(member, targetLikeableMember)
             .map(like -> {
@@ -59,7 +60,8 @@ public abstract class LikeService<LikeType extends Like<? extends LikeableMember
 
     @Transactional(readOnly = true)
     protected LikeableMember getLikeableMemberByIdOrThrow(Long likeableMemberId) {
-        return likeableMemberGetterFactory.get(getTargetLikeableMemberType()).getByIdOrThrow(likeableMemberId);
+        return likeableMemberGetterFactory.get(getTargetLikeableMemberType())
+            .getByIdOrThrow(likeableMemberId);
     }
 
     private Long getLastId(Slice<LikeType> likes, Long oldLastId) {
