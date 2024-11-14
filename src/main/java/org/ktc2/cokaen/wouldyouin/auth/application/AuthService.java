@@ -33,12 +33,14 @@ public class AuthService {
     @Transactional
     public TokenResponse localSignup(LocalSignupRequest request) {
         baseMemberService.checkUniqueEmailOrThrow(request.getEmail());
-        return TokenResponse.from(createToken(hostService.createHost(request)));
+        MemberResponse response = hostService.createHost(request);
+        return TokenResponse.of(createToken(response), response.getMemberId(), response.getMemberType());
     }
 
     @Transactional(readOnly = true)
     public TokenResponse localLogin(LocalLoginRequest request) {
-        return TokenResponse.from(createToken(hostService.getMemberResponseBy(request)));
+        MemberResponse response = hostService.getMemberResponseBy(request);
+        return TokenResponse.of(createToken(response), response.getMemberId(), response.getMemberType());
     }
 
     @Transactional
@@ -55,6 +57,8 @@ public class AuthService {
                 return SocialTokenResponse.builder()
                     .isWelcomeMember(false)
                     .token(createToken(id))
+                    .memberId(id.id())
+                    .memberType(id.type())
                     .build();
             }
             // 소셜 계정이지만 아직 추가 정보 기입이 되지 않은 경우
@@ -62,6 +66,8 @@ public class AuthService {
                 return SocialTokenResponse.builder()
                     .isWelcomeMember(true)
                     .token(createToken(id))
+                    .memberId(id.id())
+                    .memberType(id.type())
                     .build();
             }
         }
@@ -78,12 +84,15 @@ public class AuthService {
         return SocialTokenResponse.builder()
             .isWelcomeMember(true)
             .token(createToken(welcomeMemberResponse))
+            .memberId(welcomeMemberResponse.getMemberId())
+            .memberType(welcomeMemberResponse.getMemberType())
             .build();
     }
 
     @Transactional
     public TokenResponse acceptAdditionalInfo(Long welcomeMemberId, MemberAdditionalInfoRequest request) {
-        return TokenResponse.from(createToken(memberService.updateWelcomeMember(welcomeMemberId, request)));
+        MemberResponse response = memberService.updateWelcomeMember(welcomeMemberId, request);
+        return TokenResponse.of(createToken(response), response.getMemberId(), response.getMemberType());
     }
 
     private String createToken(MemberIdentifier identifier) {
