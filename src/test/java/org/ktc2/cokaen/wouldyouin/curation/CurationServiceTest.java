@@ -1,6 +1,5 @@
 package org.ktc2.cokaen.wouldyouin.curation;
 
-import static java.lang.Math.abs;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -10,7 +9,6 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
 import java.util.Optional;
-import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin._global.testdata.CurationData;
 import org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.R.curation1;
-import org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.curation1.entity;
 import org.ktc2.cokaen.wouldyouin._global.testdata.EventData;
 import org.ktc2.cokaen.wouldyouin._global.testdata.EventData.R.event2;
 import org.ktc2.cokaen.wouldyouin._global.testdata.ImageData;
@@ -34,7 +31,6 @@ import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationRepository;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.image.application.CurationImageService;
-import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.member.application.CuratorService;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.mockito.Mock;
@@ -60,17 +56,6 @@ class CurationServiceTest {
     @Mock
     private CurationImageService curationImageService;
 
-    @Mock
-    private CurationResponse curationResponse;
-
-    @Mock
-    private MemberImage memberImage;
-
-    Curation validCuration = entity.get();
-    CurationResponse validCurationResponse = CurationData.curation1.response.get();
-
-    private final long randomId = abs(new Random().nextLong());
-
     @BeforeEach
     void setUp() {
         curationService = new CurationService(curationRepository, curatorService, eventService, curationCardService, curationImageService);
@@ -80,14 +65,14 @@ class CurationServiceTest {
     @DisplayName("큐레이션 ID를 통해 해당 하는 큐레이션을 반환한다.")
     void getById() {
         // given
-        given(curationRepository.findById(randomId)).willReturn(Optional.of(validCuration));
+        given(curationRepository.findById(curation1.id)).willReturn(Optional.of(CurationData.curation1.entity.get()));
         given(curationImageService.getImageUrl(ImageData.curation1.entity.get())).willReturn(ImageData.R.curation1.url);
 
         // when
-        CurationResponse response = curationService.getById(randomId);
+        CurationResponse response = curationService.getById(curation1.id);
 
         // then
-        assertThat(response).isEqualTo(validCurationResponse);
+        assertThat(response).isEqualTo(CurationData.curation1.response.get());
     }
 
     @Test
@@ -95,7 +80,7 @@ class CurationServiceTest {
     void getAllByAreaOrderByCreatedDateDesc() {
         // given
         given(curationRepository.findAllByAreaOrderByCreatedDateDesc(curation1.area, curation1.lastId, curation1.pageable))
-            .willReturn(CurationData.curation1.CurationSlice.get());
+            .willReturn(CurationData.CurationSlice.get());
         given(curationImageService.getImageUrl(ImageData.curation1.entity.get())).willReturn(ImageData.R.curation1.url);
 
         // when
@@ -111,7 +96,7 @@ class CurationServiceTest {
     void getAllByCuratorIdOrderByCreatedDateDesc() {
         // given
         given(curationRepository.findAllByCuratorOrderByCreatedDateDesc(curator1.id, curation1.lastId, curation1.pageable))
-            .willReturn(CurationData.curation1.CurationSlice.get());
+            .willReturn(CurationData.CurationSlice.get());
         given(curationImageService.getImageUrl(ImageData.curation1.entity.get())).willReturn(ImageData.R.curation1.url);
 
         // when
@@ -123,7 +108,7 @@ class CurationServiceTest {
     }
 
     @Test
-    @DisplayName("CurationCreateReqeust를 통해 큐레이션을 생성한다.")
+    @DisplayName("큐레이션 생성 DTO를 통해 큐레이션을 생성한다.")
     void create() {
         // given
         given(curatorService.getByIdOrThrow(curator1.id)).willReturn(MemberData.curator1.entity.get());
@@ -163,13 +148,13 @@ class CurationServiceTest {
     @DisplayName("멤버 ID가 다르면 큐레이션을 수정할 수 없다.")
     void update2() {
         // given
-        Long invalidCuratorId = 100L;
+        MemberIdentifier differentMember = new MemberIdentifier(100L, MemberType.curator);
         given(curationRepository.findById(curation1.id)).willReturn(Optional.of(CurationData.curation1.entity.get()));
 
         // when, then
-        assertThrows(
-            UnauthorizedException.class, () -> curationService.update(
-                new MemberIdentifier(invalidCuratorId, MemberType.curator), curation1.id, CurationData.curation1.request.edit.get()));
+        UnauthorizedException exception = assertThrows(
+            UnauthorizedException.class, () -> curationService.update(differentMember, curation1.id, CurationData.curation1.request.edit.get()));
+        assertThat(exception.getMessage()).isEqualTo("큐레이션에 접근할 권한이 없습니다.");
     }
 
     @Test
@@ -210,21 +195,20 @@ class CurationServiceTest {
     @DisplayName("멤버 ID가 다르면 큐레이션을 삭제할 수 없다.")
     void delete2() {
         // given
-        Long invalidCuratorId = 100L;
+        MemberIdentifier differentMember = new MemberIdentifier(100L, MemberType.curator);
         given(curationRepository.findById(curation1.id)).willReturn(Optional.of(CurationData.curation1.entity.get()));
 
         // when, then
-        assertThrows(
-            UnauthorizedException.class, () -> curationService.delete(
-                new MemberIdentifier(invalidCuratorId, MemberType.curator), curation1.id));
+        UnauthorizedException exception = assertThrows(
+            UnauthorizedException.class, () -> curationService.delete(differentMember, curation1.id));
+        assertThat(exception.getMessage()).isEqualTo("큐레이션에 접근할 권한이 없습니다.");
     }
 
     @Test
     @DisplayName("멤버 ID가 달라도 ADMIN은 큐레이션을 삭제할 수 있다.")
     void delete3() {
         // given
-        Long invalidCuratorId = 100L;
-        MemberIdentifier admin = new MemberIdentifier(invalidCuratorId, MemberType.admin);
+        MemberIdentifier admin = new MemberIdentifier(100L, MemberType.admin);
         given(curationRepository.findById(curation1.id)).willReturn(Optional.of(CurationData.curation1.entity.get()));
 
         // when

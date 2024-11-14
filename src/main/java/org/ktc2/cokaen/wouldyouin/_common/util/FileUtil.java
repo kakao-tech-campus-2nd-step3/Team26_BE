@@ -1,9 +1,12 @@
 package org.ktc2.cokaen.wouldyouin._common.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
+import net.coobird.thumbnailator.Thumbnails;
 import org.ktc2.cokaen.wouldyouin._common.exception.ExtensionParsingException;
 import org.ktc2.cokaen.wouldyouin._common.exception.FailToReadImageException;
 import org.ktc2.cokaen.wouldyouin._common.exception.FailedToUploadImageException;
@@ -34,6 +37,17 @@ public class FileUtil {
             Files.write(path, file);
         } catch (IOException e) {
             throw new FailedToUploadImageException("디렉토리에 파일을 저장하는데 실패했습니다.");
+        }
+    }
+
+    public static void createThumbnail(String originalPath, String originFileName, String thumbnailPath, int width, int height) {
+        try {
+            Files.createDirectories(Paths.get(thumbnailPath));
+            Thumbnails.of(new File(originalPath))
+                .size(height, width)
+                .toFile(new File(thumbnailPath, originFileName));
+        } catch (IOException e) {
+            throw new FailedToUploadImageException("썸네일을 생성하는데 실패했습니다.");
         }
     }
 

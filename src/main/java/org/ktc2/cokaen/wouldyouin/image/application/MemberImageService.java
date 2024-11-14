@@ -15,12 +15,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 public class MemberImageService extends ImageService<MemberImage> {
 
     @Value("${image.upload.member.child-path}")
     private String childPath;
     private final MemberImageRepository memberImageRepository;
+
+    public MemberImageService(ImageStorageService imageStorageService, MemberImageRepository memberImageRepository) {
+        this.imageStorageService = imageStorageService;
+        this.memberImageRepository = memberImageRepository;
+    }
 
     @Override
     public ImageRepository<MemberImage> getImageRepository() {
@@ -48,7 +52,8 @@ public class MemberImageService extends ImageService<MemberImage> {
 
     @Override
     protected void validateMemberId(MemberIdentifier identifier, MemberImage image) {
-        if (!identifier.type().equals(MemberType.admin) && !identifier.id().equals(image.getBaseMember().getId())) {
+        if (!identifier.type().equals(MemberType.admin) &&
+            !identifier.id().equals(image.getBaseMember().getId())) {
             throw new UnauthorizedException("해당 프로필 이미지에 접근할 권한이 없습니다.");
         }
     }

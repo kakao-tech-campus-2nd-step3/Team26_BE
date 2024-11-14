@@ -70,7 +70,6 @@ class ImageControllerTest {
 
     @BeforeEach
     public void setup() throws Exception {
-
         mockMvc = MockMvcBuilders
             .webAppContextSetup(context)
             .apply(springSecurity())
@@ -92,6 +91,24 @@ class ImageControllerTest {
 
         // then
         then(imageStorageService).should(times(1)).readFromDirectory(eq(Paths.get(directory, file)));
+    }
+
+    @Test
+    @DisplayName("이미지 경로를 통해 썸네일 이미지를 조회한다.")
+    @WithMockMember1
+    void getThumnailImage() throws Exception {
+        // given
+        String directory = "member";
+        String thumbnail = "thumbnail";
+        String file = "image.jpg";
+
+        // when
+        mockMvc.perform(get("/api/images/{directory}/{thumbnail}/{file}", directory, thumbnail, file))
+            .andDo(print())
+            .andExpect(status().isOk());
+
+        // then
+        then(imageStorageService).should(times(1)).readFromDirectory(eq(Paths.get(directory, thumbnail, file)));
     }
 
     @Test

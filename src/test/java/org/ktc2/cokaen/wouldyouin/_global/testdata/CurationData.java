@@ -5,6 +5,7 @@ import static org.ktc2.cokaen.wouldyouin._global.testdata.EventData.response.cur
 import java.time.LocalDateTime;
 import java.util.List;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
+import org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.curation1.entity;
 import org.ktc2.cokaen.wouldyouin._global.testdata.EventData.R.event1;
 import org.ktc2.cokaen.wouldyouin._global.testdata.EventData.R.event2;
 import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationCardRequest;
@@ -32,7 +33,7 @@ public class CurationData {
             public static final String subtitle = "큐레이션 카드 부제목1";
             public static final String content = "큐레이션 카드 내용1 입니다. 큐레이션 카드의 내용은 최소 20자 최대 1000자 입니다.";
             public static final List<CurationImage> images = List.of(ImageData.curation1.entity.get());
-            public static final List<Long> imageIds = List.of(1301L);
+            public static final List<Long> imageIds = List.of(ImageData.R.curation1.id);
             public static final List<String> imageUrls = List.of(ImageData.R.curation1.url);
         }
 
@@ -41,7 +42,8 @@ public class CurationData {
             public static final Long id = 352L;
             public static final String subtitle = "큐레이션 카드 부제목2";
             public static final String content = "큐레이션 카드 내용2 입니다. 큐레이션 카드의 내용은 최소 20자 최대 1000자 입니다.";
-            public static final List<Long> imageIds = List.of(1302L);
+            public static final List<CurationImage> images = List.of(ImageData.curation2.entity.get());
+            public static final List<Long> imageIds = List.of(ImageData.R.curation2.id);
             public static final List<String> imageUrls = List.of(ImageData.R.curation2.url);
         }
 
@@ -86,8 +88,8 @@ public class CurationData {
                 CurationData.curationCard2.response.get()
             );
             public static final int page = 0;
-            public static final int pageSize = 10;
-            public static final Long lastId = 100L;
+            public static final int pageSize = 20;
+            public static final Long lastId = 50L;
             public static final PageRequest pageable = PageRequest.of(0, 10);
             public static final Area area = Area.광주;
             public static final List<String> hashtags = List.of("수정 해시태그");
@@ -111,6 +113,17 @@ public class CurationData {
                     .build();
                 ReflectionTestUtils.setField(validCurationCard1, "id", R.curationCard1.id);
                 return validCurationCard1;
+            }
+        }
+
+        public static class entityWithNoId {
+
+            public static CurationCard get() {
+                return CurationCard.builder()
+                    .subtitle(R.curationCard1.subtitle)
+                    .content(R.curationCard1.content)
+                    .images(R.curationCard1.images)
+                    .build();
             }
         }
 
@@ -220,13 +233,6 @@ public class CurationData {
                 ReflectionTestUtils.setField(validCuration, "createdDate", R.curation1.createdDate);
                 ReflectionTestUtils.setField(validCuration, "modifiedDate", R.curation1.modifiedDate);
                 return validCuration;
-            }
-        }
-
-        public static class CurationSlice {
-
-            public static Slice<Curation> get() {
-                return new SliceImpl<>(List.of(entity.get()), R.curation1.pageable, true);
             }
         }
 
@@ -383,6 +389,13 @@ public class CurationData {
                     .thumbnailUrl(ImageData.R.curation2.url)
                     .build();
             }
+        }
+    }
+
+    public static class CurationSlice {
+
+        public static Slice<Curation> get() {
+            return new SliceImpl<>(List.of(entity.get()), R.curation1.pageable, true);
         }
     }
 }

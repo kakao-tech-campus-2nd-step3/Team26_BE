@@ -15,12 +15,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 public class CurationImageService extends ImageService<CurationImage> {
 
     @Value("${image.upload.curation.child-path}")
     private String childPath;
     private final CurationImageRepository curationImageRepository;
+
+    public CurationImageService(ImageStorageService imageStorageService, CurationImageRepository curationImageRepository) {
+        this.imageStorageService = imageStorageService;
+        this.curationImageRepository = curationImageRepository;
+    }
 
     @Override
     public ImageRepository<CurationImage> getImageRepository() {
