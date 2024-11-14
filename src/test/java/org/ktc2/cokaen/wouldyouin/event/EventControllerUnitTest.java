@@ -67,13 +67,13 @@
 //    @Autowired
 //    private WebApplicationContext context;
 //
-//    @BeforeAll
-//    public static void init() {
-//        id = 3L;
-//        validHost = entity.get();
-//        objectMapper = new ObjectMapper();
-//        objectMapper.registerModule(new JavaTimeModule());
-//    }
+////    @BeforeAll
+////    public static void init() {
+////        id = 3L;
+////        validHost = entity.get();
+////        objectMapper = new ObjectMapper();
+////        objectMapper.registerModule(new JavaTimeModule());
+////    }
 //
 //    @BeforeEach
 //    public void setup() throws Exception {
