@@ -8,5 +8,5 @@ import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 @Retention(RetentionPolicy.RUNTIME)
 @WithMockCustomUser(memberId = curator1.id, memberType = MemberType.curator)
 public @interface WithMockCurator1 {
-
+    // TODO: mockMember 패키지명 변경
 }
