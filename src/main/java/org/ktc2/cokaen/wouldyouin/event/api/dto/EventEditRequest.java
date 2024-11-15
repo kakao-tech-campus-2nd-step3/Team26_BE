@@ -62,7 +62,7 @@ public class EventEditRequest {
     private List<Long> imageIds;
 
     @AssertTrue(message = "종료 시간은 시작 시간 이후여야 합니다.")
-    public boolean isEndTimeAfterStartTime() {
+    private boolean isEndTimeAfterStartTime() {
         if (startTime == null || endTime == null) {
             return true;
         }
@@ -70,7 +70,7 @@ public class EventEditRequest {
     }
 
     @AssertTrue(message = "이미지는 최대 5개까지 등록할 수 있습니다.")
-    public boolean isImageSizeValid() {
+    private boolean isImageSizeValid() {
         return imageIds.size() <= 5;
     }
 }
