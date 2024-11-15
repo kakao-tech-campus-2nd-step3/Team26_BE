@@ -1,10 +1,13 @@
 package org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.ktc2.cokaen.wouldyouin.image.persist.Image;
+import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 
 @Builder
@@ -28,7 +31,11 @@ public class EventHostResponse {
             .nickname(host.getNickname())
             .email(host.getEmail())
             .phone(host.getPhone())
-            .profileImageUrl(host.getProfileImage().getName())
+            .profileImageUrl(Optional.of(host)
+                .map(BaseMember::getProfileImage)
+                .map(Image::getName)
+                .orElse(null)
+            )
             .intro(host.getIntro())
             .likes(host.getLikes())
             .hashtags(host.getHashtags())
