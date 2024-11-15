@@ -34,7 +34,7 @@ public class EventHostResponse {
             .profileImageUrl(Optional.of(host)
                 .map(BaseMember::getProfileImage)
                 .map(Image::getName)
-                .orElse(null)
+                .orElse("")
             )
             .intro(host.getIntro())
             .likes(host.getLikes())
