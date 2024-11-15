@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
+import org.ktc2.cokaen.wouldyouin.member.persist.Gender;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 
 @Getter
@@ -36,7 +37,7 @@ public class MemberCreateRequest extends MemberCreateRequestBase {
             .accountType(this.accountType)
             .socialId(this.socialId)
             .area(Area.서울)
-            .gender("")
+            .gender(Gender.MAN)
             .profileImage(profileImage)
             .profileImageThumbnailUrl(thumbnailImageUrl)
             .build();
