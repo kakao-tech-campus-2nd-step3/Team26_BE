@@ -102,7 +102,6 @@ public class Event {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    // Todo: 이미지를 사용하는 모든 엔티티 thumnail 설정
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 
@@ -118,22 +117,21 @@ public class Event {
     protected Event(String title, String content, Host host, Area area, Location location,
         LocalDateTime startTime, LocalDateTime endTime, Integer price, Integer totalSeat,
         Category category, List<EventImage> images, String thumbnailUrl) {
-        this.title = title;
-        this.content = content;
-        this.host = host;
-        this.area = area;
-        this.location = location;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.price = price;
-        this.totalSeat = totalSeat;
-        this.leftSeat = totalSeat;
-        this.category = category;
+        Optional.ofNullable(title).ifPresent(this::setTitle);
+        Optional.ofNullable(content).ifPresent(this::setContent);
+        Optional.ofNullable(host).ifPresent(this::setHost);
+        Optional.ofNullable(area).ifPresent(this::setArea);
+        Optional.ofNullable(location).ifPresent(this::setLocation);
+        Optional.ofNullable(startTime).ifPresent(this::setStartTime);
+        Optional.ofNullable(endTime).ifPresent(this::setEndTime);
+        Optional.ofNullable(price).ifPresent(this::setPrice);
+        Optional.ofNullable(totalSeat).ifPresent(this::setTotalSeat);
+        Optional.ofNullable(leftSeat).ifPresent(this::setLeftSeat);
+        Optional.ofNullable(category).ifPresent(this::setCategory);
         Optional.ofNullable(images).ifPresent(this::setImages);
         Optional.of(thumbnailUrl).ifPresent(this::setThumbnailUrl);
     }
 
-    // Todo: oneToMany 연관관계에서 모든 null 처리
     public void updateFrom(EventEditRequest eventEditRequest, List<EventImage> images, String thumbnailUrl) {
         Optional.ofNullable(eventEditRequest.getTitle()).ifPresent(this::setTitle);
         Optional.ofNullable(eventEditRequest.getContent()).ifPresent(this::setContent);

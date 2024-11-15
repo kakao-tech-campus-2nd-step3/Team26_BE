@@ -98,11 +98,11 @@ public class Curation {
     public Curation(Curator curator, String title, String content, List<CurationCard> curationCards,
         Area area, List<String> hashtags,
         List<Event> events, String thumbnailUrl) {
-        this.curator = curator;
-        this.title = title;
-        this.content = content;
+        Optional.ofNullable(curator).ifPresent(this::setCurator);
+        Optional.ofNullable(title).ifPresent(this::setTitle);
+        Optional.ofNullable(content).ifPresent(this::setContent);
         Optional.ofNullable(curationCards).ifPresent(this::setCurationCards);
-        this.area = area;
+        Optional.ofNullable(area).ifPresent(this::setArea);
         Optional.ofNullable(hashtags).ifPresent(this::setHashtags);
         Optional.ofNullable(events).ifPresent(this::setEvents);
         Optional.ofNullable(thumbnailUrl).ifPresent(this::setThumbnailUrl);
