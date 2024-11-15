@@ -1,12 +1,14 @@
 package org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
+import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 
 @Getter
 @Builder
@@ -29,7 +31,10 @@ public class CurationEventResponse {
             .location(event.getLocation())
             .startTime(event.getStartTime())
             .thumbnailImageUrl(event.getThumbnailUrl())
-            .hostProfileImageUrl(event.getHost().getProfileImageUrl())
+            .hostProfileImageUrl(Optional.of(event)
+                .map(Event::getHost)
+                .map(BaseMember::getProfileImageUrl)
+                .orElse(""))
             .hostNickname(event.getHost().getNickname())
             .build();
     }
