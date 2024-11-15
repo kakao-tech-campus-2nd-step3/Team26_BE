@@ -81,14 +81,16 @@ public class KakaoRequestService extends OauthRequestService {
     }
 
     @Override
-    protected OauthRequest getOauthRequestBase() {
-        return OauthRequest.builder()
+    public OauthResourcesResponse getOauthMemberResources(String code) {
+        return requestLoginAndAccessResources(OauthRequest.builder()
             .grantType("authorization_code")
             .clientId(clientId)
             .clientSecret(clientSecret)
             .redirectUri(redirectUri)
-            .build();
+            .code(code)
+            .build());
     }
+
 
     @Override
     protected OauthResourcesResponse requestLoginAndAccessResources(OauthRequest request) {

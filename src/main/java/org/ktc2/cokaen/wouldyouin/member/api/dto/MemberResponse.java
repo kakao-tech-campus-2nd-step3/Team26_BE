@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
+import org.ktc2.cokaen.wouldyouin.member.persist.Gender;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
@@ -26,7 +27,7 @@ public class MemberResponse {
     private MemberType memberType;
 
     private Area area;
-    private String gender;
+    private Gender gender;
 
     private String intro;
     private Integer likes;

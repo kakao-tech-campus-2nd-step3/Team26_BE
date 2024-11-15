@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder(toBuilder = true)
+@Builder
 @JsonNaming(SnakeCaseStrategy.class)
 public class OauthRequest {
 
