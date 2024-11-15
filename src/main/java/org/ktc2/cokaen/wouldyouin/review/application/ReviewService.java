@@ -59,7 +59,7 @@ public class ReviewService {
         return oldLastId;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public ReviewEventSliceResponse getUnreviewedEventsByMemberId(Long memberId, Pageable pageable,
         Long beforeLastId) {
         Slice<Event> unreviewedEvents = reviewRepository.findUnreviewedEventsByMemberId(memberId,
@@ -95,8 +95,7 @@ public class ReviewService {
         reviewRepository.deleteById(reviewId);
     }
 
-    @Transactional
-    public Review getByIdOrThrow(Long id) {
+    private Review getByIdOrThrow(Long id) {
         return reviewRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("해당하는 리뷰를 찾을 수 없습니다."));
     }

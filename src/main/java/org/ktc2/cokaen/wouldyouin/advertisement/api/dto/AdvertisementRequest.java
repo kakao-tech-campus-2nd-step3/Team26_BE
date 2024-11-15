@@ -30,7 +30,7 @@ public class AdvertisementRequest {
     private LocalDateTime endTime;
 
     @AssertTrue(message = "종료 시간은 시작 시간 이후여야 합니다.")
-    public boolean isEndTimeAfterStartTime() {
+    private boolean isEndTimeAfterStartTime() {
         return endTime.isAfter(startTime);
     }
 
