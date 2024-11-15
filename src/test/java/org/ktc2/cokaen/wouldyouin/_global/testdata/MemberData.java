@@ -14,6 +14,7 @@ import org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse.ReviewMemberRe
 import org.ktc2.cokaen.wouldyouin.member.api.dto.relationResponse.ReservationMemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
+import org.ktc2.cokaen.wouldyouin.member.persist.Gender;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
@@ -56,7 +57,7 @@ public class MemberData {
             public static final String profileImageUrl = ImageData.R.member.normal.url;
             public static final String profileImageThumbnailUrl = ImageData.getThumbnailUrl(profileImage);
             public static final Area area = Area.광주;
-            public static final String gender = "Men";
+            public static final Gender gender = Gender.MAN;
             public static final String socialId = "100100100100100";
             public static final MemberType memberType = MemberType.normal;
         }
@@ -81,7 +82,7 @@ public class MemberData {
             public static final String profileImageUrl = ImageData.R.member.curator.url;
             public static final String profileImageThumbnailUrl = ImageData.getThumbnailUrl(profileImage);
             public static final Area area = Area.광주;
-            public static final String gender = "Women";
+            public static final Gender gender = Gender.WOMAN;
             public static final String socialId = "200200200200200";
             public static final String intro = "큐레이터 자기소개입니다.";
             public static final List<String> hashtags = List.of("#큐레이터", "#해시태그", "#입니다");
@@ -122,7 +123,7 @@ public class MemberData {
             public static final String profileImageUrl = ImageData.R.member.welcome.url;
             public static final String profileImageThumbnailUrl = ImageData.getThumbnailUrl(profileImage);
             public static final Area area = Area.서울;
-            public static final String gender = "Men";
+            public static final Gender gender = Gender.MAN;
             public static final String socialId = "456456456456";
 
         }

@@ -1,6 +1,8 @@
 package org.ktc2.cokaen.wouldyouin.like.persist;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -39,6 +41,7 @@ public abstract class Like<T extends LikeableMember> {
 
     @NotNull
     @Column
+    @Enumerated(EnumType.STRING)
     private MemberType likeableMemberType;
 
     @NotNull

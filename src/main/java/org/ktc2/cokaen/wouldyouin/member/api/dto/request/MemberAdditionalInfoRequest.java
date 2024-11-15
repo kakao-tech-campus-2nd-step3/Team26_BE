@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
+import org.ktc2.cokaen.wouldyouin.member.persist.Gender;
 
 @Getter
 @EqualsAndHashCode
@@ -14,5 +15,5 @@ public class MemberAdditionalInfoRequest {
 
     private String phone;
     private Area area;
-    private String gender;
+    private Gender gender;
 }
