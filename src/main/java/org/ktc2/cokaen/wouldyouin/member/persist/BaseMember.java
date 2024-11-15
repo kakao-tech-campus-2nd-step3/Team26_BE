@@ -34,21 +34,21 @@ public abstract class BaseMember {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "account_type")
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "member_type")
     @Enumerated(EnumType.STRING)
     private MemberType memberType;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "email")
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "nickname")
     private String nickname;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "phone")
     private String phone;
 
     @OneToOne(mappedBy = "baseMember")

@@ -6,8 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin._common.api.ApiResponseBody;
-import org.springframework.http.HttpStatus;
+import org.ktc2.cokaen.wouldyouin._common.api.ApiResponse;
+import org.ktc2.cokaen.wouldyouin._common.exception.ErrorCode;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -21,13 +21,12 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-
-        // TODO: Fail ApiResponse로 변경필요
-        ApiResponseBody<String> body = new ApiResponseBody<>(false, "Not Authenticated Request(response by CustomAuthenticationEntryPoint.Class)");
-        String responseBody = objectMapper.writeValueAsString(body);
+        String responseBody = objectMapper.writeValueAsString(ApiResponse.error(ErrorCode.SECURITY_FILTER_AUTHORIZATION_REQUIRED,
+            "요청시 인증이 필요합니다. Authorization Token을 확인해주세요.")
+            .getBody());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setStatus(ErrorCode.SECURITY_FILTER_AUTHORIZATION_REQUIRED.getStatus());
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(responseBody);
     }

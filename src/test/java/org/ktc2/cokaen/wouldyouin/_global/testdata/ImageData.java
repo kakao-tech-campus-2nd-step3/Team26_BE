@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import org.ktc2.cokaen.wouldyouin.image.api.dto.ImageRequest;
 import org.ktc2.cokaen.wouldyouin.image.api.dto.ImageResponse;
 import org.ktc2.cokaen.wouldyouin.image.persist.AdvertisementImage;
-import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.CurationCardImage;
 import org.ktc2.cokaen.wouldyouin.image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin.image.persist.Image;
 import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
@@ -29,7 +29,7 @@ public class ImageData {
     public static String getThumbnailUrl(AdvertisementImage image) {
         return CommonData.path.domainUrl + childPath.advertisement + "/thumbnails/" + image.getName();
     }
-    public static String getThumbnailUrl(CurationImage image) {
+    public static String getThumbnailUrl(CurationCardImage image) {
         return CommonData.path.domainUrl + childPath.curation + "/thumbnails/" + image.getName();
     }
     public static String getThumbnailUrl(EventImage image) {
@@ -423,8 +423,8 @@ public class ImageData {
 
     public static class curation1 {
         public static class entity {
-            public static CurationImage get() {
-                CurationImage ret = CurationImage.builder()
+            public static CurationCardImage get() {
+                CurationCardImage ret = CurationCardImage.builder()
                     .name(R.curation1.name)
                     .size(R.curation1.size)
                     .extension(R.curation1.extension)
@@ -457,8 +457,8 @@ public class ImageData {
     }
     public static class curation2 {
         public static class entity {
-            public static CurationImage get() {
-                CurationImage ret = CurationImage.builder()
+            public static CurationCardImage get() {
+                CurationCardImage ret = CurationCardImage.builder()
                     .name(R.curation2.name)
                     .size(R.curation2.size)
                     .extension(R.curation2.extension)
@@ -491,8 +491,8 @@ public class ImageData {
     }
     public static class curation3 {
         public static class entity {
-            public static CurationImage get() {
-                CurationImage ret = CurationImage.builder()
+            public static CurationCardImage get() {
+                CurationCardImage ret = CurationCardImage.builder()
                     .name(R.curation3.name)
                     .size(R.curation3.size)
                     .extension(R.curation3.extension)
@@ -525,8 +525,8 @@ public class ImageData {
     }
     public static class curation4 {
         public static class entity {
-            public static CurationImage get() {
-                CurationImage ret = CurationImage.builder()
+            public static CurationCardImage get() {
+                CurationCardImage ret = CurationCardImage.builder()
                     .name(R.curation4.name)
                     .size(R.curation4.size)
                     .extension(R.curation4.extension)
@@ -559,8 +559,8 @@ public class ImageData {
     }
     public static class curation5 {
         public static class entity {
-            public static CurationImage get() {
-                CurationImage ret = CurationImage.builder()
+            public static CurationCardImage get() {
+                CurationCardImage ret = CurationCardImage.builder()
                     .name(R.curation5.name)
                     .size(R.curation5.size)
                     .extension(R.curation5.extension)
@@ -593,8 +593,8 @@ public class ImageData {
     }
     public static class curation6 {
         public static class entity {
-            public static CurationImage get() {
-                CurationImage ret = CurationImage.builder()
+            public static CurationCardImage get() {
+                CurationCardImage ret = CurationCardImage.builder()
                     .name(R.curation6.name)
                     .size(R.curation6.size)
                     .extension(R.curation6.extension)
@@ -627,8 +627,8 @@ public class ImageData {
     }
     public static class curation7 {
         public static class entity {
-            public static CurationImage get() {
-                CurationImage ret = CurationImage.builder()
+            public static CurationCardImage get() {
+                CurationCardImage ret = CurationCardImage.builder()
                     .name(R.curation7.name)
                     .size(R.curation7.size)
                     .extension(R.curation7.extension)
@@ -661,8 +661,8 @@ public class ImageData {
     }
     public static class curation8 {
         public static class entity {
-            public static CurationImage get() {
-                CurationImage ret = CurationImage.builder()
+            public static CurationCardImage get() {
+                CurationCardImage ret = CurationCardImage.builder()
                     .name(R.curation8.name)
                     .size(R.curation8.size)
                     .extension(R.curation8.extension)

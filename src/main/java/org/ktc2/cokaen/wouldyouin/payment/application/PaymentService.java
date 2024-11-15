@@ -1,7 +1,7 @@
 package org.ktc2.cokaen.wouldyouin.payment.application;
 
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin._common.exception.FailedToPayException;
+import org.ktc2.cokaen.wouldyouin.payment.exception.FailedToPayException;
 import org.ktc2.cokaen.wouldyouin._common.util.KakaoPayUtil;
 import org.ktc2.cokaen.wouldyouin._common.util.RestClientUtil;
 import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;

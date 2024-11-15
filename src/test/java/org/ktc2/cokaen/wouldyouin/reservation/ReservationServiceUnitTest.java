@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.ktc2.cokaen.wouldyouin._common.exception.ReservationNotFoundForReviewException;
+import org.ktc2.cokaen.wouldyouin.reservation.exception.ReservationNotFoundForReviewException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.normal1;
 import org.ktc2.cokaen.wouldyouin._global.testdata.ReservationData;

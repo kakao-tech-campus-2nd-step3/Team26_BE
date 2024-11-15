@@ -2,12 +2,14 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin.auth.api.dto.LocalLoginRequest;
 import org.ktc2.cokaen.wouldyouin.image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.create.HostCreateRequest;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.edit.HostEditRequest;
+import org.ktc2.cokaen.wouldyouin.member.exception.LoginFailedException;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
 import org.ktc2.cokaen.wouldyouin.member.persist.HostRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
@@ -68,14 +70,15 @@ public class HostService implements MemberServiceCommonBehavior, LikeableMemberS
     @Transactional(readOnly = true)
     public MemberResponse getMemberResponseBy(LocalLoginRequest loginRequest) {
         Host host = hostRepository.findByEmailAndHashedPassword(loginRequest.email(), passwordEncoder.encode(loginRequest.password()))
-            .orElseThrow(RuntimeException::new);
+            .orElseThrow(() -> new LoginFailedException("이메일 또는 비밀번호가 일치하지 않습니다."));
         return MemberResponse.from(host, memberImageService.getImageUrl(host.getProfileImage()));
     }
 
     @Transactional(readOnly = true)
     public Host getByIdOrThrow(Long id) {
-        //TODO: 커스텀 예외 필요
-        return hostRepository.findById(id).orElseThrow(RuntimeException::new);
+        return hostRepository.findById(id).orElseThrow(() ->
+            new EntityNotFoundException("사용자가 주최자가 아니거나 없습니다.")
+        );
     }
 
     @Override

@@ -28,16 +28,16 @@ import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 @Entity
 public class Host extends BaseMember implements LikeableMember {
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "hashed_password")
     private String hashedPassword;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "intro")
     private String intro;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "likes")
     private Integer likes;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "hashtags")
     @Convert(converter = HashtagConverter.class)
     private List<String> hashtags;
 

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
-import org.ktc2.cokaen.wouldyouin._common.exception.NoLeftSeatException;
+import org.ktc2.cokaen.wouldyouin.event.exception.NoLeftSeatException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;

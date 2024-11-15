@@ -14,12 +14,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
+import org.ktc2.cokaen.wouldyouin.auth.exception.InvalidAuthorizationHeaderException;
+import org.ktc2.cokaen.wouldyouin.auth.exception.JwtTokenException;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-//TODO: 커스텀 예외 필요
 public class JwtService {
 
     @Value("${jwt.access.expiration}")
@@ -76,7 +77,7 @@ public class JwtService {
     // 토큰 접두사 제거
     private String removePrefixFrom(String authorizationHeader) {
         if (!hasPrefix(authorizationHeader)) {
-            throw new RuntimeException("Authorization header is missing or invalid");
+            throw new InvalidAuthorizationHeaderException("Authorization header is missing or invalid");
         }
 
         // 'Bearer ' 제거 후 실제 JWT 토큰만 추출 및 토큰 검증
@@ -88,13 +89,13 @@ public class JwtService {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            throw new RuntimeException("Invalid JWT Token");
+            throw new JwtTokenException("Invalid JWT Token");
         } catch (ExpiredJwtException e) {
-            throw new RuntimeException("Expired JWT Token");
+            throw new JwtTokenException("Expired JWT Token");
         } catch (UnsupportedJwtException e) {
-            throw new RuntimeException("Unsupported JWT Token");
+            throw new JwtTokenException("Unsupported JWT Token");
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("JWT claims string is empty.");
+            throw new JwtTokenException("JWT claims string is empty.");
         }
     }
 

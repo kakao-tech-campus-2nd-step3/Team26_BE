@@ -6,6 +6,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.ktc2.cokaen.wouldyouin.like.persist.Like;
 import org.ktc2.cokaen.wouldyouin.member.application.BaseMemberService;
+import org.ktc2.cokaen.wouldyouin.member.exception.NotLikeableMemberException;
 import org.ktc2.cokaen.wouldyouin.member.persist.LikeableMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class LikeServiceFactory {
 
     public LikeService<? extends Like<? extends LikeableMember>> getLikeServiceFrom(MemberType targetLikeableMemberType) {
         if (!LikeableMember.getLikeableMemberTypes().contains(targetLikeableMemberType)) {
-            throw new RuntimeException("해당 사용자는 좋아요할 수 없는 사용자 유형입니다.");
+            throw new NotLikeableMemberException("해당 사용자는 좋아요할 수 없는 사용자 유형입니다.");
         }
         return map.get(targetLikeableMemberType);
     }
