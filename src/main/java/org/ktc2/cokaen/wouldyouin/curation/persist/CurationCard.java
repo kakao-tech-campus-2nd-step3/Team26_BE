@@ -50,9 +50,9 @@ public class CurationCard {
 
     @Builder
     public CurationCard(String subtitle, String content, Curation curation, List<CurationImage> images) {
-        this.subtitle = subtitle;
-        this.content = content;
-        this.curation = curation;
+        Optional.ofNullable(subtitle).ifPresent(this::setSubtitle);
+        Optional.ofNullable(content).ifPresent(this::setContent);
+        Optional.ofNullable(curation).ifPresent(this::setCuration);
         Optional.ofNullable(images).ifPresent(this::setCurationImages);
     }
 }
