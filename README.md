@@ -20,7 +20,7 @@
 
 ## 핵심 기능
 
-![KakaoTalk_Photo_2024-11-15-18-16-08 001](https://github.com/user-attachments/assets/19c1ecfa-7b52-4c21-ad9a-2a9601033bac)
+
 ![KakaoTalk_Photo_2024-11-15-18-16-08 002](https://github.com/user-attachments/assets/4ebf209c-293d-4a56-8450-07c99ebca4ac)
 ![KakaoTalk_Photo_2024-11-15-18-16-08 003](https://github.com/user-attachments/assets/d5562835-c4e8-47fa-9e66-127185a19fb9)
 ![KakaoTalk_Photo_2024-11-15-18-16-08 004](https://github.com/user-attachments/assets/2f87c050-8be4-4c55-8c94-044679c431e5)
@@ -125,7 +125,7 @@
 
 
 
-## 배포 링크
+## 🌐 배포 링크
 
 ### 백엔드
 
@@ -137,24 +137,24 @@ https://drive.google.com/file/d/1JzK60wY1RKNoUNFT1CtsWDQZR6l1gE__/view?usp=shari
 
 
 
-## API 명세서
+## 📖 API 명세서
 
 https://www.notion.so/e8d71c13017844de97303da3c73d0840?v=8432c86ed8114eb1943ff861399fe6c1
 
 
 
-## 기능 명세서
+## ⚒️ 기능 명세서
 
 https://www.notion.so/67925a6cfccb412191c1e50e958e87f4
 
 
 
-## 에러코드 정의서
+## 🚨 에러코드 정의서
 
 https://www.notion.so/fba45247c95d4a129f60a8afddd1228f
 
 
 
-## Github 프로젝트
+## 👨‍👩‍👧‍👦 Github 프로젝트
 
 https://github.com/orgs/kakao-tech-campus-2nd-step3/projects/26
