@@ -12,12 +12,12 @@ import org.springframework.stereotype.Repository;
 public interface CurationRepository extends JpaRepository<Curation, Long> {
 
     @Query("SELECT C FROM Curation C JOIN FETCH C.curator "
-        + "WHERE C.area = :area AND C.id > :lastId "
+        + "WHERE C.area = :area AND C.id < :lastId "
         + "ORDER BY C.id DESC")
     Slice<Curation> findAllByAreaOrderByCreatedDateDesc(Area area, Long lastId, Pageable pageable);
 
     @Query("SELECT C FROM Curation C JOIN FETCH C.curator "
-        + "WHERE C.curator.id = :curatorId AND C.id > :lastId "
+        + "WHERE C.curator.id = :curatorId AND C.id < :lastId "
         + "ORDER BY C.id DESC")
     Slice<Curation> findAllByCuratorOrderByCreatedDateDesc(Long curatorId, Long lastId,
         Pageable pageable);

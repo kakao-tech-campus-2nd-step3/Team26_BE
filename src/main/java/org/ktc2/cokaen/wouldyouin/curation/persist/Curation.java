@@ -71,7 +71,7 @@ public class Curation {
     @Column(name = "area")
     private Area area;
 
-    @Column(name = "hashtag")
+    @Column(name = "hashtags")
     @Convert(converter = HashtagConverter.class)
     private List<String> hashtags = new ArrayList<>();
 
