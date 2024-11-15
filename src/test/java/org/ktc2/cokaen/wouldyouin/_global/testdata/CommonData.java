@@ -2,6 +2,7 @@ package org.ktc2.cokaen.wouldyouin._global.testdata;
 
 import org.ktc2.cokaen.wouldyouin._common.api.SliceInfo;
 import org.ktc2.cokaen.wouldyouin._global.testdata.CurationData.R.curation1;
+import org.ktc2.cokaen.wouldyouin._global.testdata.EventData.R.event1;
 import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R;
 import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.curator1;
 import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.host1;
@@ -16,6 +17,14 @@ public class CommonData {
     }
 
     public static class sliceInfo {
+        public static class event{
+            public static SliceInfo get(){
+                return SliceInfo.builder()
+                    .sliceSize(10)
+                    .lastId(event1.id)
+                    .build();
+            }
+        }
 
         public static class curation {
 
