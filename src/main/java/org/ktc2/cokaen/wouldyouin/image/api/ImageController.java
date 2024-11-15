@@ -45,8 +45,7 @@ public class ImageController {
     @PostMapping
     public ResponseEntity<ApiResponseBody<List<ImageResponse>>> uploadImages(
         @RequestParam List<MultipartFile> images,
-        @RequestParam(value = "type") ImageDomain imageDomain,
-        @Authorize({MemberType.normal, MemberType.curator, MemberType.host}) MemberIdentifier identifier) {
+        @RequestParam(value = "type") ImageDomain imageDomain) {
         return ApiResponse.ok(imageServiceFactory.getImageService(imageDomain).saveImages(images));
     }
 

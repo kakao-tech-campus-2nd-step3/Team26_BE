@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.CurationCardImage;
 
 @Getter
 @Setter
@@ -46,13 +46,13 @@ public class CurationCard {
     private Curation curation;
 
     @OneToMany(mappedBy = "curationCard", fetch = FetchType.LAZY)
-    private List<CurationImage> curationImages = new ArrayList<>();
+    private List<CurationCardImage> curationCardImages = new ArrayList<>();
 
     @Builder
-    public CurationCard(String subtitle, String content, Curation curation, List<CurationImage> images) {
+    public CurationCard(String subtitle, String content, Curation curation, List<CurationCardImage> images) {
         Optional.ofNullable(subtitle).ifPresent(this::setSubtitle);
         Optional.ofNullable(content).ifPresent(this::setContent);
         Optional.ofNullable(curation).ifPresent(this::setCuration);
-        Optional.ofNullable(images).ifPresent(this::setCurationImages);
+        Optional.ofNullable(images).ifPresent(this::setCurationCardImages);
     }
 }

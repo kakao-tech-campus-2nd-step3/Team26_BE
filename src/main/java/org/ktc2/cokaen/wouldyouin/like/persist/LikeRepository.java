@@ -17,7 +17,7 @@ public interface LikeRepository <LikeType extends Like<? extends LikeableMember>
     @Query("SELECT l FROM #{#entityName} l " +
         "JOIN FETCH l.member m " +
         "JOIN FETCH l.likeableMember lm " +
-        "WHERE l.member.id = :member " +
+        "WHERE l.member = :member " +
         "AND l.id < :lastId " +
         "ORDER BY l.id DESC")
     Slice<LikeType> findAllByMember(Member member, Long lastId, Pageable pageable);
