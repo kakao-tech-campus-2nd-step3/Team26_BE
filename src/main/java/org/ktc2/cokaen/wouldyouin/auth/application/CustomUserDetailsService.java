@@ -1,6 +1,7 @@
 package org.ktc2.cokaen.wouldyouin.auth.application;
 
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.auth.persist.CustomUserDetails;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
@@ -20,8 +21,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        // TODO: 커스텀 예외 필요
-        BaseMember member = baseMemberRepository.findById(Long.parseLong(id)).orElseThrow(RuntimeException::new);
+        BaseMember member = baseMemberRepository.findById(Long.parseLong(id)).orElseThrow(() ->
+            new EntityNotFoundException("아이디에 해당하는 사용자를 찾을 수 없습니다."));
         return new CustomUserDetails(new MemberIdentifier(member.getId(), member.getMemberType()));
     }
 }

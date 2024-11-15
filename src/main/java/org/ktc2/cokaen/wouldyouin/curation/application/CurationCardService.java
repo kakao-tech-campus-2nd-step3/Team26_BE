@@ -10,7 +10,7 @@ import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCardRepository;
 import org.ktc2.cokaen.wouldyouin.image.application.CurationImageService;
-import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.CurationCardImage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +29,7 @@ public class CurationCardService {
 
     @Transactional
     public CurationCard create(CurationCardRequest request) {
-        List<CurationImage> images = request.getImageIds().stream()
+        List<CurationCardImage> images = request.getImageIds().stream()
             .map(curationImageService::getById).toList();
         CurationCard curationCard = curationCardRepository.save(request.toEntity(images));
         images.forEach(image -> curationImageService.setCuration(image, curationCard));
@@ -39,7 +39,7 @@ public class CurationCardService {
     @Transactional
     public void delete(MemberIdentifier identifier, Long id) {
         CurationCard target = getByIdOrThrow(id);
-        target.getCurationImages().forEach(image -> curationImageService.deleteImage(identifier, image.getId()));
+        target.getCurationCardImages().forEach(image -> curationImageService.deleteImage(identifier, image.getId()));
         curationCardRepository.deleteById(id);
     }
 
@@ -53,7 +53,7 @@ public class CurationCardService {
     }
 
     private List<String> getImageUrls(CurationCard curationCard) {
-        return curationCard.getCurationImages().stream()
+        return curationCard.getCurationCardImages().stream()
             .map(curationImageService::getImageUrl)
             .toList();
     }

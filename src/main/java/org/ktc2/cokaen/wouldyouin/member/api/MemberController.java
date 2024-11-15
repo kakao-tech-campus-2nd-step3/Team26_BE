@@ -41,8 +41,8 @@ public class MemberController {
 
     // 사용자 삭제
     @DeleteMapping
-    public void deleteMember(@Authorize({MemberType.normal, MemberType.host, MemberType.curator}) MemberIdentifier identifier) {
-        // TODO: 204 NO CONTENT 반환하게 수정필요
+    public ResponseEntity<ApiResponseBody<Void>> deleteMember(@Authorize({MemberType.normal, MemberType.host, MemberType.curator}) MemberIdentifier identifier) {
         baseMemberService.deleteById(identifier.id());
+        return ApiResponse.noContent();
     }
 }

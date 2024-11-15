@@ -18,14 +18,14 @@ import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
 @EqualsAndHashCode(callSuper = true)
 @ToString
 @NoArgsConstructor
-public class CurationImage extends Image {
+public class CurationCardImage extends Image {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "curation_card_id")
     private CurationCard curationCard;
 
     @Builder
-    public CurationImage(String name, Long size, String extension) {
+    public CurationCardImage(String name, Long size, String extension) {
         super(name, size, extension);
     }
 }

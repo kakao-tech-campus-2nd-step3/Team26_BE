@@ -66,14 +66,16 @@ public class CuratorService implements MemberServiceCommonBehavior, LikeableMemb
             .build();
 
         Long toDeleteId = member.getId();
+        memberImageService.setBaseMember(member.getProfileImage(), null);
         memberRepository.deleteById(toDeleteId);
         baseMemberRepository.deleteById(toDeleteId);
 
         //삭제 후 플러시를 사용해 즉시 데이터베이스에 반영
-        memberRepository.flush();
         baseMemberRepository.flush();
+        memberRepository.flush();
 
         curatorRepository.save(curator);
+        memberImageService.setBaseMember(curator.getProfileImage(), curator);
         return MemberResponse.from(curator, memberImageService.getImageUrl(curator.getProfileImage()));
     }
 

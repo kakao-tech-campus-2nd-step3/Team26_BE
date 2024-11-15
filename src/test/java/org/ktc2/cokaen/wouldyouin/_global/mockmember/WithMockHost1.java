@@ -1,4 +1,4 @@
-package org.ktc2.cokaen.wouldyouin._global.mockMember;
+package org.ktc2.cokaen.wouldyouin._global.mockmember;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

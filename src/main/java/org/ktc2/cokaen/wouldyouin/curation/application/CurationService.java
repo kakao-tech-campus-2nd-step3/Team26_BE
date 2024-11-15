@@ -18,7 +18,7 @@ import org.ktc2.cokaen.wouldyouin.curation.persist.CurationRepository;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.image.application.CurationImageService;
-import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.CurationCardImage;
 import org.ktc2.cokaen.wouldyouin.member.application.CuratorService;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
@@ -122,7 +122,7 @@ public class CurationService {
     private List<CurationCardResponse> getCurationCardResponses(Curation curation) {
         return curation.getCurationCards().stream()
             .map(curationCard -> CurationCardResponse.from(
-                curationCard, curationCard.getCurationImages().stream()
+                curationCard, curationCard.getCurationCardImages().stream()
                     .map(curationImageService::getImageUrl).toList()))
             .toList();
     }
@@ -130,9 +130,9 @@ public class CurationService {
     private String getThumbnailUrl(List<CurationCard> curationCards) {
         return Optional.ofNullable(curationCards)
             .map(List::getFirst)
-            .map(CurationCard::getCurationImages)
+            .map(CurationCard::getCurationCardImages)
             .map(List::getFirst)
-            .map(CurationImage::getName)
+            .map(CurationCardImage::getName)
             .map(curationImageService::createThumbnail)
             .orElse("");
     }

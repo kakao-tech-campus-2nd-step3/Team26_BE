@@ -20,6 +20,7 @@ import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.MemberAdditionalInfoRequest;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.create.MemberCreateRequest;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.edit.MemberEditRequest;
+import org.ktc2.cokaen.wouldyouin.member.exception.AdditionalInfoIllegalAccessException;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
@@ -123,8 +124,7 @@ class MemberServiceUnitTest {
         given(memberRepository.findById(validMember.getId())).willReturn(Optional.of(validMember));
 
         // when & then
-        // TODO: 커스텀 예외 필요
-        assertThrows(RuntimeException.class, () ->
+        assertThrows(AdditionalInfoIllegalAccessException.class, () ->
             memberService.updateWelcomeMember(validMember.getId(), memberAdditionalInfoRequest));
 
         // then

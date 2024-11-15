@@ -11,6 +11,8 @@ import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.AccessTokenResponse;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthRequest;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthResourcesResponse;
+import org.ktc2.cokaen.wouldyouin.auth.exception.FailAccessTokenGetException;
+import org.ktc2.cokaen.wouldyouin.auth.exception.FailSocialDataGetException;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -84,14 +86,12 @@ public class GoogleRequestService extends OauthRequestService {
 
         AccessTokenResponse authenticationResponse = client.post(
             AccessTokenResponse.class, loginRequestUri, loginRequestHeaders, request,
-            // TODO: 커스텀 예외 추가
-            (req, response) -> { throw new RuntimeException("에러"); });
+            (req, response) -> { throw new FailAccessTokenGetException("구글 액세스 토큰을 가져오는데 실패했습니다."); });
 
         Objects.requireNonNull(authenticationResponse);
         GoogleAccessRequestResponse result = client.get(
             GoogleAccessRequestResponse.class, accessRequestUri, getAccessRequestHeaders(authenticationResponse),
-            // TODO: 커스텀 예외 추가
-            (req, rsp) -> { throw new RuntimeException("에러"); });
+            (req, rsp) -> { throw new FailSocialDataGetException("구글 소셜 계정 정보를 가져오는데 실패했습니다."); });
 
         log.debug("#### GoogleAccessRequestResponse result = {}", result);
 

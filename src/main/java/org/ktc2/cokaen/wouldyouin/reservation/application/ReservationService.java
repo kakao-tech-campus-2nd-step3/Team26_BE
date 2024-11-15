@@ -1,9 +1,8 @@
 package org.ktc2.cokaen.wouldyouin.reservation.application;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
-import org.ktc2.cokaen.wouldyouin._common.exception.ReservationNotFoundForReviewException;
+import org.ktc2.cokaen.wouldyouin.reservation.exception.ReservationNotFoundForReviewException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.event.application.EventService;
