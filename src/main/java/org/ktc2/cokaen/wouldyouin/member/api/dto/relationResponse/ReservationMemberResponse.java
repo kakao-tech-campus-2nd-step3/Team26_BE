@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.ktc2.cokaen.wouldyouin.member.persist.Gender;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 
 @Getter
@@ -16,7 +17,7 @@ public class ReservationMemberResponse {
     private String email;
     private String nickname;
     private String phone;
-    private String gender;
+    private Gender gender;
 
     public static ReservationMemberResponse from(Member member) {
         return ReservationMemberResponse.builder()

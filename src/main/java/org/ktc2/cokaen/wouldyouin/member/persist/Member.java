@@ -38,7 +38,8 @@ public class Member extends BaseMember {
     private Area area;
 
     @Column(nullable = false, name = "gender")
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Column(name = "social_id")
     private String socialId; //소셜 타입 식별자 값
@@ -60,7 +61,7 @@ public class Member extends BaseMember {
     private List<Review> reviews = new ArrayList<>();
 
     // for Curator
-    protected Member(AccountType accountType, MemberType memberType, String email, String nickname, String phone, MemberImage profileImage, String profileImageThumbNailUrl, Area area, String gender, String socialId) {
+    protected Member(AccountType accountType, MemberType memberType, String email, String nickname, String phone, MemberImage profileImage, String profileImageThumbNailUrl, Area area, Gender gender, String socialId) {
         super(accountType, memberType, email, nickname, phone, profileImage, profileImageThumbNailUrl);
         this.area = area;
         this.gender = gender;
@@ -69,7 +70,7 @@ public class Member extends BaseMember {
 
     @Builder
     // for public builder
-    protected Member(AccountType accountType, String email, String nickname, String phone, MemberImage profileImage, String profileImageThumbnailUrl, Area area, String gender, String socialId) {
+    protected Member(AccountType accountType, String email, String nickname, String phone, MemberImage profileImage, String profileImageThumbnailUrl, Area area, Gender gender, String socialId) {
         this(accountType, MemberType.welcome, email, nickname, phone, profileImage, profileImageThumbnailUrl, area, gender, socialId);
     }
 

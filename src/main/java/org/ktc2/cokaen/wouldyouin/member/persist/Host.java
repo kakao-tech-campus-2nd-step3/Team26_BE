@@ -24,7 +24,7 @@ import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("Host")
 @EqualsAndHashCode(callSuper = true)
-@ToString()
+@ToString
 @Entity
 public class Host extends BaseMember implements LikeableMember {
 
