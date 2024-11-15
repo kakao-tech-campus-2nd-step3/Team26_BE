@@ -127,13 +127,9 @@
 
 ## 🌐 배포 링크
 
-### 백엔드
+- 백엔드: https://www.wouldyouin.store
 
-https://www.wouldyouin.store
-
-### 안드로이드
-
-https://drive.google.com/file/d/1JzK60wY1RKNoUNFT1CtsWDQZR6l1gE__/view?usp=sharing
+- 안드로이드: https://drive.google.com/file/d/1JzK60wY1RKNoUNFT1CtsWDQZR6l1gE__/view?usp=sharing
 
 
 
