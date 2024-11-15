@@ -23,6 +23,7 @@ import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.host1;
 import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.normal1;
 import org.ktc2.cokaen.wouldyouin._global.testdata.MemberData.R.welcome1;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.MemberResponse;
+import org.ktc2.cokaen.wouldyouin.member.exception.EmailAlreadyExistsException;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.Curator;
@@ -146,8 +147,7 @@ class BaseMemberServiceUnitTest {
         given(baseMemberRepository.findByEmail(email)).willReturn(optionalMember);
 
         // when & then
-        // TODO: 커스텀 예외 처리 필요
-        assertThrows(RuntimeException.class, () -> baseMemberService.checkUniqueEmailOrThrow(email));
+        assertThrows(EmailAlreadyExistsException.class, () -> baseMemberService.checkUniqueEmailOrThrow(email));
         then(baseMemberRepository).should(times(1)).findByEmail(email);
     }
 

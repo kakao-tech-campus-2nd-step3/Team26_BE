@@ -2,6 +2,7 @@ package org.ktc2.cokaen.wouldyouin.member.application;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.image.application.MemberImageService;
 import org.ktc2.cokaen.wouldyouin.image.persist.MemberImage;
@@ -9,6 +10,7 @@ import org.ktc2.cokaen.wouldyouin.member.api.dto.MemberResponse;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.MemberAdditionalInfoRequest;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.create.MemberCreateRequest;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.request.edit.MemberEditRequest;
+import org.ktc2.cokaen.wouldyouin.member.exception.AdditionalInfoIllegalAccessException;
 import org.ktc2.cokaen.wouldyouin.member.persist.Member;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
@@ -53,8 +55,7 @@ public class MemberService implements MemberServiceCommonBehavior {
         Member member = getByIdOrThrow(welcomeMemberId);
         // TODO : validate
         if (member.getMemberType() != MemberType.welcome) {
-            // TODO: 커스텀 예외 필요
-            throw new RuntimeException("Welcome Member가 아닙니다.");
+            throw new AdditionalInfoIllegalAccessException("최초 소셜로그인 후 추가정보를 기입하지 않은 사용자만 접근 가능합니다.");
         }
         member.updateFrom(additionalInfoRequest);
         return MemberResponse.from(member, memberImageService.getImageUrl(member.getProfileImage()));
@@ -75,8 +76,9 @@ public class MemberService implements MemberServiceCommonBehavior {
 
     @Transactional(readOnly = true)
     public Member getByIdOrThrow(Long id) {
-        //TODO: 커스텀 예외 필요
-        return memberRepository.findById(id).orElseThrow(RuntimeException::new);
+        return memberRepository.findById(id).orElseThrow(() ->
+            new EntityNotFoundException("해당 사용자를 찾을 수 없습니다.")
+        );
     }
 
     @Transactional(readOnly = true)

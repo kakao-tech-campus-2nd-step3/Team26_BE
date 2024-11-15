@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
+import org.ktc2.cokaen.wouldyouin.auth.exception.AuthenticationEmptyException;
 import org.ktc2.cokaen.wouldyouin.auth.persist.CustomUserDetails;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 import org.springframework.core.MethodParameter;
@@ -17,7 +18,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
 @RequiredArgsConstructor
-//TODO: 커스텀 예외 추가 필요
 public class AuthorizeArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
@@ -37,12 +37,12 @@ public class AuthorizeArgumentResolver implements HandlerMethodArgumentResolver 
     // 토큰으로 인증된 사용자 정보 얻기
     private MemberIdentifier getAuthorizedMemberIdFrom(Authentication authentication) {
         if (authentication == null) {
-            throw new RuntimeException("No authentication found");
+            throw new AuthenticationEmptyException("시큐리티 컨텍스트 내 인증 정보가 없습니다.");
         }
         if (authentication.getPrincipal() instanceof CustomUserDetails userDetails) {
             return userDetails.getIdentifier();
         }
-        throw new RuntimeException("No CustomUserDetails found");
+        throw new RuntimeException("No CustomUserDetails found"); // 절대 도달하지 않음
     }
 
     // @Authorize 애너테이션이 요구한 멤버 타입 추출

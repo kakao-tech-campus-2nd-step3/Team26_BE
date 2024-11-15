@@ -32,7 +32,7 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String[] AUTH_WHITELIST = {
-        "/**", //임시 설정, 나중에 제거필요
+        "/**",
         "/h2-console/**",
         "/swagger-ui/**",
         "/swagger-ui/index.html",

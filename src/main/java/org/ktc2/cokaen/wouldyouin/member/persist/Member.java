@@ -3,6 +3,8 @@ package org.ktc2.cokaen.wouldyouin.member.persist;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
@@ -31,17 +33,18 @@ import org.ktc2.cokaen.wouldyouin.review.persist.Review;
 @Entity
 public class Member extends BaseMember {
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "area")
+    @Enumerated(EnumType.STRING)
     private Area area;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "gender")
     private String gender;
 
-    @Column
+    @Column(name = "social_id")
     private String socialId; //소셜 타입 식별자 값
 
     //for JWT refresh token
-    @Column(length = 1000)
+    @Column(length = 1000, name = "refresh_token")
     private String refreshToken;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)

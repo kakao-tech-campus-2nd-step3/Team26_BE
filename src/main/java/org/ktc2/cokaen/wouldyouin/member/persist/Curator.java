@@ -31,13 +31,13 @@ import org.ktc2.cokaen.wouldyouin.member.api.dto.request.edit.CuratorEditRequest
 @Entity
 public class Curator extends Member implements LikeableMember {
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "intro")
     private String intro;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "likes")
     private Integer likes;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "hashtags")
     @Convert(converter = HashtagConverter.class)
     private List<String> hashtags;
 

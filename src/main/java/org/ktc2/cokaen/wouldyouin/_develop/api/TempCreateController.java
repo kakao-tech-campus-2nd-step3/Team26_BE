@@ -63,9 +63,9 @@ public class TempCreateController {
 
     // 테스트: 사용자 삭제
     @DeleteMapping("/delete/{memberId}")
-    public void testDeleteMember(@PathVariable("memberId") Long id) {
-        // TODO: 204 NO CONTENT 반환하게 수정필요
+    public ResponseEntity<ApiResponseBody<Void>> testDeleteMember(@PathVariable("memberId") Long id) {
         baseMemberService.deleteById(id);
+        return ApiResponse.noContent();
     }
 
     @GetMapping("create/token")
