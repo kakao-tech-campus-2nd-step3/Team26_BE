@@ -110,8 +110,9 @@ public class EventService {
 
     @Transactional
     public void delete(MemberIdentifier identifier, Long eventId) {
-        validateHostId(identifier, getByIdOrThrow(eventId));
-        eventImageService.deleteImage(identifier, eventId);
+        Event event = getByIdOrThrow(eventId);
+        validateHostId(identifier, event);
+        event.getImages().forEach(eventImage -> eventImageService.deleteImage(identifier, eventImage.getId()));
         eventRepository.deleteById(eventId);
     }
 
