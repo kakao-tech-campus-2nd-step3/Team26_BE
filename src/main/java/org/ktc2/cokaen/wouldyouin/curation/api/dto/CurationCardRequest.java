@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
-import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.CurationCardImage;
 
 @Getter
 @Builder(toBuilder = true)
@@ -32,7 +32,7 @@ public class CurationCardRequest {
         return imageIds == null || imageIds.size() <= 5;
     }
 
-    public CurationCard toEntity(List<CurationImage> images) {
+    public CurationCard toEntity(List<CurationCardImage> images) {
         return CurationCard.builder()
             .subtitle(this.subtitle)
             .content(this.content)

@@ -17,7 +17,7 @@ import org.ktc2.cokaen.wouldyouin.curation.api.dto.CurationSliceResponse;
 import org.ktc2.cokaen.wouldyouin.curation.persist.Curation;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
-import org.ktc2.cokaen.wouldyouin.image.persist.CurationImage;
+import org.ktc2.cokaen.wouldyouin.image.persist.CurationCardImage;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -32,7 +32,7 @@ public class CurationData {
             public static final Long id = 351L;
             public static final String subtitle = "큐레이션 카드 부제목1";
             public static final String content = "큐레이션 카드 내용1 입니다. 큐레이션 카드의 내용은 최소 20자 최대 1000자 입니다.";
-            public static final List<CurationImage> images = List.of(ImageData.curation1.entity.get());
+            public static final List<CurationCardImage> images = List.of(ImageData.curation1.entity.get());
             public static final List<Long> imageIds = List.of(ImageData.R.curation1.id);
             public static final List<String> imageUrls = List.of(ImageData.R.curation1.url);
         }
@@ -42,7 +42,7 @@ public class CurationData {
             public static final Long id = 352L;
             public static final String subtitle = "큐레이션 카드 부제목2";
             public static final String content = "큐레이션 카드 내용2 입니다. 큐레이션 카드의 내용은 최소 20자 최대 1000자 입니다.";
-            public static final List<CurationImage> images = List.of(ImageData.curation2.entity.get());
+            public static final List<CurationCardImage> images = List.of(ImageData.curation2.entity.get());
             public static final List<Long> imageIds = List.of(ImageData.R.curation2.id);
             public static final List<String> imageUrls = List.of(ImageData.R.curation2.url);
         }
