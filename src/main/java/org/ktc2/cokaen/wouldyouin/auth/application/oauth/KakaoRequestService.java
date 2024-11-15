@@ -13,6 +13,8 @@ import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.AccessTokenResponse;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthRequest;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.dto.OauthResourcesResponse;
+import org.ktc2.cokaen.wouldyouin.auth.exception.FailAccessTokenGetException;
+import org.ktc2.cokaen.wouldyouin.auth.exception.FailSocialDataGetException;
 import org.ktc2.cokaen.wouldyouin.member.persist.AccountType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -92,16 +94,12 @@ public class KakaoRequestService extends OauthRequestService {
     protected OauthResourcesResponse requestLoginAndAccessResources(OauthRequest request) {
         AccessTokenResponse authenticationResponse = client.post(
             AccessTokenResponse.class, getLoginRequestUri(request), loginRequestHeaders,
-            // TODO: 커스텀 예외 추가
-            (req, rsp) -> {
-                throw new RuntimeException("에러");
-            });
+            (req, rsp) -> { throw new FailAccessTokenGetException("카카오 액세스 토큰을 가져오는데 실패했습니다."); });
 
         Objects.requireNonNull(authenticationResponse);
         KakaoAccessRequestResponse result = client.get(
             KakaoAccessRequestResponse.class, accessRequestUri, getAccessRequestHeaders(authenticationResponse),
-            // TODO: 커스텀 예외 추가
-            (req, rsp) -> { throw new RuntimeException("에러"); });
+            (req, rsp) -> { throw new FailSocialDataGetException("카카오 소셜 계정 정보를 가져오는데 실패했습니다."); });
 
         log.debug("#### KakaoAccessRequestResponse result = {}", result);
 

@@ -1,7 +1,9 @@
 package org.ktc2.cokaen.wouldyouin.member.application;
 
 import lombok.RequiredArgsConstructor;
+import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin.member.api.dto.MemberResponse;
+import org.ktc2.cokaen.wouldyouin.member.exception.EmailAlreadyExistsException;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMember;
 import org.ktc2.cokaen.wouldyouin.member.persist.BaseMemberRepository;
 import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
@@ -15,13 +17,14 @@ public class BaseMemberService {
     private final BaseMemberRepository baseMemberRepository;
     private final DerivedMemberServiceFactory derivedMemberServiceFactory;
 
-    public BaseMember getByIdOrThrow(Long id) throws RuntimeException {
-        // TODO: 커스텀 예외 작성필요
-        return baseMemberRepository.findById(id).orElseThrow(RuntimeException::new);
+    public BaseMember getByIdOrThrow(Long id) throws EntityNotFoundException {
+        return baseMemberRepository.findById(id).orElseThrow(() ->
+            new EntityNotFoundException("아이디에 해당하는 사용자를 찾을 수 없습니다.")
+        );
     }
 
     @Transactional(readOnly = true)
-    public MemberType getMemberType(Long id) throws RuntimeException {
+    public MemberType getMemberType(Long id) throws EntityNotFoundException {
         return getByIdOrThrow(id).getMemberType();
     }
 
@@ -32,9 +35,8 @@ public class BaseMemberService {
 
     @Transactional(readOnly = true)
     public void checkUniqueEmailOrThrow(String email) {
-        // TODO: 커스텀 예외 추가필요
         baseMemberRepository.findByEmail(email).ifPresent(p -> {
-            throw new RuntimeException("Email already exists");
+            throw new EmailAlreadyExistsException("이미 사용중인 이메일입니다.");
         });
     }
 
