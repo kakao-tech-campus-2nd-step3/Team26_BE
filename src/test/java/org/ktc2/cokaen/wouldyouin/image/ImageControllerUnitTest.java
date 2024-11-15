@@ -43,7 +43,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @WebMvcTest(ImageController.class)
-class ImageControllerTest {
+class ImageControllerUnitTest {
 
     private final long randomId = abs(new Random().nextLong());
     @Autowired

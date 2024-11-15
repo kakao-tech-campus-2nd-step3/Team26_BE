@@ -83,7 +83,7 @@ public class CommonData {
 
             public static SliceInfo get() {
                 return SliceInfo.builder()
-                    .sliceSize(10)
+                    .sliceSize(20)
                     .lastId(review1.id)
                     .build();
             }

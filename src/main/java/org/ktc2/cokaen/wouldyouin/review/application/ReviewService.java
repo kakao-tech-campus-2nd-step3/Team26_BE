@@ -52,13 +52,6 @@ public class ReviewService {
         return ReviewSliceResponse.from(reviews, reviews.getSize(), newLastId);
     }
 
-    private Long getLastId(Slice<Review> reviews, Long oldLastId) {
-        if (reviews.hasContent()) {
-            return reviews.getContent().getLast().getId();
-        }
-        return oldLastId;
-    }
-
     @Transactional(readOnly = true)
     public ReviewEventSliceResponse getUnreviewedEventsByMemberId(Long memberId, Pageable pageable,
         Long beforeLastId) {
@@ -93,6 +86,13 @@ public class ReviewService {
     public void delete(Long memberId, Long reviewId) {
         validateMemberId(memberId, getByIdOrThrow(reviewId));
         reviewRepository.deleteById(reviewId);
+    }
+
+    private Long getLastId(Slice<Review> reviews, Long oldLastId) {
+        if (reviews.hasContent()) {
+            return reviews.getContent().getLast().getId();
+        }
+        return oldLastId;
     }
 
     private Review getByIdOrThrow(Long id) {

@@ -25,7 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class CurationCardServiceTest {
+public class CurationCardServiceUnitTest {
 
     private CurationCardService curationCardService;
 
