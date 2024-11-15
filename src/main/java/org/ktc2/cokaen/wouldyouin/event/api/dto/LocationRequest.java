@@ -20,9 +20,9 @@ public class LocationRequest {
 
     @Min(value = -90, message = "위도는 -90 이상이어야 합니다.")
     @Max(value = 90, message = "위도는 90 이하여야 합니다.")
-    private Double latitude;
+    private Double latitude = 37.0;
 
     @Min(value = -180, message = "경도는 -180 이상이어야 합니다.")
     @Max(value = 180, message = "경도는 180 이하여야 합니다.")
-    private Double longitude;
+    private Double longitude = 127.1;
 }
