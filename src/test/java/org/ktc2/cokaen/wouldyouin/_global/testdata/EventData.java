@@ -5,15 +5,25 @@ import java.util.List;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
 import org.ktc2.cokaen.wouldyouin._common.vo.Location;
+import org.ktc2.cokaen.wouldyouin._global.testdata.EventData.R.event1;
+import org.ktc2.cokaen.wouldyouin._global.testdata.EventData.R.event1._Dto.editRequest1;
+import org.ktc2.cokaen.wouldyouin._global.testdata.EventData.R.event1._Relation;
+import org.ktc2.cokaen.wouldyouin._global.testdata.EventData.R.updatedEvent1;
+import org.ktc2.cokaen.wouldyouin._global.testdata.EventData.event1.entity;
+import org.ktc2.cokaen.wouldyouin._global.testdata.EventData.event1.response;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventCreateRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventEditRequest;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventResponse;
+import org.ktc2.cokaen.wouldyouin.event.api.dto.EventSliceResponse;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.CurationEventResponse;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.ReservationEventResponse;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.relationResonse.ReviewEventResponse;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.image.persist.EventImage;
 import org.ktc2.cokaen.wouldyouin.member.persist.Host;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class EventData {
@@ -34,6 +44,8 @@ public class EventData {
             public static final Integer totalSeat = 100;
             public static final Integer leftSeat = 10;
             public static final Category category = Category.밴드;
+            public static final Long lastId = 100L;
+            public static final PageRequest pageable = PageRequest.of(0, 10);
             public static final String thumbnailUrl = ImageData.getThumbnailUrl(
                 _Relation.images().getFirst());
             public static final LocalDateTime createdDate = LocalDateTime.now().minusDays(1);
@@ -79,6 +91,25 @@ public class EventData {
                     );
                 }
             }
+        }
+
+        public static class updatedEvent1{
+            public static final long id = event1.id;
+            public static final String title = editRequest1.title;
+            public static final String content = editRequest1.content;
+            public static final Area area = editRequest1.area;
+            public static final Location location = editRequest1.location;
+            public static final LocalDateTime startTime = editRequest1.startTime;
+            public static final LocalDateTime endTime = editRequest1.endTime;
+            public static final Integer price = editRequest1.price;
+            public static final Integer totalSeat = editRequest1.totalSeat;
+            public static final Integer leftSeat = 10;
+            public static final Category category = editRequest1.category;
+            public static final Long lastId = 100L;
+            public static final List<EventImage> images = List.of(ImageData.event4.entity.get(), ImageData.event5.entity.get());
+            public static final String thumbnailUrl = ImageData.getThumbnailUrl(
+                images.getFirst());
+            public static final LocalDateTime createdDate = LocalDateTime.now().minusDays(1);
         }
 
         public static class event2 {
@@ -165,8 +196,6 @@ public class EventData {
 
                 ReflectionTestUtils.setField(ret, "id", R.event1.id);
                 ReflectionTestUtils.setField(ret, "leftSeat", R.event1.leftSeat);
-                ret.getHost().setEvents(List.of(ret));
-                ret.getImages().forEach(image -> image.setEvent(ret));
                 return ret;
             }
         }
@@ -242,6 +271,52 @@ public class EventData {
                 return EventResponse.from(EventData.event1.entity.get(),
                     R.event1._Relation.imageUrls());
             }
+
+            public static class slice{
+                public static EventSliceResponse get(){
+                    return EventSliceResponse.builder()
+                        .events(List.of(response.get()))
+                        .sliceInfo(CommonData.sliceInfo.event.get())
+                        .build();
+                }
+            }
+        }
+    }
+
+    public static class updatedEvent1{
+        public static class entity {
+
+            public static Event get() {
+                Event ret = Event.builder()
+                    .title(R.updatedEvent1.title)
+                    .content(R.updatedEvent1.content)
+                    .host(R.event1._Relation.host())
+                    .area(R.updatedEvent1.area)
+                    .location(R.updatedEvent1.location)
+                    .startTime(R.updatedEvent1.startTime)
+                    .endTime(R.updatedEvent1.endTime)
+                    .price(R.updatedEvent1.price)
+                    .totalSeat(R.updatedEvent1.totalSeat)
+                    .category(R.updatedEvent1.category)
+                    .images(R.updatedEvent1.images)
+                    .thumbnailUrl(R.updatedEvent1.thumbnailUrl)
+                    .build();
+
+                ReflectionTestUtils.setField(ret, "id", R.updatedEvent1.id);
+                ReflectionTestUtils.setField(ret, "leftSeat", R.updatedEvent1.leftSeat);
+                return ret;
+            }
+        }
+        public static class response {
+
+            public static EventResponse get() {
+                List<String> imageUrls= List.of(
+                        ImageData.R.event4.url,
+                        ImageData.R.event5.url);
+
+                return EventResponse.from(EventData.updatedEvent1.entity.get(),
+                    imageUrls);
+            }
         }
     }
 
@@ -266,6 +341,13 @@ public class EventData {
             public static CurationEventResponse createValidCurationEventResponse() {
                 return CurationEventResponse.from(EventData.event1.entity.get());
             }
+        }
+    }
+
+    public static class EventSlice{
+
+        public static Slice<Event> get(){
+            return new SliceImpl<>(List.of(entity.get()), R.event1.pageable, true);
         }
     }
 }
