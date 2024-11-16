@@ -66,6 +66,13 @@ public abstract class ImageService<T extends Image> {
         getImageRepository().deleteById(id);
     }
 
+    @Transactional
+    public List<ImageResponse> saveImagesWithThumbnail(List<MultipartFile> images) {
+        return images.stream()
+            .map(image -> create(imageStorageService.saveToDirectoryWithThumbnail(image, getChildPath())))
+            .toList();
+    }
+
     public String createThumbnail(String fileName) {
         return imageStorageService.createThumbnailImage(imageApiHeader, getChildPath(), fileName);
     }

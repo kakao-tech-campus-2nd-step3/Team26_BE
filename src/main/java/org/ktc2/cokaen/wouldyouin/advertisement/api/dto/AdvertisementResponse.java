@@ -26,7 +26,7 @@ public class AdvertisementResponse {
             .id(advertisement.getId())
             .title(advertisement.getTitle())
             .imageUrl(Optional.of(advertisement)
-                .map((ad) -> advertisement.getAdvertisementImage())
+                .map(ad -> advertisement.getAdvertisementImage())
                 .map(Image::getName)
                 .orElse(""))
             .startTime(advertisement.getStartTime())

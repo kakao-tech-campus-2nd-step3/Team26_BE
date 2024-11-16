@@ -55,6 +55,13 @@ public class ImageController {
         return ApiResponse.ok(imageServiceFactory.getImageService(imageDomain).saveImages(images));
     }
 
+    @PostMapping("/withThumbnail")
+    public ResponseEntity<ApiResponseBody<List<ImageResponse>>> uploadImagesWithThumbnail(
+        @RequestParam List<MultipartFile> images,
+        @RequestParam(value = "type") ImageDomain imageDomain) {
+        return ApiResponse.ok(imageServiceFactory.getImageService(imageDomain).saveImagesWithThumbnail(images));
+    }
+
     @DeleteMapping("/{imageId}")
     public ResponseEntity<ApiResponseBody<Void>> deleteImage(
         @PathVariable Long imageId,

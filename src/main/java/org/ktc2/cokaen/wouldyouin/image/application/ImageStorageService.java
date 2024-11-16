@@ -40,6 +40,18 @@ public class ImageStorageService {
         return ImageRequest.of(fileName, image.getSize(), extension);
     }
 
+    public ImageRequest saveToDirectoryWithThumbnail(MultipartFile image, String childPath) {
+        String extension = FileUtil.getExtension(image.getContentType());
+        String fileName = FileUtil.createRandomFileName(extension);
+        FileUtil.saveFile(image, Path.of(parentPath, childPath, fileName));
+
+        String originImagePath = Path.of(parentPath, childPath, fileName).toString();
+        String thumbnailImagePath = Path.of(parentPath, childPath, thumbnailChildPath).toString();
+        FileUtil.createThumbnail(originImagePath, fileName, thumbnailImagePath,
+            thumbnailWidth, thumbnailHeight);
+        return ImageRequest.of(fileName, image.getSize(), extension);
+    }
+
     public ImageRequest saveToDirectory(String imageUrl, String childPath) {
         ResponseEntity<byte[]> response = client.getResponseEntity(byte[].class, imageUrl,
             new HttpHeaders(),
