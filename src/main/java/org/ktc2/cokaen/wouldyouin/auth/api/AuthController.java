@@ -44,8 +44,8 @@ public class AuthController {
 
     // 소셜 로그인 redirect 처리
     @GetMapping("/social/redirect/{accountType}")
-    public ResponseEntity<ApiResponseBody<Void>> processRedirect(@PathVariable("accountType") AccountType accountType, @RequestParam("code") String code) {
-        return ApiResponse.noContent();
+    public ResponseEntity<ApiResponseBody<String>> processRedirect(@PathVariable("accountType") AccountType accountType, @RequestParam("code") String code) {
+        return ApiResponse.ok(code);
     }
 
     // 소셜 로그인
