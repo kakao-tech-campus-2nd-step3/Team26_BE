@@ -88,7 +88,7 @@ oauth:
     client:
       id: ${GOOGLE_CLIENT_ID}
       secret: ${GOOGLE_CLIENT_SECRET}
-    redirect_uri: ${GOOGLE_REDIRECT_URI} wouldyouin://redirect/login/social/google
+    redirect_uri: ${GOOGLE_REDIRECT_URI}
     scope:
       - email
       - profile
