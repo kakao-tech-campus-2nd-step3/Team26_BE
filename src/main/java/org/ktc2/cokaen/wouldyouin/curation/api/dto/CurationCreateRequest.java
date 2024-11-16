@@ -42,7 +42,8 @@ public class CurationCreateRequest {
 
     @AssertTrue(message = "큐레이션 카드의 개수는 1개 이상 10개 이하이어야 합니다.")
     private boolean isCurationCardsSizeValid() {
-        return curationCards != null && 1 <= this.curationCards.size() && this.curationCards.size() <= 10;
+        return curationCards != null && 1 <= this.curationCards.size()
+            && this.curationCards.size() <= 10;
     }
 
     public Curation toEntity(Curator curator, List<CurationCard> curationCards,

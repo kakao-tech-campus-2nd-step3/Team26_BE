@@ -1,6 +1,5 @@
 package org.ktc2.cokaen.wouldyouin.image.application;
 
-import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.image.api.ImageDomain;
@@ -17,11 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MemberImageService extends ImageService<MemberImage> {
 
+    private final MemberImageRepository memberImageRepository;
     @Value("${image.upload.member.child-path}")
     private String childPath;
-    private final MemberImageRepository memberImageRepository;
 
-    public MemberImageService(ImageStorageService imageStorageService, MemberImageRepository memberImageRepository) {
+    public MemberImageService(ImageStorageService imageStorageService,
+        MemberImageRepository memberImageRepository) {
         this.imageStorageService = imageStorageService;
         this.memberImageRepository = memberImageRepository;
     }

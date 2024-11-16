@@ -31,7 +31,7 @@ public class CuratorLikeService extends LikeService<CuratorLike> {
     @Override
     protected CuratorLike toEntity(Member member, LikeableMember targetLikableMember) {
         return CuratorLike.builder()
-            .targetMember((Curator)targetLikableMember)
+            .targetMember((Curator) targetLikableMember)
             .member(member)
             .build();
     }

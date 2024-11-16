@@ -14,7 +14,7 @@ import org.ktc2.cokaen.wouldyouin.member.persist.MemberType;
 @EqualsAndHashCode(callSuper = true)
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CuratorLike extends Like<Curator>{
+public class CuratorLike extends Like<Curator> {
 
     @Builder
     protected CuratorLike(Curator targetMember, Member member) {

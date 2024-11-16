@@ -31,15 +31,21 @@ public class ImageController {
     private final ImageServiceFactory imageServiceFactory;
     private final ImageStorageService imageStorageService;
 
-    @GetMapping(value = "/{directory}/{file}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    public ResponseEntity<byte[]> getImage(@PathVariable String directory, @PathVariable String file) {
-        return ResponseEntity.status(HttpStatus.OK).body(imageStorageService.readFromDirectory(Paths.get(directory, file)));
+    @GetMapping(value = "/{directory}/{file}", produces = {MediaType.IMAGE_PNG_VALUE,
+        MediaType.IMAGE_JPEG_VALUE})
+    public ResponseEntity<byte[]> getImage(@PathVariable String directory,
+        @PathVariable String file) {
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(imageStorageService.readFromDirectory(Paths.get(directory, file)));
     }
 
-    @GetMapping(value = "/{directory}/{thumbnail}/{file}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    public ResponseEntity<byte[]> getThumnailImage(@PathVariable String directory, @PathVariable String thumbnail,
+    @GetMapping(value = "/{directory}/{thumbnail}/{file}", produces = {MediaType.IMAGE_PNG_VALUE,
+        MediaType.IMAGE_JPEG_VALUE})
+    public ResponseEntity<byte[]> getThumnailImage(@PathVariable String directory,
+        @PathVariable String thumbnail,
         @PathVariable String file) {
-        return ResponseEntity.status(HttpStatus.OK).body(imageStorageService.readFromDirectory(Paths.get(directory, thumbnail, file)));
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(imageStorageService.readFromDirectory(Paths.get(directory, thumbnail, file)));
     }
 
     @PostMapping
@@ -53,7 +59,8 @@ public class ImageController {
     public ResponseEntity<ApiResponseBody<Void>> deleteImage(
         @PathVariable Long imageId,
         @RequestParam(value = "type") ImageDomain imageDomain,
-        @Authorize({MemberType.normal, MemberType.curator, MemberType.host}) MemberIdentifier identifier) {
+        @Authorize({MemberType.normal, MemberType.curator,
+            MemberType.host}) MemberIdentifier identifier) {
         imageServiceFactory.getImageService(imageDomain).deleteImage(identifier, imageId);
         return ApiResponse.noContent();
     }

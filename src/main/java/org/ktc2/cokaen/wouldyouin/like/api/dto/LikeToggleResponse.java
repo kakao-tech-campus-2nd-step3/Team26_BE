@@ -13,6 +13,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class LikeToggleResponse {
+
     private final boolean isLiked;
 
     public static LikeToggleResponse from(boolean state) {

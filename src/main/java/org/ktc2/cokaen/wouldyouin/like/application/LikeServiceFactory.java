@@ -27,14 +27,16 @@ public class LikeServiceFactory {
         this.baseMemberService = baseMemberService;
     }
 
-    public LikeService<? extends Like<? extends LikeableMember>> getLikeServiceFrom(MemberType targetLikeableMemberType) {
+    public LikeService<? extends Like<? extends LikeableMember>> getLikeServiceFrom(
+        MemberType targetLikeableMemberType) {
         if (!LikeableMember.getLikeableMemberTypes().contains(targetLikeableMemberType)) {
             throw new NotLikeableMemberException("해당 사용자는 좋아요할 수 없는 사용자 유형입니다.");
         }
         return map.get(targetLikeableMemberType);
     }
 
-    public LikeService<? extends Like<? extends LikeableMember>> getLikeServiceFrom(Long targetMemberId) {
+    public LikeService<? extends Like<? extends LikeableMember>> getLikeServiceFrom(
+        Long targetMemberId) {
         return getLikeServiceFrom(baseMemberService.getMemberType(targetMemberId));
     }
 }

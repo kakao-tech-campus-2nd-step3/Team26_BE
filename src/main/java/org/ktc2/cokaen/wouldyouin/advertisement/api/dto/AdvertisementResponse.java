@@ -4,11 +4,12 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.advertisement.persist.Advertisement;
-import org.ktc2.cokaen.wouldyouin.image.persist.AdvertisementImage;
 import org.ktc2.cokaen.wouldyouin.image.persist.Image;
 
+@Getter
 @Builder
 @EqualsAndHashCode
 @ToString

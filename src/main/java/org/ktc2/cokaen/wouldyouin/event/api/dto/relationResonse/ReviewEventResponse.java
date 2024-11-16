@@ -18,7 +18,7 @@ public class ReviewEventResponse {
     private LocalDateTime startTime;
     private String thumbnailUrl;
 
-    public static ReviewEventResponse from(Event event){
+    public static ReviewEventResponse from(Event event) {
         return builder()
             .eventId(event.getId())
             .title(event.getTitle())

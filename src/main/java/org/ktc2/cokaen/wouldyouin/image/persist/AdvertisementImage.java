@@ -25,7 +25,8 @@ public class AdvertisementImage extends Image {
     private Advertisement advertisement;
 
     @Builder
-    public AdvertisementImage(String name, Long size, String extension, Advertisement advertisement) {
+    public AdvertisementImage(String name, Long size, String extension,
+        Advertisement advertisement) {
         super(name, size, extension);
         this.advertisement = advertisement;
     }

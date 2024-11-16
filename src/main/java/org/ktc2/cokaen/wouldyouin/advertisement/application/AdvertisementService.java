@@ -2,7 +2,6 @@ package org.ktc2.cokaen.wouldyouin.advertisement.application;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
 import org.ktc2.cokaen.wouldyouin.advertisement.api.dto.AdvertisementRequest;

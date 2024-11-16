@@ -15,7 +15,8 @@ public class KakaoPayReservationResponse {
     private ReservationResponse reservationResponse;
     private KakaoPayResponse kakaoPayResponse;
 
-    public static KakaoPayReservationResponse from(ReservationResponse reservationResponse, KakaoPayResponse kakaoPayResponse) {
+    public static KakaoPayReservationResponse from(ReservationResponse reservationResponse,
+        KakaoPayResponse kakaoPayResponse) {
         return KakaoPayReservationResponse.builder()
             .reservationResponse(reservationResponse)
             .kakaoPayResponse(kakaoPayResponse)

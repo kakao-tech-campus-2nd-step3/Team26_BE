@@ -7,10 +7,10 @@ import lombok.Getter;
 import lombok.ToString;
 import org.ktc2.cokaen.wouldyouin.curation.persist.CurationCard;
 
+@Getter
 @Builder
 @EqualsAndHashCode
 @ToString
-@Getter
 public class CurationCardResponse {
 
     private String subtitle;

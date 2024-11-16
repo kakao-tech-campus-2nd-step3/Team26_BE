@@ -15,7 +15,8 @@ public class ImageServiceFactory {
 
     public ImageServiceFactory(List<ImageService<? extends Image>> imageServices) {
         imageServiceMap = new ConcurrentHashMap<>(imageServices.stream()
-            .collect(Collectors.toConcurrentMap(ImageService::getImageDomain, Function.identity())));
+            .collect(
+                Collectors.toConcurrentMap(ImageService::getImageDomain, Function.identity())));
     }
 
     public ImageService<? extends Image> getImageService(ImageDomain imageDomain) {

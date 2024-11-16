@@ -37,7 +37,8 @@ public abstract class ImageService<T extends Image> {
     @Transactional(readOnly = true)
     public T getById(Long id) {
         return getImageRepository().findById(id)
-            .orElseThrow(() -> new EntityNotFoundException(getImageDomain().name() + " 이미지를 찾을 수 없습니다."));
+            .orElseThrow(
+                () -> new EntityNotFoundException(getImageDomain().name() + " 이미지를 찾을 수 없습니다."));
     }
 
     @Transactional

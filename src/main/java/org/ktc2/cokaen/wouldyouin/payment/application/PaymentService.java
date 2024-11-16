@@ -1,12 +1,12 @@
 package org.ktc2.cokaen.wouldyouin.payment.application;
 
 import lombok.RequiredArgsConstructor;
-import org.ktc2.cokaen.wouldyouin.payment.exception.FailedToPayException;
 import org.ktc2.cokaen.wouldyouin._common.util.KakaoPayUtil;
 import org.ktc2.cokaen.wouldyouin._common.util.RestClientUtil;
 import org.ktc2.cokaen.wouldyouin._common.util.UriUtil;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayRequest;
 import org.ktc2.cokaen.wouldyouin.payment.dto.KakaoPayResponse;
+import org.ktc2.cokaen.wouldyouin.payment.exception.FailedToPayException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +34,11 @@ public class PaymentService {
             KakaoPayResponse.class,
             UriUtil.assembleFullUrl(kakaoPayRequestHost, kakaoPaySinglePaymentUrl),
             KakaoPayUtil.createKakaoPayRequestHeaders(kakaoPayRequestHost, secretKey),
-            KakaoPayUtil.createKakaoPayRequestBody(kakaoPayRequest, approvalUrl, cancelUrl, failUrl),
-            (req, rsp) -> { throw new FailedToPayException("카카오페이 API 요청을 실패하였습니다."); }
+            KakaoPayUtil.createKakaoPayRequestBody(kakaoPayRequest, approvalUrl, cancelUrl,
+                failUrl),
+            (req, rsp) -> {
+                throw new FailedToPayException("카카오페이 API 요청을 실패하였습니다.");
+            }
         );
     }
 }

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.EntityNotFoundException;
-import org.ktc2.cokaen.wouldyouin.event.exception.NoLeftSeatException;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin._common.vo.Area;
 import org.ktc2.cokaen.wouldyouin._common.vo.Category;
@@ -15,6 +14,7 @@ import org.ktc2.cokaen.wouldyouin.event.api.dto.EventResponse;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.EventSliceResponse;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationFilter;
 import org.ktc2.cokaen.wouldyouin.event.api.dto.LocationRequest;
+import org.ktc2.cokaen.wouldyouin.event.exception.NoLeftSeatException;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
 import org.ktc2.cokaen.wouldyouin.event.persist.EventRepository;
 import org.ktc2.cokaen.wouldyouin.image.application.EventImageService;
@@ -37,6 +37,13 @@ public class EventService {
     private final EventImageService eventImageService;
     private final MemberImageService memberImageService;
 
+    public static Long getLastId(Slice<Event> events, Long oldLastId) {
+        if (events.hasContent()) {
+            return events.getContent().getLast().getId();
+        }
+        return oldLastId;
+    }
+
     @Transactional
     public Event getByIdOrThrow(Long id) throws EntityNotFoundException {
         return eventRepository.findById(id)
@@ -50,11 +57,13 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public EventSliceResponse getAllByFilterOrderByDistanceAsc(LocationFilter location, LocationRequest currentLocation, String title,
+    public EventSliceResponse getAllByFilterOrderByDistanceAsc(
+        LocationFilter location, LocationRequest currentLocation, String title,
         Category category, Area area, Pageable pageable, Long beforeLastId) {
         Slice<Event> events = eventRepository.findAllByFilterOrderByDistance(
             location.getStartLatitude(), location.getStartLongitude(), location.getEndLatitude(),
-            location.getEndLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(),
+            location.getEndLongitude(), currentLocation.getLatitude(),
+            currentLocation.getLongitude(),
             title, category, area, pageable
         );
         Long newLastId = getLastId(events, beforeLastId);
@@ -63,8 +72,10 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public EventSliceResponse getAllByHostIdOrderByCreatedDateDesc(Long hostId, Pageable pageable, Long beforeLastId) {
-        Slice<Event> events = eventRepository.findAllByHostIdOrderByEventIdDesc(hostId, beforeLastId, pageable);
+    public EventSliceResponse getAllByHostIdOrderByCreatedDateDesc(
+        Long hostId, Pageable pageable, Long beforeLastId) {
+        Slice<Event> events = eventRepository.findAllByHostIdOrderByEventIdDesc(hostId,
+            beforeLastId, pageable);
         Long newLastId = getLastId(events, beforeLastId);
         List<EventResponse> responses = events.stream().map(this::getEventResponse).toList();
         return EventSliceResponse.from(responses, events.getSize(), newLastId);
@@ -83,7 +94,8 @@ public class EventService {
         Host host = hostService.getByIdOrThrow(identifier.id());
         List<EventImage> images = eventCreateRequest.getImageIds().stream()
             .map(eventImageService::getById).toList();
-        Event event = eventRepository.save(eventCreateRequest.toEntity(host, images, getThumbnailUrl(images)));
+        Event event = eventRepository.save(
+            eventCreateRequest.toEntity(host, images, getThumbnailUrl(images)));
         images.forEach(image -> eventImageService.setEvent(image, event));
         return getEventResponse(event);
     }
@@ -100,7 +112,8 @@ public class EventService {
     public EventResponse update(MemberIdentifier identifier, Long eventId, EventEditRequest eventEditRequest) {
         Event event = getByIdOrThrow(eventId);
         validateHostId(identifier, event);
-        event.getImages().forEach(image -> eventImageService.deleteImage(identifier, image.getId()));
+        event.getImages()
+            .forEach(image -> eventImageService.deleteImage(identifier, image.getId()));
         List<EventImage> images = eventEditRequest.getImageIds().stream()
             .map(eventImageService::getById).toList();
         event.updateFrom(eventEditRequest, images, getThumbnailUrl(images));
@@ -112,7 +125,8 @@ public class EventService {
     public void delete(MemberIdentifier identifier, Long eventId) {
         Event event = getByIdOrThrow(eventId);
         validateHostId(identifier, event);
-        event.getImages().forEach(eventImage -> eventImageService.deleteImage(identifier, eventImage.getId()));
+        event.getImages()
+            .forEach(eventImage -> eventImageService.deleteImage(identifier, eventImage.getId()));
         eventRepository.deleteById(eventId);
     }
 
@@ -125,15 +139,9 @@ public class EventService {
         event.decreaseLeftSeat(count);
     }
 
-    public static Long getLastId(Slice<Event> events, Long oldLastId) {
-        if (events.hasContent()) {
-            return events.getContent().getLast().getId();
-        }
-        return oldLastId;
-    }
-
     public void validateHostId(MemberIdentifier identifier, Event event) {
-        if (!identifier.type().equals(MemberType.admin) && !identifier.id().equals(event.getHost().getId())) {
+        if (!identifier.type().equals(MemberType.admin) && !identifier.id()
+            .equals(event.getHost().getId())) {
             throw new UnauthorizedException("해당 이벤트에 접근할 권한이 없습니다.");
         }
     }

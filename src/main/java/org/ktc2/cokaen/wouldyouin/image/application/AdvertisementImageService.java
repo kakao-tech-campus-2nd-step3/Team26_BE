@@ -1,6 +1,5 @@
 package org.ktc2.cokaen.wouldyouin.image.application;
 
-import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin.advertisement.persist.Advertisement;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
@@ -18,11 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class AdvertisementImageService extends ImageService<AdvertisementImage> {
 
+    private final AdvertisementImageRepository adImageRepository;
     @Value("${image.upload.ad.child-path}")
     private String childPath;
-    private final AdvertisementImageRepository adImageRepository;
 
-    public AdvertisementImageService(ImageStorageService imageStorageService, AdvertisementImageRepository adImageRepository) {
+    public AdvertisementImageService(ImageStorageService imageStorageService,
+        AdvertisementImageRepository adImageRepository) {
         this.imageStorageService = imageStorageService;
         this.adImageRepository = adImageRepository;
     }
@@ -60,7 +60,8 @@ public class AdvertisementImageService extends ImageService<AdvertisementImage> 
 
     @Transactional
     public AdvertisementImage saveImage(MultipartFile image) {
-        return adImageRepository.save(mapToEntityFrom(imageStorageService.saveToDirectory(image, getChildPath())));
+        return adImageRepository.save(
+            mapToEntityFrom(imageStorageService.saveToDirectory(image, getChildPath())));
     }
 
     @Transactional

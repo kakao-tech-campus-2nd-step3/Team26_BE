@@ -11,7 +11,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
-public interface LikeRepository <LikeType extends Like<? extends LikeableMember>> extends JpaRepository<LikeType, Long> {
+public interface LikeRepository<LikeType extends Like<? extends LikeableMember>> extends
+    JpaRepository<LikeType, Long> {
+
     Optional<LikeType> findByMemberAndLikeableMember(Member member, LikeableMember likeableMember);
 
     @Query("SELECT l FROM #{#entityName} l " +

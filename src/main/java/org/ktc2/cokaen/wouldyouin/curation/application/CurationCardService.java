@@ -39,7 +39,8 @@ public class CurationCardService {
     @Transactional
     public void delete(MemberIdentifier identifier, Long id) {
         CurationCard target = getByIdOrThrow(id);
-        target.getCurationCardImages().forEach(image -> curationImageService.deleteImage(identifier, image.getId()));
+        target.getCurationCardImages()
+            .forEach(image -> curationImageService.deleteImage(identifier, image.getId()));
         curationCardRepository.deleteById(id);
     }
 
@@ -49,7 +50,8 @@ public class CurationCardService {
     }
 
     private CurationCard getByIdOrThrow(Long id) {
-        return curationCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당하는 큐레이션 카드를 찾을 수 없습니다."));
+        return curationCardRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("해당하는 큐레이션 카드를 찾을 수 없습니다."));
     }
 
     private List<String> getImageUrls(CurationCard curationCard) {

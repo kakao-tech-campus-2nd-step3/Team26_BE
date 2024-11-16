@@ -49,7 +49,8 @@ public class CurationCard {
     private List<CurationCardImage> curationCardImages = new ArrayList<>();
 
     @Builder
-    public CurationCard(String subtitle, String content, Curation curation, List<CurationCardImage> images) {
+    public CurationCard(String subtitle, String content, Curation curation,
+        List<CurationCardImage> images) {
         Optional.ofNullable(subtitle).ifPresent(this::setSubtitle);
         Optional.ofNullable(content).ifPresent(this::setContent);
         Optional.ofNullable(curation).ifPresent(this::setCuration);

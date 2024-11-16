@@ -132,7 +132,8 @@ public class Event {
         Optional.of(thumbnailUrl).ifPresent(this::setThumbnailUrl);
     }
 
-    public void updateFrom(EventEditRequest eventEditRequest, List<EventImage> images, String thumbnailUrl) {
+    public void updateFrom(EventEditRequest eventEditRequest, List<EventImage> images,
+        String thumbnailUrl) {
         Optional.ofNullable(eventEditRequest.getTitle()).ifPresent(this::setTitle);
         Optional.ofNullable(eventEditRequest.getContent()).ifPresent(this::setContent);
         Optional.ofNullable(eventEditRequest.getArea()).ifPresent(this::setArea);

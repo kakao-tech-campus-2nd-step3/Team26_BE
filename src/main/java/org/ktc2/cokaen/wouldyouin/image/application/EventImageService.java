@@ -1,6 +1,5 @@
 package org.ktc2.cokaen.wouldyouin.image.application;
 
-import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin._common.exception.UnauthorizedException;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.event.persist.Event;
@@ -17,11 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class EventImageService extends ImageService<EventImage> {
 
+    private final EventImageRepository eventImageRepository;
     @Value("${image.upload.event.child-path}")
     private String childPath;
-    private final EventImageRepository eventImageRepository;
 
-    public EventImageService(ImageStorageService imageStorageService, EventImageRepository eventImageRepository) {
+    public EventImageService(ImageStorageService imageStorageService,
+        EventImageRepository eventImageRepository) {
         this.imageStorageService = imageStorageService;
         this.eventImageRepository = eventImageRepository;
     }

@@ -16,11 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CurationImageService extends ImageService<CurationCardImage> {
 
+    private final CurationCardImageRepository curationCardImageRepository;
     @Value("${image.upload.curation.child-path}")
     private String childPath;
-    private final CurationCardImageRepository curationCardImageRepository;
 
-    public CurationImageService(ImageStorageService imageStorageService, CurationCardImageRepository curationCardImageRepository) {
+    public CurationImageService(ImageStorageService imageStorageService,
+        CurationCardImageRepository curationCardImageRepository) {
         this.imageStorageService = imageStorageService;
         this.curationCardImageRepository = curationCardImageRepository;
     }

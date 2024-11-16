@@ -31,7 +31,7 @@ public class HostLikeService extends LikeService<HostLike> {
     @Override
     protected HostLike toEntity(Member member, LikeableMember targetLikableMember) {
         return HostLike.builder()
-            .targetMember((Host)targetLikableMember)
+            .targetMember((Host) targetLikableMember)
             .member(member)
             .build();
     }

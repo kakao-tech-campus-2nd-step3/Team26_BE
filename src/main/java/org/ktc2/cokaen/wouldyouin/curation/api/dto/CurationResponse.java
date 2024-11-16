@@ -29,7 +29,8 @@ public class CurationResponse {
     private final LocalDateTime createdTime;
     private final LocalDateTime modifiedDate;
 
-    public static CurationResponse from(Curation curation, List<CurationCardResponse> curationCards) {
+    public static CurationResponse from(Curation curation,
+        List<CurationCardResponse> curationCards) {
         return CurationResponse.builder()
             .id(curation.getId())
             .curator(CurationCuratorResponse.from(curation.getCurator()))
