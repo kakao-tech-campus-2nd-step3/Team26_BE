@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.ktc2.cokaen.wouldyouin.auth.MemberIdentifier;
 import org.ktc2.cokaen.wouldyouin.auth.api.dto.LocalLoginRequest;
 import org.ktc2.cokaen.wouldyouin.auth.api.dto.LocalSignupRequest;
+import org.ktc2.cokaen.wouldyouin.auth.api.dto.SocialLoginRequest;
 import org.ktc2.cokaen.wouldyouin.auth.api.dto.SocialTokenResponse;
 import org.ktc2.cokaen.wouldyouin.auth.api.dto.TokenResponse;
 import org.ktc2.cokaen.wouldyouin.auth.application.oauth.OauthRequestServiceFactory;
@@ -44,7 +45,9 @@ public class AuthService {
     }
 
     @Transactional
-    public SocialTokenResponse socialLogin(AccountType accountType, String code) {
+    public SocialTokenResponse socialLogin(SocialLoginRequest request) {
+        AccountType accountType = request.accountType();
+        String code = request.token();
         OauthResourcesResponse resources = oauthRequestServiceFactory.getServiceFrom(accountType).getOauthMemberResources(code);
         Optional<MemberIdentifier> identifier = memberService.getMemberIdentifierBySocialId(resources.getSocialId());
 
