@@ -76,7 +76,7 @@ oauth:
     client:
       id: ${KAKAO_CLIENT_ID}
       secret: ${KAKAO_CLIENT_SECRET}
-    redirect_uri: ${SERVER_DOMAIN_NAME}/api/auth/social/redirect/kakao
+    redirect_uri: ${KAKAO_REDIRECT_URI}
   google:
     uri:
       login:
@@ -88,7 +88,7 @@ oauth:
     client:
       id: ${GOOGLE_CLIENT_ID}
       secret: ${GOOGLE_CLIENT_SECRET}
-    redirect_uri: ${SERVER_DOMAIN_NAME}/api/auth/social/redirect/google
+    redirect_uri: ${GOOGLE_REDIRECT_URI} wouldyouin://redirect/login/social/google
     scope:
       - email
       - profile

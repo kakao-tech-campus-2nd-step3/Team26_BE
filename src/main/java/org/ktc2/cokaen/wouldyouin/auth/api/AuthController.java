@@ -42,12 +42,6 @@ public class AuthController {
         return ApiResponse.ok(authService.localLogin(request));
     }
 
-    // 소셜 로그인 redirect 처리
-    @GetMapping("/social/redirect/{accountType}")
-    public ResponseEntity<ApiResponseBody<String>> processRedirect(@PathVariable("accountType") AccountType accountType, @RequestParam("code") String code) {
-        return ApiResponse.ok(code);
-    }
-
     // 소셜 로그인
     @PostMapping("/social/login")
     public ResponseEntity<ApiResponseBody<SocialTokenResponse>> processSocialLogin(@RequestBody SocialLoginRequest loginRequest) {
